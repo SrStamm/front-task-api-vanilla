@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task Manager</title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="container">
+      <div class="form-container">
+        <h2>Ingresar</h2>
+        <form>
+          <div class="form-group">
+            <label for="emailLogin">Email</label>
+            <input
+              type="email"
+              name="emailLogin"
+              placeholder="Ingrese su email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordLogin">Contraseña</label>
+            <input
+              type="password"
+              name="passwordLogin"
+              placeholder="Ingresa tu contraseña"
+            />
+          </div>
+          <div class="btn-container">
+            <button class="btn">Ingresar</button>
+          </div>
+          <p>No tienes una cuenta? <a href="">Registrate aquí</a></p>
+        </form>
+      </div>
+
+      <div class="form-container" style="display: none">
+        <h2>Registro</h2>
+        <form>
+          <div class="form-group">
+            <label for="emailLogin">Email:</label>
+            <input
+              type="email"
+              name="emailLogin"
+              placeholder="Ingrese su email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordRegister">Contraseña:</label>
+            <input
+              type="password"
+              name="passwordRegister"
+              placeholder="Ingresa una nueva contraseña"
+            />
+          </div>
+          <div class="form-group">
+            <button class="btn">Registrarse</button>
+          </div>
+        </form>
+        <p>Ya tienes una cuenta? <a href="">Ingresa aquí</a></p>
+      </div>
+    </main>
+  </body>
+</html>
