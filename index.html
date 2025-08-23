@@ -7,41 +7,52 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <main class="container">
-      <div class="form-container">
+    <div class="container" id="formLogContainer" style="display: none">
+      <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
-        <form>
+        <form id="loginForm">
           <div class="form-group">
-            <label for="emailLogin">Email</label>
+            <label for="usernameLogin">Username:</label>
             <input
-              type="email"
-              name="emailLogin"
-              placeholder="Ingrese su email"
+              type="text"
+              id="usernameLogin"
+              placeholder="Ingrese su nombre de usuario"
             />
           </div>
           <div class="form-group">
-            <label for="passwordLogin">Contraseña</label>
+            <label for="passwordLogin">Contraseña:</label>
             <input
               type="password"
-              name="passwordLogin"
+              id="passwordLogin"
               placeholder="Ingresa tu contraseña"
             />
           </div>
           <div class="btn-container">
-            <button class="btn">Ingresar</button>
+            <button class="btn" id="loginBtn">Ingresar</button>
           </div>
-          <p>No tienes una cuenta? <a href="">Registrate aquí</a></p>
+          <p>
+            No tienes una cuenta?
+            <a href="#" id="registerLink">Registrate aquí</a>
+          </p>
         </form>
       </div>
 
-      <div class="form-container" style="display: none">
+      <div class="form-container" id="registerSection" style="display: none">
         <h2>Registro</h2>
-        <form>
+        <form id="registerForm">
           <div class="form-group">
-            <label for="emailLogin">Email:</label>
+            <label for="usernameRegister">Username:</label>
+            <input
+              type="text"
+              id="usernameRegister"
+              placeholder="Ingresa un nombre de usuario"
+            />
+          </div>
+          <div class="form-group">
+            <label for="emailRegister">Email:</label>
             <input
               type="email"
-              name="emailLogin"
+              id="emailRegister"
               placeholder="Ingrese su email"
             />
           </div>
@@ -49,16 +60,110 @@
             <label for="passwordRegister">Contraseña:</label>
             <input
               type="password"
-              name="passwordRegister"
+              id="passwordRegister"
               placeholder="Ingresa una nueva contraseña"
             />
           </div>
-          <div class="form-group">
-            <button class="btn">Registrarse</button>
+          <div class="btn-container">
+            <button class="btn" id="registerBtn">Registrarse</button>
           </div>
         </form>
-        <p>Ya tienes una cuenta? <a href="">Ingresa aquí</a></p>
+        <p>Ya tienes una cuenta? <a href="#" id="loginLink">Ingresa aquí</a></p>
+      </div>
+    </div>
+
+    <!-- Contenedor principal del layout -->
+    <main class="principal-layout">
+      <!-- Side bar -->
+      <div class="sidebar-container">
+        <aside class="sidebar">
+          <ul class="sidebar_list">
+            <li class="sidebar_element">
+              <img src="assets/dashboard.png" alt="" class="sidebar_icon" />
+              <div class="sidebar_hide">
+                <p class="sidebar_text">Inicio</p>
+              </div>
+            </li>
+            <li class="sidebar_element">
+              <img src="assets/group.png" alt="" class="sidebar_icon" />
+              <div class="sidebar_hide">
+                <p class="sidebar_text">Grupos</p>
+              </div>
+            </li>
+            <li class="sidebar_element">
+              <img src="assets/check-square.png" alt="" class="sidebar_icon" />
+              <div class="sidebar_hide">
+                <p class="sidebar_text">Tareas</p>
+              </div>
+            </li>
+            <li class="sidebar_element">
+              <img
+                src="assets/message-circle.png"
+                alt=""
+                class="sidebar_icon"
+              />
+              <div class="sidebar_hide">
+                <p class="sidebar_text">Chat</p>
+              </div>
+            </li>
+
+            <li class="sidebar_element sidebar_element--avatar">
+              <img
+                src="assets/user.png"
+                alt=""
+                class="sidebar_icon sidebar_icon--avatar"
+              />
+              <div class="sidebar_hide">
+                <h3 class="sidebar_title">Mirko</h3>
+                <p class="sidebar_info">Cuenta Free</p>
+              </div>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <!-- Dashboard Layout -->
+      <div class="dashboard-layout">
+        <!-- Dashboard - Inicio section -->
+        <section id="inicioSection">
+          <h2>Inicio</h2>
+          <div id="pendingTaskWidget">
+            <h3>Tareas pendientes próximas a vencer</h3>
+            <ol>
+              <li></li>
+            </ol>
+          </div>
+          <div id="projectProgress">
+            <h3>Progreso de los proyectos</h3>
+            <ol>
+              <li></li>
+            </ol>
+          </div>
+          <div>
+            <h3>Notificaciones</h3>
+            <ul>
+              <li></li>
+            </ul>
+          </div>
+        </section>
+        <!-- Dashboard - Group section -->
+        <section id="groupSection" style="display: none">
+          <h2>Grupos</h2>
+        </section>
+        <!-- Dashboard - Project section -->
+        <section id="projectSection" style="display: none">
+          <h2>Proyectos</h2>
+        </section>
+        <!-- Dashboard - Task section -->
+        <section id="taskSection" style="display: none">
+          <h2>Tareas</h2>
+        </section>
+        <!-- Dashboard - Chat section -->
+        <section id="chatSection" style="display: none">
+          <h2>Chat</h2>
+        </section>
       </div>
     </main>
   </body>
+  <script src="js/login.js"></script>
 </html>
