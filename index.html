@@ -78,30 +78,32 @@
       <div class="sidebar-container">
         <aside class="sidebar">
           <ul class="sidebar_list">
-            <li class="sidebar_element">
+            <li class="sidebar_element" id="sidebarInicioSection">
               <img src="assets/dashboard.png" alt="" class="sidebar_icon" />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Inicio</p>
               </div>
             </li>
-            <li class="sidebar_element">
-              <img src="assets/group.png" alt="" class="sidebar_icon" />
+            <li class="sidebar_element" id="sidebarGroupSection">
+              <img src="assets/group.png" class="sidebar_icon" />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Grupos</p>
               </div>
             </li>
-            <li class="sidebar_element">
-              <img src="assets/check-square.png" alt="" class="sidebar_icon" />
+            <li class="sidebar_element" id="sidebarProjectSection">
+              <img src="" class="sidebar_icon" />
+              <div class="sidebar_hide">
+                <p class="sidebar_text">Proyectos</p>
+              </div>
+            </li>
+            <li class="sidebar_element" id="sidebarTaskSection">
+              <img src="assets/check-square.png" class="sidebar_icon" />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Tareas</p>
               </div>
             </li>
-            <li class="sidebar_element">
-              <img
-                src="assets/message-circle.png"
-                alt=""
-                class="sidebar_icon"
-              />
+            <li class="sidebar_element" id="sidebarChatSection">
+              <img src="assets/message-circle.png" class="sidebar_icon" />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Chat</p>
               </div>
@@ -127,19 +129,19 @@
         <!-- Dashboard - Inicio section -->
         <section id="inicioSection">
           <h2>Inicio</h2>
-          <div id="pendingTaskWidget">
+          <div id="pendingTaskWidget" class="partSections">
             <h3>Tareas pendientes próximas a vencer</h3>
             <ol>
               <li></li>
             </ol>
           </div>
-          <div id="projectProgress">
+          <div id="projectProgress" class="partSections">
             <h3>Progreso de los proyectos</h3>
             <ol>
               <li></li>
             </ol>
           </div>
-          <div>
+          <div class="partSections">
             <h3>Notificaciones</h3>
             <ul>
               <li></li>
@@ -149,6 +151,7 @@
         <!-- Dashboard - Group section -->
         <section id="groupSection" style="display: none">
           <h2>Grupos</h2>
+          <div class="partSections"></div>
         </section>
         <!-- Dashboard - Project section -->
         <section id="projectSection" style="display: none">
@@ -165,5 +168,6 @@
       </div>
     </main>
   </body>
-  <script src="js/login.js"></script>
+  <script type="module" src="js/login.js"></script>
+  <script type="module" src="js/dom.js"></script>
 </html>

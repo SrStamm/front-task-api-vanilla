@@ -1,3 +1,9 @@
+// Manejo de formularios de login y register
+// Llamadas a la API
+// Manejo de los tokens
+
+import { showSections } from "./dom.js";
+
 const url = "http://localhost:8000";
 
 // Links de los formularios
@@ -53,8 +59,10 @@ loginBtn.addEventListener("click", async (event) => {
 
     // Cambia al inicio de sesión
     document.getElementById("formLogContainer").style.display = "none";
-    document.querySelector(".principal-layout").style.display = "block";
     document.querySelector(".principal-layout").style.display = "flex";
+
+    // Muestra la seccion principal del dashboard
+    showSections("inicioSection");
   } catch (error) {
     console.error("Error al iniciar sesión: ", error);
   }
