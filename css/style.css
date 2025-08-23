@@ -251,3 +251,15 @@ a {
 #inicioSection h2 {
   grid-column: 1 / -1; /* El título ocupa todo el ancho */
 }
+
+#taskSection,
+#chatSection {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 1rem;
+}
+
+#taskSection h2,
+#chatSection h2 {
+  grid-column: 1 / -1;
+}
