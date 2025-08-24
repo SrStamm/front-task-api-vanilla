@@ -232,6 +232,11 @@ a {
   flex-direction: column;
 }
 
+.dashboard-layout h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3em;
+}
+
 .partSections {
   background: var(--surface);
   border-radius: var(--border-radius);
@@ -264,4 +269,95 @@ a {
 #taskSection h2,
 #chatSection h2 {
   grid-column: 1 / -1;
+}
+
+template {
+  display: none;
+}
+
+#groupList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  position: relative;
+}
+
+.card {
+  background: var(--surface);
+  padding: 1.2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  height: auto;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+}
+
+.card.expanded {
+  position: absolute;
+  z-index: 10;
+  width: calc(100% - 2rem);
+  left: 1rem;
+  box-shadow: var(--shadow-lg);
+  transform-origin: center top;
+  animation: expandCard 0.3s ease forwards;
+}
+
+@keyframes expandCard {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.card-placeholder {
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.card h4 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.card .template-hide {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.card.expanded .template-hide {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+}
+
+.card .groupDescription {
+  color: var(--text);
+  line-height: 1.5;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

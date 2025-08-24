@@ -7,7 +7,7 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="container" id="formLogContainer">
+    <div class="container" id="formLogContainer" style="display: none">
       <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
         <form id="loginForm">
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Contenedor principal del layout -->
-    <main class="principal-layout" style="display: none">
+    <main class="principal-layout">
       <!-- Side bar -->
       <div class="sidebar-container">
         <aside class="sidebar">
@@ -150,8 +150,8 @@
         </section>
 
         <!-- Dashboard - Group section -->
-        <section id="groupSection">
-          <h2>Grupos</h2>
+        <section id="groupSection" style="display: none">
+          <h2>Mis Grupos</h2>
           <div class="partSections">
             <h3>Grupos</h3>
             <div id="groupList"></div>
@@ -159,7 +159,7 @@
         </section>
 
         <!-- Dashboard - Project section -->
-        <section id="projectSection">
+        <section id="projectSection" style="display: none">
           <h2>Proyectos</h2>
           <div class="partSections">
             <h3>Mis Proyectos</h3>
@@ -214,8 +214,8 @@
     </template>
 
     <!-- Template de proyectos -->
-    <template id="projectTemplate" class="card">
-      <div>
+    <template id="projectTemplate">
+      <div class="card">
         <h4 class="projectTittle"></h4>
         <div class="template-hide">
           <h4>Miembros</h4>
@@ -228,8 +228,8 @@
     </template>
 
     <!-- Template de tareas -->
-    <template id="taskTemplate" class="card">
-      <div>
+    <template id="taskTemplate">
+      <div class="card">
         <h4 class="taskTitle"></h4>
         <p class="taskPriority"></p>
         <p class="taskDueDate"></p>
@@ -240,15 +240,17 @@
     </template>
 
     <!-- Template de mensajes -->
-    <template id="messageTemplate" class="card">
-      <div>
+    <template id="messageTemplate">
+      <div class="card">
         <p class="textMessage"></p>
         <p class="dateMessage"></p>
       </div>
     </template>
 
     <!-- Template de notificaciones -->
-    <template id="notificationTemplate" class="card"></template>
+    <template id="notificationTemplate">
+      <div class="card"></div>
+    </template>
   </body>
   <script type="module" src="js/login.js"></script>
   <script type="module" src="js/dom.js"></script>
