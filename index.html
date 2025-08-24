@@ -7,7 +7,7 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="container" id="formLogContainer" style="display: none">
+    <div class="container" id="formLogContainer">
       <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
         <form id="loginForm">
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Contenedor principal del layout -->
-    <main class="principal-layout">
+    <main class="principal-layout" style="display: none">
       <!-- Side bar -->
       <div class="sidebar-container">
         <aside class="sidebar">
@@ -150,18 +150,16 @@
         </section>
 
         <!-- Dashboard - Group section -->
-        <section id="groupSection" style="display: none">
+        <section id="groupSection">
           <h2>Grupos</h2>
           <div class="partSections">
             <h3>Grupos</h3>
-            <ol id="groupList">
-              <li></li>
-            </ol>
+            <div id="groupList"></div>
           </div>
         </section>
 
         <!-- Dashboard - Project section -->
-        <section id="projectSection" style="display: none">
+        <section id="projectSection">
           <h2>Proyectos</h2>
           <div class="partSections">
             <h3>Mis Proyectos</h3>
@@ -205,8 +203,8 @@
     </main>
 
     <!-- Template de grupos -->
-    <template id="groupTemplate" class="card">
-      <div>
+    <template id="groupTemplate">
+      <div class="card">
         <h4 class="groupName"></h4>
         <p class="numbersOfMembers"></p>
         <div class="template-hide">
@@ -254,4 +252,6 @@
   </body>
   <script type="module" src="js/login.js"></script>
   <script type="module" src="js/dom.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/api.js"></script>
 </html>

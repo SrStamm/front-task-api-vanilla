@@ -13,30 +13,27 @@ export function showSections(sectionId) {
   document.getElementById(sectionId).style.display = "grid";
 }
 
-// sidebar Secciones
-const startSection = document.getElementById("sidebarInicioSection");
-const groupSection = document.getElementById("sidebarGroupSection");
-const projectSection = document.getElementById("sidebarProjectSection");
-const taskSection = document.getElementById("sidebarTaskSection");
-const chatSection = document.getElementById("sidebarChatSection");
+export function showGroups(groups) {
+  const groupTemplate = document.getElementById("groupTemplate");
+  const groupContainer = document.getElementById("groupSection");
 
-startSection.addEventListener("click", function () {
-  showSections("inicioSection");
-});
+  if (groups <= 0) {
+    groupContainer.textContent = "No eres parte de ningun grupo.";
+  } else {
+    groups.forEach((group) => {
+      // Copia el template
+      const clonTemplate = groupTemplate.content.cloneNode(true);
 
-groupSection.addEventListener("click", function () {
-  showSections("groupSection");
-});
+      // Accede a cada parte del template
+      const groupName = clonTemplate.querySelector(".groupName");
+      const groupDescription = clonTemplate.querySelector(".groupDescription");
 
-projectSection.addEventListener("click", function () {
-  showSections("projectSection");
-});
+      // Actualiza con los datos obtenidos
+      groupName.textContent = group.name;
+      groupDescription.textContent = group.description;
 
-taskSection.addEventListener("click", function () {
-  showSections("taskSection");
-});
-
-chatSection.addEventListener("click", function () {
-  showSections("chatSection");
-});
-
+      // Agrega los datos
+      groupContainer.appendChild(clonTemplate);
+    });
+  }
+}

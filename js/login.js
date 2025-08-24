@@ -58,7 +58,7 @@ loginBtn.addEventListener("click", async (event) => {
     localStorage.setItem("refrToken", responseData.refresh_token);
 
     // Cambia al inicio de sesión
-    document.getElementById("formLogContainer").style.display = "none";
+    document.querySelector("#formLogContainer").style.display = "none";
     document.querySelector(".principal-layout").style.display = "flex";
 
     // Muestra la seccion principal del dashboard
