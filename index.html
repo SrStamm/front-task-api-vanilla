@@ -131,13 +131,13 @@
           <h2>Inicio</h2>
           <div id="pendingTaskWidget" class="partSections">
             <h3>Tareas pendientes próximas a vencer</h3>
-            <ol>
+            <ol id="taskDueSoon">
               <li></li>
             </ol>
           </div>
           <div id="projectProgress" class="partSections">
             <h3>Progreso de los proyectos</h3>
-            <ol>
+            <ol id="projectProgressList">
               <li></li>
             </ol>
           </div>
@@ -154,7 +154,7 @@
           <h2>Grupos</h2>
           <div class="partSections">
             <h3>Grupos</h3>
-            <ol>
+            <ol id="groupList">
               <li></li>
             </ol>
           </div>
@@ -165,7 +165,7 @@
           <h2>Proyectos</h2>
           <div class="partSections">
             <h3>Mis Proyectos</h3>
-            <ol>
+            <ol id="projectList">
               <li></li>
             </ol>
           </div>
@@ -179,7 +179,7 @@
           </div>
           <div class="partSections taskPartSection">
             <h3>Tareas</h3>
-            <ol>
+            <ol id="taskList">
               <li></li>
             </ol>
           </div>
@@ -190,7 +190,7 @@
           <h2>Chat</h2>
           <div class="partSections">
             <h3>Proyectos</h3>
-            <ol>
+            <ol id="projectListToChat">
               <li></li>
             </ol>
           </div>
@@ -203,6 +203,54 @@
         </section>
       </div>
     </main>
+
+    <!-- Template de grupos -->
+    <template id="groupTemplate" class="card">
+      <div>
+        <h4 class="groupName"></h4>
+        <p class="numbersOfMembers"></p>
+        <div class="template-hide">
+          <p class="groupDescription"></p>
+        </div>
+      </div>
+    </template>
+
+    <!-- Template de proyectos -->
+    <template id="projectTemplate" class="card">
+      <div>
+        <h4 class="projectTittle"></h4>
+        <div class="template-hide">
+          <h4>Miembros</h4>
+          <ol>
+            <li></li>
+          </ol>
+        </div>
+        <button type="button" id="accessProjectChat">Acceder al chat</button>
+      </div>
+    </template>
+
+    <!-- Template de tareas -->
+    <template id="taskTemplate" class="card">
+      <div>
+        <h4 class="taskTitle"></h4>
+        <p class="taskPriority"></p>
+        <p class="taskDueDate"></p>
+        <ol>
+          <li id="userAssigned"></li>
+        </ol>
+      </div>
+    </template>
+
+    <!-- Template de mensajes -->
+    <template id="messageTemplate" class="card">
+      <div>
+        <p class="textMessage"></p>
+        <p class="dateMessage"></p>
+      </div>
+    </template>
+
+    <!-- Template de notificaciones -->
+    <template id="notificationTemplate" class="card"></template>
   </body>
   <script type="module" src="js/login.js"></script>
   <script type="module" src="js/dom.js"></script>
