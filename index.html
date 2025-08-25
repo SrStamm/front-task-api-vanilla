@@ -28,7 +28,7 @@
             />
           </div>
           <div class="btn-container">
-            <button class="btn" id="loginBtn">Ingresar</button>
+            <button class="btn btn-primary" id="loginBtn">Ingresar</button>
           </div>
           <p>
             No tienes una cuenta?
@@ -118,7 +118,7 @@
               <div class="sidebar_hide">
                 <h3 class="sidebar_title">Mirko</h3>
                 <p class="sidebar_info">Cuenta Free</p>
-                <button type="button" class="btn btn-secondary" id="logoutBtn">Cerrar sesión</button>
+                <button type="button" class="btn btn-error btn-sm btn-block" id="logoutBtn">Cerrar sesión</button>
               </div>
             </li>
           </ul>
@@ -245,6 +245,23 @@
     <template id="notificationTemplate">
       <div class="card"></div>
     </template>
+
+
+
+    <!-- Modal para crear grupo -->
+    <div class="modal-backdrop" style="display: none;">
+      <div class="modal">
+        <h3>Crear un nuevo grupo</h3>
+        <form>
+          <input type="text" placeholder="Nombre del grupo">
+          <textarea rows="3" placeholder="Descripción del grupo"></textarea>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-outline-error  btn-warning">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-success">Crear</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
   <script type="module" src="js/login.js"></script>
   <script type="module" src="js/dom.js"></script>
