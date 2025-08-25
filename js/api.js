@@ -2,10 +2,13 @@
 // Una función fetchData(endpoint, method, body) que maneje las peticiones
 // Funciones especificas como getProjects() o getTasks() que usen la función anterior
 
+import { refresh } from "./auth.js";
+import { unauthorized } from "./dom.js";
+
 const url = "http://localhost:8000";
 
 async function fetchData(endpoint, method, body, token) {
-  const response = await fetch(url + endpoint, {
+  let response = await fetch(url + endpoint, {
     method: method,
     headers: {
       Authorization: "Bearer " + token,
@@ -15,13 +18,34 @@ async function fetchData(endpoint, method, body, token) {
   });
 
   // Verifica que no haya ningún error
+  if (response.status == 401) {
+    try {
+      // Nuevo token
+      let newToken = await refresh();
+
+      // Reintennto de fecth
+      response = await fetch(url + endpoint, {
+        method: method,
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        body: body,
+      });
+    } catch (error) {
+      unauthorized();
+      throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
+    }
+  }
+
+  // Lanza excepción por otro error
   if (!response.ok) {
-    const dataError = await response.json();
-    throw new Error(dataError.detail);
+    const errorData = await response.json();
+    throw new Error(errorData.detail);
   }
 
   // Obtiene los datos y los devuelve
-  const data = await response.json();
+  let data = await response.json();
   return data;
 }
 
@@ -31,10 +55,22 @@ async function fetchData(endpoint, method, body, token) {
 
 // Funcion que haga refresh
 // Después de crear la funcion, agregarla al flujo de fetchData
-// Si no esta autorizado, ejecutar esta funcion
-// Si falla de nuevo, eliminar los tokens y mostrar form de login
+export async function refreshFetch() {
+  // Obtiene los tokens
+  const token = localStorage.getItem("authToken");
+  const refreshToken = localStorage.getItem("refrToken");
+  // Lo prepara para enviarlo
+  const bodyData = { refresh: refreshToken };
+
+  return fetchData("/refresh", "POST", JSON.stringify(bodyData), token);
+}
 
 // Funcion que haga logout
+export async function logoutFetch() {
+  const token = localStorage.getItem("authToken");
+
+  return fetchData("/logout", "POST", null, token);
+}
 
 //
 //  --- Lógica de Grupos ---

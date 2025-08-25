@@ -1,6 +1,6 @@
 // Eventos de autorización
 
-import { getCurrentUser } from "./api.js";
+import { getCurrentUser, logoutFetch, refreshFetch } from "./api.js";
 import { unauthorized, loginSucces } from "./dom.js";
 
 // Validar la autenticación del usuario
@@ -22,6 +22,37 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Funcion de refresh token
+export async function refresh() {
+  try {
+    const response = await refreshFetch();
+
+    const data = await response.json();
+
+    if (data.access_token) {
+      // Elimina los token
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refrToken");
+
+      // Guarda los nuevos tokens
+      localStorage.setItem("authToken", data.access_token);
+      localStorage.setItem("refrToken", data.refresh_token);
+    }
+  } catch (error) {
+    if (error.message == "Token Not Authorized") {
+      console.error("Refresh Token no valido");
+    }
+  }
+}
 
 // Funcion centrar para cerrar sesion
 // Debe limpiar los tokens y cambiar el dom, ademas de ejecutar la funcion de logout de api.js
+export async function logout() {
+  let response = await logoutFetch();
+
+  if (response.detail == "Closed all sessions") {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("refrToken");
+  }
+
+  return response;
+}

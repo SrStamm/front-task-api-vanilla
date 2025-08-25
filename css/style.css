@@ -14,9 +14,6 @@
   --surface: #ffffff;
   --text: #1e293b;
   --text-light: #64748b;
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
 
   /* Sombras */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -25,6 +22,24 @@
 
   --transition: all 0.3s ease;
   --border-radius: 8px;
+
+  /* Colores para estados */
+  --info: #3b82f6;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  /* Neutrales más definidos */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
 }
 
 * {
@@ -143,32 +158,34 @@ input:focus {
   white-space: nowrap;
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
 .btn-secondary {
-  background-color: var(--primary);
+  background-color: var(--secondary);
   color: white;
-  border: none;
-  border-radius: var(--border-radius);
-  padding: 0.5rem;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: var(--transition);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
+  max-width: none;
+  padding: 0.5rem 1rem;
 }
 
-.btn-secondary:hover {
-  background-color: var(--primary-dark);
+#logoutBtn {
+  background-color: var(--error);
+}
+
+.btn-secondary:hover,
+#logoutBtn:hover {
+  background-color: var(--warning);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: white;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
 }
 
 a {
@@ -189,7 +206,7 @@ a {
 }
 
 .sidebar {
-  background-color: var(--secondary);
+  background-color: var(--gray-700);
   width: max-content;
   border-radius: var(--border-radius);
   padding: 2rem 1rem;
@@ -216,12 +233,12 @@ a {
   align-items: center;
   grid-template-columns: 40px 0fr;
 
-  color: var(--text);
+  color: var(--gray-50);
   transition: grid-template-columns 0.4s;
 }
 
 .sidebar_element:hover {
-  background-color: var(--accent);
+  background-color: var(--secondary);
   color: var(--surface);
   cursor: pointer;
 }

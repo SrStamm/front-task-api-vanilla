@@ -3,6 +3,8 @@
 // Eventos de los enlaces para cambiar entre el formulario de login y registro
 // Eventos para los botones de sidebar
 
+import { logout } from "./auth.js";
+
 export function showSections(sectionId) {
   // Oculta todas las secciones de contenido
   document.querySelectorAll("section").forEach((section) => {
@@ -126,3 +128,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // setupLogoutBotton
 // Encontrar el boton, agregar un evento y llamar a la funcion de auth.js
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", async () => {
+  try {
+    let response = await logout();
+
+    console.log("logout-response: ", response);
+
+    if (response.detail == "Closed all sessions") {
+      unauthorized();
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+});
