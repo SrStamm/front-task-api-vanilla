@@ -13,6 +13,21 @@ export function showSections(sectionId) {
   document.getElementById(sectionId).style.display = "grid";
 }
 
+export function unauthorized() {
+  // No autorizado, se oculta todo
+  document.querySelector(".principal-layout").style.display = "none";
+
+  // Muestra el formulario de login
+  document.getElementById("formLogContainer").style.display = "flex";
+}
+
+export function loginSucces() {
+  document.querySelector(".principal-layout").style.display = "flex";
+  showSections("inicioSection");
+
+  document.getElementById("formLogContainer").style.display = "none";
+}
+
 export function showGroups(groups) {
   const groupTemplate = document.getElementById("groupTemplate");
   const groupContainer = document.getElementById("groupList");
@@ -108,3 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// setupLogoutBotton
+// Encontrar el boton, agregar un evento y llamar a la funcion de auth.js

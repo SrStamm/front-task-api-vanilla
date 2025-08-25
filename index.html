@@ -7,7 +7,7 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="container" id="formLogContainer" style="display: none">
+    <div class="container" id="formLogContainer">
       <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
         <form id="loginForm">
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Contenedor principal del layout -->
-    <main class="principal-layout">
+    <main class="principal-layout" style="display: none">
       <!-- Side bar -->
       <div class="sidebar-container">
         <aside class="sidebar">
@@ -118,6 +118,7 @@
               <div class="sidebar_hide">
                 <h3 class="sidebar_title">Mirko</h3>
                 <p class="sidebar_info">Cuenta Free</p>
+                <button type="button" class="btn-secondary">Cerrar sesión</button>
               </div>
             </li>
           </ul>
@@ -125,27 +126,21 @@
       </div>
 
       <!-- Dashboard Layout -->
-      <div class="dashboard-layout">
+      <div class="dashboard-layout" ;">
         <!-- Dashboard - Inicio section -->
         <section id="inicioSection">
           <h2>Inicio</h2>
           <div id="pendingTaskWidget" class="partSections">
             <h3>Tareas pendientes próximas a vencer</h3>
-            <ol id="taskDueSoon">
-              <li></li>
-            </ol>
+            <ol id="taskDueSoon"></ol>
           </div>
           <div id="projectProgress" class="partSections">
             <h3>Progreso de los proyectos</h3>
-            <ol id="projectProgressList">
-              <li></li>
-            </ol>
+            <ol id="projectProgressList"></ol>
           </div>
           <div class="partSections">
             <h3>Notificaciones</h3>
-            <ul>
-              <li></li>
-            </ul>
+            <ul></ul>
           </div>
         </section>
 
@@ -168,9 +163,7 @@
           <h2>Proyectos</h2>
           <div class="partSections">
             <h3>Mis Proyectos</h3>
-            <ol id="projectList">
-              <li></li>
-            </ol>
+            <ol id="projectList"></ol>
           </div>
         </section>
 
@@ -193,15 +186,11 @@
           <h2>Chat</h2>
           <div class="partSections">
             <h3>Proyectos</h3>
-            <ol id="projectListToChat">
-              <li></li>
-            </ol>
+            <ol id="projectListToChat"></ol>
           </div>
           <div class="partSections">
             <h3>Chat</h3>
-            <ul>
-              <li></li>
-            </ul>
+            <ul id=""></ul>
           </div>
         </section>
       </div>
@@ -261,4 +250,5 @@
   <script type="module" src="js/dom.js"></script>
   <script type="module" src="js/dashboard.js"></script>
   <script type="module" src="js/api.js"></script>
+  <script type="module" src="js/auth.js"></script>
 </html>

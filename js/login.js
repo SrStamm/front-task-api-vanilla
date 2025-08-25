@@ -2,7 +2,7 @@
 // Llamadas a la API
 // Manejo de los tokens
 
-import { showSections } from "./dom.js";
+import { loginSucces } from "./dom.js";
 
 const url = "http://localhost:8000";
 
@@ -62,7 +62,7 @@ loginBtn.addEventListener("click", async (event) => {
     document.querySelector(".principal-layout").style.display = "flex";
 
     // Muestra la seccion principal del dashboard
-    showSections("inicioSection");
+    loginSucces();
   } catch (error) {
     console.error("Error al iniciar sesión: ", error);
   }

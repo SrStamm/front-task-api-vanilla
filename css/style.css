@@ -149,6 +149,28 @@ input:focus {
   box-shadow: var(--shadow-lg);
 }
 
+.btn-secondary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
 a {
   color: var(--primary);
   text-decoration: none;

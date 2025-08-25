@@ -26,6 +26,17 @@ async function fetchData(endpoint, method, body, token) {
 }
 
 //
+//  --- Lógica de autorizacion ---
+//
+
+// Funcion que haga refresh
+// Después de crear la funcion, agregarla al flujo de fetchData
+// Si no esta autorizado, ejecutar esta funcion
+// Si falla de nuevo, eliminar los tokens y mostrar form de login
+
+// Funcion que haga logout
+
+//
 //  --- Lógica de Grupos ---
 //
 
@@ -51,6 +62,11 @@ export async function getProjects() {
 //
 // --- Lógica de Usuarios ---
 //
+
+export async function getCurrentUser() {
+  const token = localStorage.getItem("authToken");
+  return await fetchData("/user/me", "GET", null, token);
+}
 
 //
 // --- Lógica de Tareas ---
