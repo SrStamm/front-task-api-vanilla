@@ -262,30 +262,16 @@ input:focus {
   box-shadow: var(--shadow-lg);
 }
 
-/* Botón de cerrar sesión específico */
-#logoutBtn {
-  composes: btn btn-error btn-sm btn-block;
-  margin-top: 0.5rem;
-}
-
 /* Botones del modal */
 .modal-actions {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .modal-actions .btn {
   min-width: 100px;
-}
-
-.btn-cancel {
-  composes: btn btn-outline-error;
-}
-
-.btn-confirm {
-  composes: btn btn-primary;
 }
 
 /* Contenedores de botones */
@@ -299,6 +285,11 @@ input:focus {
 
 .btn-container .btn {
   max-width: 200px;
+}
+
+/* Estilos específicos para el botón de logout */
+#logoutBtn {
+  margin-top: 0.5rem;
 }
 
 a {
@@ -571,14 +562,4 @@ template {
 .modal textarea {
   margin-bottom: 1rem;
   border-radius: var(--border-radius);
-}
-
-.modal-actions {
-  max-width: 200px;
-  margin: 0 auto;
-  display: flex;
-}
-
-.modal-actions button {
-  max-width: 100px;
 }

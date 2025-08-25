@@ -4,8 +4,8 @@
 // Manejar los eventos del sidebar para mostrar las secciones
 // Llama a las funciones de `api.js` para obtener los datos iniciales y a los de `dom.js` para renderizarlos
 
-import { showSections, showGroups } from "./dom.js";
-import { getGroups } from "./api.js";
+import { showSections, showGroups, showModal, occultModal } from "./dom.js";
+import { createGroup, getGroups } from "./api.js";
 
 // sidebar Secciones
 const startSection = document.getElementById("sidebarInicioSection");
@@ -44,5 +44,51 @@ async function loadGroup() {
     showGroups(groups);
   } catch (error) {
     console.error("No se pudo cargar la lista de grupos: ", error.message);
+  }
+}
+
+// Botones en dashboard
+const createGroupBtn = document.getElementById("createGroupBtn");
+
+createGroupBtn.addEventListener("click", () => {
+  showModal("modalGroup");
+});
+
+// Botones del modal
+const saveGroupBtn = document.getElementById("saveGroup");
+
+//
+saveGroupBtn.addEventListener("click", async () => {
+  let response = await createGroupEvent();
+
+  if (response == "Se ha creado un nuevo grupo de forma exitosa") {
+    console.log("Grupo creado exitosamente");
+  } else {
+    console.log("Error al crear el grupo: ", response.detail);
+  }
+  occultModal("modalGroup");
+  loadGroup();
+});
+
+// Funciones completas
+async function createGroupEvent() {
+  try {
+    // Obtiene los datos
+    const newGroupName = document.getElementById("newGroupName").value;
+    const newGroupDescription = document.getElementById(
+      "newGroupDescription",
+    ).value;
+
+    let data = {
+      name: newGroupName,
+      description: newGroupDescription || null,
+    };
+
+    let response = await createGroup(data);
+    console.log("Respone al crear el grupo: ", response);
+
+    return response.detail;
+  } catch (error) {
+    console.log("Error en crear un grupo: ", error);
   }
 }

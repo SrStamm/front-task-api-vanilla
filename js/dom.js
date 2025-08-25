@@ -30,6 +30,39 @@ export function loginSucces() {
   document.getElementById("formLogContainer").style.display = "none";
 }
 
+// Mostrar modal de group
+export function showModal(modalId) {
+  const modalGroupContainer = document.getElementById(modalId);
+
+  modalGroupContainer.style.display = "flex";
+}
+
+export function occultModal(modalId) {
+  const modalGroupContainer = document.getElementById(modalId);
+  modalGroupContainer.innerHTML = "";
+  modalGroupContainer.style.display = "none";
+}
+
+// Cerrar cards expandidas al hacer clic fuera de ellas
+document.addEventListener("click", function (event) {
+  const expandedCards = document.querySelectorAll(".card.expanded");
+  if (expandedCards.length > 0) {
+    const isClickInsideCard = Array.from(expandedCards).some((card) =>
+      card.contains(event.target),
+    );
+
+    if (!isClickInsideCard) {
+      expandedCards.forEach((card) => {
+        card.classList.remove("expanded");
+        const placeholder = card.nextElementSibling;
+        if (placeholder && placeholder.classList.contains("card-placeholder")) {
+          placeholder.remove();
+        }
+      });
+    }
+  }
+});
+
 export function showGroups(groups) {
   const groupTemplate = document.getElementById("groupTemplate");
   const groupContainer = document.getElementById("groupList");
@@ -97,26 +130,6 @@ export function showGroups(groups) {
   }
 }
 
-// Cerrar cards expandidas al hacer clic fuera de ellas
-document.addEventListener("click", function (event) {
-  const expandedCards = document.querySelectorAll(".card.expanded");
-  if (expandedCards.length > 0) {
-    const isClickInsideCard = Array.from(expandedCards).some((card) =>
-      card.contains(event.target),
-    );
-
-    if (!isClickInsideCard) {
-      expandedCards.forEach((card) => {
-        card.classList.remove("expanded");
-        const placeholder = card.nextElementSibling;
-        if (placeholder && placeholder.classList.contains("card-placeholder")) {
-          placeholder.remove();
-        }
-      });
-    }
-  }
-});
-
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (event) {
@@ -126,8 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// setupLogoutBotton
-// Encontrar el boton, agregar un evento y llamar a la funcion de auth.js
+// Evento de logout
 const logoutBtn = document.getElementById("logoutBtn");
 
 logoutBtn.addEventListener("click", async () => {

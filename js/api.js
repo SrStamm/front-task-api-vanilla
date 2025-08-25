@@ -53,8 +53,6 @@ async function fetchData(endpoint, method, body, token) {
 //  --- Lógica de autorizacion ---
 //
 
-// Funcion que haga refresh
-// Después de crear la funcion, agregarla al flujo de fetchData
 export async function refreshFetch() {
   // Obtiene los tokens
   const token = localStorage.getItem("authToken");
@@ -65,7 +63,6 @@ export async function refreshFetch() {
   return fetchData("/refresh", "POST", JSON.stringify(bodyData), token);
 }
 
-// Funcion que haga logout
 export async function logoutFetch() {
   const token = localStorage.getItem("authToken");
 
@@ -86,6 +83,11 @@ export async function createGroup(groupData) {
   return await fetchData("/group", "POST", JSON.stringify(groupData), token);
 }
 
+export async function deleteGroup(groupId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/group/${groupId}`, "DELETE", null, token);
+}
+
 //
 // --- Lógica de Proyectos ---
 //
@@ -93,6 +95,26 @@ export async function createGroup(groupData) {
 export async function getProjects() {
   const token = localStorage.getItem("authToken");
   return await fetchData("/projects/me", "GET", null, token);
+}
+
+export async function createProject(projectData, groupId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}`,
+    "POST",
+    JSON.stringify(projectData),
+    token,
+  );
+}
+
+export async function deleteProject(projectId, groupId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}`,
+    "DELETE",
+    null,
+    token,
+  );
 }
 
 //
