@@ -3,7 +3,9 @@
 // Eventos de los enlaces para cambiar entre el formulario de login y registro
 // Eventos para los botones de sidebar
 
+import { deleteGroup, deleteUserFromGroup } from "./api.js";
 import { logout } from "./auth.js";
+import { loadGroup } from "./dashboard.js";
 
 export function showSections(sectionId) {
   // Oculta todas las secciones de contenido
@@ -39,7 +41,6 @@ export function showModal(modalId) {
 
 export function occultModal(modalId) {
   const modalGroupContainer = document.getElementById(modalId);
-  modalGroupContainer.innerHTML = "";
   modalGroupContainer.style.display = "none";
 }
 
@@ -63,6 +64,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
+// Función que renderiza los grupos
 export function showGroups(groups) {
   const groupTemplate = document.getElementById("groupTemplate");
   const groupContainer = document.getElementById("groupList");
@@ -86,7 +88,15 @@ export function showGroups(groups) {
       groupDescription.textContent = group.description || "Sin descripción";
 
       // Añadir evento de clic para mostrar/ocultar descripción
-      card.addEventListener("click", function () {
+      card.addEventListener("click", function (event) {
+        if (event.target.classList.contains("btn-manage")) {
+          event.stopPropagation(); // Evita que se dispare la expansión
+          // Función que muestra el modal
+          showModal("modalInfoGroup");
+          showGroupDetailsModal(group);
+          return;
+        }
+
         // Si ya está expandida, contraer
         if (this.classList.contains("expanded")) {
           this.classList.remove("expanded");
@@ -138,6 +148,94 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+//
+function showGroupDetailsModal(groupData) {
+  console.log("El grupo que se quiere mas informacion es: ", groupData);
+
+  // Accede al modal
+  const modal = document.getElementById("modalInfoGroup");
+  const groupName = modal.querySelector(".groupName");
+  const groupDescription = modal.querySelector(".description");
+  const userList = modal.querySelector(".listUser");
+  const deleteBtn = modal.querySelector("#deleteGroup");
+  const addUserBtn = modal.querySelector("#addUserGroup");
+
+  // VERIFICAR que los elementos existen antes de usarlos
+  if (
+    !groupName ||
+    !groupDescription ||
+    !userList ||
+    !deleteBtn ||
+    !addUserBtn
+  ) {
+    console.error("Error: No se encontraron todos los elementos del modal");
+    return;
+  }
+
+  // Llenar los datos
+  groupName.textContent = groupData.name;
+  groupDescription.textContent = groupData.description;
+
+  // Limpiar la lista anterior
+  userList.innerHTML = "";
+
+  // Agregar usuarios si existen
+  if (groupData.users && groupData.users.length > 0) {
+    groupData.users.forEach((user) => {
+      renderUserInGroup(user.username, null);
+    });
+  } else {
+    userList.innerHTML = "<li>No hay miembros en este grupo</li>";
+  }
+
+  // Agregar acciones a los botones
+  deleteBtn.onclick = () => deleteGroupAction(groupData.group_id);
+  addUserBtn.onclick = () =>
+    console.log("Agregar usuario al grupo:", groupData.group_id);
+
+  modal.style.display = "flex";
+}
+
+async function deleteGroupAction(groupId) {
+  try {
+    let result = await deleteGroup(groupId);
+    console.log("Grupo eliminado:", result);
+    // Cerrar modal y recargar grupos
+    occultModal("modalInfoGroup");
+    loadGroup();
+  } catch (error) {
+    console.log(`Error al eliminar el grupo ${groupId}: `, error);
+  }
+}
+
+function renderUserInGroup(groupId, userId, username, role) {
+  // Accede al modal
+  const modal = document.getElementById("modalInfoGroup");
+  const userList = modal.querySelector(".listUser");
+
+  // Accede al template de users in group
+  const userGroupTemplate = document.getElementById("userGroupTemplate");
+  const clonTemplate = userGroupTemplate.content.cloneNode(true);
+
+  // Obtiene cada parte del template
+  const userNameTemplate = clonTemplate.querySelector(".userName");
+  const userRoleTemplate = clonTemplate.querySelector(".userRole");
+
+  // Modifica cada parte
+  userNameTemplate.textContent = username;
+  userRoleTemplate.textContent = role || "Sin rol";
+
+  // Configurar botones
+  const deleteBtn = clonTemplate.querySelector("#deleteUserGroup");
+  deleteBtn.onclick = () => deleteUserFromGroup(groupId, userId);
+
+  const editBtn = clonTemplate.querySelector("#editRoleGroup");
+  editBtn.onclick = () =>
+    console.log("Editar rol del usuario en el grupo:", groupId);
+
+  userList.appendChild(clonTemplate);
+}
 
 // Evento de logout
 const logoutBtn = document.getElementById("logoutBtn");

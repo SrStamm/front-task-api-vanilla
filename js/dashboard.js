@@ -35,7 +35,7 @@ chatSection.addEventListener("click", function () {
   showSections("chatSection");
 });
 
-async function loadGroup() {
+export async function loadGroup() {
   try {
     // Llama a la funcion que obtendra los grupos
     const groups = await getGroups();
@@ -57,7 +57,7 @@ createGroupBtn.addEventListener("click", () => {
 // Botones del modal
 const saveGroupBtn = document.getElementById("saveGroup");
 
-//
+// Evento de creación de un grupo
 saveGroupBtn.addEventListener("click", async () => {
   let response = await createGroupEvent();
 

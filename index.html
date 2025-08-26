@@ -203,6 +203,21 @@
         <p class="numbersOfMembers"></p>
         <div class="template-hide">
           <p class="groupDescription"></p>
+          <button type="button" class="btn btn-sm btn-outline-primary btn-manage">Más detalles</button>
+        </div>
+      </div>
+    </template>
+
+
+    <template id="userGroupTemplate">
+      <div class="body-template">
+        <div class="info-template">
+          <p class="userName"></p>
+          <p class="userRole"></p>
+        </div>
+        <div class="actionTemplate">
+          <button type="button" class="btn btn-vsm btn-outline-error" id="deleteUserGroup">Eliminar</button>
+          <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup">Editar</button>
         </div>
       </div>
     </template>
@@ -233,6 +248,7 @@
       </div>
     </template>
 
+
     <!-- Template de mensajes -->
     <template id="messageTemplate">
       <div class="card">
@@ -247,7 +263,7 @@
     </template>
 
 
-    <!-- Modal para crear grupo -->
+    <!-- Modal para forms -->
     <div class="modal-backdrop" id="modalGroup" style="display: none;">
       <div class="modal">
         <h3>Crear un nuevo grupo</h3>
@@ -259,6 +275,22 @@
             <button type="button" class="btn btn-primary" id="saveGroup">Crear</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Modal para mas información -->
+    <div class="modal-backdrop" id="modalInfoGroup" style="display: none;">
+      <div class="modal">
+        <h3 class="groupName">Nombre de grupo</h3>
+        <h4>Descripción:</h4>
+        <p class="description">Descripción del grupo</p>
+        <h4>Miembros</h3>
+        <ol class="listUser">
+        </ol>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="addUserGroup">Agregar Usuario</button>
+            <button type="button" class="btn btn-error btn-sm" id="deleteGroup">Eliminar Grupo</button>
+          </div>
       </div>
     </div>
   </body>

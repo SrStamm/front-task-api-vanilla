@@ -88,6 +88,11 @@ export async function deleteGroup(groupId) {
   return await fetchData(`/group/${groupId}`, "DELETE", null, token);
 }
 
+export async function deleteUserFromGroup(groupId, userId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/group/${groupId}/${userId}`, "DELETE", null, token);
+}
+
 //
 // --- Lógica de Proyectos ---
 //
