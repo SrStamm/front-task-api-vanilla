@@ -208,7 +208,6 @@
       </div>
     </template>
 
-
     <template id="userGroupTemplate">
       <div class="body-template">
         <div class="info-template">
@@ -248,7 +247,6 @@
       </div>
     </template>
 
-
     <!-- Template de mensajes -->
     <template id="messageTemplate">
       <div class="card">
@@ -260,6 +258,19 @@
     <!-- Template de notificaciones -->
     <template id="notificationTemplate">
       <div class="card"></div>
+    </template>
+
+    <!-- Template de usuarios -->
+    <template id="userList">
+      <div class="body-template">
+        <div class="info-template">
+          <p class="userName"></p>
+          <p class="userId" style="display: none;"></p>
+        </div>
+        <div class="actionTemplate">
+          <button type="button" class="btn btn-sm" id="addUserToGroup">Agregar</button>
+        </div>
+      </div>
     </template>
 
 
@@ -290,7 +301,14 @@
           <div class="modal-actions">
             <button type="button" class="btn btn-primary btn-sm" id="addUserGroup">Agregar Usuario</button>
             <button type="button" class="btn btn-error btn-sm" id="deleteGroup">Eliminar Grupo</button>
-          </div>
+    </div>
+
+    <!-- Modal de lista de usuarios para agregar -->
+    <div class="modal-backdrop" id="allUsersList" style="display: none;">
+      <div class="modal">
+        <h3>Usuarios</h3>
+        <ol class="listUser">
+        </ol>
       </div>
     </div>
   </body>

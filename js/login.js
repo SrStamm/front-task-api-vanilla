@@ -2,7 +2,7 @@
 // Llamadas a la API
 // Manejo de los tokens
 
-import { loginSucces } from "./dom.js";
+import { loginSucces, showLoginForm, showRegisterForm } from "./dom.js";
 
 const url = "http://localhost:8000";
 
@@ -13,15 +13,13 @@ const loginLink = document.getElementById("loginLink");
 registerLink.addEventListener("click", function (event) {
   event.preventDefault();
 
-  document.getElementById("loginSection").style.display = "none";
-  document.getElementById("registerSection").style.display = "block";
+  showRegisterForm();
 });
 
 loginLink.addEventListener("click", function (event) {
   event.preventDefault();
 
-  document.getElementById("loginSection").style.display = "block";
-  document.getElementById("registerSection").style.display = "none";
+  showLoginForm();
 });
 
 // Botones

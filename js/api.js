@@ -18,20 +18,22 @@ async function fetchData(endpoint, method, body, token) {
   });
 
   // Verifica que no haya ningún error
-  if (response.status == 401) {
+  if (response.status === 401) {
     try {
       // Nuevo token
       let newToken = await refresh();
 
-      // Reintennto de fecth
-      response = await fetch(url + endpoint, {
-        method: method,
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: body,
-      });
+      if (newToken) {
+        // Reintennto de fecth
+        response = await fetch(url + endpoint, {
+          method: method,
+          headers: {
+            Authorization: "Bearer " + newToken,
+            "Content-Type": "application/json",
+          },
+          body: body,
+        });
+      }
     } catch (error) {
       unauthorized();
       throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
@@ -41,7 +43,9 @@ async function fetchData(endpoint, method, body, token) {
   // Lanza excepción por otro error
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.detail);
+    throw new Error(
+      `HTTP ${errorData.status}: ${errorData.detail || "Error desconocido"}`,
+    );
   }
 
   // Obtiene los datos y los devuelve
@@ -56,7 +60,12 @@ async function fetchData(endpoint, method, body, token) {
 export async function refreshFetch() {
   // Obtiene los tokens
   const token = localStorage.getItem("authToken");
+
+  if (!token) {
+    throw new Error("No se encontro el token");
+  }
   const refreshToken = localStorage.getItem("refrToken");
+
   // Lo prepara para enviarlo
   const bodyData = { refresh: refreshToken };
 
@@ -91,6 +100,11 @@ export async function deleteGroup(groupId) {
 export async function deleteUserFromGroup(groupId, userId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(`/group/${groupId}/${userId}`, "DELETE", null, token);
+}
+
+export async function addUserToGroup(groupId, userId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/group/${groupId}/${userId}`, "POST", null, token);
 }
 
 //
@@ -129,6 +143,11 @@ export async function deleteProject(projectId, groupId) {
 export async function getCurrentUser() {
   const token = localStorage.getItem("authToken");
   return await fetchData("/user/me", "GET", null, token);
+}
+
+export async function getUsers() {
+  const token = localStorage.getItem("authToken");
+  return await fetchData("/user", "GET", null, token);
 }
 
 //

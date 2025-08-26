@@ -3,7 +3,12 @@
 // Eventos de los enlaces para cambiar entre el formulario de login y registro
 // Eventos para los botones de sidebar
 
-import { deleteGroup, deleteUserFromGroup } from "./api.js";
+import {
+  addUserToGroup,
+  deleteGroup,
+  deleteUserFromGroup,
+  getUsers,
+} from "./api.js";
 import { logout } from "./auth.js";
 import { loadGroup } from "./dashboard.js";
 
@@ -30,6 +35,16 @@ export function loginSucces() {
   showSections("inicioSection");
 
   document.getElementById("formLogContainer").style.display = "none";
+}
+
+export function showLoginForm() {
+  document.getElementById("loginSection").style.display = "block";
+  document.getElementById("registerSection").style.display = "none";
+}
+
+export function showRegisterForm() {
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("registerSection").style.display = "block";
 }
 
 // Mostrar modal de group
@@ -150,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //
-function showGroupDetailsModal(groupData) {
+async function showGroupDetailsModal(groupData) {
   console.log("El grupo que se quiere mas informacion es: ", groupData);
 
   // Accede al modal
@@ -191,9 +206,13 @@ function showGroupDetailsModal(groupData) {
 
   // Agregar acciones a los botones
   deleteBtn.onclick = () => deleteGroupAction(groupData.group_id);
-  addUserBtn.onclick = () =>
-    console.log("Agregar usuario al grupo:", groupData.group_id);
-
+  addUserBtn.onclick = async () => {
+    showModal("allUsersList");
+    let allUsers = await getUsers();
+    allUsers.forEach((user) => {
+      renderUsers(user.user_id, user.username, groupData.group_id);
+    });
+  };
   modal.style.display = "flex";
 }
 
@@ -233,6 +252,31 @@ function renderUserInGroup(groupId, userId, username, role) {
   const editBtn = clonTemplate.querySelector("#editRoleGroup");
   editBtn.onclick = () =>
     console.log("Editar rol del usuario en el grupo:", groupId);
+
+  userList.appendChild(clonTemplate);
+}
+
+// Renderiza una lista de usuarios
+function renderUsers(userId, username, groupId) {
+  // Accede al modal
+  const modal = document.getElementById("allUsersList");
+  const userList = modal.querySelector(".listUser");
+
+  // Accede al template de users
+  const userGroupTemplate = document.getElementById("userList");
+  const clonTemplate = userGroupTemplate.content.cloneNode(true);
+
+  // Obtiene cada parte del template
+  const userNameTemplate = clonTemplate.querySelector(".userName");
+  const userIdTemplate = clonTemplate.querySelector(".userId");
+
+  // Modifica cada parte
+  userNameTemplate.textContent = username;
+  userIdTemplate.textContent = userId;
+
+  // Configurar botones
+  const addBtn = clonTemplate.querySelector("#addUserToGroup");
+  addBtn.onclick = () => addUserToGroup(groupId, userId);
 
   userList.appendChild(clonTemplate);
 }
