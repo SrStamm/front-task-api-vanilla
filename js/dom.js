@@ -1,7 +1,24 @@
 // Manipulación del DOM y renderizado
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
-import { addUserToGroup, deleteUserFromGroup } from "./api.js";
+import { deleteUserFromGroup } from "./api.js";
+import { loadGroup } from "./dashboard.js";
+
+export function showMessage(message, type = "error") {
+  // Vacia por si habia un mensaje antes
+  messageContainer.style.display = "none";
+  messageContainer.textContent = "";
+
+  // Actualiza el mensaje y lo muestra
+  messageContainer.textContent = message;
+  messageContainer.className = `alert alert-${type}`;
+  messageContainer.style.display = "block";
+
+  setTimeout(() => {
+    messageContainer.style.display = "none";
+    messageContainer.textContent = "";
+  }, 4000);
+}
 
 export function showSections(sectionId) {
   // Oculta todas las secciones de contenido
@@ -41,13 +58,18 @@ export function showRegisterForm() {
 // Mostrar modal de group
 export function showModal(modalId) {
   const modalGroupContainer = document.getElementById(modalId);
-
-  modalGroupContainer.style.display = "flex";
+  modalGroupContainer.classList.remove("hidden"); // Asegura que sea visible
+  setTimeout(() => {
+    modalGroupContainer.classList.add("show"); // Activa la animación
+  }, 10); // Pequeño retraso para que la transición ocurra
 }
 
 export function occultModal(modalId) {
   const modalGroupContainer = document.getElementById(modalId);
-  modalGroupContainer.style.display = "none";
+  modalGroupContainer.classList.remove("show"); // Quita la clase para fade-out
+  setTimeout(() => {
+    modalGroupContainer.classList.add("hidden"); // Oculta después de la animación
+  }, 300); // Espera la duración de la transición (0.3s)
 }
 
 // Muestra el modal de Group
@@ -95,7 +117,7 @@ function renderGroupInModal(elementId, groupData) {
           groupData.group_id,
           user.user_id,
           user.username,
-          null,
+          user.role,
         );
       });
     } else {
@@ -137,7 +159,12 @@ export function renderGroup(elementId, groupData) {
     // Agregar usuarios si existen
     if (groupData.users && groupData.users.length > 0) {
       groupData.users.forEach((user) => {
-        renderUserInGroup(user.username, null);
+        renderUserInGroup(
+          groupData.group_id,
+          user.user_id,
+          user.username,
+          user.role,
+        );
       });
     } else {
       userList.innerHTML = "<li>No hay miembros en este grupo</li>";
@@ -164,15 +191,18 @@ function renderUserInGroup(groupId, userId, username, role) {
 
   // Modifica cada parte
   userNameTemplate.textContent = username;
-  userRoleTemplate.textContent = role || "Sin rol";
+  userRoleTemplate.textContent = role;
 
   // Configurar botones
   const deleteBtn = clonTemplate.querySelector("#deleteUserGroup");
-  deleteBtn.onclick = () => deleteUserFromGroup(groupId, userId);
+  deleteBtn.onclick = async () => {
+    await deleteUserFromGroup(groupId, userId);
+    occultModal("modalInfoGroup");
+    await loadGroup();
+  };
 
   const editBtn = clonTemplate.querySelector("#editRoleGroup");
-  editBtn.onclick = () =>
-    console.log("Editar rol del usuario en el grupo:", groupId);
+  editBtn.onclick = () => console.log("Editado rol del usuario");
 
   userList.appendChild(clonTemplate);
 }

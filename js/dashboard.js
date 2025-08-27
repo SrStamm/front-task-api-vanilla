@@ -9,12 +9,14 @@ import {
   showGroupDetailsModal,
   renderGroup,
   renderUsers,
+  showMessage,
 } from "./dom.js";
 import {
   addUserToGroup,
   createGroup,
   deleteGroup,
   getGroups,
+  getUsersInGroup,
   getUsers,
 } from "./api.js";
 import { logout } from "./auth.js";
@@ -30,9 +32,9 @@ startSection.addEventListener("click", function () {
   showSections("inicioSection");
 });
 
-groupSection.addEventListener("click", function () {
+groupSection.addEventListener("click", async function () {
   showSections("groupSection");
-  loadGroup();
+  await loadGroup();
 });
 
 projectSection.addEventListener("click", function () {
@@ -74,15 +76,44 @@ document.addEventListener("DOMContentLoaded", function () {
       event.stopPropagation();
     }
   });
+
+  document.addEventListener("click", function (event) {
+    const modalBackdrop = event.target.closest(".modal-backdrop");
+    const modalContent = event.target.closest(".modal");
+
+    // Si el clic es en el backdrop pero no en el contenido del modal
+    if (modalBackdrop && !modalContent) {
+      const modalId = modalBackdrop.id;
+      // Verifica si el modal está visible (tiene clase 'show')
+      if (modalBackdrop.classList.contains("show")) {
+        occultModal(modalId);
+      }
+    }
+  });
 });
+
+// Obtener referencias a los elementos
+const spinnerContainer = document.getElementById("spinner-container");
+const spinnerElement = document.querySelector(".spinner"); // Para manejar la clase del spinner
+
+// Función para mostrar el spinner
+function showSpinner() {
+  spinnerContainer.style.display = "block"; // Muestra el contenedor
+  spinnerElement.classList.remove("spinner-hidden"); // Asegura que el spinner no esté oculto por estilos internos
+}
+
+// Función para ocultar el spinner
+function hideSpinner() {
+  spinnerContainer.style.display = "none"; // Oculta el contenedor
+  spinnerElement.classList.add("spinner-hidden"); // Añade la clase de oculto para asegurar
+}
 
 export async function loadGroup() {
   try {
     // Llama a la funcion que obtendra los grupos
     const groups = await getGroups();
 
-    // Si fue exitosa, los muestra
-    // showGroups(groups);
+    showSpinner();
 
     const groupContainer = document.getElementById("groupList");
     groupContainer.innerHTML = "";
@@ -90,17 +121,35 @@ export async function loadGroup() {
     if (groups <= 0) {
       groupContainer.textContent = "No eres parte de ningun grupo.";
     } else {
+      hideSpinner();
+
       groups.forEach((group) => {
         let clone = renderGroup("groupTemplate", group);
 
         // Añadir evento de clic para mostrar/ocultar descripción
         let card = clone.querySelector(".card");
-        card.addEventListener("click", function (event) {
+        card.addEventListener("click", async function (event) {
           if (event.target.classList.contains("btn-manage")) {
             event.stopPropagation(); // Evita que se dispare la expansión
             // Función que muestra el modal
             showModal("modalInfoGroup");
-            const modal = showGroupDetailsModal(group);
+
+            showSpinner();
+
+            // Obtiene la lista de usuarios del grupo
+            let groupMembers = await getUsersInGroup(group.group_id);
+
+            // Serializa los datos
+            let data = {
+              group_id: group.group_id,
+              name: group.name,
+              description: group.description,
+              users: groupMembers,
+            };
+
+            hideSpinner();
+
+            const modal = showGroupDetailsModal(data);
 
             // Se conecta con los botones
             const deleteBtn = modal.querySelector("#deleteGroup");
@@ -112,21 +161,30 @@ export async function loadGroup() {
               occultModal("modalInfoGroup");
               await loadGroup();
             };
+
             addUserBtn.onclick = async () => {
               showModal("allUsersList");
+
+              showSpinner();
 
               // Accede al modal
               const modal = document.getElementById("allUsersList");
               const userList = modal.querySelector(".listUser");
+              userList.innerHTML = "";
+
+              hideSpinner();
+
               let allUsers = await getUsers();
               allUsers.forEach((user) => {
                 let renderizedUser = renderUsers(user.user_id, user.username);
 
                 // Configurar botones
                 const addBtn = renderizedUser.querySelector("#addUserToGroup");
-                addBtn.onclick = () => {
-                  addUserToGroup(group.group_id, user.user_id);
+                addBtn.onclick = async () => {
+                  await addUserToGroup(group.group_id, user.user_id);
                   occultModal("allUsersList");
+                  occultModal("modalInfoGroup");
+                  await loadGroup();
                 };
 
                 // Agrega el usuario renderizado
@@ -201,7 +259,7 @@ saveGroupBtn.addEventListener("click", async () => {
     console.log("Error al crear el grupo: ", response.detail);
   }
   occultModal("modalGroup");
-  loadGroup();
+  await loadGroup();
 });
 
 // Funciones completas
@@ -241,11 +299,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 logoutBtn.addEventListener("click", async () => {
   try {
-    let response = await logout();
-
-    if (response.detail == "Closed all sessions") {
-      unauthorized();
-    }
+    await logout();
   } catch (error) {
     console.log("Error: ", error);
   }

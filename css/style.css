@@ -58,7 +58,6 @@ body {
   align-items: center;
 }
 
-/*
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -66,7 +65,6 @@ body {
   display: flex;
   flex-direction: row;
 }
-*/
 
 h2 {
   color: var(--primary);
@@ -548,6 +546,12 @@ template {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.show {
+  opacity: 1;
 }
 
 .modal {
@@ -556,6 +560,20 @@ template {
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
+  transform: translateY(-20px); /* Inicia ligeramente arriba */
+  opacity: 0; /* Inicia invisible */
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease; /* Transición para fade y movimiento */
+}
+
+.modal-backdrop.show .modal {
+  opacity: 1; /* Visible */
+  transform: translateY(0); /* En su posición final */
+}
+
+.modal-backdrop.hidden {
+  display: none; /* Oculta completamente cuando no se usa */
 }
 
 .modal h3 {
@@ -580,8 +598,81 @@ template {
 }
 
 .body-template {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   justify-content: space-between;
   margin-bottom: 0.5rem;
+}
+
+.listUser {
+  margin-bottom: 0.5rem;
+}
+
+.info-template {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.info-template p {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+.info-template p:last-child {
+  margin-bottom: 0;
+  margin-right: 0;
+}
+
+/* Mensajes */
+.alert {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+  display: none;
+  animation: fadeIn 0.5s;
+  width: max-content;
+  position: absolute;
+  z-index: 2;
+}
+
+.alert p {
+  text-align: center;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 5px solid #28a745;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left: 5px solid #dc3545;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left: 5px solid #17a2b8;
+}
+
+/* Oculta el spinner por defecto */
+.spinner-hidden {
+  display: none;
+}
+
+/* Estilos para el círculo del spinner */
+.spinner {
+  width: 36px; /* Tamaño del spinner */
+  height: 36px;
+  border: 5px solid rgba(0, 0, 0, 0.3); /* Grosor y color del borde principal */
+  border-radius: 50%; /* Forma circular */
+  border-left-color: #7d47ff; /* Color del borde que se anima */
+  animation: spin 1s ease infinite; /* Define la animación */
+  position: absolute;
+  z-index: 2;
+
+  margin: 0 auto;
 }

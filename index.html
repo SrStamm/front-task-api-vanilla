@@ -7,6 +7,14 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
+    <!-- Mensaje de error -->
+    <div class="alert" id="messageContainer"></div>
+
+   <!-- spinner --> 
+    <div id="spinner-container" class="spinner-hidden">
+      <div class="spinner"></div>
+    </div>
+
     <div class="container" id="formLogContainer">
       <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
@@ -275,7 +283,7 @@
 
 
     <!-- Modal para forms -->
-    <div class="modal-backdrop" id="modalGroup" style="display: none;">
+    <div class="modal-backdrop hidden" id="modalGroup" >
       <div class="modal">
         <h3>Crear un nuevo grupo</h3>
         <form>
@@ -290,7 +298,7 @@
     </div>
 
     <!-- Modal para mas información -->
-    <div class="modal-backdrop" id="modalInfoGroup" style="display: none;">
+    <div class="modal-backdrop hidden" id="modalInfoGroup" >
       <div class="modal">
         <h3 class="groupName">Nombre de grupo</h3>
         <h4>Descripción:</h4>
@@ -304,7 +312,7 @@
     </div>
 
     <!-- Modal de lista de usuarios para agregar -->
-    <div class="modal-backdrop" id="allUsersList" style="display: none;">
+    <div class="modal-backdrop hidden" id="allUsersList">
       <div class="modal">
         <h3>Usuarios</h3>
         <ol class="listUser">

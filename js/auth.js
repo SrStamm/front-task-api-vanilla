@@ -2,7 +2,7 @@
 // Contiene la logica del refresh y logout
 
 import { getCurrentUser, logoutFetch, refreshFetch } from "./api.js";
-import { unauthorized, loginSucces } from "./dom.js";
+import { unauthorized, loginSucces, showMessage } from "./dom.js";
 
 // Validar la autenticación del usuario
 export async function validToken() {
@@ -54,6 +54,7 @@ export async function logout() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("refrToken");
     unauthorized();
+    showMessage("Sesión cerrada", "info");
   }
 
   return response;

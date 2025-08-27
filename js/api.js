@@ -2,7 +2,7 @@
 // Centraliza lógica Fetch, manejo de token y errores
 
 import { refresh } from "./auth.js";
-import { unauthorized } from "./dom.js";
+import { showMessage, unauthorized } from "./dom.js";
 
 const url = "http://localhost:8000";
 
@@ -39,6 +39,11 @@ async function fetchData(endpoint, method, body, token) {
       }
 
       if (response.status === 401 || !response.ok) {
+        const errorData = await response.json();
+        showMessage(
+          `Error: ${errorData.detail || "Error desconocido"}`,
+          "error",
+        );
         throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
       }
     } catch (error) {
@@ -92,6 +97,11 @@ export async function logoutFetch() {
 export async function getGroups() {
   const token = localStorage.getItem("authToken");
   return await fetchData("/group/me", "GET", null, token);
+}
+
+export async function getUsersInGroup(groupId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/group/${groupId}/users`, "GET", null, token);
 }
 
 export async function createGroup(groupData) {
