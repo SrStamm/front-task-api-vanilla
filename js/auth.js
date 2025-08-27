@@ -1,4 +1,5 @@
-// Eventos de autorización
+// Validación del token y manejo de sesion
+// Contiene la logica del refresh y logout
 
 import { getCurrentUser, logoutFetch, refreshFetch } from "./api.js";
 import { unauthorized, loginSucces } from "./dom.js";
@@ -52,6 +53,7 @@ export async function logout() {
   if (response.detail == "Closed all sessions") {
     localStorage.removeItem("authToken");
     localStorage.removeItem("refrToken");
+    unauthorized();
   }
 
   return response;

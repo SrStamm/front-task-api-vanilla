@@ -1,6 +1,4 @@
-// Manejo de formularios de login y register
-// Llamadas a la API
-// Manejo de los tokens
+// Gestiona todo lo relacionado con autenticación, envio de forms y registro, gestión de almacen de token
 
 import { loginSucces, showLoginForm, showRegisterForm } from "./dom.js";
 

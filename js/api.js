@@ -1,6 +1,5 @@
-// Exclusivo para llamadas de la API
-// Una función fetchData(endpoint, method, body) que maneje las peticiones
-// Funciones especificas como getProjects() o getTasks() que usen la función anterior
+// Modulo de llamadas API
+// Centraliza lógica Fetch, manejo de token y errores
 
 import { refresh } from "./auth.js";
 import { unauthorized } from "./dom.js";
@@ -8,6 +7,10 @@ import { unauthorized } from "./dom.js";
 const url = "http://localhost:8000";
 
 async function fetchData(endpoint, method, body, token) {
+  if (!token) {
+    throw new Error(`No hay ningún token.`);
+  }
+
   let response = await fetch(url + endpoint, {
     method: method,
     headers: {
@@ -34,9 +37,13 @@ async function fetchData(endpoint, method, body, token) {
           body: body,
         });
       }
+
+      if (response.status === 401 || !response.ok) {
+        throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
+      }
     } catch (error) {
       unauthorized();
-      throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
+      throw new Error(`Error: `, error.message);
     }
   }
 
