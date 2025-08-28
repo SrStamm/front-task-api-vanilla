@@ -58,6 +58,11 @@ body {
   align-items: center;
 }
 
+body ol,
+boyd ul {
+  list-style: none;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -309,12 +314,12 @@ a {
 
 .principal-layout {
   padding: 20px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
 }
 
 .sidebar-container {
   max-width: 400px;
-  margin-right: 1rem;
 }
 
 .sidebar {
@@ -347,6 +352,12 @@ a {
 
   color: var(--gray-50);
   transition: grid-template-columns 0.4s;
+}
+
+.sidebar_element:hover {
+  background-color: var(--secondary);
+  color: var(--surface);
+  cursor: pointer;
 }
 
 .sidebar_element:hover {
@@ -631,9 +642,11 @@ template {
   margin: 1rem 0;
   display: none;
   animation: fadeIn 0.5s;
-  width: max-content;
+  width: 50%;
   position: absolute;
   z-index: 2;
+  top: 5px;
+  opacity: 0.6;
 }
 
 .alert p {

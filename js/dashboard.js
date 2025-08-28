@@ -9,6 +9,7 @@ import {
   showGroupDetailsModal,
   renderGroup,
   renderUsers,
+  unauthorized,
   showMessage,
 } from "./dom.js";
 import {
@@ -18,6 +19,7 @@ import {
   getGroups,
   getUsersInGroup,
   getUsers,
+  getCurrentUser,
 } from "./api.js";
 import { logout } from "./auth.js";
 
@@ -27,6 +29,9 @@ const groupSection = document.getElementById("sidebarGroupSection");
 const projectSection = document.getElementById("sidebarProjectSection");
 const taskSection = document.getElementById("sidebarTaskSection");
 const chatSection = document.getElementById("sidebarChatSection");
+
+// Botones
+const logoutBtn = document.getElementById("logoutBtn");
 
 startSection.addEventListener("click", function () {
   showSections("inicioSection");
@@ -49,8 +54,9 @@ chatSection.addEventListener("click", function () {
   showSections("chatSection");
 });
 
-// Cerrar cards expandidas al hacer clic fuera de ellas
-document.addEventListener("click", function (event) {
+// Prevenir que el clic en la card propague y cierre la card
+document.addEventListener("DOMContentLoaded", function (event) {
+  // Cerrar cards expandidas al hacer clic fuera de ellas
   const expandedCards = document.querySelectorAll(".card.expanded");
   if (expandedCards.length > 0) {
     const isClickInsideCard = Array.from(expandedCards).some((card) =>
@@ -67,27 +73,133 @@ document.addEventListener("click", function (event) {
       });
     }
   }
-});
 
-// Prevenir que el clic en la card propague y cierre la card
-document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (event) {
     if (event.target.closest(".card")) {
       event.stopPropagation();
     }
   });
 
-  document.addEventListener("click", function (event) {
+  // Logout
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      const response = await logout();
+      if (response.detail === "Closed All Sessions") {
+        unauthorized();
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  });
+
+  // Event delegation para #groupList (cards, botones de grupo, usuarios)
+  const groupContainer = document.getElementById("groupList");
+  groupContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+    const card = target.closest(".card");
+
+    if (target.id === "deleteUserGroup") {
+      await deleteUserFromGroup(groupId, userId);
+      occultModal("modalInfoGroup");
+      await loadGroup();
+    } else if (
+      target.classList.contains("btn-manage") &&
+      target.id === "moreDetailsGroup"
+    ) {
+      const groupId = target.dataset.groupId;
+      const groupName = target.dataset.name;
+      const groupDescription = target.dataset.description;
+      const listUser = await getUsersInGroup(groupId);
+      showGroupDetailsModal({
+        group_id: groupId,
+        name: groupName,
+        description: groupDescription,
+        users: listUser,
+      });
+    } else if (card && !target.classList.contains("btn-manage")) {
+      // Lógica de expandir/contraer cards
+      if (card.classList.contains("expanded")) {
+        card.classList.remove("expanded");
+        const placeholder = card.nextElementSibling;
+        if (placeholder && placeholder.classList.contains("card-placeholder")) {
+          placeholder.remove();
+        }
+      } else {
+        document.querySelectorAll(".card.expanded").forEach((expandedCard) => {
+          expandedCard.classList.remove("expanded");
+          const placeholder = expandedCard.nextElementSibling;
+          if (
+            placeholder &&
+            placeholder.classList.contains("card-placeholder")
+          ) {
+            placeholder.remove();
+          }
+        });
+        card.classList.add("expanded");
+        const placeholder = document.createElement("div");
+        placeholder.classList.add("card-placeholder");
+        placeholder.style.height = `${card.offsetHeight}px`;
+        card.parentNode.insertBefore(placeholder, card.nextSibling);
+      }
+    }
+  });
+
+  //
+  const groupModalContainer = document.getElementById("modalInfoGroup");
+  groupModalContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (target.id === "addUserGroup") {
+      showModal("allUsersList");
+      const modal = document.getElementById("allUsersList");
+      const userList = modal.querySelector(".listUser");
+      userList.innerHTML = "";
+      const allUsers = await getUsers();
+      allUsers.forEach((user) => {
+        const renderizedUser = renderUsers(user.user_id, user.username);
+        const addBtn = renderizedUser.querySelector("#addUserToGroup");
+        addBtn.dataset.userId = user.user_id;
+        addBtn.dataset.groupId = target.dataset.groupId;
+        userList.appendChild(renderizedUser);
+      });
+    } else if (target.id === "addUserToGroup") {
+      const groupId = target.dataset.groupId;
+      const userId = target.dataset.userId;
+
+      console.log(`Agregar usuario ${userId} al grupo ${groupId}`);
+
+      try {
+        let response = await addUserToGroup(groupId, userId);
+        if (!response.ok) {
+          throw new Error(response.ok);
+        }
+
+        occultModal("allUsersList");
+        occultModal("modalInfoGroup");
+        await loadGroup();
+      } catch (error) {
+        showMessage("Error al añadir el usuario: ", error.message);
+        occultModal("allUsersList");
+        occultModal("modalInfoGroup");
+      }
+    } else if (target.id === "deleteGroup") {
+      const groupId = target.dataset.groupId;
+      await deleteGroupAction(groupId);
+      occultModal("modalInfoGroup");
+      await loadGroup();
+    }
+  });
+
+  // Event delegation para modales (cierre por backdrop)
+  document.addEventListener("click", (event) => {
     const modalBackdrop = event.target.closest(".modal-backdrop");
     const modalContent = event.target.closest(".modal");
-
-    // Si el clic es en el backdrop pero no en el contenido del modal
-    if (modalBackdrop && !modalContent) {
-      const modalId = modalBackdrop.id;
-      // Verifica si el modal está visible (tiene clase 'show')
-      if (modalBackdrop.classList.contains("show")) {
-        occultModal(modalId);
-      }
+    if (
+      modalBackdrop &&
+      !modalContent &&
+      modalBackdrop.classList.contains("show")
+    ) {
+      occultModal(modalBackdrop.id);
     }
   });
 });
@@ -118,123 +230,18 @@ export async function loadGroup() {
     const groupContainer = document.getElementById("groupList");
     groupContainer.innerHTML = "";
 
-    if (groups <= 0) {
+    if (groups.length <= 0) {
       groupContainer.textContent = "No eres parte de ningun grupo.";
     } else {
       hideSpinner();
 
       groups.forEach((group) => {
         let clone = renderGroup("groupTemplate", group);
-
-        // Añadir evento de clic para mostrar/ocultar descripción
-        let card = clone.querySelector(".card");
-        card.addEventListener("click", async function (event) {
-          if (event.target.classList.contains("btn-manage")) {
-            event.stopPropagation(); // Evita que se dispare la expansión
-            // Función que muestra el modal
-            showModal("modalInfoGroup");
-
-            showSpinner();
-
-            // Obtiene la lista de usuarios del grupo
-            let groupMembers = await getUsersInGroup(group.group_id);
-
-            // Serializa los datos
-            let data = {
-              group_id: group.group_id,
-              name: group.name,
-              description: group.description,
-              users: groupMembers,
-            };
-
-            hideSpinner();
-
-            const modal = showGroupDetailsModal(data);
-
-            // Se conecta con los botones
-            const deleteBtn = modal.querySelector("#deleteGroup");
-            const addUserBtn = modal.querySelector("#addUserGroup");
-
-            // Agregar acciones a los botones
-            deleteBtn.onclick = async () => {
-              await deleteGroupAction(group.group_id);
-              occultModal("modalInfoGroup");
-              await loadGroup();
-            };
-
-            addUserBtn.onclick = async () => {
-              showModal("allUsersList");
-
-              showSpinner();
-
-              // Accede al modal
-              const modal = document.getElementById("allUsersList");
-              const userList = modal.querySelector(".listUser");
-              userList.innerHTML = "";
-
-              hideSpinner();
-
-              let allUsers = await getUsers();
-              allUsers.forEach((user) => {
-                let renderizedUser = renderUsers(user.user_id, user.username);
-
-                // Configurar botones
-                const addBtn = renderizedUser.querySelector("#addUserToGroup");
-                addBtn.onclick = async () => {
-                  await addUserToGroup(group.group_id, user.user_id);
-                  occultModal("allUsersList");
-                  occultModal("modalInfoGroup");
-                  await loadGroup();
-                };
-
-                // Agrega el usuario renderizado
-                userList.appendChild(renderizedUser);
-              });
-            };
-            return;
-          }
-
-          // Si ya está expandida, contraer
-          if (this.classList.contains("expanded")) {
-            this.classList.remove("expanded");
-            // Eliminar el placeholder
-            const placeholder = this.nextElementSibling;
-            if (
-              placeholder &&
-              placeholder.classList.contains("card-placeholder")
-            ) {
-              placeholder.remove();
-            }
-          } else {
-            // Contrae cualquier otra card expandida
-            document
-              .querySelectorAll(".card.expanded")
-              .forEach((expandedCard) => {
-                expandedCard.classList.remove("expanded");
-                const placeholder = expandedCard.nextElementSibling;
-                if (
-                  placeholder &&
-                  placeholder.classList.contains("card-placeholder")
-                ) {
-                  placeholder.remove();
-                }
-              });
-
-            // Expande esta card
-            this.classList.add("expanded");
-
-            // Crear un placeholder para mantener el espacio en el grid
-            const placeholder = document.createElement("div");
-            placeholder.classList.add("card-placeholder");
-            placeholder.style.height = `${this.offsetHeight}px`;
-            this.parentNode.insertBefore(placeholder, this.nextSibling);
-          }
-        });
-
         groupContainer.appendChild(clone);
       });
     }
   } catch (error) {
+    hideSpinner();
     console.error("No se pudo cargar la lista de grupos: ", error.message);
   }
 }
@@ -293,14 +300,3 @@ async function deleteGroupAction(groupId) {
     console.log(`Error al eliminar el grupo ${groupId}: `, error);
   }
 }
-
-// Evento de logout
-const logoutBtn = document.getElementById("logoutBtn");
-
-logoutBtn.addEventListener("click", async () => {
-  try {
-    await logout();
-  } catch (error) {
-    console.log("Error: ", error);
-  }
-});

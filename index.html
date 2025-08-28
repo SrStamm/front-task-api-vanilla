@@ -134,7 +134,7 @@
       </div>
 
       <!-- Dashboard Layout -->
-      <div class="dashboard-layout" ;">
+      <div class="dashboard-layout">
         <!-- Dashboard - Inicio section -->
         <section id="inicioSection">
           <h2>Inicio</h2>
@@ -209,9 +209,16 @@
       <div class="card">
         <h4 class="groupName"></h4>
         <p class="numbersOfMembers"></p>
-        <div class="template-hide">
+        <div class="template-hide ">
           <p class="groupDescription"></p>
-          <button type="button" class="btn btn-sm btn-outline-primary btn-manage">Más detalles</button>
+          <button id="moreDetailsGroup"
+            type="button"
+            class="btn btn-sm btn-outline-primary btn-manage"
+            data-group-id="{{group_id}}"
+            data-group-name="{{name}}"
+            data-group-description="{{description}}">
+            Más detalles
+          </button>
         </div>
       </div>
     </template>
@@ -223,8 +230,22 @@
           <p class="userRole"></p>
         </div>
         <div class="actionTemplate">
-          <button type="button" class="btn btn-vsm btn-outline-error" id="deleteUserGroup">Eliminar</button>
-          <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup">Editar</button>
+          <button
+            type="button" 
+            class="btn btn-vsm btn-outline-error"
+            id="deleteUserGroup"
+            data-group-id="{{group_id}}"
+            data-user-id="{{user_id}}">
+            Eliminar
+          </button>
+          <button
+            type="button"
+            class="btn btn-vsm btn-secondary"
+            id="editRoleGroup"
+            data-group-id="{{group_id}}"
+            data-user-id="{{user_id}}">
+            Editar
+          </button>
         </div>
       </div>
     </template>
@@ -276,7 +297,7 @@
           <p class="userId" style="display: none;"></p>
         </div>
         <div class="actionTemplate">
-          <button type="button" class="btn btn-sm" id="addUserToGroup">Agregar</button>
+          <button type="button" class="btn btn-sm" id="addUserToGroup" data-group-id="{{group_id}}" data-user-id="{{user_id}}">Agregar</button>
         </div>
       </div>
     </template>
@@ -303,12 +324,26 @@
         <h3 class="groupName">Nombre de grupo</h3>
         <h4>Descripción:</h4>
         <p class="groupDescription">Descripción del grupo</p>
-        <h4>Miembros</h3>
+        <h4>Miembros</h4>
         <ol class="listUser">
         </ol>
           <div class="modal-actions">
-            <button type="button" class="btn btn-primary btn-sm" id="addUserGroup">Agregar Usuario</button>
-            <button type="button" class="btn btn-error btn-sm" id="deleteGroup">Eliminar Grupo</button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              id="addUserGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}">
+              Agregar Usuario
+            </button>
+            <button
+              type="button" 
+              class="btn btn-error btn-sm"
+              id="deleteGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}">
+              Eliminar Grupo
+            </button>
     </div>
 
     <!-- Modal de lista de usuarios para agregar -->
@@ -319,10 +354,10 @@
         </ol>
       </div>
     </div>
+    <script type="module" src="js/login.js"></script>
+    <script type="module" src="js/dom.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/auth.js"></script>
   </body>
-  <script type="module" src="js/login.js"></script>
-  <script type="module" src="js/dom.js"></script>
-  <script type="module" src="js/dashboard.js"></script>
-  <script type="module" src="js/api.js"></script>
-  <script type="module" src="js/auth.js"></script>
 </html>

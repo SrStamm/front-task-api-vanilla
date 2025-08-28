@@ -1,7 +1,7 @@
 // Manipulación del DOM y renderizado
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
-import { deleteUserFromGroup } from "./api.js";
+import { addUserToGroup, deleteGroup, deleteUserFromGroup } from "./api.js";
 import { loadGroup } from "./dashboard.js";
 
 export function showMessage(message, type = "error") {
@@ -39,7 +39,7 @@ export function unauthorized() {
 }
 
 export function loginSucces() {
-  document.querySelector(".principal-layout").style.display = "flex";
+  document.querySelector(".principal-layout").style.display = "grid";
   showSections("inicioSection");
 
   document.getElementById("formLogContainer").style.display = "none";
@@ -55,12 +55,12 @@ export function showRegisterForm() {
   document.getElementById("registerSection").style.display = "block";
 }
 
-// Mostrar modal de group
+// Mostrar modal
 export function showModal(modalId) {
-  const modalGroupContainer = document.getElementById(modalId);
-  modalGroupContainer.classList.remove("hidden"); // Asegura que sea visible
+  const modalContainer = document.getElementById(modalId);
+  modalContainer.classList.remove("hidden"); // Asegura que sea visible
   setTimeout(() => {
-    modalGroupContainer.classList.add("show"); // Activa la animación
+    modalContainer.classList.add("show"); // Activa la animación
   }, 10); // Pequeño retraso para que la transición ocurra
 }
 
@@ -79,6 +79,7 @@ export function showGroupDetailsModal(groupData) {
 
   // Accede a los botones
   const modal = document.getElementById("modalInfoGroup");
+
   return modal;
 }
 
@@ -90,6 +91,13 @@ function renderGroupInModal(elementId, groupData) {
   const groupName = modalContainer.querySelector(".groupName");
   const groupDescription = modalContainer.querySelector(".groupDescription");
   const userList = modalContainer.querySelector(".listUser");
+
+  // Accede a botones para almacenar información
+  const addUserBtn = modalContainer.querySelector("#addUserGroup");
+  const deleteGroupBtn = modalContainer.querySelector("#deleteGroup");
+
+  // Almacena la información necesaria
+  deleteGroupBtn.dataset.groupId = groupData.group_id;
 
   // VERIFICAR que los elementos existen antes de usarlos
   if (!groupName || !groupDescription) {
@@ -119,6 +127,8 @@ function renderGroupInModal(elementId, groupData) {
           user.username,
           user.role,
         );
+        addUserBtn.dataset.groupId = groupData.group_id;
+        addUserBtn.dataset.userId = user.user_id;
       });
     } else {
       userList.innerHTML = "<li>No hay miembros en este grupo</li>";
@@ -137,6 +147,7 @@ export function renderGroup(elementId, groupData) {
   const groupName = clonTemplate.querySelector(".groupName");
   const groupDescription = clonTemplate.querySelector(".groupDescription");
   const userList = clonTemplate.querySelector(".listUser");
+  const manageBtn = clonTemplate.querySelector(".btn-manage");
 
   // VERIFICAR que los elementos existen antes de usarlos
   if (!groupName || !groupDescription) {
@@ -150,6 +161,11 @@ export function renderGroup(elementId, groupData) {
   // Actualiza con los datos obtenidos
   groupName.textContent = groupData.name;
   groupDescription.textContent = groupData.description || "Sin descripción";
+
+  //
+  manageBtn.dataset.groupId = groupData.group_id;
+  manageBtn.dataset.name = groupData.name;
+  manageBtn.dataset.description = groupData.description;
 
   // Si se tiene una seccion de lista, renderiza y agrega a los usuarios
   if (userList) {
@@ -194,12 +210,6 @@ function renderUserInGroup(groupId, userId, username, role) {
   userRoleTemplate.textContent = role;
 
   // Configurar botones
-  const deleteBtn = clonTemplate.querySelector("#deleteUserGroup");
-  deleteBtn.onclick = async () => {
-    await deleteUserFromGroup(groupId, userId);
-    occultModal("modalInfoGroup");
-    await loadGroup();
-  };
 
   const editBtn = clonTemplate.querySelector("#editRoleGroup");
   editBtn.onclick = () => console.log("Editado rol del usuario");
