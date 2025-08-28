@@ -19,7 +19,6 @@ import {
   getGroups,
   getUsersInGroup,
   getUsers,
-  getCurrentUser,
 } from "./api.js";
 import { logout } from "./auth.js";
 
@@ -32,6 +31,7 @@ const chatSection = document.getElementById("sidebarChatSection");
 
 // Botones
 const logoutBtn = document.getElementById("logoutBtn");
+const createGroupBtn = document.getElementById("createGroupBtn");
 
 startSection.addEventListener("click", function () {
   showSections("inicioSection");
@@ -145,8 +145,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   //
-  const groupModalContainer = document.getElementById("modalInfoGroup");
-  groupModalContainer.addEventListener("click", async (event) => {
+  const groupModalInfoContainer = document.getElementById("modalInfoGroup");
+  groupModalInfoContainer.addEventListener("click", async (event) => {
     const target = event.target;
 
     if (target.id === "addUserGroup") {
@@ -166,19 +166,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
 
-      console.log(`Agregar usuario ${userId} al grupo ${groupId}`);
-
       try {
         let response = await addUserToGroup(groupId, userId);
-        if (!response.ok) {
-          throw new Error(response.ok);
+
+        if (response.detail !== "El usuario ha sido agregado al grupo") {
+          throw new Error(response.detail);
         }
 
         occultModal("allUsersList");
-        occultModal("modalInfoGroup");
-        await loadGroup();
       } catch (error) {
-        showMessage("Error al añadir el usuario: ", error.message);
+        showMessage("Error al añadir el usuario: ", error);
         occultModal("allUsersList");
         occultModal("modalInfoGroup");
       }
@@ -186,6 +183,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupId = target.dataset.groupId;
       await deleteGroupAction(groupId);
       occultModal("modalInfoGroup");
+      await loadGroup();
+    }
+  });
+
+  const groupModalContainer = document.getElementById("modalGroup");
+  groupModalContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (target.id === "cancelGroup") {
+      occultModal("modalGroup");
+    } else if (target.id === "saveGroup") {
+      let response = await createGroupEvent();
+
+      if (response == "Se ha creado un nuevo grupo de forma exitosa") {
+        console.log("Grupo creado exitosamente");
+      } else {
+        console.log("Error al crear el grupo: ", response.detail);
+      }
+      occultModal("modalGroup");
       await loadGroup();
     }
   });
@@ -230,11 +246,10 @@ export async function loadGroup() {
     const groupContainer = document.getElementById("groupList");
     groupContainer.innerHTML = "";
 
+    hideSpinner();
     if (groups.length <= 0) {
       groupContainer.textContent = "No eres parte de ningun grupo.";
     } else {
-      hideSpinner();
-
       groups.forEach((group) => {
         let clone = renderGroup("groupTemplate", group);
         groupContainer.appendChild(clone);
@@ -247,26 +262,9 @@ export async function loadGroup() {
 }
 
 // Botones en dashboard
-const createGroupBtn = document.getElementById("createGroupBtn");
 
 createGroupBtn.addEventListener("click", () => {
   showModal("modalGroup");
-});
-
-// Botones del modal
-const saveGroupBtn = document.getElementById("saveGroup");
-
-// Evento de creación de un grupo
-saveGroupBtn.addEventListener("click", async () => {
-  let response = await createGroupEvent();
-
-  if (response == "Se ha creado un nuevo grupo de forma exitosa") {
-    console.log("Grupo creado exitosamente");
-  } else {
-    console.log("Error al crear el grupo: ", response.detail);
-  }
-  occultModal("modalGroup");
-  await loadGroup();
 });
 
 // Funciones completas
@@ -284,7 +282,6 @@ async function createGroupEvent() {
     };
 
     let response = await createGroup(data);
-    console.log("Respone al crear el grupo: ", response);
 
     return response.detail;
   } catch (error) {
@@ -295,7 +292,10 @@ async function createGroupEvent() {
 async function deleteGroupAction(groupId) {
   try {
     let result = await deleteGroup(groupId);
-    console.log("Grupo eliminado:", result);
+
+    if (result.detail !== "Se ha eliminado el grupo") {
+      throw new Error(result.detail);
+    }
   } catch (error) {
     console.log(`Error al eliminar el grupo ${groupId}: `, error);
   }

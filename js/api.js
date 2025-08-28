@@ -28,7 +28,7 @@ async function fetchData(endpoint, method, body, token) {
 
       if (newToken) {
         // Reintennto de fecth
-        response = await fetch(url + endpoint, {
+        let newResponse = await fetch(url + endpoint, {
           method: method,
           headers: {
             Authorization: "Bearer " + newToken,
@@ -36,15 +36,18 @@ async function fetchData(endpoint, method, body, token) {
           },
           body: body,
         });
-      }
 
-      if (response.status === 401 || !response.ok) {
+        if (newResponse.status === 401 || !newResponse.ok) {
+          const errorData = await response.json();
+          showMessage(
+            "Sesion expirada. Por favor, vuelve a iniciar sesion",
+            "error",
+          );
+          throw new Error(errorData.detail || "Error desconocido");
+        }
+      } else {
         const errorData = await response.json();
-        showMessage(
-          `Error: ${errorData.detail || "Error desconocido"}`,
-          "error",
-        );
-        throw new Error(`Sesion expirada. Por favor, vuelve a iniciar sesion.`);
+        throw new Error(errorData.detail || "Error en refresh");
       }
     } catch (error) {
       unauthorized();
