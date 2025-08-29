@@ -10,7 +10,7 @@
     <!-- Mensaje de error -->
     <div class="alert" id="messageContainer"></div>
 
-   <!-- spinner --> 
+    <!-- spinner -->
     <div id="spinner-container" class="spinner-hidden">
       <div class="spinner"></div>
     </div>
@@ -126,7 +126,13 @@
               <div class="sidebar_hide">
                 <h3 class="sidebar_title">Mirko</h3>
                 <p class="sidebar_info">Cuenta Free</p>
-                <button type="button" class="btn btn-error btn-sm btn-block" id="logoutBtn">Cerrar sesión</button>
+                <button
+                  type="button"
+                  class="btn btn-error btn-sm btn-block"
+                  id="logoutBtn"
+                >
+                  Cerrar sesión
+                </button>
               </div>
             </li>
           </ul>
@@ -136,7 +142,7 @@
       <!-- Dashboard Layout -->
       <div class="dashboard-layout">
         <!-- Dashboard - Inicio section -->
-        <section id="inicioSection">
+        <section class="dashboard-section" id="inicioSection">
           <h2>Dashboard</h2>
           <div id="pendingTaskWidget" class="partSections">
             <h3>Tareas pendientes próximas a vencer</h3>
@@ -153,7 +159,11 @@
         </section>
 
         <!-- Dashboard - Group section -->
-        <section id="groupSection" style="display: none">
+        <section
+          class="dashboard-section"
+          id="groupSection"
+          style="display: none"
+        >
           <h2>Mis Grupos</h2>
           <div class="partSections">
             <div class="headerPartSection">
@@ -167,7 +177,11 @@
         </section>
 
         <!-- Dashboard - Project section -->
-        <section id="projectSection" style="display: none">
+        <section
+          class="dashboard-section"
+          id="projectSection"
+          style="display: none"
+        >
           <h2>Proyectos</h2>
           <div class="partSections">
             <h3>Mis Proyectos</h3>
@@ -176,7 +190,11 @@
         </section>
 
         <!-- Dashboard - Task section -->
-        <section id="taskSection" style="display: none">
+        <section
+          class="dashboard-section"
+          id="taskSection"
+          style="display: none"
+        >
           <h2>Tareas</h2>
           <div class="partSections taskPartSection">
             <h3>Proyectos</h3>
@@ -190,7 +208,11 @@
         </section>
 
         <!-- Dashboard - Chat section -->
-        <section id="chatSection" style="display: none">
+        <section
+          class="dashboard-section"
+          id="chatSection"
+          style="display: none"
+        >
           <h2>Chat</h2>
           <div class="partSections">
             <h3>Proyectos</h3>
@@ -209,14 +231,16 @@
       <div class="card">
         <h4 class="groupName"></h4>
         <p class="numbersOfMembers"></p>
-        <div class="template-hide ">
+        <div class="template-hide">
           <p class="groupDescription"></p>
-          <button id="moreDetailsGroup"
+          <button
+            id="moreDetailsGroup"
             type="button"
             class="btn btn-sm btn-outline-primary btn-manage"
             data-group-id="{{group_id}}"
             data-group-name="{{name}}"
-            data-group-description="{{description}}">
+            data-group-description="{{description}}"
+          >
             Más detalles
           </button>
         </div>
@@ -224,30 +248,34 @@
     </template>
 
     <template id="userGroupTemplate">
-      <div class="body-template">
-        <div class="info-template">
-          <p class="userName"></p>
-          <p class="userRole"></p>
+      <li>
+        <div class="body-template">
+          <div class="info-template">
+            <p class="userName"></p>
+            <p class="userRole"></p>
+          </div>
+          <div class="actionTemplate">
+            <button
+              type="button"
+              class="btn btn-vsm btn-outline-error manage-btn"
+              id="deleteUserGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}"
+            >
+              Eliminar
+            </button>
+            <button
+              type="button"
+              class="btn btn-vsm btn-secondary"
+              id="editRoleGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}"
+            >
+              Editar
+            </button>
+          </div>
         </div>
-        <div class="actionTemplate">
-          <button
-            type="button" 
-            class="btn btn-vsm btn-outline-error"
-            id="deleteUserGroup"
-            data-group-id="{{group_id}}"
-            data-user-id="{{user_id}}">
-            Eliminar
-          </button>
-          <button
-            type="button"
-            class="btn btn-vsm btn-secondary"
-            id="editRoleGroup"
-            data-group-id="{{group_id}}"
-            data-user-id="{{user_id}}">
-            Editar
-          </button>
-        </div>
-      </div>
+      </li>
     </template>
 
     <!-- Template de proyectos -->
@@ -294,70 +322,101 @@
       <div class="body-template">
         <div class="info-template">
           <p class="userName"></p>
-          <p class="userId" style="display: none;"></p>
         </div>
         <div class="actionTemplate">
-          <button type="button" class="btn btn-sm" id="addUserToGroup" data-group-id="{{group_id}}" data-user-id="{{user_id}}">Agregar</button>
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="addUserToGroup"
+            data-group-id="{{group_id}}"
+            data-user-id="{{user_id}}"
+          >
+            Agregar
+          </button>
         </div>
       </div>
     </template>
 
-
     <!-- Modal para forms -->
-    <div class="modal-backdrop hidden" id="modalGroup" >
-      <div class="modal">
+    <div class="modal-backdrop hidden" id="modalGroup">
+      <div class="modal modal-small">
         <h3>Crear un nuevo grupo</h3>
         <form>
-          <input type="text" placeholder="Nombre del grupo" id="newGroupName">
-          <textarea rows="3" placeholder="Descripción del grupo" id="newGroupDescription"></textarea>
+          <input type="text" placeholder="Nombre del grupo" id="newGroupName" />
+          <textarea
+            rows="3"
+            placeholder="Descripción del grupo"
+            id="newGroupDescription"
+          ></textarea>
           <div class="modal-actions">
-            <button type="button" class="btn btn-outline-error" id="cancelGroup">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="saveGroup">Crear</button>
+            <button
+              type="button"
+              class="btn btn-outline-error"
+              id="cancelGroup"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="saveGroup">
+              Crear
+            </button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- Modal para mas información -->
-    <div class="modal-backdrop hidden" id="modalInfoGroup" >
-      <div class="modal">
-        <h3 class="groupName">Nombre de grupo</h3>
-        <h4>Descripción:</h4>
-        <p class="groupDescription">Descripción del grupo</p>
-        <h4>Miembros</h4>
-        <ol class="listUser">
-        </ol>
-          <div class="modal-actions">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm"
-              id="addUserGroup"
-              data-group-id="{{group_id}}"
-              data-user-id="{{user_id}}">
-              Agregar Usuario
-            </button>
-            <button
-              type="button" 
-              class="btn btn-error btn-sm"
-              id="deleteGroup"
-              data-group-id="{{group_id}}"
-              data-user-id="{{user_id}}">
-              Eliminar Grupo
-            </button>
+    <div class="modal-backdrop hidden" id="modalInfoGroup">
+      <div class="modal modal-large">
+        <header class="modal-header">
+          <h3 class="groupName">Nombre de grupo</h3>
+          <!-- Podría agregarse un boton para cerrar-->
+        </header>
+        <main class="modal-body">
+          <section>
+            <h4>Descripción:</h4>
+            <p class="groupDescription">Descripción del grupo</p>
+          </section>
+          <section>
+            <h4>Miembros</h4>
+            <ol class="listUser"></ol>
+          </section>
+        </main>
+        <footer class="modal-footer modal-actions">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            id="addUserGroup"
+            data-group-id="{{group_id}}"
+            data-user-id="{{user_id}}"
+          >
+            Agregar Usuario
+          </button>
+          <button
+            type="button"
+            class="btn btn-error btn-sm"
+            id="deleteGroup"
+            data-group-id="{{group_id}}"
+            data-user-id="{{user_id}}"
+          >
+            Eliminar Grupo
+          </button>
+        </footer>
+      </div>
     </div>
 
     <!-- Modal de lista de usuarios para agregar -->
     <div class="modal-backdrop hidden" id="allUsersList">
-      <div class="modal">
+      <div class="modal modal-small">
         <h3>Usuarios</h3>
-        <ol class="listUser">
-        </ol>
+        <ol class="listUser"></ol>
       </div>
     </div>
-    <script type="module" src="js/login.js"></script>
+
+    <!-- Scripts -->
     <script type="module" src="js/dom.js"></script>
     <script type="module" src="js/dashboard.js"></script>
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/login.js"></script>
   </body>
 </html>

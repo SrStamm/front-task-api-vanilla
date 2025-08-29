@@ -11,6 +11,9 @@ import {
   renderUsers,
   unauthorized,
   showMessage,
+  showSpinner,
+  hideSpinner,
+  renderGroupInModal,
 } from "./dom.js";
 import {
   addUserToGroup,
@@ -19,6 +22,7 @@ import {
   getGroups,
   getUsersInGroup,
   getUsers,
+  deleteUserFromGroup,
 } from "./api.js";
 import { logout } from "./auth.js";
 
@@ -98,11 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const target = event.target;
     const card = target.closest(".card");
 
-    if (target.id === "deleteUserGroup") {
-      await deleteUserFromGroup(groupId, userId);
-      occultModal("modalInfoGroup");
-      await loadGroup();
-    } else if (
+    if (
       target.classList.contains("btn-manage") &&
       target.id === "moreDetailsGroup"
     ) {
@@ -144,49 +144,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
-  //
-  const groupModalInfoContainer = document.getElementById("modalInfoGroup");
-  groupModalInfoContainer.addEventListener("click", async (event) => {
-    const target = event.target;
-
-    if (target.id === "addUserGroup") {
-      showModal("allUsersList");
-      const modal = document.getElementById("allUsersList");
-      const userList = modal.querySelector(".listUser");
-      userList.innerHTML = "";
-      const allUsers = await getUsers();
-      allUsers.forEach((user) => {
-        const renderizedUser = renderUsers(user.user_id, user.username);
-        const addBtn = renderizedUser.querySelector("#addUserToGroup");
-        addBtn.dataset.userId = user.user_id;
-        addBtn.dataset.groupId = target.dataset.groupId;
-        userList.appendChild(renderizedUser);
-      });
-    } else if (target.id === "addUserToGroup") {
-      const groupId = target.dataset.groupId;
-      const userId = target.dataset.userId;
-
-      try {
-        let response = await addUserToGroup(groupId, userId);
-
-        if (response.detail !== "El usuario ha sido agregado al grupo") {
-          throw new Error(response.detail);
-        }
-
-        occultModal("allUsersList");
-      } catch (error) {
-        showMessage("Error al añadir el usuario: ", error);
-        occultModal("allUsersList");
-        occultModal("modalInfoGroup");
-      }
-    } else if (target.id === "deleteGroup") {
-      const groupId = target.dataset.groupId;
-      await deleteGroupAction(groupId);
-      occultModal("modalInfoGroup");
-      await loadGroup();
-    }
-  });
-
+  // Eventos para form de crear grupo
   const groupModalContainer = document.getElementById("modalGroup");
   groupModalContainer.addEventListener("click", async (event) => {
     const target = event.target;
@@ -206,6 +164,53 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
+  // Eventos para modal de mas información del grupo
+  const groupModalInfoContainer = document.getElementById("modalInfoGroup");
+  groupModalInfoContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (target.id === "addUserGroup") {
+      showModal("allUsersList");
+      const modal = document.getElementById("allUsersList");
+      const userList = modal.querySelector(".listUser");
+      const groupId = target.dataset.groupId;
+      userList.innerHTML = "";
+      const allUsers = await getUsers();
+      allUsers.forEach((user) => {
+        const renderizedUser = renderUsers(
+          user.username,
+          groupId,
+          user.user_id,
+        );
+        userList.appendChild(renderizedUser);
+      });
+    } else if (target.id === "deleteGroup") {
+      const groupId = target.dataset.groupId;
+      await deleteGroupAction(groupId);
+      occultModal("modalInfoGroup");
+      await loadGroup();
+    } else if (target.id === "deleteUserGroup") {
+      const groupId = target.dataset.groupId;
+      const userId = target.dataset.userId;
+      await deleteUserFromGroupAction(groupId, userId);
+    }
+  });
+
+  // Eventos para agregar el usuario al grupo
+  const allUsersListModal = document.getElementById("allUsersList");
+  allUsersListModal.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (target.id === "addUserToGroup") {
+      const groupId = target.dataset.groupId;
+      const userId = target.dataset.userId;
+
+      // DEBUG
+      console.log(`Usuario ${userId} se intenta agregar al grupo ${groupId}`);
+      await addUserToGroupAction(groupId, userId);
+    }
+  });
+
   // Event delegation para modales (cierre por backdrop)
   document.addEventListener("click", (event) => {
     const modalBackdrop = event.target.closest(".modal-backdrop");
@@ -219,22 +224,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 });
-
-// Obtener referencias a los elementos
-const spinnerContainer = document.getElementById("spinner-container");
-const spinnerElement = document.querySelector(".spinner"); // Para manejar la clase del spinner
-
-// Función para mostrar el spinner
-function showSpinner() {
-  spinnerContainer.style.display = "block"; // Muestra el contenedor
-  spinnerElement.classList.remove("spinner-hidden"); // Asegura que el spinner no esté oculto por estilos internos
-}
-
-// Función para ocultar el spinner
-function hideSpinner() {
-  spinnerContainer.style.display = "none"; // Oculta el contenedor
-  spinnerElement.classList.add("spinner-hidden"); // Añade la clase de oculto para asegurar
-}
 
 export async function loadGroup() {
   try {
@@ -298,5 +287,67 @@ async function deleteGroupAction(groupId) {
     }
   } catch (error) {
     console.log(`Error al eliminar el grupo ${groupId}: `, error);
+  }
+}
+
+async function addUserToGroupAction(groupId, userId) {
+  try {
+    let response = await addUserToGroup(groupId, userId);
+
+    console.log("Response para agregar usaurio al grupo: ", response);
+
+    if (response.detail !== "El usuario ha sido agregado al grupo") {
+      throw new Error(response.detail);
+    }
+
+    showMessage("Usuario agregado exitosamente", "success");
+    occultModal("allUsersList");
+
+    // Actualizar la lista de usuarios en el modal de grupo
+    const groupData = {
+      group_id: groupId,
+      name: document.querySelector("#modalInfoGroup .groupName").textContent,
+      description: document.querySelector("#modalInfoGroup .groupDescription")
+        .textContent,
+    };
+    const listUser = await getUsersInGroup(groupId);
+    groupData.users = listUser;
+
+    // Volver a renderizar la información del grupo
+    await renderGroupInModal("modalInfoGroup", groupData);
+  } catch (error) {
+    console.log("Error al agregar usaurio al grupo: ", error);
+    showMessage("Error al añadir el usuario: ", error.message);
+    occultModal("allUsersList");
+  }
+}
+
+async function deleteUserFromGroupAction(groupId, userId) {
+  try {
+    let response = await deleteUserFromGroup(groupId, userId);
+
+    console.log("Response para eliminar un usuario al grupo: ", response);
+
+    if (response.detail !== "El usuario ha sido eliminado del grupo") {
+      throw new Error(response.detail);
+    }
+
+    showMessage("Usuario eliminado exitosamente", "success");
+
+    // Actualizar la lista de usuarios en el modal de grupo
+    const groupData = {
+      group_id: groupId,
+      name: document.querySelector("#modalInfoGroup .groupName").textContent,
+      description: document.querySelector("#modalInfoGroup .groupDescription")
+        .textContent,
+    };
+    const listUser = await getUsersInGroup(groupId);
+    groupData.users = listUser;
+
+    // Volver a renderizar la información del grupo
+    await renderGroupInModal("modalInfoGroup", groupData);
+  } catch (error) {
+    console.log("Error al eliminar usaurio al grupo: ", error);
+    showMessage("Error al eliminar el usuario: ", error.message);
   }
 }

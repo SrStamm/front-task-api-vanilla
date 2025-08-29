@@ -309,7 +309,6 @@ input:focus {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-top: 1rem;
 }
 
 .modal-actions .btn {
@@ -673,19 +672,30 @@ template {
 
 .modal-backdrop.show {
   opacity: 1;
+  backdrop-filter: blur();
 }
 
 .modal {
   background: white;
+  max-width: 800px;
+  min-width: 400px;
   padding: 2rem;
   border-radius: var(--border-radius);
-  width: 90%;
-  max-width: 500px;
   transform: translateY(-20px);
   opacity: 0;
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
+}
+
+.modal-small {
+  max-width: 600px;
+  min-width: 300px;
+}
+
+.modal-large {
+  max-width: 900px;
+  min-width: 600px;
 }
 
 .modal-backdrop.show .modal {
@@ -700,12 +710,16 @@ template {
 .modal h3 {
   margin-bottom: 1rem;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 2.4em;
 }
 
 .modal form {
   display: flex;
   flex-direction: column;
+}
+
+.modal form btn {
+  margin-top: 1rem;
 }
 
 .modal input,

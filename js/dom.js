@@ -1,8 +1,23 @@
 // Manipulación del DOM y renderizado
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
-import { addUserToGroup, deleteGroup, deleteUserFromGroup } from "./api.js";
-import { loadGroup } from "./dashboard.js";
+import { getUsersInGroup } from "./api.js";
+
+// Obtener referencias a los elementos
+const spinnerContainer = document.getElementById("spinner-container");
+const spinnerElement = document.querySelector(".spinner"); // Para manejar la clase del spinner
+
+// Función para mostrar el spinner
+export function showSpinner() {
+  spinnerContainer.style.display = "block"; // Muestra el contenedor
+  spinnerElement.classList.remove("spinner-hidden"); // Asegura que el spinner no esté oculto por estilos internos
+}
+
+// Función para ocultar el spinner
+export function hideSpinner() {
+  spinnerContainer.style.display = "none"; // Oculta el contenedor
+  spinnerElement.classList.add("spinner-hidden"); // Añade la clase de oculto para asegurar
+}
 
 export function showMessage(message, type = "error") {
   // Vacia por si habia un mensaje antes
@@ -22,7 +37,7 @@ export function showMessage(message, type = "error") {
 
 export function showSections(sectionId) {
   // Oculta todas las secciones de contenido
-  document.querySelectorAll("section").forEach((section) => {
+  document.querySelectorAll(".dashboard-section").forEach((section) => {
     section.style.display = "none";
   });
 
@@ -74,8 +89,9 @@ export function occultModal(modalId) {
 
 // Muestra el modal de Group
 export function showGroupDetailsModal(groupData) {
-  showModal("modalInfoGroup");
-  renderGroupInModal("modalInfoGroup", groupData);
+  renderGroupInModal("modalInfoGroup", groupData).then(() => {
+    showModal("modalInfoGroup");
+  });
 
   // Accede a los botones
   const modal = document.getElementById("modalInfoGroup");
@@ -83,20 +99,23 @@ export function showGroupDetailsModal(groupData) {
   return modal;
 }
 
-function renderGroupInModal(elementId, groupData) {
+export async function renderGroupInModal(elementId, groupData) {
   // Obtiene el contenedor principal del modal
   const modalContainer = document.getElementById(elementId);
 
   // Accede a cada parte del modal
-  const groupName = modalContainer.querySelector(".groupName");
-  const groupDescription = modalContainer.querySelector(".groupDescription");
-  const userList = modalContainer.querySelector(".listUser");
+  const modalContent = modalContainer.querySelector(".modal");
+  const groupName = modalContent.querySelector(".groupName");
+  const groupDescription = modalContent.querySelector(".groupDescription");
+  const userList = modalContent.querySelector(".listUser");
 
   // Accede a botones para almacenar información
   const addUserBtn = modalContainer.querySelector("#addUserGroup");
   const deleteGroupBtn = modalContainer.querySelector("#deleteGroup");
+  const deleteUserTogroupBtn = modalContainer.querySelector("#deleteUserGroup");
 
   // Almacena la información necesaria
+  addUserBtn.dataset.groupId = groupData.group_id;
   deleteGroupBtn.dataset.groupId = groupData.group_id;
 
   // VERIFICAR que los elementos existen antes de usarlos
@@ -117,18 +136,20 @@ function renderGroupInModal(elementId, groupData) {
     // Limpiar la lista anterior
     userList.innerHTML = "";
 
+    // Obtiene los usuarios del grupo
+    let users = await getUsersInGroup(groupData.group_id);
+
     // Agregar usuarios si existen
-    if (groupData.users && groupData.users.length > 0) {
-      groupData.users.forEach((user) => {
+    if (users.length > 0) {
+      users.forEach((user) => {
         // Usa `renderUserInGroup` para agregar cada usuario a la lista
         renderUserInGroup(
+          userList,
           groupData.group_id,
           user.user_id,
           user.username,
           user.role,
         );
-        addUserBtn.dataset.groupId = groupData.group_id;
-        addUserBtn.dataset.userId = user.user_id;
       });
     } else {
       userList.innerHTML = "<li>No hay miembros en este grupo</li>";
@@ -176,6 +197,7 @@ export function renderGroup(elementId, groupData) {
     if (groupData.users && groupData.users.length > 0) {
       groupData.users.forEach((user) => {
         renderUserInGroup(
+          userList,
           groupData.group_id,
           user.user_id,
           user.username,
@@ -192,11 +214,7 @@ export function renderGroup(elementId, groupData) {
 }
 
 // Render
-function renderUserInGroup(groupId, userId, username, role) {
-  // Accede al modal
-  const modal = document.getElementById("modalInfoGroup");
-  const userList = modal.querySelector(".listUser");
-
+function renderUserInGroup(userListElement, groupId, userId, username, role) {
   // Accede al template de users in group
   const userGroupTemplate = document.getElementById("userGroupTemplate");
   const clonTemplate = userGroupTemplate.content.cloneNode(true);
@@ -204,32 +222,50 @@ function renderUserInGroup(groupId, userId, username, role) {
   // Obtiene cada parte del template
   const userNameTemplate = clonTemplate.querySelector(".userName");
   const userRoleTemplate = clonTemplate.querySelector(".userRole");
+  const deleteBtn = clonTemplate.querySelector("#deleteUserGroup");
+  const editBtn = clonTemplate.querySelector("#editRoleGroup");
 
   // Modifica cada parte
   userNameTemplate.textContent = username;
   userRoleTemplate.textContent = role;
 
-  // Configurar botones
+  // Configurar los data-set para los botones
+  deleteBtn.dataset.groupId = groupId;
+  deleteBtn.dataset.userId = userId;
+  editBtn.dataset.groupId = groupId;
+  editBtn.dataset.userId = userId;
 
-  const editBtn = clonTemplate.querySelector("#editRoleGroup");
+  // Debug
+  console.log(
+    `Data-set de botones para eliminar: groupId ${groupId} y userId ${userId}`,
+  );
+
+  // Configurar botones
   editBtn.onclick = () => console.log("Editado rol del usuario");
 
-  userList.appendChild(clonTemplate);
+  userListElement.appendChild(clonTemplate);
 }
 
 // Renderiza una lista de usuarios
-export function renderUsers(userId, username) {
+export function renderUsers(username, groupId, userId) {
   // Accede al template de users
-  const userGroupTemplate = document.getElementById("userList");
-  const clonTemplate = userGroupTemplate.content.cloneNode(true);
+  const userTemplate = document.getElementById("userList");
+  const clonTemplate = userTemplate.content.cloneNode(true);
 
   // Obtiene cada parte del template
   const userNameTemplate = clonTemplate.querySelector(".userName");
-  const userIdTemplate = clonTemplate.querySelector(".userId");
+  const addBtn = clonTemplate.getElementById("addUserToGroup");
 
   // Modifica cada parte
   userNameTemplate.textContent = username;
-  userIdTemplate.textContent = userId;
+
+  // Setea los datos
+  addBtn.dataset.userId = userId;
+  addBtn.dataset.groupId = groupId;
+
+  console.log(
+    `Datos seteados para group_id: ${groupId} y para user_id: ${userId}`,
+  );
 
   return clonTemplate;
 }
