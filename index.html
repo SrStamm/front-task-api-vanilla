@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Task Manager Application" />
+    <meta name="theme-color" content="#your-color-here" />
+    <link rel="icon" href="favicon.ico" />
     <title>Task Manager</title>
     <link href="css/style.css" rel="stylesheet" />
   </head>
@@ -25,6 +28,8 @@
               type="text"
               id="usernameLogin"
               placeholder="Ingrese su nombre de usuario"
+              required
+              autofocus
             />
           </div>
           <div class="form-group">
@@ -33,6 +38,7 @@
               type="password"
               id="passwordLogin"
               placeholder="Ingresa tu contraseña"
+              required
             />
           </div>
           <div class="btn-container">
@@ -54,6 +60,8 @@
               type="text"
               id="usernameRegister"
               placeholder="Ingresa un nombre de usuario"
+              required
+              autofocus
             />
           </div>
           <div class="form-group">
@@ -62,6 +70,8 @@
               type="email"
               id="emailRegister"
               placeholder="Ingrese su email"
+              required
+              minlength="6"
             />
           </div>
           <div class="form-group">
@@ -87,31 +97,47 @@
         <aside class="sidebar">
           <ul class="sidebar_list">
             <li class="sidebar_element" id="sidebarInicioSection">
-              <img src="assets/dashboard.png" alt="" class="sidebar_icon" />
+              <img
+                src="assets/dashboard.png"
+                alt="Dashboard Icon"
+                class="sidebar_icon"
+              />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Inicio</p>
               </div>
             </li>
             <li class="sidebar_element" id="sidebarGroupSection">
-              <img src="assets/group.png" class="sidebar_icon" />
+              <img
+                src="assets/group.png"
+                alt="Group Icon"
+                class="sidebar_icon"
+              />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Grupos</p>
               </div>
             </li>
             <li class="sidebar_element" id="sidebarProjectSection">
-              <img src="" class="sidebar_icon" />
+              <img src="" alt="Project Icon" class="sidebar_icon" />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Proyectos</p>
               </div>
             </li>
             <li class="sidebar_element" id="sidebarTaskSection">
-              <img src="assets/check-square.png" class="sidebar_icon" />
+              <img
+                src="assets/check-square.png"
+                alt="Task Icon"
+                class="sidebar_icon"
+              />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Tareas</p>
               </div>
             </li>
             <li class="sidebar_element" id="sidebarChatSection">
-              <img src="assets/message-circle.png" class="sidebar_icon" />
+              <img
+                src="assets/message-circle.png"
+                alt="Chat Icon"
+                class="sidebar_icon"
+              />
               <div class="sidebar_hide">
                 <p class="sidebar_text">Chat</p>
               </div>
@@ -120,7 +146,7 @@
             <li class="sidebar_element sidebar_element--avatar">
               <img
                 src="assets/user.png"
-                alt=""
+                alt="User Icon"
                 class="sidebar_icon sidebar_icon--avatar"
               />
               <div class="sidebar_hide">
@@ -201,9 +227,7 @@
           </div>
           <div class="partSections taskPartSection">
             <h3>Tareas</h3>
-            <ol id="taskList">
-              <li></li>
-            </ol>
+            <ol id="taskList"></ol>
           </div>
         </section>
 
@@ -284,9 +308,7 @@
         <h4 class="projectTittle"></h4>
         <div class="template-hide">
           <h4>Miembros</h4>
-          <ol>
-            <li></li>
-          </ol>
+          <ol></ol>
         </div>
         <button type="button" id="accessProjectChat">Acceder al chat</button>
       </div>
@@ -340,14 +362,24 @@
     <!-- Modal para forms -->
     <div class="modal-backdrop hidden" id="modalGroup">
       <div class="modal modal-small">
-        <h3>Crear un nuevo grupo</h3>
-        <form>
-          <input type="text" placeholder="Nombre del grupo" id="newGroupName" />
-          <textarea
-            rows="3"
-            placeholder="Descripción del grupo"
-            id="newGroupDescription"
-          ></textarea>
+        <header class="modal-header">
+          <h4>Crear un nuevo grupo</h4>
+        </header>
+        <main class="modal-body">
+          <form>
+            <input
+              type="text"
+              placeholder="Nombre del grupo"
+              id="newGroupName"
+            />
+            <textarea
+              rows="3"
+              placeholder="Descripción del grupo"
+              id="newGroupDescription"
+            ></textarea>
+          </form>
+        </main>
+        <footer class="modal-footer">
           <div class="modal-actions">
             <button
               type="button"
@@ -360,7 +392,7 @@
               Crear
             </button>
           </div>
-        </form>
+        </footer>
       </div>
     </div>
 
@@ -372,34 +404,38 @@
           <!-- Podría agregarse un boton para cerrar-->
         </header>
         <main class="modal-body">
-          <section>
+          <div>
             <h4>Descripción:</h4>
             <p class="groupDescription">Descripción del grupo</p>
-          </section>
-          <section>
+          </div>
+          <div>
             <h4>Miembros</h4>
-            <ol class="listUser"></ol>
-          </section>
+            <div>
+              <ol class="listUser"></ol>
+            </div>
+          </div>
         </main>
-        <footer class="modal-footer modal-actions">
-          <button
-            type="button"
-            class="btn btn-primary btn-sm"
-            id="addUserGroup"
-            data-group-id="{{group_id}}"
-            data-user-id="{{user_id}}"
-          >
-            Agregar Usuario
-          </button>
-          <button
-            type="button"
-            class="btn btn-error btn-sm"
-            id="deleteGroup"
-            data-group-id="{{group_id}}"
-            data-user-id="{{user_id}}"
-          >
-            Eliminar Grupo
-          </button>
+        <footer class="modal-footer">
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              id="addUserGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}"
+            >
+              Agregar Usuario
+            </button>
+            <button
+              type="button"
+              class="btn btn-error btn-sm"
+              id="deleteGroup"
+              data-group-id="{{group_id}}"
+              data-user-id="{{user_id}}"
+            >
+              Eliminar Grupo
+            </button>
+          </div>
         </footer>
       </div>
     </div>
@@ -413,10 +449,10 @@
     </div>
 
     <!-- Scripts -->
-    <script type="module" src="js/dom.js"></script>
-    <script type="module" src="js/dashboard.js"></script>
-    <script type="module" src="js/api.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/login.js"></script>
+    <script type="module" rel="preload" src="js/login.js" defer></script>
+    <script type="module" rel="preload" src="js/auth.js" defer></script>
+    <script type="module" src="js/dom.js" defer></script>
+    <script type="module" src="js/dashboard.js" defer></script>
+    <script type="module" src="js/api.js" defer></script>
   </body>
 </html>

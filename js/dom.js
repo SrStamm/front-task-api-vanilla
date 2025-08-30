@@ -112,7 +112,6 @@ export async function renderGroupInModal(elementId, groupData) {
   // Accede a botones para almacenar información
   const addUserBtn = modalContainer.querySelector("#addUserGroup");
   const deleteGroupBtn = modalContainer.querySelector("#deleteGroup");
-  const deleteUserTogroupBtn = modalContainer.querySelector("#deleteUserGroup");
 
   // Almacena la información necesaria
   addUserBtn.dataset.groupId = groupData.group_id;
@@ -235,11 +234,6 @@ function renderUserInGroup(userListElement, groupId, userId, username, role) {
   editBtn.dataset.groupId = groupId;
   editBtn.dataset.userId = userId;
 
-  // Debug
-  console.log(
-    `Data-set de botones para eliminar: groupId ${groupId} y userId ${userId}`,
-  );
-
   // Configurar botones
   editBtn.onclick = () => console.log("Editado rol del usuario");
 
@@ -262,10 +256,6 @@ export function renderUsers(username, groupId, userId) {
   // Setea los datos
   addBtn.dataset.userId = userId;
   addBtn.dataset.groupId = groupId;
-
-  console.log(
-    `Datos seteados para group_id: ${groupId} y para user_id: ${userId}`,
-  );
 
   return clonTemplate;
 }

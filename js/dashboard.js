@@ -205,8 +205,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
 
-      // DEBUG
-      console.log(`Usuario ${userId} se intenta agregar al grupo ${groupId}`);
       await addUserToGroupAction(groupId, userId);
     }
   });
