@@ -2,9 +2,10 @@
 // Centraliza lógica Fetch, manejo de token y errores
 
 import { refresh } from "./auth.js";
-import { showMessage, unauthorized } from "./dom.js";
+import { unauthorized } from "./dom.js";
+import { showMessage } from "./utils/utils.js";
 
-const url = "http://localhost:8000";
+export const url = "http://localhost:8000";
 
 async function fetchData(endpoint, method, body, token) {
   if (!token) {
@@ -71,6 +72,23 @@ async function fetchData(endpoint, method, body, token) {
 //
 //  --- Lógica de autorizacion ---
 //
+
+export async function loginFetch(userData) {
+  let response = await fetch(url + "/login", {
+    method: "POST",
+    body: userData,
+  });
+  return response;
+}
+
+export async function registerFetch(userData) {
+  let response = await fetch(url + "/user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  });
+  return response;
+}
 
 export async function refreshFetch() {
   // Obtiene los tokens

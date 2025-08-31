@@ -2,17 +2,13 @@
 // Carga inicial de secciones y datos del panel
 // Gestiona eventos del sidebar y los paneles
 
+// UPDATE: This file should now act as the central orchestrator for the dashboard* functionality.
+// It will import the rendering functions from render/ and the UI utilities from utils/ to build the page.
+
 import {
-  showSections,
-  showModal,
-  occultModal,
   showGroupDetailsModal,
   renderGroup,
   renderUsers,
-  unauthorized,
-  showMessage,
-  showSpinner,
-  hideSpinner,
   renderGroupInModal,
 } from "./dom.js";
 import {
@@ -24,40 +20,11 @@ import {
   getUsers,
   deleteUserFromGroup,
 } from "./api.js";
-import { logout } from "./auth.js";
-
-// sidebar Secciones
-const sidebar = document.getElementById("sidebar");
-const startSection = document.getElementById("sidebarInicioSection");
-const groupSection = document.getElementById("sidebarGroupSection");
-const projectSection = document.getElementById("sidebarProjectSection");
-const taskSection = document.getElementById("sidebarTaskSection");
-const chatSection = document.getElementById("sidebarChatSection");
+import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
+import { showSections, showModal, occultModal } from "./utils/modal.js";
 
 // Botones
-const logoutBtn = document.getElementById("logoutBtn");
 const createGroupBtn = document.getElementById("createGroupBtn");
-
-startSection.addEventListener("click", function () {
-  showSections("inicioSection");
-});
-
-groupSection.addEventListener("click", async function () {
-  showSections("groupSection");
-  await loadGroup();
-});
-
-projectSection.addEventListener("click", function () {
-  showSections("projectSection");
-});
-
-taskSection.addEventListener("click", function () {
-  showSections("taskSection");
-});
-
-chatSection.addEventListener("click", function () {
-  showSections("chatSection");
-});
 
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -85,15 +52,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
-  // Logout
-  logoutBtn.addEventListener("click", async () => {
-    try {
-      const response = await logout();
-      if (response.detail === "Closed All Sessions") {
-        unauthorized();
-      }
-    } catch (error) {
-      console.log("Error: ", error);
+  const sidebar = document.querySelector(".sidebar");
+  sidebar.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (target.id == "sidebarInicioSection") {
+      showSections("inicioSection");
+    } else if (target.id == "sidebarGroupSection") {
+      showSections("groupSection");
+      await loadGroup();
+    } else if (target.id == "sidebarProjectSection") {
+      showSections("projectSection");
+    } else if (target.id == "sidebarTaskSection") {
+      showSections("taskSection");
+    } else if (target.id == "sidebarChatSection") {
+      showSections("chatSection");
     }
   });
 

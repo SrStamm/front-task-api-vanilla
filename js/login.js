@@ -1,13 +1,6 @@
 // Gestiona todo lo relacionado con autenticación, envio de forms y registro, gestión de almacen de token
 
-import {
-  loginSucces,
-  showLoginForm,
-  showMessage,
-  showRegisterForm,
-} from "./dom.js";
-
-const url = "http://localhost:8000";
+import { showLoginForm, showRegisterForm } from "./dom.js";
 
 // Links de los formularios
 const registerLink = document.getElementById("registerLink");
@@ -23,82 +16,4 @@ loginLink.addEventListener("click", function (event) {
   event.preventDefault();
 
   showLoginForm();
-});
-
-// Botones
-const loginBtn = document.querySelector('[data-action="login"]');
-const registerBtn = document.getElementById('[data-action="register"]');
-
-loginBtn.addEventListener("click", async (event) => {
-  event.preventDefault();
-
-  // Obtiene los datos ingresados
-  const username = document.getElementById("usernameLogin").value;
-  const password = document.getElementById("passwordLogin").value;
-
-  // Codifica los datos
-  const formData = new URLSearchParams();
-  formData.append("username", username);
-  formData.append("password", password);
-
-  try {
-    const response = await fetch(url + "/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.detail);
-    }
-
-    // Obtiene los token de iniciar sesión
-    const responseData = await response.json();
-    localStorage.setItem("authToken", responseData.access_token);
-    localStorage.setItem("refrToken", responseData.refresh_token);
-
-    // Cambia al inicio de sesión
-    document.querySelector("#formLogContainer").style.display = "none";
-    document.querySelector(".principal-layout").style.display = "flex";
-
-    showMessage("Sesión iniciada con suceso", "success");
-
-    // Muestra la seccion principal del dashboard
-    loginSucces();
-  } catch (error) {
-    console.error("Error al iniciar sesión: ", error);
-  }
-});
-
-registerBtn.addEventListener("click", async (event) => {
-  event.preventDefault();
-
-  // Obtiene los datos ingresados
-  const data = {
-    username: document.getElementById("usernameRegister").value,
-    email: document.getElementById("emailRegister").value,
-    password: document.getElementById("passwordRegister").value,
-  };
-
-  try {
-    const response = await fetch(url + "/user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.detail);
-    }
-
-    const dataResponse = await response.json();
-    console.info("Detail: ", dataResponse.detail);
-
-    document.getElementById("loginSection").style.display = "block";
-    document.getElementById("registerSection").style.display = "none";
-  } catch (error) {
-    console.error("Error al crear un usuario: ", error);
-  }
 });

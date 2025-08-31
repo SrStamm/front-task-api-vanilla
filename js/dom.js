@@ -2,48 +2,7 @@
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
 import { getUsersInGroup } from "./api.js";
-
-// Obtener referencias a los elementos
-const spinnerContainer = document.getElementById("spinner-container");
-const spinnerElement = document.querySelector(".spinner"); // Para manejar la clase del spinner
-
-// Función para mostrar el spinner
-export function showSpinner() {
-  spinnerContainer.style.display = "block"; // Muestra el contenedor
-  spinnerElement.classList.remove("spinner-hidden"); // Asegura que el spinner no esté oculto por estilos internos
-}
-
-// Función para ocultar el spinner
-export function hideSpinner() {
-  spinnerContainer.style.display = "none"; // Oculta el contenedor
-  spinnerElement.classList.add("spinner-hidden"); // Añade la clase de oculto para asegurar
-}
-
-export function showMessage(message, type = "error") {
-  // Vacia por si habia un mensaje antes
-  messageContainer.style.display = "none";
-  messageContainer.textContent = "";
-
-  // Actualiza el mensaje y lo muestra
-  messageContainer.textContent = message;
-  messageContainer.className = `alert alert-${type}`;
-  messageContainer.style.display = "block";
-
-  setTimeout(() => {
-    messageContainer.style.display = "none";
-    messageContainer.textContent = "";
-  }, 4000);
-}
-
-export function showSections(sectionId) {
-  // Oculta todas las secciones de contenido
-  document.querySelectorAll(".dashboard-section").forEach((section) => {
-    section.style.display = "none";
-  });
-
-  // Muestra la seccion que corresponde al ID
-  document.getElementById(sectionId).style.display = "grid";
-}
+import { showSections } from "./utils/modal.js";
 
 export function unauthorized() {
   // No autorizado, se oculta todo
@@ -68,23 +27,6 @@ export function showLoginForm() {
 export function showRegisterForm() {
   document.getElementById("loginSection").style.display = "none";
   document.getElementById("registerSection").style.display = "block";
-}
-
-// Mostrar modal
-export function showModal(modalId) {
-  const modalContainer = document.getElementById(modalId);
-  modalContainer.classList.remove("hidden"); // Asegura que sea visible
-  setTimeout(() => {
-    modalContainer.classList.add("show"); // Activa la animación
-  }, 10); // Pequeño retraso para que la transición ocurra
-}
-
-export function occultModal(modalId) {
-  const modalGroupContainer = document.getElementById(modalId);
-  modalGroupContainer.classList.remove("show"); // Quita la clase para fade-out
-  setTimeout(() => {
-    modalGroupContainer.classList.add("hidden"); // Oculta después de la animación
-  }, 300); // Espera la duración de la transición (0.3s)
 }
 
 // Muestra el modal de Group
