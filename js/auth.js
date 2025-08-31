@@ -13,10 +13,11 @@ import {
   logoutFetch,
   refreshFetch,
   loginFetch,
-  url,
 } from "./api.js";
 import { unauthorized, loginSucces } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
+
+const url = "http://localhost:8000";
 
 // Validar la autenticación del usuario
 export async function validToken() {
@@ -165,13 +166,47 @@ logoutBtn.addEventListener("click", async () => {
   }
 });
 
-loginBtn.addEventListener("click", async () => {
-  try {
-    await login();
+loginBtn.addEventListener("click", async (event) => {
+  event.preventDefault();
 
+  try {
+    // await login();
+
+    // Obtiene los datos ingresados
+    const username = document.getElementById("usernameLogin").value;
+    const password = document.getElementById("passwordLogin").value;
+
+    if (!username || !password) {
+      showMessage("Por favor, complete todos los campos", "warning");
+      throw new Error("Faltan campos por completar");
+    }
+
+    // Codifica los datos
+    const formData = new URLSearchParams();
+    formData.append("username", username);
+    formData.append("password", password);
+
+    const response = await fetch(url + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail);
+    }
+
+    // Obtiene los token de iniciar sesión
+    const responseData = await response.json();
+    localStorage.setItem("authToken", responseData.access_token);
+    localStorage.setItem("refrToken", responseData.refresh_token);
+
+    showMessage("Sesión iniciada con suceso", "success");
     loginSucces();
   } catch (error) {
-    console.log("Error al iniciar sesión: ", error.message);
+    console.error("Error al iniciar sesión: ", error);
+    console.error(error.message);
   }
 });
 

@@ -2,7 +2,7 @@
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
 import { getUsersInGroup } from "./api.js";
-import { showSections } from "./utils/modal.js";
+import { showModal, showSections } from "./utils/modal.js";
 
 export function unauthorized() {
   // No autorizado, se oculta todo

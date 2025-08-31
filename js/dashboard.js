@@ -21,10 +21,11 @@ import {
   deleteUserFromGroup,
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
-import { showSections, showModal, occultModal } from "./utils/modal.js";
+import { showSections, showModal, occultModal } from "./utils/modals.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
+const sidebar = document.querySelector(".sidebar");
 
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -52,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
-  const sidebar = document.querySelector(".sidebar");
   sidebar.addEventListener("click", async (event) => {
     const target = event.target;
 
