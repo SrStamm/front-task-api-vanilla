@@ -126,9 +126,13 @@ export async function renderGroupInModal(elementId, groupData) {
     return;
   }
 
+  if (groupData.description === null) {
+    groupData.description = "Sin descripción";
+  }
+
   // Actualiza con los datos obtenidos
   groupName.textContent = groupData.name;
-  groupDescription.textContent = groupData.description || "Sin descripción";
+  groupDescription.textContent = groupData.description;
 
   // Si se tiene una seccion de lista, renderiza y agrega a los usuarios
   if (userList) {
@@ -178,9 +182,13 @@ export function renderGroup(elementId, groupData) {
     return;
   }
 
+  if (groupData.description === null) {
+    groupData.description = "Sin descripción";
+  }
+
   // Actualiza con los datos obtenidos
   groupName.textContent = groupData.name;
-  groupDescription.textContent = groupData.description || "Sin descripción";
+  groupDescription.textContent = groupData.description;
 
   //
   manageBtn.dataset.groupId = groupData.group_id;

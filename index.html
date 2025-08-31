@@ -1,10 +1,9 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Task Manager Application" />
-    <meta name="theme-color" content="#your-color-here" />
     <link rel="icon" href="favicon.ico" />
     <title>Task Manager</title>
     <link href="css/style.css" rel="stylesheet" />
@@ -18,31 +17,35 @@
       <div class="spinner"></div>
     </div>
 
-    <div class="container" id="formLogContainer">
+    <div class="container" id="formLogContainer" style="display: none">
       <div class="form-container" id="loginSection">
         <h2>Ingresar</h2>
         <form id="loginForm">
           <div class="form-group">
-            <label for="usernameLogin">Username:</label>
+            <label class="form-label" for="usernameLogin">Username:</label>
             <input
               type="text"
               id="usernameLogin"
+              class="form-input"
               placeholder="Ingrese su nombre de usuario"
               required
               autofocus
             />
           </div>
           <div class="form-group">
-            <label for="passwordLogin">Contraseña:</label>
+            <label for="passwordLogin" class="form-label">Contraseña:</label>
             <input
               type="password"
               id="passwordLogin"
+              class="form-input"
               placeholder="Ingresa tu contraseña"
               required
             />
           </div>
           <div class="btn-container">
-            <button class="btn btn-primary" id="loginBtn">Ingresar</button>
+            <button class="btn btn-primary" id="loginBtn" data-action="login">
+              Ingresar
+            </button>
           </div>
           <p>
             No tienes una cuenta?
@@ -55,35 +58,40 @@
         <h2>Registro</h2>
         <form id="registerForm">
           <div class="form-group">
-            <label for="usernameRegister">Username:</label>
+            <label for="usernameRegister" class="form-label">Username:</label>
             <input
               type="text"
               id="usernameRegister"
+              class="form-input"
               placeholder="Ingresa un nombre de usuario"
               required
               autofocus
             />
           </div>
           <div class="form-group">
-            <label for="emailRegister">Email:</label>
+            <label for="emailRegister" class="form-label">Email:</label>
             <input
               type="email"
               id="emailRegister"
+              class="form-input"
               placeholder="Ingrese su email"
               required
               minlength="6"
             />
           </div>
           <div class="form-group">
-            <label for="passwordRegister">Contraseña:</label>
+            <label for="passwordRegister" class="form-label">Contraseña:</label>
             <input
               type="password"
               id="passwordRegister"
+              class="form-input"
               placeholder="Ingresa una nueva contraseña"
             />
           </div>
           <div class="btn-container">
-            <button class="btn" id="registerBtn">Registrarse</button>
+            <button class="btn" id="registerBtn" data-action="register">
+              Registrarse
+            </button>
           </div>
         </form>
         <p>Ya tienes una cuenta? <a href="#" id="loginLink">Ingresa aquí</a></p>
@@ -302,43 +310,6 @@
       </li>
     </template>
 
-    <!-- Template de proyectos -->
-    <template id="projectTemplate">
-      <div class="card">
-        <h4 class="projectTittle"></h4>
-        <div class="template-hide">
-          <h4>Miembros</h4>
-          <ol></ol>
-        </div>
-        <button type="button" id="accessProjectChat">Acceder al chat</button>
-      </div>
-    </template>
-
-    <!-- Template de tareas -->
-    <template id="taskTemplate">
-      <div class="card">
-        <h4 class="taskTitle"></h4>
-        <p class="taskPriority"></p>
-        <p class="taskDueDate"></p>
-        <ol>
-          <li id="userAssigned"></li>
-        </ol>
-      </div>
-    </template>
-
-    <!-- Template de mensajes -->
-    <template id="messageTemplate">
-      <div class="card">
-        <p class="textMessage"></p>
-        <p class="dateMessage"></p>
-      </div>
-    </template>
-
-    <!-- Template de notificaciones -->
-    <template id="notificationTemplate">
-      <div class="card"></div>
-    </template>
-
     <!-- Template de usuarios -->
     <template id="userList">
       <div class="body-template">
@@ -367,28 +338,22 @@
         </header>
         <main class="modal-body">
           <form>
-            <input
-              type="text"
-              placeholder="Nombre del grupo"
-              id="newGroupName"
-            />
-            <textarea
-              rows="3"
-              placeholder="Descripción del grupo"
-              id="newGroupDescription"
-            ></textarea>
+            <label for="newGroupName">Nombre del grupo:</label>
+            <input type="text" id="newGroupName" />
+            <label for="newGroupDescription">Descripción:</label>
+            <textarea rows="3" cols="3" id="newGroupDescription"></textarea>
           </form>
         </main>
         <footer class="modal-footer">
           <div class="modal-actions">
             <button
               type="button"
-              class="btn btn-outline-error"
+              class="btn btn-outline-error btn-sm"
               id="cancelGroup"
             >
               Cancelar
             </button>
-            <button type="button" class="btn btn-primary" id="saveGroup">
+            <button type="button" class="btn btn-primary btn-sm" id="saveGroup">
               Crear
             </button>
           </div>
@@ -442,13 +407,30 @@
 
     <!-- Modal de lista de usuarios para agregar -->
     <div class="modal-backdrop hidden" id="allUsersList">
-      <div class="modal modal-small">
+      <div class="modal modal-small modal-body">
         <h3>Usuarios</h3>
         <ol class="listUser"></ol>
       </div>
     </div>
 
+    <!-- Modal genérico-->
+    <div class="modal-backdrop hidden" id="genericModal">
+      <div class="modal">
+        <header class="modal-header">
+          <h3 class="modal-title"></h3>
+          <button class="modal-close" data-action="close-modal">&times;</button>
+        </header>
+        <main class="modal-content"></main>
+        <footer class="modal-footer">
+          <div class="modal-actions"></div>
+        </footer>
+      </div>
+    </div>
+
     <!-- Scripts -->
+
+    <!-- 
+    -->
     <script type="module" rel="preload" src="js/login.js" defer></script>
     <script type="module" rel="preload" src="js/auth.js" defer></script>
     <script type="module" src="js/dom.js" defer></script>

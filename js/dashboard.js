@@ -27,6 +27,7 @@ import {
 import { logout } from "./auth.js";
 
 // sidebar Secciones
+const sidebar = document.getElementById("sidebar");
 const startSection = document.getElementById("sidebarInicioSection");
 const groupSection = document.getElementById("sidebarGroupSection");
 const projectSection = document.getElementById("sidebarProjectSection");

@@ -26,8 +26,8 @@ loginLink.addEventListener("click", function (event) {
 });
 
 // Botones
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
+const loginBtn = document.querySelector('[data-action="login"]');
+const registerBtn = document.getElementById('[data-action="register"]');
 
 loginBtn.addEventListener("click", async (event) => {
   event.preventDefault();
