@@ -480,8 +480,6 @@ a {
 }
 
 .dashboard-layout section {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 1600px; /* Más ancho */
   margin: 0 auto;
@@ -543,8 +541,8 @@ a {
 /* GRIDS MEJORADOS */
 #inicioSection {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Más ancho */
-  gap: 2.5rem; /* Más espacio */
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Más ancho */
+  gap: 2rem; /* Más espacio */
   width: 100%;
 }
 

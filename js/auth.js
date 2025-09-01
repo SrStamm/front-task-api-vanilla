@@ -13,30 +13,10 @@ import {
   logoutFetch,
   refreshFetch,
   loginFetch,
+  registerFetch,
 } from "./api.js";
-import {
-  unauthorized,
-  loginSucces,
-  showRegisterForm,
-  showLoginForm,
-} from "./dom.js";
+import { unauthorized, loginSucces, showLoginForm } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
-
-// Links de los formularios
-const registerLink = document.getElementById("registerLink");
-const loginLink = document.getElementById("loginLink");
-
-registerLink.addEventListener("click", function (event) {
-  event.preventDefault();
-
-  showRegisterForm();
-});
-
-loginLink.addEventListener("click", function (event) {
-  event.preventDefault();
-
-  showLoginForm();
-});
 
 // Validar la autenticación del usuario
 export async function validToken() {
@@ -123,6 +103,7 @@ export async function register() {
   try {
     const response = await registerFetch(data);
 
+    console.log("Response register: ", response);
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail);
@@ -183,6 +164,7 @@ export async function logout() {
 // Botones
 const logoutBtn = document.getElementById("logoutBtn");
 const registerBtn = document.querySelector('[data-action="register"]');
+// const registerBtn = document.querySelector('#registerBtn ');
 
 // Logout
 logoutBtn.addEventListener("click", async () => {
@@ -209,7 +191,6 @@ registerBtn.addEventListener("click", async () => {
         "Usuario creado con éxito. Por favor, inicie sesión.",
         "success",
       );
-      showMessage(response.message, "success");
       // Modifica la vista
       showLoginForm();
     } else {
@@ -239,7 +220,6 @@ loginBtn.addEventListener("click", async (event) => {
     // Obtiene los token de iniciar sesión
     localStorage.setItem("authToken", response.accessToken);
     localStorage.setItem("refrToken", response.refreshToken);
-    console.log("Tokens guardados en localStorage", response.accessToken);
 
     showMessage("Sesión iniciada con suceso", "success");
     loginSucces();

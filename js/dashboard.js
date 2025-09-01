@@ -22,9 +22,12 @@ import {
   renderGroupInModal,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
+import { showLoginForm, showRegisterForm } from "./dom.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
+const formLogContainer = document.getElementById("formLogContainer");
+const sidebar = document.querySelector("#sidebar");
 
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -52,7 +55,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
-  const sidebar = document.querySelector("#sidebar");
+  formLogContainer.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target.id === "registerLink") {
+      event.preventDefault();
+      showRegisterForm();
+    } else if (target.id === "loginLink") {
+      event.preventDefault();
+      showLoginForm();
+    }
+  });
+
   sidebar.addEventListener("click", async (event) => {
     const targetLi = event.target.closest("li");
 

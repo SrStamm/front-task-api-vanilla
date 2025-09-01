@@ -83,12 +83,12 @@ export async function loginFetch(userData) {
 }
 
 export async function registerFetch(userData) {
-  let response = await fetch(url + "/user", {
+  console.log("Registering user:", userData);
+  return await fetch(url + "/user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
   });
-  return response;
 }
 
 export async function refreshFetch() {
