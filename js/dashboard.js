@@ -22,12 +22,17 @@ import {
   renderGroupInModal,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
-import { showLoginForm, showRegisterForm } from "./dom.js";
+import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
+import { auth } from "./auth.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
 const formLogContainer = document.getElementById("formLogContainer");
 const sidebar = document.querySelector("#sidebar");
+
+const loginBtn = document.querySelector('[data-action="login"]');
+const logoutBtn = document.getElementById("logoutBtn");
+const registerBtn = document.querySelector('[data-action="register"]');
 
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -64,6 +69,49 @@ document.addEventListener("DOMContentLoaded", function (event) {
     } else if (target.id === "loginLink") {
       event.preventDefault();
       showLoginForm();
+    }
+  });
+
+  loginBtn.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    let response = await auth.login();
+
+    if (response.success) {
+      // Obtiene los token de iniciar sesión
+      localStorage.setItem("authToken", response.accessToken);
+      localStorage.setItem("refrToken", response.refreshToken);
+      showMessage("Sesión iniciada con suceso", "success");
+      loginSucces();
+    } else {
+      showMessage(response.message, "error");
+    }
+  });
+
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      let response = await auth.logout();
+
+      if (response.success) {
+        showMessage("Sesión cerrada", "info");
+        unauthorized();
+      } else {
+        showMessage(error.message, "error");
+      }
+    } catch (error) {
+      showMessage("Ocurrió un error inesperado al cerrar sesión.", "error");
+    }
+  });
+
+  registerBtn.addEventListener("click", async () => {
+    let response = await auth.register();
+
+    if (response.success) {
+      showMessage(response.message, "success");
+      showLoginForm();
+    } else {
+      console.log("Error en el registro: ", response.message);
+      showMessage(response.message, "error");
     }
   });
 

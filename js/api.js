@@ -1,7 +1,7 @@
 // Modulo de llamadas API
 // Centraliza lógica Fetch, manejo de token y errores
 
-import { refresh } from "./auth.js";
+import { auth } from "./auth.js";
 import { unauthorized } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
 
@@ -25,7 +25,7 @@ async function fetchData(endpoint, method, body, token) {
   if (response.status === 401) {
     try {
       // Nuevo token
-      let newToken = await refresh();
+      let newToken = await auth.refresh();
 
       if (newToken.success) {
         // Reintennto de fecth
@@ -51,6 +51,8 @@ async function fetchData(endpoint, method, body, token) {
         throw new Error(errorData.detail || "Error en refresh");
       }
     } catch (error) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refrToken");
       unauthorized();
       console.log("Error en fetchData 401: ", error);
       throw new Error(`Error: `, error.message);
@@ -83,7 +85,6 @@ export async function loginFetch(userData) {
 }
 
 export async function registerFetch(userData) {
-  console.log("Registering user:", userData);
   return await fetch(url + "/user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
