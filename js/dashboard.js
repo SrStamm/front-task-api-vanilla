@@ -21,11 +21,10 @@ import {
   deleteUserFromGroup,
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
-import { showSections, showModal, occultModal } from "./utils/modals.js";
+import { showSections, showModal, occultModal } from "./utils/modal.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
-const sidebar = document.querySelector(".sidebar");
 
 // Prevenir que el clic en la card propague y cierre la card
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -53,20 +52,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
   });
 
+  const sidebar = document.querySelector("#sidebar");
   sidebar.addEventListener("click", async (event) => {
-    const target = event.target;
+    const targetLi = event.target.closest("li");
 
-    if (target.id == "sidebarInicioSection") {
-      showSections("inicioSection");
-    } else if (target.id == "sidebarGroupSection") {
-      showSections("groupSection");
+    // Si el clic no fue en un 'li' o no tiene un data-target, salimos
+    if (!targetLi || !targetLi.dataset.target) {
+      return;
+    }
+
+    const sectionId = targetLi.dataset.target;
+    showSections(sectionId);
+
+    if (sectionId === "groupSection") {
       await loadGroup();
-    } else if (target.id == "sidebarProjectSection") {
-      showSections("projectSection");
-    } else if (target.id == "sidebarTaskSection") {
-      showSections("taskSection");
-    } else if (target.id == "sidebarChatSection") {
-      showSections("chatSection");
     }
   });
 

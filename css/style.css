@@ -543,7 +543,7 @@ a {
 /* GRIDS MEJORADOS */
 #inicioSection {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Más ancho */
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Más ancho */
   gap: 2.5rem; /* Más espacio */
   width: 100%;
 }

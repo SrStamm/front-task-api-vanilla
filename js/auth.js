@@ -14,10 +14,31 @@ import {
   refreshFetch,
   loginFetch,
 } from "./api.js";
-import { unauthorized, loginSucces } from "./dom.js";
+import {
+  unauthorized,
+  loginSucces,
+  showRegisterForm,
+  showLoginForm,
+} from "./dom.js";
 import { showMessage } from "./utils/utils.js";
 
 const url = "http://localhost:8000";
+
+// Links de los formularios
+const registerLink = document.getElementById("registerLink");
+const loginLink = document.getElementById("loginLink");
+
+registerLink.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  showRegisterForm();
+});
+
+loginLink.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  showLoginForm();
+});
 
 // Validar la autenticación del usuario
 export async function validToken() {
