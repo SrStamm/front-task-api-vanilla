@@ -22,8 +22,6 @@ import {
 } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
 
-const url = "http://localhost:8000";
-
 // Links de los formularios
 const registerLink = document.getElementById("registerLink");
 const loginLink = document.getElementById("loginLink");
@@ -45,7 +43,7 @@ export async function validToken() {
   try {
     const response = await getCurrentUser();
     console.log("UserId: ", response.user_id);
-    loginSucces();
+    return { success: true, message: "Usario validado" };
   } catch (error) {
     unauthorized();
     localStorage.removeItem("authToken");
@@ -54,12 +52,17 @@ export async function validToken() {
 }
 
 // Funcion que se ejecuta al cargar la página
-document.addEventListener("DOMContentLoaded", function () {
-  validToken();
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    let validated = await validToken();
+    if (validated.success) {
+      loginSucces();
+    }
+  } catch (error) {}
 });
 
 // Funcion de login
-async function login() {
+export async function login() {
   // Obtiene los datos ingresados
   const username = document.getElementById("usernameLogin").value;
   const password = document.getElementById("passwordLogin").value;
@@ -88,11 +91,13 @@ async function login() {
     localStorage.setItem("refrToken", responseData.refresh_token);
 
     showMessage("Sesión iniciada con suceso", "success");
-    console.info("Detail: ", responseData.detail);
-    return responseData;
+    return {
+      success: true,
+      accessToken: responseData.access_token,
+      refreshToken: responseData.refresh_token,
+    };
   } catch (error) {
-    console.error("Error al iniciar sesión: ", error);
-    console.error(error.message);
+    return { success: false, message: error.message };
   }
 }
 
@@ -126,10 +131,10 @@ export async function register() {
     const dataResponse = await response.json();
     console.info("Detail: ", dataResponse.detail);
 
-    document.getElementById("loginSection").style.display = "block";
-    document.getElementById("registerSection").style.display = "none";
+    return { success: true, message: dataResponse.detail };
   } catch (error) {
     console.error("Error al crear un usuario: ", error);
+    return { success: false, message: error.message };
   }
 }
 
@@ -149,10 +154,16 @@ export async function refresh() {
       localStorage.setItem("authToken", data.access_token);
       localStorage.setItem("refrToken", data.refresh_token);
     }
+
+    return { success: true, message: "Sesión refrescada" };
   } catch (error) {
     if (error.message == "Token Not Authorized") {
       console.error("Refresh Token no valido");
     }
+    return {
+      success: false,
+      message: error.message || "Error al refrescar la sesión",
+    };
   }
 }
 
@@ -163,8 +174,7 @@ export async function logout() {
   if (response.detail == "Closed all sessions") {
     localStorage.removeItem("authToken");
     localStorage.removeItem("refrToken");
-    unauthorized();
-    showMessage("Sesión cerrada", "info");
+    return { success: true, message: "Sesión cerrada" };
   }
 
   return response;
@@ -172,69 +182,73 @@ export async function logout() {
 
 // Botones
 const logoutBtn = document.getElementById("logoutBtn");
-// const loginBtn = document.querySelector('[data-action="login"]');
-const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.querySelector('[data-action="register"]');
 
 // Logout
 logoutBtn.addEventListener("click", async () => {
   try {
-    await logout();
+    let response = await logout();
 
-    unauthorized();
-  } catch (error) {
-    console.log("Error: ", error);
-  }
-});
-
-loginBtn.addEventListener("click", async (event) => {
-  event.preventDefault();
-
-  try {
-    // await login();
-
-    // Obtiene los datos ingresados
-    const username = document.getElementById("usernameLogin").value;
-    const password = document.getElementById("passwordLogin").value;
-
-    if (!username || !password) {
-      showMessage("Por favor, complete todos los campos", "warning");
-      throw new Error("Faltan campos por completar");
+    if (response.success) {
+      showMessage("Sesión cerrada", "info");
+      unauthorized();
+    } else {
+      showMessage(error.message, "error");
     }
-
-    // Codifica los datos
-    const formData = new URLSearchParams();
-    formData.append("username", username);
-    formData.append("password", password);
-
-    const response = await fetch(url + "/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.detail);
-    }
-
-    // Obtiene los token de iniciar sesión
-    const responseData = await response.json();
-    localStorage.setItem("authToken", responseData.access_token);
-    localStorage.setItem("refrToken", responseData.refresh_token);
-
-    showMessage("Sesión iniciada con suceso", "success");
-    loginSucces();
   } catch (error) {
-    console.error("Error al iniciar sesión: ", error);
-    console.error(error.message);
+    showMessage("Ocurrió un error inesperado al cerrar sesión.", "error");
   }
 });
 
 registerBtn.addEventListener("click", async () => {
   try {
-    await register();
+    let response = await register();
 
-    showLoginForm();
-  } catch (error) {}
+    if (response.success) {
+      showMessage(
+        "Usuario creado con éxito. Por favor, inicie sesión.",
+        "success",
+      );
+      showMessage(response.message, "success");
+      // Modifica la vista
+      showLoginForm();
+    } else {
+      showMessage(response.message, "error");
+    }
+  } catch (error) {
+    showMessage(
+      "Ocurrió un error inesperado al registrar el usuario.",
+      "error",
+    );
+  }
+});
+
+// const loginBtn = document.querySelector('[data-action="login"]');
+const loginBtn = document.getElementById("loginBtn");
+
+loginBtn.addEventListener("click", async (event) => {
+  event.preventDefault();
+
+  try {
+    let response = await login();
+
+    if (!response.success) {
+      throw new Error(response.message || "Error al iniciar sesión");
+    }
+
+    // Obtiene los token de iniciar sesión
+    localStorage.setItem("authToken", response.accessToken);
+    localStorage.setItem("refrToken", response.refreshToken);
+    console.log("Tokens guardados en localStorage", response.accessToken);
+
+    showMessage("Sesión iniciada con suceso", "success");
+    loginSucces();
+  } catch (error) {
+    console.error(error.message);
+    if (error.message === "User not found") {
+      showMessage("Usuario no encontrado", "error");
+    } else {
+      showMessage("Error al iniciar sesión", "error");
+    }
+  }
 });

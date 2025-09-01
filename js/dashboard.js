@@ -6,12 +6,6 @@
 // It will import the rendering functions from render/ and the UI utilities from utils/ to build the page.
 
 import {
-  showGroupDetailsModal,
-  renderGroup,
-  renderUsers,
-  renderGroupInModal,
-} from "./dom.js";
-import {
   addUserToGroup,
   createGroup,
   deleteGroup,
@@ -22,6 +16,12 @@ import {
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
 import { showSections, showModal, occultModal } from "./utils/modal.js";
+import { renderUsers } from "./render/userRender.js";
+import {
+  renderGroup,
+  renderGroupInModal,
+  showGroupDetailsModal,
+} from "./render/groupRender.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -217,7 +217,7 @@ export async function loadGroup() {
     }
   } catch (error) {
     hideSpinner();
-    console.error("No se pudo cargar la lista de grupos: ", error.message);
+    console.error("No se pudo cargar la lista de grupos: ", error);
   }
 }
 

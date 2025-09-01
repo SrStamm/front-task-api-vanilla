@@ -5,7 +5,7 @@ import { refresh } from "./auth.js";
 import { unauthorized } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
 
-export const url = "http://localhost:8000";
+const url = "http://localhost:8000";
 
 async function fetchData(endpoint, method, body, token) {
   if (!token) {
@@ -27,7 +27,7 @@ async function fetchData(endpoint, method, body, token) {
       // Nuevo token
       let newToken = await refresh();
 
-      if (newToken) {
+      if (newToken.success) {
         // Reintennto de fecth
         let newResponse = await fetch(url + endpoint, {
           method: method,
@@ -52,6 +52,7 @@ async function fetchData(endpoint, method, body, token) {
       }
     } catch (error) {
       unauthorized();
+      console.log("Error en fetchData 401: ", error);
       throw new Error(`Error: `, error.message);
     }
   }
@@ -74,11 +75,11 @@ async function fetchData(endpoint, method, body, token) {
 //
 
 export async function loginFetch(userData) {
-  let response = await fetch(url + "/login", {
+  return await fetch(url + "/login", {
     method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: userData,
   });
-  return response;
 }
 
 export async function registerFetch(userData) {
