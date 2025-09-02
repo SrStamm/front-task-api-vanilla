@@ -28,3 +28,27 @@ export function occultModal(modalId) {
     modalGroupContainer.classList.add("hidden"); // Oculta después de la animación
   }, 300); // Espera la duración de la transición (0.3s)
 }
+
+export function updateModalContent(header, body, footer, addClass) {
+  const modalContainer = document.getElementById("genericModal");
+  const modalDiv = modalContainer.querySelector(".modal");
+
+  if (!addClass) {
+    console.log("No se proporcionó una clase para agregar al modal.");
+  } else {
+    modalDiv.classList.add(addClass);
+    console.log("Clase agregada al modal:", addClass);
+  }
+
+  console.log(modalDiv.classList);
+
+  if (header) {
+    modalContainer.querySelector(".modal-header").innerHTML = header;
+  }
+  if (body) {
+    modalContainer.querySelector(".modal-body").innerHTML = body;
+  }
+  if (footer) {
+    modalContainer.querySelector(".modal-actions").innerHTML = footer;
+  }
+}

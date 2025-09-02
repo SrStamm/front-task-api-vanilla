@@ -22,7 +22,9 @@ async function fetchData(endpoint, method, body, token) {
   });
 
   // Verifica que no haya ningún error
-  if (response.status === 401) {
+  const dataResponse = await response.json();
+
+  if (response.status === 401 && dataResponse.detail == "Invalid Token") {
     try {
       // Nuevo token
       let newToken = await auth.refresh();
@@ -38,17 +40,18 @@ async function fetchData(endpoint, method, body, token) {
           body: body,
         });
 
-        if (newResponse.status === 401 || !newResponse.ok) {
-          const errorData = await response.json();
+        const newResponseData = await newResponse.json();
+
+        if (!newResponse.ok) {
           showMessage(
             "Sesion expirada. Por favor, vuelve a iniciar sesion",
             "error",
           );
-          throw new Error(errorData.detail || "Error desconocido");
+          throw new Error(newResponseData.detail || "Error desconocido");
         }
+        return newResponse;
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Error en refresh");
+        throw new Error(newToken.detail || "Error en refresh");
       }
     } catch (error) {
       localStorage.removeItem("authToken");
@@ -61,15 +64,12 @@ async function fetchData(endpoint, method, body, token) {
 
   // Lanza excepción por otro error
   if (!response.ok) {
-    const errorData = await response.json();
     throw new Error(
-      `HTTP ${errorData.status}: ${errorData.detail || "Error desconocido"}`,
+      `HTTP ${response.status}: ${response.detail || "Error desconocido"}`,
     );
   }
 
-  // Obtiene los datos y los devuelve
-  let data = await response.json();
-  return data;
+  return dataResponse;
 }
 
 //
@@ -123,8 +123,20 @@ export async function getGroups() {
 }
 
 export async function getUsersInGroup(groupId) {
-  const token = localStorage.getItem("authToken");
-  return await fetchData(`/group/${groupId}/users`, "GET", null, token);
+  try {
+    const token = localStorage.getItem("authToken");
+    const response = await fetchData(
+      `/group/${groupId}/users`,
+      "GET",
+      null,
+      token,
+    );
+    console.log("Usuarios del grupo obtenidos:", response);
+    return response;
+  } catch (error) {
+    console.error("Error al obtener usuarios del grupo:", error);
+    return [];
+  }
 }
 
 export async function createGroup(groupData) {

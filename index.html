@@ -383,66 +383,19 @@
       </div>
     </div>
 
-    <!-- Modal para mas información -->
-    <div class="modal-backdrop hidden" id="modalInfoGroup">
-      <div class="modal modal-large">
-        <header class="modal-header">
-          <h3 class="groupName">Nombre de grupo</h3>
-          <!-- Podría agregarse un boton para cerrar-->
-        </header>
-        <main class="modal-body">
-          <div>
-            <h4>Descripción:</h4>
-            <p class="groupDescription">Descripción del grupo</p>
-          </div>
-          <div>
-            <h4>Miembros</h4>
-            <div>
-              <ol class="listUser"></ol>
-            </div>
-          </div>
-        </main>
-        <footer class="modal-footer">
-          <div class="modal-actions">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm"
-              id="addUserGroup"
-              data-group-id="{{group_id}}"
-              data-user-id="{{user_id}}"
-            >
-              Agregar Usuario
-            </button>
-            <button
-              type="button"
-              class="btn btn-error btn-sm"
-              id="deleteGroup"
-              data-group-id="{{group_id}}"
-              data-user-id="{{user_id}}"
-            >
-              Eliminar Grupo
-            </button>
-          </div>
-        </footer>
-      </div>
-    </div>
-
     <!-- Modal de lista de usuarios para agregar -->
     <div class="modal-backdrop hidden" id="allUsersList">
       <div class="modal modal-small modal-body">
         <h3>Usuarios</h3>
-        <ol class="listUser"></ol>
+        <ol class="allUsersList"></ol>
       </div>
     </div>
 
     <!-- Modal genérico-->
     <div class="modal-backdrop hidden" id="genericModal">
       <div class="modal">
-        <header class="modal-header">
-          <h3 class="modal-title"></h3>
-          <button class="modal-close" data-action="close-modal">&times;</button>
-        </header>
-        <main class="modal-content"></main>
+        <header class="modal-header"></header>
+        <main class="modal-body"></main>
         <footer class="modal-footer">
           <div class="modal-actions"></div>
         </footer>
@@ -450,9 +403,6 @@
     </div>
 
     <!-- Scripts -->
-
-    <!-- 
-    -->
     <script type="module" rel="preload" src="js/auth.js" defer></script>
     <script type="module" src="js/dom.js" defer></script>
     <script type="module" src="js/dashboard.js" defer></script>

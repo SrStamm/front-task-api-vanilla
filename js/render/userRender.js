@@ -17,3 +17,30 @@ export function renderUsers(username, groupId, userId) {
 
   return clonTemplate;
 }
+
+export function newRenderUsers(username, groupId, userId) {
+  headerContent = `
+      <h3>Usuarios</h3>
+    `;
+
+  bodyContent = `
+      <ul id="listUser">
+        <div class="body-template">
+          <p>${username}</p>
+        </div>
+        <div class="actionTemplate">
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="addUserToGroup"
+            data-group-id="${groupId}"
+            data-user-id="${userId}"
+          >
+            Agregar
+          </button>
+        </div>
+      </ul>
+    `;
+
+  return { header: headerContent, body: bodyContent };
+}

@@ -15,11 +15,16 @@ import {
   deleteUserFromGroup,
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
-import { showSections, showModal, occultModal } from "./utils/modal.js";
+import {
+  showSections,
+  showModal,
+  occultModal,
+  updateModalContent,
+} from "./utils/modal.js";
 import { renderUsers } from "./render/userRender.js";
 import {
+  newRenderGroupInModal,
   renderGroup,
-  renderGroupInModal,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
 import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
@@ -91,8 +96,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
   logoutBtn.addEventListener("click", async () => {
     try {
       let response = await auth.logout();
+      console.log("Response al cerrar sesión: ", response);
 
-      if (response.success) {
+      if (response.message === "Sesión cerrada") {
         showMessage("Sesión cerrada", "info");
         unauthorized();
       } else {
@@ -145,6 +151,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupName = target.dataset.name;
       const groupDescription = target.dataset.description;
       const listUser = await getUsersInGroup(groupId);
+      console.log("Usuarios del grupo: ", listUser);
+
+      // Muestra el modal con los detalles del grupo
       showGroupDetailsModal({
         group_id: groupId,
         name: groupName,
@@ -200,14 +209,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   // Eventos para modal de mas información del grupo
-  const groupModalInfoContainer = document.getElementById("modalInfoGroup");
+  const groupModalInfoContainer = document.getElementById("genericModal");
   groupModalInfoContainer.addEventListener("click", async (event) => {
     const target = event.target;
 
     if (target.id === "addUserGroup") {
       showModal("allUsersList");
       const modal = document.getElementById("allUsersList");
-      const userList = modal.querySelector(".listUser");
+      const userList = modal.querySelector(".allUsersList");
       const groupId = target.dataset.groupId;
       userList.innerHTML = "";
       const allUsers = await getUsers();
@@ -219,12 +228,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
         );
         userList.appendChild(renderizedUser);
       });
-    } else if (target.id === "deleteGroup") {
+    }
+
+    if (target.id === "deleteGroup") {
       const groupId = target.dataset.groupId;
       await deleteGroupAction(groupId);
-      occultModal("modalInfoGroup");
+      occultModal("genericModal");
       await loadGroup();
-    } else if (target.id === "deleteUserGroup") {
+    }
+
+    if (target.id === "deleteUserGroup") {
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
       await deleteUserFromGroupAction(groupId, userId);
@@ -298,6 +311,13 @@ async function createGroupEvent() {
       "newGroupDescription",
     ).value;
 
+    if (!newGroupName) {
+      showMessage("El nombre del grupo es obligatorio", "error");
+      return;
+    }
+
+    // Crea el grupo)
+
     let data = {
       name: newGroupName,
       description: newGroupDescription || null,
@@ -334,24 +354,30 @@ async function addUserToGroupAction(groupId, userId) {
     }
 
     showMessage("Usuario agregado exitosamente", "success");
-    occultModal("allUsersList");
+
+    // Obtener los datos del grupo desde el dataset del modal
+    const modalContainer = document.getElementById("genericModal");
+    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
 
     // Actualizar la lista de usuarios en el modal de grupo
-    const groupData = {
-      group_id: groupId,
-      name: document.querySelector("#modalInfoGroup .groupName").textContent,
-      description: document.querySelector("#modalInfoGroup .groupDescription")
-        .textContent,
-    };
     const listUser = await getUsersInGroup(groupId);
     groupData.users = listUser;
 
     // Volver a renderizar la información del grupo
-    await renderGroupInModal("modalInfoGroup", groupData);
+    const content = newRenderGroupInModal(groupData);
+    updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+    );
+
+    // Actualizar el dataset con los nuevos datos
+    modalContainer.dataset.groupData = JSON.stringify(groupData);
   } catch (error) {
     console.log("Error al agregar usaurio al grupo: ", error);
     showMessage("Error al añadir el usuario: ", error.message);
-    occultModal("allUsersList");
+    occultModal("genericModal");
   }
 }
 
@@ -367,18 +393,25 @@ async function deleteUserFromGroupAction(groupId, userId) {
 
     showMessage("Usuario eliminado exitosamente", "success");
 
+    // Obtener los datos del grupo desde el dataset del modal
+    const modalContainer = document.getElementById("genericModal");
+    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
+
     // Actualizar la lista de usuarios en el modal de grupo
-    const groupData = {
-      group_id: groupId,
-      name: document.querySelector("#modalInfoGroup .groupName").textContent,
-      description: document.querySelector("#modalInfoGroup .groupDescription")
-        .textContent,
-    };
     const listUser = await getUsersInGroup(groupId);
     groupData.users = listUser;
 
     // Volver a renderizar la información del grupo
-    await renderGroupInModal("modalInfoGroup", groupData);
+    const content = newRenderGroupInModal(groupData);
+    updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+    );
+
+    // Actualizar el dataset con los nuevos datos
+    modalContainer.dataset.groupData = JSON.stringify(groupData);
   } catch (error) {
     console.log("Error al eliminar usaurio al grupo: ", error);
     showMessage("Error al eliminar el usuario: ", error.message);

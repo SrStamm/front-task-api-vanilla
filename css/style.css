@@ -731,6 +731,12 @@ h3 {
   text-align: center;
 }
 
+modal-header {
+  border-bottom: 2px solid var(--gray-100);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
 .modal-body {
   display: flex;
   flex-direction: column;
@@ -822,9 +828,11 @@ h3 {
   border-radius: var(--border-radius);
 }
 
+/*
 .modal p {
   margin-bottom: 1rem;
 }
+*/
 
 .body-template {
   display: flex;
@@ -838,25 +846,57 @@ h3 {
   font-size: var(--font-size-lg);
 }
 
-/*
 .listUser {
   margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-*/
 
-.info-template {
+.listUser div {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  gap: 1rem;
 }
 
-.info-template p {
+.listUser li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  gap: 2rem;
+
+  background: var(--gray-100);
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.listUser li:hover {
+  background: var(--gray-200);
+}
+
+.listuser p {
   margin-right: 1rem;
 }
 
-.info-template p:last-child {
+.listUser p:last-child {
   margin-bottom: 0;
   margin-right: 0;
+}
+
+.allUsersList {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  gap: 2rem;
+}
+
+#allUsersList {
+  z-index: 1500;
+  position: fixed;
 }
 
 /* Mensajes */
