@@ -5,21 +5,8 @@
 // UPDATE: This file should now act as the central orchestrator for the dashboard* functionality.
 // It will import the rendering functions from render/ and the UI utilities from utils/ to build the page.
 
-import {
-  addUserToGroup,
-  createGroup,
-  deleteGroup,
-  getGroups,
-  getUsersInGroup,
-  getUsers,
-  deleteUserFromGroup,
-  editGroup,
-  editRole,
-  getProjects,
-  createProject,
-  getProjectsFromGroup,
-} from "./api.js";
-import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
+import { getUsersInGroup, getUsers, getProjectsFromGroup } from "./api.js";
+import { showMessage } from "./utils/utils.js";
 import {
   showSections,
   showModal,
@@ -29,13 +16,22 @@ import {
 import { renderUsers } from "./render/userRender.js";
 import {
   newRenderGroupInModal,
-  renderGroup,
   renderGroupToEdit,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
 import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
 import { auth } from "./auth.js";
-import { renderCreateProject, renderProject } from "./render/projectRender.js";
+import { renderCreateProject } from "./render/projectRender.js";
+import { createProjectAction, loadProjects } from "./actions/projectActions.js";
+import { loadGroup } from "./actions/groupActions.js";
+import {
+  editGroupAction,
+  createGroupEvent,
+  addUserToGroupAction,
+  deleteUserFromGroupAction,
+  editRoleAction,
+} from "./actions/groupActions.js";
+import { unauthorized } from "./unauthorized.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -304,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     if (target.id === "deleteGroup") {
       const groupId = target.dataset.groupId;
-      await deleteGroupAction(groupId);
+      await editGroupAction(groupId);
       occultModal("genericModal");
       await loadGroup();
     }
@@ -476,294 +472,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 });
 
-export async function loadGroup() {
-  try {
-    // Llama a la funcion que obtendra los grupos
-    const groups = await getGroups();
-
-    showSpinner();
-
-    const groupContainer = document.getElementById("groupList");
-    groupContainer.innerHTML = "";
-
-    hideSpinner();
-    if (groups.length <= 0) {
-      groupContainer.textContent = "No eres parte de ningun grupo.";
-    } else {
-      groups.forEach((group) => {
-        let clone = renderGroup("groupTemplate", group);
-        groupContainer.appendChild(clone);
-      });
-    }
-  } catch (error) {
-    hideSpinner();
-    console.error("No se pudo cargar la lista de grupos: ", error);
-  }
-}
-
-export async function loadProjects() {
-  try {
-    // Llama a la funcion que obtendra los proyectos
-    const projects = await getProjects();
-
-    showSpinner();
-
-    const projectContainer = document.getElementById("projectList");
-    projectContainer.innerHTML = "";
-
-    hideSpinner();
-    if (projects.length <= 0) {
-      projectContainer.textContent = "No eres parte de ningun grupo.";
-    } else {
-      projects.forEach((project) => {
-        let clone = renderProject("projectTemplate", project);
-        projectContainer.appendChild(clone);
-      });
-    }
-  } catch (error) {
-    hideSpinner();
-    console.error("No se pudo cargar la lista de proyectos: ", error);
-  }
-}
-
 // Botones en dashboard
 
 createGroupBtn.addEventListener("click", () => {
   showModal("modalGroup");
 });
-
-// Funciones completas
-async function createGroupEvent() {
-  try {
-    // Obtiene los datos
-    const newGroupName = document.getElementById("newGroupName").value;
-    const newGroupDescription = document.getElementById(
-      "newGroupDescription",
-    ).value;
-
-    if (!newGroupName) {
-      showMessage("El nombre del grupo es obligatorio", "error");
-      return;
-    }
-
-    // Crea el grupo)
-
-    let data = {
-      name: newGroupName,
-      description: newGroupDescription || null,
-    };
-
-    let response = await createGroup(data);
-
-    return response.detail;
-  } catch (error) {
-    console.log("Error en crear un grupo: ", error);
-  }
-}
-
-async function deleteGroupAction(groupId) {
-  try {
-    let result = await deleteGroup(groupId);
-
-    if (result.detail !== "Se ha eliminado el grupo") {
-      throw new Error(result.detail);
-    }
-  } catch (error) {
-    console.log(`Error al eliminar el grupo ${groupId}: `, error);
-  }
-}
-
-async function addUserToGroupAction(groupId, userId) {
-  try {
-    let response = await addUserToGroup(groupId, userId);
-
-    console.log("Response para agregar usaurio al grupo: ", response);
-
-    if (response.detail !== "El usuario ha sido agregado al grupo") {
-      throw new Error(response.detail);
-    }
-
-    showMessage("Usuario agregado exitosamente", "success");
-
-    // Obtener los datos del grupo desde el dataset del modal
-    const modalContainer = document.getElementById("genericModal");
-    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-
-    // Actualizar la lista de usuarios en el modal de grupo
-    const listUser = await getUsersInGroup(groupId);
-    groupData.users = listUser;
-
-    const listProject = await getProjectsFromGroup(groupId);
-    groupData.projects = listProject;
-    console.log("Lista de proyectos: ", listProject);
-
-    // Volver a renderizar la información del grupo
-    const content = newRenderGroupInModal(groupData);
-    updateModalContent(
-      content.header,
-      content.body,
-      content.footer,
-      content.addClass,
-    );
-
-    // Actualizar el dataset con los nuevos datos
-    modalContainer.dataset.groupData = JSON.stringify(groupData);
-  } catch (error) {
-    console.log("Error al agregar usaurio al grupo: ", error);
-    showMessage("Error al añadir el usuario: ", error.message);
-    occultModal("allUsersList");
-  }
-}
-
-async function deleteUserFromGroupAction(groupId, userId) {
-  try {
-    let response = await deleteUserFromGroup(groupId, userId);
-
-    console.log("Response para eliminar un usuario al grupo: ", response);
-
-    if (response.detail !== "El usuario ha sido eliminado del grupo") {
-      throw new Error(response.detail);
-    }
-
-    showMessage("Usuario eliminado exitosamente", "success");
-
-    // Obtener los datos del grupo desde el dataset del modal
-    const modalContainer = document.getElementById("genericModal");
-    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-
-    // Actualizar la lista de usuarios en el modal de grupo
-    const listUser = await getUsersInGroup(groupId);
-    groupData.users = listUser;
-
-    const listProject = await getProjectsFromGroup(groupId);
-    groupData.projects = listProject;
-    console.log("Lista de proyectos: ", listProject);
-
-    // Volver a renderizar la información del grupo
-    const content = newRenderGroupInModal(groupData);
-    updateModalContent(
-      content.header,
-      content.body,
-      content.footer,
-      content.addClass,
-    );
-
-    // Actualizar el dataset con los nuevos datos
-    modalContainer.dataset.groupData = JSON.stringify(groupData);
-  } catch (error) {
-    console.log("Error al eliminar usaurio al grupo: ", error);
-    showMessage("Error al eliminar el usuario: ", error.message);
-  }
-}
-
-async function editGroupAction(groupId, groupName, groupDescription) {
-  try {
-    let groupEditData = {
-      name: groupName,
-    };
-
-    if (groupDescription || groupDescription !== null) {
-      groupEditData.description = groupDescription;
-    }
-    let response = await editGroup(groupId, groupEditData);
-
-    console.log("Response para editar el grupo: ", response);
-
-    if (response.detail !== "Se ha actualizado la informacion del grupo") {
-      throw new Error(response.detail);
-    }
-
-    showMessage("Grupo editado exitosamente", "success");
-
-    // Obtener los datos del grupo desde el dataset del modal
-    const modalContainer = document.getElementById("genericModal");
-    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-
-    // Actualizar la lista de usuarios en el modal de grupo
-    const listUser = await getUsersInGroup(groupId);
-    groupData.users = listUser;
-
-    const listProject = await getProjectsFromGroup(groupId);
-    groupData.projects = listProject;
-
-    console.log("Lista de proyectos: ", listProject);
-
-    // Volver a renderizar la información del grupo
-    const content = newRenderGroupInModal(groupData);
-    updateModalContent(
-      content.header,
-      content.body,
-      content.footer,
-      content.addClass,
-    );
-
-    // Actualizar el dataset con los nuevos datos
-    modalContainer.dataset.groupData = JSON.stringify(groupData);
-  } catch (error) {
-    console.log("Error al eliminar usaurio al grupo: ", error);
-    showMessage("Error al eliminar el usuario: ", error.message);
-  }
-}
-
-async function editRoleAction(groupId, userId, role) {
-  try {
-    if (!groupId || !userId || !role) {
-      showMessage("Faltan datos para editar el rol", "error");
-      return;
-    }
-
-    const response = await editRole(groupId, userId, role);
-
-    if (
-      response.detail !== "Se ha cambiado los permisos del usuario en el grupo"
-    ) {
-      throw new Error(response.detail);
-    } else {
-      // Obtener los datos del grupo desde el dataset del modal
-      const modalContainer = document.getElementById("genericModal");
-      const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-
-      // Actualizar la lista de usuarios en el modal de grupo
-      const listUser = await getUsersInGroup(groupId);
-      groupData.users = listUser;
-
-      const listProject = await getProjectsFromGroup(groupId);
-      groupData.projects = listProject;
-      console.lign("Lista de proyectos: ", listProject);
-
-      // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
-      updateModalContent(
-        content.header,
-        content.body,
-        content.footer,
-        content.addClass,
-      );
-
-      // Actualizar el dataset con los nuevos datos
-      modalContainer.dataset.groupData = JSON.stringify(groupData);
-      return { success: true, detail: response.detail };
-    }
-  } catch (error) {
-    return { sucess: false, detail: error.message };
-  }
-}
-
-async function createProjectAction(projectData, groupId) {
-  try {
-    if (!projectData.title || projectData.title.trim() === "") {
-      alert("El nombre del proyecto no puede estar vacío.");
-      return;
-    }
-
-    const response = await createProject(projectData, groupId);
-
-    if (response.detail === "Se ha creado un nuevo proyecto de forma exitosa") {
-      return { success: true, detail: response.detail };
-    } else {
-      return { success: false, detail: response.detail };
-    }
-  } catch (error) {
-    return { success: false, detail: response.detail };
-  }
-}
