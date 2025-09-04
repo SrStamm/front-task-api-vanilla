@@ -561,7 +561,7 @@ template {
   display: none;
 }
 
-#groupList {
+.card-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Más ancho */
   gap: 2.5rem; /* Más espacio */
@@ -977,7 +977,7 @@ modal-header {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
 
-  #groupList {
+  .card-list {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }

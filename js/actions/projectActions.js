@@ -1,5 +1,6 @@
-import { getProjects } from "../api";
-import { hideSpinner, showSpinner } from "../utils/utils";
+import { getProjects } from "../api.js";
+import { renderProject } from "../render/projectRender.js";
+import { hideSpinner, showSpinner } from "../utils/utils.js";
 
 export async function loadProjects() {
   try {

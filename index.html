@@ -223,7 +223,7 @@
                 <span>+ Crear grupo</span>
               </button>
             </div>
-            <div id="groupList"></div>
+            <div class="card-list" id="groupList"></div>
           </div>
         </section>
 
@@ -231,8 +231,10 @@
         <section class="dashboard-section" id="projectSection">
           <h2>Proyectos</h2>
           <div class="partSections">
-            <h3 class="headerPartSection">Mis Proyectos</h3>
-            <ol id="projectList"></ol>
+            <div class="headerPartSection">
+              <h3>Mis Proyectos</h3>
+            </div>
+            <ol class="card-list" id="projectList"></ol>
           </div>
         </section>
 
@@ -342,15 +344,19 @@
     <!-- Template de proyectos -->
     <template id="projectTemplate">
       <li class="project-item">
-        <h4 class="projectTitle"></h4>
-        <p class="projectDescription"></p>
-        <button
-          class="btn btn-sm btn-primary view-project-btn"
-          data-group-id="{{group_id}}"
-          data-project-id="{{project_id}}"
-        >
-          Ver tareas
-        </button>
+        <div class="card">
+          <h4 class="projectTitle"></h4>
+          <div class="template-hide">
+            <p class="projectDescription"></p>
+            <button
+              class="btn btn-sm btn-primary view-project-btn"
+              data-group-id="{{group_id}}"
+              data-project-id="{{project_id}}"
+            >
+              Ver tareas
+            </button>
+          </div>
+        </div>
       </li>
     </template>
 
@@ -415,5 +421,6 @@
     <script type="module" src="js/actions/projectActions.js"></script>
     <script type="module" src="js/render/groupRender.js"></script>
     <script type="module" src="js/render/projectRender.js"></script>
+    <script type="module" src="js/render/userRender.js"></script>
   </body>
 </html>

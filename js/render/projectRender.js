@@ -33,8 +33,8 @@ export function renderProject(elementId, projectData) {
   projectDescription.textContent = projectData.description;
 
   //
-  viewBtn.dataset.groupId = groupData.group_id;
-  viewBtn.dataset.projectId = groupData.project_id;
+  viewBtn.dataset.groupId = projectData.group_id;
+  viewBtn.dataset.projectId = projectData.project_id;
 
   // Agrega los datos
   return clonTemplate;

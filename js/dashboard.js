@@ -31,7 +31,6 @@ import {
   deleteUserFromGroupAction,
   editRoleAction,
 } from "./actions/groupActions.js";
-import { unauthorized } from "./unauthorized.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
