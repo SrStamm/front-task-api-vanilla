@@ -188,7 +188,12 @@ export async function editRole(groupId, userId, role) {
 
 export async function getProjects() {
   const token = localStorage.getItem("authToken");
-  return await fetchData("/projects/me", "GET", null, token);
+  return await fetchData("/project/me", "GET", null, token);
+}
+
+export async function getProjectsFromGroup(groupId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/project/${groupId}`, "GET", null, token);
 }
 
 export async function createProject(projectData, groupId) {

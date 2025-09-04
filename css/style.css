@@ -841,6 +841,9 @@ modal-header {
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem 0;
+
+  max-width: 800px;
+  overflow: auto;
 }
 
 .listUser:last-child {
@@ -856,23 +859,38 @@ modal-header {
 }
 */
 
-.listUser li {
+.listUser li,
+.listProject li {
   background: var(--gray-100);
   padding: 1rem;
   border-radius: var(--border-radius);
 }
 
-.listUser li:hover {
+.listUser li:hover,
+.listProject li:hover {
   background: var(--gray-200);
 }
 
-.listuser p {
+.listuser p,
+.listProject p {
   margin-right: 1rem;
 }
 
-.listUser p:last-child {
+.listUser p:last-child,
+.listProject p:last-child {
   margin-bottom: 0;
   margin-right: 0;
+}
+
+.listProject {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+
+  max-height: 300px;
+  overflow: scroll;
 }
 
 .allUsersList {

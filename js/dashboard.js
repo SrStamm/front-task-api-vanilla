@@ -15,6 +15,9 @@ import {
   deleteUserFromGroup,
   editGroup,
   editRole,
+  getProjects,
+  createProject,
+  getProjectsFromGroup,
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
 import {
@@ -32,6 +35,7 @@ import {
 } from "./render/groupRender.js";
 import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
 import { auth } from "./auth.js";
+import { renderCreateProject, renderProject } from "./render/projectRender.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -138,6 +142,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     if (sectionId === "groupSection") {
       await loadGroup();
     }
+    if (sectionId === "projectSection") {
+      await loadProjects();
+    }
   });
 
   // Event delegation para #groupList (cards, botones de grupo, usuarios)
@@ -155,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupDescription = target.dataset.description;
       const listUser = await getUsersInGroup(groupId);
       console.log("Usuarios del grupo: ", listUser);
+      const listProject = await getProjectsFromGroup(groupId);
 
       // Muestra el modal con los detalles del grupo
       showGroupDetailsModal({
@@ -162,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         name: groupName,
         description: groupDescription,
         users: listUser,
+        projects: listProject,
       });
     } else if (card && !target.classList.contains("btn-manage")) {
       // Lógica de expandir/contraer cards
@@ -268,12 +277,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
       // Actualizar la lista de usuarios en el modal de grupo
       const listUser = await getUsersInGroup(groupId);
+      const listProject = await getProjectsFromGroup(groupId);
 
+      console.log("Lista de proyectos: ", listProject);
       const groupData = {
         name: groupName,
         description: groupDescription,
         group_id: groupId,
         users: listUser,
+        projects: listProject,
       };
 
       // Volver a renderizar la información del grupo
@@ -335,6 +347,106 @@ document.addEventListener("DOMContentLoaded", function (event) {
         select.style.display = "none"; // muestra el botón
       }
     }
+
+    if (target.id === "createProject") {
+      const modalContainer = document.getElementById("genericModal");
+      const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
+      const content = renderCreateProject(groupData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+        content.removeClass,
+      );
+    }
+
+    if (target.id === "confirCreateProject") {
+      const modalContainer = document.getElementById("genericModal");
+      const projectTitle = modalContainer.querySelector(
+        "#createProjectNameName",
+      ).value;
+      const projectDescription =
+        modalContainer.querySelector("#createProjectName").value;
+
+      const projectData = {
+        title: projectTitle,
+        description: projectDescription || null,
+      };
+
+      const groupId = target.dataset.groupId;
+
+      let response = await createProjectAction(projectData, groupId);
+
+      if (response && response.success) {
+        showMessage("Proyecto creado exitosamente", "success");
+        occultModal("genericModal");
+        await loadProjects();
+
+        // Actualizar la lista de usuarios en el modal de grupo
+        const listUser = await getUsersInGroup(target.dataset.groupId);
+        const listProject = await getProjectsFromGroup(groupId);
+        console.log("Lista de proyectos: ", listProject);
+
+        const groupData = {
+          name: target.dataset.groupName,
+          description: target.dataset.groupDescription,
+          group_id: target.dataset.groupId,
+          users: listUser,
+          projects: listProject,
+        };
+
+        // Volver a renderizar la información del grupo
+        const content = newRenderGroupInModal(groupData);
+        updateModalContent(
+          content.header,
+          content.body,
+          content.footer,
+          content.addClass,
+          "modal-small",
+        );
+
+        // Actualizar el dataset con los nuevos datos
+        modalContainer.dataset.groupData = JSON.stringify(groupData);
+      } else {
+        showMessage("Error al crear el proyecto: " + response.detail, "error");
+      }
+    }
+
+    if (target.id === "cancelCreateProject") {
+      // Obtener los datos del grupo desde el dataset del modal
+      const modalContainer = document.getElementById("genericModal");
+      const CancelBtn = modalContainer.querySelector("#cancelCreateProject");
+      const groupId = CancelBtn.dataset.groupId;
+      const groupName = CancelBtn.dataset.groupName;
+      const groupDescription = CancelBtn.dataset.groupDescription;
+
+      // Actualizar la lista de usuarios en el modal de grupo
+      const listUser = await getUsersInGroup(groupId);
+      const listProject = await getProjectsFromGroup(groupId);
+      console.log("Lista de proyectos: ", listProject);
+
+      const groupData = {
+        name: groupName,
+        description: groupDescription,
+        group_id: groupId,
+        users: listUser,
+        projects: listProject,
+      };
+
+      // Volver a renderizar la información del grupo
+      const content = newRenderGroupInModal(groupData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+        "modal-small",
+      );
+
+      // Actualizar el dataset con los nuevos datos
+      modalContainer.dataset.groupData = JSON.stringify(groupData);
+    }
   });
 
   // Eventos para agregar el usuario al grupo
@@ -386,6 +498,31 @@ export async function loadGroup() {
   } catch (error) {
     hideSpinner();
     console.error("No se pudo cargar la lista de grupos: ", error);
+  }
+}
+
+export async function loadProjects() {
+  try {
+    // Llama a la funcion que obtendra los proyectos
+    const projects = await getProjects();
+
+    showSpinner();
+
+    const projectContainer = document.getElementById("projectList");
+    projectContainer.innerHTML = "";
+
+    hideSpinner();
+    if (projects.length <= 0) {
+      projectContainer.textContent = "No eres parte de ningun grupo.";
+    } else {
+      projects.forEach((project) => {
+        let clone = renderProject("projectTemplate", project);
+        projectContainer.appendChild(clone);
+      });
+    }
+  } catch (error) {
+    hideSpinner();
+    console.error("No se pudo cargar la lista de proyectos: ", error);
   }
 }
 
@@ -456,6 +593,10 @@ async function addUserToGroupAction(groupId, userId) {
     const listUser = await getUsersInGroup(groupId);
     groupData.users = listUser;
 
+    const listProject = await getProjectsFromGroup(groupId);
+    groupData.projects = listProject;
+    console.log("Lista de proyectos: ", listProject);
+
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);
     updateModalContent(
@@ -493,6 +634,10 @@ async function deleteUserFromGroupAction(groupId, userId) {
     // Actualizar la lista de usuarios en el modal de grupo
     const listUser = await getUsersInGroup(groupId);
     groupData.users = listUser;
+
+    const listProject = await getProjectsFromGroup(groupId);
+    groupData.projects = listProject;
+    console.log("Lista de proyectos: ", listProject);
 
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);
@@ -538,6 +683,11 @@ async function editGroupAction(groupId, groupName, groupDescription) {
     const listUser = await getUsersInGroup(groupId);
     groupData.users = listUser;
 
+    const listProject = await getProjectsFromGroup(groupId);
+    groupData.projects = listProject;
+
+    console.log("Lista de proyectos: ", listProject);
+
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);
     updateModalContent(
@@ -577,6 +727,10 @@ async function editRoleAction(groupId, userId, role) {
       const listUser = await getUsersInGroup(groupId);
       groupData.users = listUser;
 
+      const listProject = await getProjectsFromGroup(groupId);
+      groupData.projects = listProject;
+      console.lign("Lista de proyectos: ", listProject);
+
       // Volver a renderizar la información del grupo
       const content = newRenderGroupInModal(groupData);
       updateModalContent(
@@ -592,5 +746,24 @@ async function editRoleAction(groupId, userId, role) {
     }
   } catch (error) {
     return { sucess: false, detail: error.message };
+  }
+}
+
+async function createProjectAction(projectData, groupId) {
+  try {
+    if (!projectData.title || projectData.title.trim() === "") {
+      alert("El nombre del proyecto no puede estar vacío.");
+      return;
+    }
+
+    const response = await createProject(projectData, groupId);
+
+    if (response.detail === "Se ha creado un nuevo proyecto de forma exitosa") {
+      return { success: true, detail: response.detail };
+    } else {
+      return { success: false, detail: response.detail };
+    }
+  } catch (error) {
+    return { success: false, detail: response.detail };
   }
 }

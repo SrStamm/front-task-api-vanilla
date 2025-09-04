@@ -339,6 +339,21 @@
       </div>
     </template>
 
+    <!-- Template de proyectos -->
+    <template id="projectTemplate">
+      <li class="project-item">
+        <h4 class="projectTitle"></h4>
+        <p class="projectDescription"></p>
+        <button
+          class="btn btn-sm btn-primary view-project-btn"
+          data-group-id="{{group_id}}"
+          data-project-id="{{project_id}}"
+        >
+          Ver tareas
+        </button>
+      </li>
+    </template>
+
     <!-- Modal para forms -->
     <div class="modal-backdrop hidden" id="modalGroup">
       <div class="modal modal-small">

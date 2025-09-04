@@ -2,6 +2,7 @@
 // Rendering group-related elements. This file would handle the creation of the HTML templates and their population data
 
 import { showModal, updateModalContent } from "../utils/modal.js";
+import { renderProjectInGroup } from "./projectRender.js";
 
 // Función que renderiza los grupos
 export function renderGroup(elementId, groupData) {
@@ -79,12 +80,13 @@ export function newRenderGroupInModal(groupData) {
     <div class="headerList">
       <h4>Proyectos</h4>
       <button type="button" class="btn btn-accent btn-vsm" id="createProject"
-        data-group-id="${groupData.group_id}"
-      > Crear proyecto </button>
+        data-group-id="${groupData.group_id}"> Crear proyecto </button>
     </div>
     <div>
-      <ol>
-        <li>No perteneces a ningun proyecto</li>
+      <ol class="listProject">
+        ${(groupData.projects || [])
+          .map((project) => renderProjectInGroup(project.title))
+          .join("")}
       </ol>
     </div>
   </div>
