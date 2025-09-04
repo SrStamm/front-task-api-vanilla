@@ -13,6 +13,8 @@ import {
   getUsersInGroup,
   getUsers,
   deleteUserFromGroup,
+  editGroup,
+  editRole,
 } from "./api.js";
 import { showSpinner, hideSpinner, showMessage } from "./utils/utils.js";
 import {
@@ -25,6 +27,7 @@ import { renderUsers } from "./render/userRender.js";
 import {
   newRenderGroupInModal,
   renderGroup,
+  renderGroupToEdit,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
 import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
@@ -195,7 +198,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     if (target.id === "cancelGroup") {
       occultModal("modalGroup");
-    } else if (target.id === "saveGroup") {
+    }
+    if (target.id === "saveGroup") {
       let response = await createGroupEvent();
 
       if (response == "Se ha creado un nuevo grupo de forma exitosa") {
@@ -230,6 +234,62 @@ document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
 
+    if (target.id === "editGroup") {
+      const modalContainer = document.getElementById("genericModal");
+      const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
+      const content = renderGroupToEdit(groupData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+        content.removeClass,
+      );
+    }
+
+    if (target.id === "confirmEditGroup") {
+      const modalContainer = document.getElementById("genericModal");
+      const groupName = modalContainer.querySelector("#editGroupName");
+      const groupDescription = modalContainer.querySelector(
+        "#editGroupDescription",
+      );
+      const groupId = target.dataset.groupId;
+
+      await editGroupAction(groupId, groupName.value, groupDescription.value);
+    }
+
+    if (target.id === "cancelEditGroup") {
+      // Obtener los datos del grupo desde el dataset del modal
+      const modalContainer = document.getElementById("genericModal");
+      const CancelBtn = modalContainer.querySelector("#cancelEditGroup");
+      const groupId = CancelBtn.dataset.groupId;
+      const groupName = CancelBtn.dataset.groupName;
+      const groupDescription = CancelBtn.dataset.groupDescription;
+
+      // Actualizar la lista de usuarios en el modal de grupo
+      const listUser = await getUsersInGroup(groupId);
+
+      const groupData = {
+        name: groupName,
+        description: groupDescription,
+        group_id: groupId,
+        users: listUser,
+      };
+
+      // Volver a renderizar la información del grupo
+      const content = newRenderGroupInModal(groupData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+        "modal-small",
+      );
+
+      // Actualizar el dataset con los nuevos datos
+      modalContainer.dataset.groupData = JSON.stringify(groupData);
+    }
+
     if (target.id === "deleteGroup") {
       const groupId = target.dataset.groupId;
       await deleteGroupAction(groupId);
@@ -241,6 +301,39 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
       await deleteUserFromGroupAction(groupId, userId);
+    }
+
+    if (target.id == "editRoleGroup") {
+      const userId = target.dataset.userId;
+      const groupId = target.dataset.groupId;
+      const select = document.querySelector(
+        `.role-select[data-user-id="${userId}"]`,
+      );
+
+      // Obtiene el rol actual y el del select
+      const selectRole = select.value;
+      const currentRole = select.dataset.role;
+
+      // Si el rol ha cambiado, llama a la API para actualizarlo
+
+      if (currentRole !== selectRole) {
+        let response = await editRoleAction(groupId, userId, selectRole);
+
+        if (response && response.success) {
+          showMessage("Rol cambiado exitosamente", "success");
+        } else {
+          showMessage("Error al cambiar el rol: " + response.detail, "error");
+          return; // Sale de la función si hubo un error
+        }
+      }
+
+      select.disabled = !select.disabled; // activa/desactiva edición
+
+      if (select.style.display === "none") {
+        select.style.display = "inline-block"; // muestra el select
+      } else {
+        select.style.display = "none"; // muestra el botón
+      }
     }
   });
 
@@ -377,7 +470,7 @@ async function addUserToGroupAction(groupId, userId) {
   } catch (error) {
     console.log("Error al agregar usaurio al grupo: ", error);
     showMessage("Error al añadir el usuario: ", error.message);
-    occultModal("genericModal");
+    occultModal("allUsersList");
   }
 }
 
@@ -415,5 +508,89 @@ async function deleteUserFromGroupAction(groupId, userId) {
   } catch (error) {
     console.log("Error al eliminar usaurio al grupo: ", error);
     showMessage("Error al eliminar el usuario: ", error.message);
+  }
+}
+
+async function editGroupAction(groupId, groupName, groupDescription) {
+  try {
+    let groupEditData = {
+      name: groupName,
+    };
+
+    if (groupDescription || groupDescription !== null) {
+      groupEditData.description = groupDescription;
+    }
+    let response = await editGroup(groupId, groupEditData);
+
+    console.log("Response para editar el grupo: ", response);
+
+    if (response.detail !== "Se ha actualizado la informacion del grupo") {
+      throw new Error(response.detail);
+    }
+
+    showMessage("Grupo editado exitosamente", "success");
+
+    // Obtener los datos del grupo desde el dataset del modal
+    const modalContainer = document.getElementById("genericModal");
+    const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
+
+    // Actualizar la lista de usuarios en el modal de grupo
+    const listUser = await getUsersInGroup(groupId);
+    groupData.users = listUser;
+
+    // Volver a renderizar la información del grupo
+    const content = newRenderGroupInModal(groupData);
+    updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+    );
+
+    // Actualizar el dataset con los nuevos datos
+    modalContainer.dataset.groupData = JSON.stringify(groupData);
+  } catch (error) {
+    console.log("Error al eliminar usaurio al grupo: ", error);
+    showMessage("Error al eliminar el usuario: ", error.message);
+  }
+}
+
+async function editRoleAction(groupId, userId, role) {
+  try {
+    if (!groupId || !userId || !role) {
+      showMessage("Faltan datos para editar el rol", "error");
+      return;
+    }
+
+    const response = await editRole(groupId, userId, role);
+
+    if (
+      response.detail !== "Se ha cambiado los permisos del usuario en el grupo"
+    ) {
+      throw new Error(response.detail);
+    } else {
+      // Obtener los datos del grupo desde el dataset del modal
+      const modalContainer = document.getElementById("genericModal");
+      const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
+
+      // Actualizar la lista de usuarios en el modal de grupo
+      const listUser = await getUsersInGroup(groupId);
+      groupData.users = listUser;
+
+      // Volver a renderizar la información del grupo
+      const content = newRenderGroupInModal(groupData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+      );
+
+      // Actualizar el dataset con los nuevos datos
+      modalContainer.dataset.groupData = JSON.stringify(groupData);
+      return { success: true, detail: response.detail };
+    }
+  } catch (error) {
+    return { sucess: false, detail: error.message };
   }
 }

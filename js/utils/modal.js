@@ -29,7 +29,13 @@ export function occultModal(modalId) {
   }, 300); // Espera la duración de la transición (0.3s)
 }
 
-export function updateModalContent(header, body, footer, addClass) {
+export function updateModalContent(
+  header,
+  body,
+  footer,
+  addClass,
+  removeClass,
+) {
   const modalContainer = document.getElementById("genericModal");
   const modalDiv = modalContainer.querySelector(".modal");
 
@@ -38,6 +44,13 @@ export function updateModalContent(header, body, footer, addClass) {
   } else {
     modalDiv.classList.add(addClass);
     console.log("Clase agregada al modal:", addClass);
+  }
+
+  if (!removeClass) {
+    console.log("No se proporcionó una clase para agregar al modal.");
+  } else {
+    modalDiv.classList.remove(removeClass);
+    console.log("Clase removida al modal:", addClass);
   }
 
   console.log(modalDiv.classList);

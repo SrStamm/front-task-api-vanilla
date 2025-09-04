@@ -200,26 +200,21 @@
         <!-- Dashboard - Inicio section -->
         <section class="dashboard-section" id="inicioSection">
           <h2>Dashboard</h2>
-          <div id="pendingTaskWidget" class="partSections">
-            <h3>Tareas pendientes próximas a vencer</h3>
-            <ol id="taskDueSoon"></ol>
-          </div>
-          <div id="projectProgress" class="partSections">
-            <h3>Progreso de los proyectos</h3>
-            <ol id="projectProgressList"></ol>
-          </div>
-          <div class="partSections">
-            <h3>Notificaciones</h3>
-            <ul></ul>
+          <div class="inicioSection">
+            <div id="pendingTaskWidget" class="partSections">
+              <h3 class="headerPartSection">Tareas próximas a vencer</h3>
+            </div>
+            <div id="projectProgress" class="partSections">
+              <h3 class="headerPartSection">Progreso de proyectos</h3>
+            </div>
+            <div class="partSections">
+              <h3 class="headerPartSection">Notificaciones</h3>
+            </div>
           </div>
         </section>
 
         <!-- Dashboard - Group section -->
-        <section
-          class="dashboard-section"
-          id="groupSection"
-          style="display: none"
-        >
+        <section class="dashboard-section" id="groupSection">
           <h2>Mis Grupos</h2>
           <div class="partSections">
             <div class="headerPartSection">
@@ -233,47 +228,39 @@
         </section>
 
         <!-- Dashboard - Project section -->
-        <section
-          class="dashboard-section"
-          id="projectSection"
-          style="display: none"
-        >
+        <section class="dashboard-section" id="projectSection">
           <h2>Proyectos</h2>
           <div class="partSections">
-            <h3>Mis Proyectos</h3>
+            <h3 class="headerPartSection">Mis Proyectos</h3>
             <ol id="projectList"></ol>
           </div>
         </section>
 
         <!-- Dashboard - Task section -->
-        <section
-          class="dashboard-section"
-          id="taskSection"
-          style="display: none"
-        >
+        <section class="dashboard-section splitSections" id="taskSection">
           <h2>Tareas</h2>
           <div class="partSections taskPartSection">
-            <h3>Proyectos</h3>
+            <h3 class="headerPartSection">Proyectos</h3>
           </div>
           <div class="partSections taskPartSection">
-            <h3>Tareas</h3>
+            <h3 class="headerPartSection">Tareas</h3>
             <ol id="taskList"></ol>
           </div>
         </section>
 
         <!-- Dashboard - Chat section -->
         <section
-          class="dashboard-section"
+          class="dashboard-section splitSections"
           id="chatSection"
           style="display: none"
         >
           <h2>Chat</h2>
           <div class="partSections">
-            <h3>Proyectos</h3>
+            <h3 class="headerPartSection">Proyectos</h3>
             <ol id="projectListToChat"></ol>
           </div>
           <div class="partSections">
-            <h3>Chat</h3>
+            <h3 class="headerPartSection">Chat</h3>
             <ul id=""></ul>
           </div>
         </section>

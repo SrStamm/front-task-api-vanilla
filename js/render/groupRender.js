@@ -1,7 +1,6 @@
 // Move renderGroup, renderUserInGroup, and renderUsers into this file
 // Rendering group-related elements. This file would handle the creation of the HTML templates and their population data
 
-import { getUsersInGroup } from "../api.js";
 import { showModal, updateModalContent } from "../utils/modal.js";
 
 // Función que renderiza los grupos
@@ -15,7 +14,6 @@ export function renderGroup(elementId, groupData) {
   // Accede a cada parte del template
   const groupName = clonTemplate.querySelector(".groupName");
   const groupDescription = clonTemplate.querySelector(".groupDescription");
-  const userList = clonTemplate.querySelector(".listUser");
   const manageBtn = clonTemplate.querySelector(".btn-manage");
 
   // VERIFICAR que los elementos existen antes de usarlos
@@ -39,27 +37,6 @@ export function renderGroup(elementId, groupData) {
   manageBtn.dataset.groupId = groupData.group_id;
   manageBtn.dataset.name = groupData.name;
   manageBtn.dataset.description = groupData.description;
-
-  // Si se tiene una seccion de lista, renderiza y agrega a los usuarios
-  if (userList) {
-    // Limpiar la lista anterior
-    userList.innerHTML = "";
-
-    // Agregar usuarios si existen
-    if (groupData.users && groupData.users.length > 0) {
-      groupData.users.forEach((user) => {
-        renderUserInGroup(
-          userList,
-          groupData.group_id,
-          user.user_id,
-          user.username,
-          user.role,
-        );
-      });
-    } else {
-      userList.innerHTML = "<li>No hay miembros en este grupo</li>";
-    }
-  }
 
   // Agrega los datos
   return clonTemplate;
@@ -99,7 +76,25 @@ export function newRenderGroupInModal(groupData) {
     <p> ${groupData.description} </p>
   </div>
   <div>
-    <h4>Miembros</h4>
+    <div class="headerList">
+      <h4>Proyectos</h4>
+      <button type="button" class="btn btn-accent btn-vsm" id="createProject"
+        data-group-id="${groupData.group_id}"
+      > Crear proyecto </button>
+    </div>
+    <div>
+      <ol>
+        <li>No perteneces a ningun proyecto</li>
+      </ol>
+    </div>
+  </div>
+  <div>
+    <div class="headerList">
+      <h4>Miembros</h4>
+      <button type="button" class="btn btn-primary btn-vsm" id="addUserGroup"
+        data-group-id="${groupData.group_id}"
+      > Agregar Usuario </button>
+    </div>
     <div>
       <ol class="listUser">
           ${groupData.users
@@ -118,9 +113,9 @@ export function newRenderGroupInModal(groupData) {
 `;
 
   const footerHtml = `
-    <button type="button" class="btn btn-primary btn-sm" id="addUserGroup"
+    <button type="button" class="btn btn-secondary btn-sm" id="editGroup"
       data-group-id="${groupData.group_id}"
-    > Agregar Usuario </button>
+    > Editar Grupo </button>
     <button type="button" class="btn btn-error btn-sm" id="deleteGroup"
       data-group-id="${groupData.group_id}"
     > Eliminar Grupo </button>
@@ -134,65 +129,68 @@ export function newRenderGroupInModal(groupData) {
   };
 }
 
-// Función que renderiza usuarios que son miembros de un grupo
-export function renderUserInGroup(
-  userListElement,
-  groupId,
-  userId,
-  username,
-  role,
-) {
-  // Accede al template de users in group
-  const userGroupTemplate = document.getElementById("userGroupTemplate");
-  const clonTemplate = userGroupTemplate.content.cloneNode(true);
-
-  // Obtiene cada parte del template
-  const userNameTemplate = clonTemplate.querySelector(".userName");
-  const userRoleTemplate = clonTemplate.querySelector(".userRole");
-  const deleteBtn = clonTemplate.querySelector("#deleteUserGroup");
-  const editBtn = clonTemplate.querySelector("#editRoleGroup");
-
-  // Modifica cada parte
-  userNameTemplate.textContent = username;
-  userRoleTemplate.textContent = role;
-
-  // Configurar los data-set para los botones
-  deleteBtn.dataset.groupId = groupId;
-  deleteBtn.dataset.userId = userId;
-  editBtn.dataset.groupId = groupId;
-  editBtn.dataset.userId = userId;
-
-  // Configurar botones
-  editBtn.onclick = () => console.log("Editado rol del usuario");
-
-  userListElement.appendChild(clonTemplate);
-}
-
 export function newRenderUserInGroup(groupId, userId, username, role) {
   const contentHtml = `
   <li>
-    <div class="info-template">
-      <p> ${username}</p>
+    <div class="body-template">
+      <div class="info-template">
+        <p> ${username}</p>
+      </div>
+      <div>
+        <p class="currentRole"> ${role}</p>
+      </div>
+      <div>
+        <select class="role-select" data-user-id="${userId}" data-role="${role}"  style="display: none" disabled>
+          <option value="member" ${role === "member" ? "selected" : ""}>Miembro</option>
+          <option value="editor" ${role === "editor" ? "selected" : ""}>Editor</option>
+          <option value="admin" ${role === "admin" ? "selected" : ""}>Administrador</option>
+        </select>
+      </div>
+      <div class="actionTemplate">
+        <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
+          data-group-id="${groupId}" data-user-id="${userId}" > Eliminar </button>
+        <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup"
+          data-group-id="${groupId}" data-user-id="${userId}" > Editar </button>
+      </div>
     </div>
-    <div>
-      <p> ${role}</p>
-    </div>
-    <div class="actionTemplate">
-      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
-        data-group-id="${groupId}" data-user-id="${userId}"
-      > Eliminar </button>
-      <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup"
-        data-group-id="${groupId}" data-user-id="${userId}"
-      > Editar </button>
-    </div>
+
   </li>
 `;
 
-  // Obtiene cada parte del template
-  // const editBtn = document.querySelector("#editRoleGroup");
-
-  // Configurar botones
-  // editBtn.onclick = () => console.log("Editado rol del usuario");
-
   return contentHtml;
+}
+
+//
+export function renderGroupToEdit(groupData) {
+  console.log("Renderizando modal de edición de grupo:", groupData);
+  // Crea el contenido del modal
+  const headerHtml = `<h4>Editar el grupo</h4>`;
+
+  const bodyHtml = `
+    <form>
+      <label for="editGroupName">Nombre del grupo:</label>
+      <input type="text" id="editGroupName" value="${groupData.name}"/>
+      <label for="editGroupDescription">Descripción:</label>
+      <textarea rows="3" cols="3" id="editGroupDescription" value="${groupData.description}"></textarea>
+    </form>
+  `;
+
+  const footerHtml = `
+    <button type="button" class="btn btn-primary btn-sm" id="confirmEditGroup"
+      data-group-id="${groupData.group_id}"
+    > Confirmar </button>
+    <button type="button" class="btn btn-error btn-sm" id="cancelEditGroup"
+    data-group-id="${groupData.group_id}"
+    data-group-name="${groupData.name}"
+    data-group-description="${groupData.description}"
+    > Cancelar </button>
+  `;
+
+  return {
+    header: headerHtml,
+    body: bodyHtml,
+    footer: footerHtml,
+    addClass: "modal-small",
+    removeClass: "modal-large",
+  };
 }

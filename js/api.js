@@ -144,6 +144,16 @@ export async function createGroup(groupData) {
   return await fetchData("/group", "POST", JSON.stringify(groupData), token);
 }
 
+export async function editGroup(groupId, groupData) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/group/${groupId}`,
+    "PATCH",
+    JSON.stringify(groupData),
+    token,
+  );
+}
+
 export async function deleteGroup(groupId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(`/group/${groupId}`, "DELETE", null, token);
@@ -157,6 +167,19 @@ export async function deleteUserFromGroup(groupId, userId) {
 export async function addUserToGroup(groupId, userId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(`/group/${groupId}/${userId}`, "POST", null, token);
+}
+
+export async function editRole(groupId, userId, role) {
+  const token = localStorage.getItem("authToken");
+
+  const body = { role: role };
+  console.log("Editando rol con body:", body);
+  return await fetchData(
+    `/group/${groupId}/${userId}`,
+    "PATCH",
+    JSON.stringify(body),
+    token,
+  );
 }
 
 //
