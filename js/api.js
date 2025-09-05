@@ -196,6 +196,16 @@ export async function getProjectsFromGroup(groupId) {
   return await fetchData(`/project/${groupId}`, "GET", null, token);
 }
 
+export async function getUsersFromProject(groupId, projectId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}/users`,
+    "GET",
+    null,
+    token,
+  );
+}
+
 export async function createProject(projectData, groupId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(

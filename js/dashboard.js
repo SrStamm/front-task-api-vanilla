@@ -5,7 +5,12 @@
 // UPDATE: This file should now act as the central orchestrator for the dashboard* functionality.
 // It will import the rendering functions from render/ and the UI utilities from utils/ to build the page.
 
-import { getUsersInGroup, getUsers, getProjectsFromGroup } from "./api.js";
+import {
+  getUsersInGroup,
+  getUsers,
+  getProjectsFromGroup,
+  getUsersFromProject,
+} from "./api.js";
 import { showMessage } from "./utils/utils.js";
 import {
   showSections,
@@ -469,16 +474,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
       target.classList.contains("view-project-btn")
     ) {
       const groupId = target.dataset.groupId;
-      const projecId = target.dataset.projectId;
+      const projectId = target.dataset.projectId;
       const title = target.dataset.title;
       const description = target.dataset.description;
-      // const listUser = await getUsersInGroup(groupId);
+      const listUser = await getUsersFromProject(groupId, projectId);
 
       const projecData = {
         group_id: groupId,
-        project_id: projecId,
+        project_id: projectId,
         title: title,
         description: description,
+        users: listUser,
       };
       console.log("Datos del proyecto: ", projecData);
       // Muestra el modal con los detalles del grupo

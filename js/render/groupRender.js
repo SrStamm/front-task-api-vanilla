@@ -2,6 +2,7 @@
 // Rendering group-related elements. This file would handle the creation of the HTML templates and their population data
 
 import { showModal, updateModalContent } from "../utils/modal.js";
+import { showTab } from "../utils/utils.js";
 import { renderProjectInGroup } from "./projectRender.js";
 
 // Función que renderiza los grupos
@@ -45,8 +46,6 @@ export function renderGroup(elementId, groupData) {
 
 // Muestra el modal de Group
 export function showGroupDetailsModal(groupData) {
-  console.log("Mostrando modal de grupo:", groupData);
-
   // Renderiza el modal con la información del grupo
   const content = newRenderGroupInModal(groupData);
   showModal("genericModal");
@@ -61,6 +60,19 @@ export function showGroupDetailsModal(groupData) {
   const modalContainer = document.getElementById("genericModal");
   modalContainer.dataset.groupData = JSON.stringify(groupData);
 
+  const tabsContainer = document.querySelector(".modal-tabs");
+  console.log("Contenedor de pestañas:", tabsContainer);
+  tabsContainer.addEventListener("click", (event) => {
+    const target = event.target;
+
+    // Maneja el cambio de pestañas
+    if (target.classList.contains("tab-btn")) {
+      console.log("Cambiando a la pestaña:", target.dataset.tab);
+      // Muestra la sección correspondiente
+      showTab(target.dataset.tab + "-tab");
+    }
+  });
+
   return modalContainer;
 }
 
@@ -72,44 +84,48 @@ export function newRenderGroupInModal(groupData) {
   const headerHtml = `<h3>${groupData.name}</h3>`;
 
   const bodyHtml = `
-  <div>
-    <p> Descripción: ${groupData.description} </p>
+  <div class="modal-section">
+    <p class="modal-description"> ${groupData.description} </p>
   </div>
-  <div>
-    <div class="headerList">
-      <h4>Proyectos</h4>
+ 
+  <div class="modal-tabs">
+    <button class="tab-btn active" data-tab="projects">Proyectos</button>
+    <button class="tab-btn" data-tab="members">Miembros</button>
+    <button class="tab-btn" data-tab="settings">Configuración</button>
+  </div>
+
+  <div class="modal-section tab-content active" id="projects-tab">
+    <div class="modal-section-header">
+      <h4 class="modal-subtitle" >Proyectos</h4>
       <button type="button" class="btn btn-accent btn-vsm" id="createProject"
         data-group-id="${groupData.group_id}"> Crear proyecto </button>
     </div>
-    <div>
-      <ol class="listProject">
-        ${(groupData.projects || [])
-          .map((project) => renderProjectInGroup(project.title))
-          .join("")}
-      </ol>
-    </div>
+    <ol class="listProject">
+      ${(groupData.projects || [])
+        .map((project) => renderProjectInGroup(project.title))
+        .join("")}
+    </ol>
   </div>
-  <div>
-    <div class="headerList">
-      <h4>Miembros</h4>
+
+  <div class="modal-section tab-content" id="members-tab">
+    <div class="modal-section-header ">
+      <h4 class="modal-subtitle">Miembros</h4>
       <button type="button" class="btn btn-primary btn-vsm" id="addUserGroup"
         data-group-id="${groupData.group_id}"
       > Agregar Usuario </button>
     </div>
-    <div>
-      <ol class="listUser">
-          ${groupData.users
-            .map((user) =>
-              newRenderUserInGroup(
-                groupData.group_id,
-                user.user_id,
-                user.username,
-                user.role,
-              ),
-            )
-            .join("")}
-      </ol>
-    </div>
+    <ol class="listUser">
+        ${groupData.users
+          .map((user) =>
+            newRenderUserInGroup(
+              groupData.group_id,
+              user.user_id,
+              user.username,
+              user.role,
+            ),
+          )
+          .join("")}
+    </ol>
   </div>
 `;
 
@@ -132,29 +148,24 @@ export function newRenderGroupInModal(groupData) {
 
 export function newRenderUserInGroup(groupId, userId, username, role) {
   const contentHtml = `
-  <li>
-    <div class="body-template">
-      <div class="info-template">
-        <p> ${username}</p>
-      </div>
-      <div>
-        <p class="currentRole"> ${role}</p>
-      </div>
-      <div>
-        <select class="role-select" data-user-id="${userId}" data-role="${role}"  style="display: none" disabled>
-          <option value="member" ${role === "member" ? "selected" : ""}>Miembro</option>
-          <option value="editor" ${role === "editor" ? "selected" : ""}>Editor</option>
-          <option value="admin" ${role === "admin" ? "selected" : ""}>Administrador</option>
-        </select>
-      </div>
-      <div class="actionTemplate">
-        <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
-          data-group-id="${groupId}" data-user-id="${userId}" > Eliminar </button>
-        <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup"
-          data-group-id="${groupId}" data-user-id="${userId}" > Editar </button>
+  <li class="user-item">
+    <div class="user-info">
+      <div class="user-details">
+        <p class="user-name"> ${username}</p>
+        <p class="currentRole user-role"> ${role}</p>
       </div>
     </div>
-
+    <div class="user-actions">
+      <select class="role-select" data-user-id="${userId}" data-role="${role}"  style="display: none" disabled>
+        <option value="member" ${role === "member" ? "selected" : ""}>Miembro</option>
+        <option value="editor" ${role === "editor" ? "selected" : ""}>Editor</option>
+        <option value="admin" ${role === "admin" ? "selected" : ""}>Administrador</option>
+      </select>
+      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
+        data-group-id="${groupId}" data-user-id="${userId}" > Eliminar </button>
+      <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup"
+        data-group-id="${groupId}" data-user-id="${userId}" > Editar </button>
+    </div>
   </li>
 `;
 

@@ -32,3 +32,29 @@ export function hideSpinner() {
   spinnerContainer.style.display = "none"; // Oculta el contenedor
   spinnerElement.classList.add("spinner-hidden"); // Añade la clase de oculto para asegurar
 }
+
+export function showTab(tabId) {
+  // Limpia la pestaña
+  document.querySelectorAll(".tab-content").forEach((section) => {
+    section.classList.remove("active");
+  });
+
+  console.log("Mostrando pestaña:", tabId);
+  const tab = document.getElementById(tabId);
+  tab.classList.add("active");
+
+  // Limpia el boton
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.classList.remove("active");
+  });
+
+  // Activa el botón
+  const activeBtn = document.querySelector(
+    `.tab-btn[data-tab="${tabId.replace("-tab", "")}"]`,
+  );
+  if (activeBtn) {
+    activeBtn.classList.add("active");
+  } else {
+    console.warn("No se encontró el botón para la pestaña:", tabId);
+  }
+}
