@@ -73,8 +73,7 @@ export function newRenderGroupInModal(groupData) {
 
   const bodyHtml = `
   <div>
-    <h4>Descripción:</h4>
-    <p> ${groupData.description} </p>
+    <p> Descripción: ${groupData.description} </p>
   </div>
   <div>
     <div class="headerList">

@@ -21,7 +21,10 @@ import {
 } from "./render/groupRender.js";
 import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
 import { auth } from "./auth.js";
-import { renderCreateProject } from "./render/projectRender.js";
+import {
+  renderCreateProject,
+  showProjectDetailsModal,
+} from "./render/projectRender.js";
 import { createProjectAction, loadProjects } from "./actions/projectActions.js";
 import { loadGroup } from "./actions/groupActions.js";
 import {
@@ -454,6 +457,32 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const userId = target.dataset.userId;
 
       await addUserToGroupAction(groupId, userId);
+    }
+  });
+
+  const projectContainer = document.getElementById("projectList");
+  projectContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    if (
+      target.classList.contains("btn-manage") &&
+      target.classList.contains("view-project-btn")
+    ) {
+      const groupId = target.dataset.groupId;
+      const projecId = target.dataset.projectId;
+      const title = target.dataset.title;
+      const description = target.dataset.description;
+      // const listUser = await getUsersInGroup(groupId);
+
+      const projecData = {
+        group_id: groupId,
+        project_id: projecId,
+        title: title,
+        description: description,
+      };
+      console.log("Datos del proyecto: ", projecData);
+      // Muestra el modal con los detalles del grupo
+      showProjectDetailsModal(projecData);
     }
   });
 

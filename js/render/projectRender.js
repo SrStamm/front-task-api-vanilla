@@ -1,3 +1,5 @@
+import { showModal, updateModalContent } from "../utils/modal.js";
+
 // Función que renderiza los proyectos
 export function renderProject(elementId, projectData) {
   // Obtiene el template
@@ -31,10 +33,81 @@ export function renderProject(elementId, projectData) {
   //
   viewBtn.dataset.groupId = projectData.group_id;
   viewBtn.dataset.projectId = projectData.project_id;
+  viewBtn.dataset.title = projectData.title;
+  viewBtn.dataset.description = projectData.description;
 
   // Agrega los datos
   return clonTemplate;
 }
+
+export function renderProjectInModal(projectData) {
+  console.log("Renderizando modal de proyecto:", projectData);
+  // Crea el contenido del modal
+  const headerHtml = `<h4>${projectData.title}</h4>`;
+
+  const bodyHtml = `
+    <p><strong>Descripción:</strong> ${projectData.description}</p>
+    <div class="headerList">
+      <h4> Miembros del proyecto </h4>
+      <button type="button" class="btn btn-accent btn-vsm" id="addUserToProject"
+        data-project-id="${projectData.project_id}"
+        data-project-title="${projectData.title}"
+        data-project-description="${projectData.description}"
+        data-group-id="${projectData.group_id}"> Añadir usuario</button>
+    </div>
+    <div>
+      <ul id="projectUsersList" class="list-template">
+      <!-- Aquí se agregarán los usuarios del proyecto -->
+        <li> No hay usuarios </li>
+    </ul>
+
+
+    <div class="headerList">
+      <h4> Tareas </h4>
+      <button type="button" class="btn btn-accent btn-vsm" id="createTaskToProject"
+        data-project-id="${projectData.project_id}"
+        data-group-id="${projectData.group_id}"> Crear tarea</button>
+    </div>
+    <div>
+      <ul id="projectTaskList" class="list-template">
+      <!-- Aquí se agregarán las tareas del proyecto -->
+        <li> No hay tareas </li>
+    </ul>
+  `;
+
+  const footerHtml = `
+    <button type="button" class="btn btn-primary btn-sm" id="closeProjectDetails"> Cerrar </button>
+    <button type="button" class="btn btn-secondary btn-sm" id="editProject" > Editar Proyecto </button>
+  `;
+
+  return {
+    header: headerHtml,
+    body: bodyHtml,
+    footer: footerHtml,
+    addClass: "modal-large",
+    removeClass: "modal-small",
+  };
+}
+
+export function showProjectDetailsModal(projectData) {
+  const content = renderProjectInModal(projectData);
+  showModal("genericModal");
+  updateModalContent(
+    content.header,
+    content.body,
+    content.footer,
+    content.addClass,
+    content.removeClass,
+  );
+
+  // Accede a los botones
+  const modalContainer = document.getElementById("genericModal");
+  modalContainer.dataset.projectData = JSON.stringify(projectData);
+
+  return modalContainer;
+}
+
+// Para renderizar modal de creación de proyecto
 
 export function renderCreateProject(groupData) {
   console.log("Renderizando modal de creación de proyecto:", groupData);
