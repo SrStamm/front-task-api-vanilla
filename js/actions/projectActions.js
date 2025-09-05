@@ -21,9 +21,42 @@ export async function loadProjects() {
         projectContainer.appendChild(clone);
       });
     }
+
+    // Agregar el event listener después de renderizar los proyectos
+    projectContainer.addEventListener("click", handleProjectCardClick);
   } catch (error) {
     hideSpinner();
     console.error("No se pudo cargar la lista de proyectos: ", error);
+  }
+}
+
+// Función separada para manejar los clics
+function handleProjectCardClick(event) {
+  const target = event.target;
+  const card = target.closest(".card");
+
+  if (card && !target.closest(".view-project-btn")) {
+    // Lógica de expandir/contraer cards
+    if (card.classList.contains("expanded")) {
+      card.classList.remove("expanded");
+      const placeholder = card.nextElementSibling;
+      if (placeholder && placeholder.classList.contains("card-placeholder")) {
+        placeholder.remove();
+      }
+    } else {
+      document.querySelectorAll(".card.expanded").forEach((expandedCard) => {
+        expandedCard.classList.remove("expanded");
+        const placeholder = expandedCard.nextElementSibling;
+        if (placeholder && placeholder.classList.contains("card-placeholder")) {
+          placeholder.remove();
+        }
+      });
+      card.classList.add("expanded");
+      const placeholder = document.createElement("div");
+      placeholder.classList.add("card-placeholder");
+      placeholder.style.height = `${card.offsetHeight}px`;
+      card.parentNode.insertBefore(placeholder, card.nextSibling);
+    }
   }
 }
 

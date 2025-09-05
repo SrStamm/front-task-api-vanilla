@@ -300,6 +300,11 @@ h2 {
   border: 2px solid var(--secondary);
 }
 
+.btn-outline-secondary:hover {
+  background-color: var(--secondary);
+  color: white;
+}
+
 .btn-outline-error {
   background-color: transparent;
   color: var(--error);
@@ -659,7 +664,7 @@ template {
   margin-top: 1rem;
 }
 
-.card .groupDescription {
+.card .description {
   color: var(--text);
   line-height: 1.5;
   padding: 0.5rem 0;

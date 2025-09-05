@@ -20,12 +20,8 @@ export function renderProject(elementId, projectData) {
     return;
   }
 
-  if (!projectData.description) {
-    console.warn("Advertencia: La descripción del proyecto es nula");
-  } else {
-    if (projectData.description === null) {
-      projectData.description = "Sin descripción";
-    }
+  if (projectData.description === null) {
+    projectData.description = "Sin descripción";
   }
 
   // Actualiza con los datos obtenidos

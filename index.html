@@ -275,7 +275,7 @@
         <h4 class="groupName"></h4>
         <p class="numbersOfMembers"></p>
         <div class="template-hide">
-          <p class="groupDescription"></p>
+          <p class="groupDescription description"></p>
           <button
             id="moreDetailsGroup"
             type="button"
@@ -343,21 +343,19 @@
 
     <!-- Template de proyectos -->
     <template id="projectTemplate">
-      <li class="project-item">
-        <div class="card">
-          <h4 class="projectTitle"></h4>
-          <div class="template-hide">
-            <p class="projectDescription"></p>
-            <button
-              class="btn btn-sm btn-primary view-project-btn"
-              data-group-id="{{group_id}}"
-              data-project-id="{{project_id}}"
-            >
-              Ver tareas
-            </button>
-          </div>
+      <div class="card">
+        <h4 class="projectTitle"></h4>
+        <div class="template-hide">
+          <p class="projectDescription description"></p>
+          <button
+            class="btn btn-sm btn-outline-secondary btn-manage view-project-btn"
+            data-group-id="{{group_id}}"
+            data-project-id="{{project_id}}"
+          >
+            Ver mas detalles
+          </button>
         </div>
-      </li>
+      </div>
     </template>
 
     <!-- Modal para forms -->
