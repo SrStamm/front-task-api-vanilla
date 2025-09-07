@@ -1,6 +1,15 @@
-import { getProjects } from "../api.js";
-import { renderProject } from "../render/projectRender.js";
-import { hideSpinner, showSpinner } from "../utils/utils.js";
+import {
+  addUserToProject,
+  createProject,
+  getProjects,
+  getUsersFromProject,
+} from "../api.js";
+import {
+  renderProject,
+  renderProjectInModal,
+} from "../render/projectRender.js";
+import { updateModalContent } from "../utils/modal.js";
+import { hideSpinner, showMessage, showSpinner } from "../utils/utils.js";
 
 export async function loadProjects() {
   try {
@@ -75,6 +84,41 @@ export async function createProjectAction(projectData, groupId) {
       return { success: false, detail: response.detail };
     }
   } catch (error) {
-    return { success: false, detail: response.detail };
+    return { success: false, detail: error.detail };
   }
+}
+
+export async function addUserToProjectAction(groupId, projectId, userId) {
+  try {
+    const response = await addUserToProject(groupId, projectId, userId);
+
+    if (response.detail === "El usuario ha sido agregado al proyecto") {
+      return { success: true, detail: response.detail };
+    } else {
+      return { success: false, detail: response.detail };
+    }
+  } catch (error) {
+    showMessage(`Error: ${error}`, "error");
+    return { success: false, detail: error.detail };
+  }
+}
+
+export async function refreshCurrentProject(groupId, projectId) {
+  // Actualizar la lista de usuarios en el modal de grupo
+  const listUsers = await getUsersFromProject(groupId, projectId);
+
+  const projectData = {
+    groupId: groupId,
+    projectId: projectId,
+    users: listUsers,
+  };
+
+  // Volver a renderizar la información del grupo
+  const content = renderProjectInModal(projectData);
+  updateModalContent(
+    content.header,
+    content.body,
+    content.footer,
+    content.addClass,
+  );
 }

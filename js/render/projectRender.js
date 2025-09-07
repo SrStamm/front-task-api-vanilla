@@ -54,13 +54,12 @@ export function renderProjectInModal(projectData) {
   <div class="modal-tabs">
     <button class="tab-btn active" data-tab="members">Miembros</button>
     <button class="tab-btn " data-tab="tasks">Tareas</button>
-    <button class="tab-btn" data-tab="settings">Configuración</button>
   </div>
 
   <div class="modal-section tab-content active" id="members-tab">
     <div class="modal-section-header">
       <h4 class="modal-subtitle"> Miembros del proyecto </h4>
-      <button type="button" class="btn btn-accent btn-vsm" id="addUserToProject"
+      <button type="button" class="btn btn-accent btn-vsm" id="showListUserToAdd"
         data-project-id="${projectData.project_id}"
         data-project-title="${projectData.title}"
         data-project-description="${projectData.description}"
@@ -97,8 +96,8 @@ export function renderProjectInModal(projectData) {
   `;
 
   const footerHtml = `
-    <button type="button" class="btn btn-primary btn-sm" id="closeProjectDetails"> Cerrar </button>
-    <button type="button" class="btn btn-secondary btn-sm" id="editProject" > Editar Proyecto </button>
+    <button type="button" class="btn btn-secondary btn-sm" id="editProject" > Editar </button>
+    <button type="button" class="btn btn-error btn-sm" id="deleteProject" > Eliminar </button>
   `;
 
   return {

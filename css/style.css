@@ -571,6 +571,8 @@ template {
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Más ancho */
   gap: 2.5rem; /* Más espacio */
   width: 100%;
+  overflow: scroll;
+  max-height: 500px;
 }
 
 /* CARDS */
@@ -783,7 +785,7 @@ modal-header {
 
 .modal-section {
   padding: 1.5rem 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .modal-section:last-child {
@@ -919,7 +921,9 @@ modal-header {
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
+  width: 100%;
 }
 
 .user-avatar {
@@ -987,8 +991,9 @@ modal-header {
   gap: 0.5rem;
   padding: 1rem 0;
 
-  max-width: 800px;
-  overflow: auto;
+  max-width: 100%;
+  max-height: 300px;
+  overflow: scroll;
 }
 
 .listUser:last-child {

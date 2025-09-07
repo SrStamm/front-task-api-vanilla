@@ -131,7 +131,6 @@ export async function getUsersInGroup(groupId) {
       null,
       token,
     );
-    console.log("Usuarios del grupo obtenidos:", response);
     return response;
   } catch (error) {
     console.error("Error al obtener usuarios del grupo:", error);
@@ -220,6 +219,41 @@ export async function deleteProject(projectId, groupId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(
     `/project/${groupId}/${projectId}`,
+    "DELETE",
+    null,
+    token,
+  );
+}
+
+export async function addUserToProject(groupId, projectId, userId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}/${userId}`,
+    "POST",
+    null,
+    token,
+  );
+}
+
+export async function editPermissionInProject(
+  groupId,
+  projectId,
+  userId,
+  permission,
+) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}/${userId}`,
+    "PATCH",
+    JSON.stringify({ permission: permission }),
+    token,
+  );
+}
+
+export async function removeUserToProject(groupId, projectId, userId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}/${userId}`,
     "DELETE",
     null,
     token,

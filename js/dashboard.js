@@ -18,7 +18,7 @@ import {
   occultModal,
   updateModalContent,
 } from "./utils/modal.js";
-import { renderUsers } from "./render/userRender.js";
+import { renderUsers, renderUsersFromGroup } from "./render/userRender.js";
 import {
   newRenderGroupInModal,
   renderGroupToEdit,
@@ -30,7 +30,12 @@ import {
   renderCreateProject,
   showProjectDetailsModal,
 } from "./render/projectRender.js";
-import { createProjectAction, loadProjects } from "./actions/projectActions.js";
+import {
+  addUserToProjectAction,
+  createProjectAction,
+  loadProjects,
+  refreshCurrentProject,
+} from "./actions/projectActions.js";
 import { loadGroup } from "./actions/groupActions.js";
 import {
   editGroupAction,
@@ -50,7 +55,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 const registerBtn = document.querySelector('[data-action="register"]');
 
 // Prevenir que el clic en la card propague y cierre la card
-document.addEventListener("DOMContentLoaded", function (event) {
+document.addEventListener("DOMContentLoaded", async (event) => {
   // Cerrar cards expandidas al hacer clic fuera de ellas
   const expandedCards = document.querySelectorAll(".card.expanded");
   if (expandedCards.length > 0) {
@@ -106,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   logoutBtn.addEventListener("click", async () => {
     try {
       let response = await auth.logout();
-      console.log("Response al cerrar sesión: ", response);
 
       if (response.message === "Sesión cerrada") {
         showMessage("Sesión cerrada", "info");
@@ -126,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       showMessage(response.message, "success");
       showLoginForm();
     } else {
-      console.log("Error en el registro: ", response.message);
       showMessage(response.message, "error");
     }
   });
@@ -164,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const groupName = target.dataset.name;
       const groupDescription = target.dataset.description;
       const listUser = await getUsersInGroup(groupId);
-      console.log("Usuarios del grupo: ", listUser);
       const listProject = await getProjectsFromGroup(groupId);
 
       // Muestra el modal con los detalles del grupo
@@ -215,9 +217,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
       let response = await createGroupEvent();
 
       if (response == "Se ha creado un nuevo grupo de forma exitosa") {
-        console.log("Grupo creado exitosamente");
       } else {
-        console.log("Error al crear el grupo: ", response.detail);
+        showMessage("Error al crear el grupo: " + response.detail, "error");
       }
       occultModal("modalGroup");
       await loadGroup();
@@ -229,6 +230,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
   groupModalInfoContainer.addEventListener("click", async (event) => {
     const target = event.target;
 
+    //
+    // GRUPOS
+    //
+
     if (target.id === "addUserGroup") {
       showModal("allUsersList");
       const modal = document.getElementById("allUsersList");
@@ -238,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const allUsers = await getUsers();
       allUsers.forEach((user) => {
         const renderizedUser = renderUsers(
+          "group",
           user.username,
           groupId,
           user.user_id,
@@ -282,7 +288,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const listUser = await getUsersInGroup(groupId);
       const listProject = await getProjectsFromGroup(groupId);
 
-      console.log("Lista de proyectos: ", listProject);
       const groupData = {
         name: groupName,
         description: groupDescription,
@@ -389,7 +394,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Actualizar la lista de usuarios en el modal de grupo
         const listUser = await getUsersInGroup(target.dataset.groupId);
         const listProject = await getProjectsFromGroup(groupId);
-        console.log("Lista de proyectos: ", listProject);
 
         const groupData = {
           name: target.dataset.groupName,
@@ -427,7 +431,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       // Actualizar la lista de usuarios en el modal de grupo
       const listUser = await getUsersInGroup(groupId);
       const listProject = await getProjectsFromGroup(groupId);
-      console.log("Lista de proyectos: ", listProject);
 
       const groupData = {
         name: groupName,
@@ -450,6 +453,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
     }
+
+    //
+    // PROYECTOS
+    //
+
+    if (event.target.id === "showListUserToAdd") {
+      showModal("allUsersList");
+
+      const modal = document.getElementById("allUsersList");
+      const userList = modal.querySelector(".allUsersList");
+      const groupId = event.target.dataset.groupId;
+      const projectId = event.target.dataset.projectId;
+
+      userList.innerHTML = "";
+      const allUsers = await getUsersInGroup(groupId);
+
+      allUsers.forEach((user) => {
+        const renderizedUser = renderUsersFromGroup(
+          "project",
+          user.username,
+          groupId,
+          projectId,
+          user.user_id,
+        );
+        userList.appendChild(renderizedUser);
+      });
+    }
   });
 
   // Eventos para agregar el usuario al grupo
@@ -457,26 +487,44 @@ document.addEventListener("DOMContentLoaded", function (event) {
   allUsersListModal.addEventListener("click", async (event) => {
     const target = event.target;
 
-    if (target.id === "addUserToGroup") {
+    if (target.id === "addUser" && target.dataset.target == "group") {
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
 
       await addUserToGroupAction(groupId, userId);
+    } else if (target.id === "addUser" && target.dataset.target == "project") {
+      target.textContent = "Agregando...";
+      target.disabled = true;
+
+      const groupId = target.dataset.groupId;
+      const projectId = target.dataset.projectId;
+      const userId = target.dataset.userId;
+      let response = await addUserToProjectAction(groupId, projectId, userId);
+
+      if (response && response.success) {
+        showMessage("Usuario agregado al proyecto", "success");
+        target.textContent = "Agregado";
+        await refreshCurrentProject(groupId, projectId);
+      } else {
+        showMessage("Error al agregar el usuario: " + response.detail, "error");
+        target.textContent = "Error";
+        target.disabled = false;
+      }
+    } else if (target.id === "closeUserList") {
+      occultModal("allUsersList");
     }
   });
 
   const projectContainer = document.getElementById("projectList");
   projectContainer.addEventListener("click", async (event) => {
-    const target = event.target;
-
     if (
-      target.classList.contains("btn-manage") &&
-      target.classList.contains("view-project-btn")
+      event.target.classList.contains("btn-manage") &&
+      event.target.classList.contains("view-project-btn")
     ) {
-      const groupId = target.dataset.groupId;
-      const projectId = target.dataset.projectId;
-      const title = target.dataset.title;
-      const description = target.dataset.description;
+      const groupId = event.target.dataset.groupId;
+      const projectId = event.target.dataset.projectId;
+      const title = event.target.dataset.title;
+      const description = event.target.dataset.description;
       const listUser = await getUsersFromProject(groupId, projectId);
 
       const projecData = {
@@ -486,24 +534,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
         description: description,
         users: listUser,
       };
-      console.log("Datos del proyecto: ", projecData);
+
       // Muestra el modal con los detalles del grupo
       showProjectDetailsModal(projecData);
     }
   });
+});
 
-  // Event delegation para modales (cierre por backdrop)
-  document.addEventListener("click", (event) => {
-    const modalBackdrop = event.target.closest(".modal-backdrop");
-    const modalContent = event.target.closest(".modal");
-    if (
-      modalBackdrop &&
-      !modalContent &&
-      modalBackdrop.classList.contains("show")
-    ) {
-      occultModal(modalBackdrop.id);
-    }
-  });
+// Event delegation para modales (cierre por backdrop)
+document.addEventListener("click", (event) => {
+  const modalBackdrop = event.target.closest(".modal-backdrop");
+  const modalContent = event.target.closest(".modal");
+  if (
+    modalBackdrop &&
+    !modalContent &&
+    modalBackdrop.classList.contains("show")
+  ) {
+    occultModal(modalBackdrop.id);
+  }
 });
 
 // Botones en dashboard

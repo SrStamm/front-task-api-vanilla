@@ -91,7 +91,6 @@ export function newRenderGroupInModal(groupData) {
   <div class="modal-tabs">
     <button class="tab-btn active" data-tab="projects">Proyectos</button>
     <button class="tab-btn" data-tab="members">Miembros</button>
-    <button class="tab-btn" data-tab="settings">Configuración</button>
   </div>
 
   <div class="modal-section tab-content active" id="projects-tab">
@@ -130,12 +129,12 @@ export function newRenderGroupInModal(groupData) {
 `;
 
   const footerHtml = `
-    <button type="button" class="btn btn-secondary btn-sm" id="editGroup"
-      data-group-id="${groupData.group_id}"
-    > Editar Grupo </button>
-    <button type="button" class="btn btn-error btn-sm" id="deleteGroup"
-      data-group-id="${groupData.group_id}"
-    > Eliminar Grupo </button>
+      <button type="button" class="btn btn-secondary btn-sm" id="editGroup"
+        data-group-id="${groupData.group_id}"
+      > Editar Grupo </button>
+      <button type="button" class="btn btn-error btn-sm" id="deleteGroup"
+        data-group-id="${groupData.group_id}"
+      > Eliminar Grupo </button>
   `;
 
   return {

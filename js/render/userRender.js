@@ -1,12 +1,12 @@
 // Renderiza una lista de usuarios
-export function renderUsers(username, groupId, userId) {
+export function renderUsers(target, username, groupId, userId) {
   // Accede al template de users
   const userTemplate = document.getElementById("userList");
   const clonTemplate = userTemplate.content.cloneNode(true);
 
   // Obtiene cada parte del template
   const userNameTemplate = clonTemplate.querySelector(".userName");
-  const addBtn = clonTemplate.getElementById("addUserToGroup");
+  const addBtn = clonTemplate.getElementById("addUser");
 
   // Modifica cada parte
   userNameTemplate.textContent = username;
@@ -14,6 +14,34 @@ export function renderUsers(username, groupId, userId) {
   // Setea los datos
   addBtn.dataset.userId = userId;
   addBtn.dataset.groupId = groupId;
+  addBtn.dataset.target = target;
+
+  return clonTemplate;
+}
+
+export function renderUsersFromGroup(
+  target,
+  username,
+  groupId,
+  projectId,
+  userId,
+) {
+  // Accede al template de users
+  const userTemplate = document.getElementById("userList");
+  const clonTemplate = userTemplate.content.cloneNode(true);
+
+  // Obtiene cada parte del template
+  const userNameTemplate = clonTemplate.querySelector(".userName");
+  const addBtn = clonTemplate.getElementById("addUser");
+
+  // Modifica cada parte
+  userNameTemplate.textContent = username;
+
+  // Setea los datos
+  addBtn.dataset.userId = userId;
+  addBtn.dataset.groupId = groupId;
+  addBtn.dataset.projectId = projectId;
+  addBtn.dataset.target = target;
 
   return clonTemplate;
 }

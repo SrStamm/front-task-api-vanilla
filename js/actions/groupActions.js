@@ -10,7 +10,7 @@ import {
   getUsersInGroup,
 } from "../api.js";
 import { newRenderGroupInModal, renderGroup } from "../render/groupRender.js";
-import { updateModalContent } from "../utils/modal.js";
+import { occultModal, updateModalContent } from "../utils/modal.js";
 import { showSpinner, hideSpinner, showMessage } from "../utils/utils.js";
 
 export async function loadGroup() {
@@ -130,8 +130,6 @@ export async function deleteGroupAction(groupId) {
 export async function addUserToGroupAction(groupId, userId) {
   try {
     let response = await addUserToGroup(groupId, userId);
-
-    console.log("Response para agregar usaurio al grupo: ", response);
 
     if (response.detail !== "El usuario ha sido agregado al grupo") {
       throw new Error(response.detail);
