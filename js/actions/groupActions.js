@@ -77,8 +77,6 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
     }
     let response = await editGroup(groupId, groupEditData);
 
-    console.log("Response para editar el grupo: ", response);
-
     if (response.detail !== "Se ha actualizado la informacion del grupo") {
       throw new Error(response.detail);
     }
@@ -95,8 +93,6 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
 
     const listProject = await getProjectsFromGroup(groupId);
     groupData.projects = listProject;
-
-    console.log("Lista de proyectos: ", listProject);
 
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);
@@ -147,7 +143,6 @@ export async function addUserToGroupAction(groupId, userId) {
 
     const listProject = await getProjectsFromGroup(groupId);
     groupData.projects = listProject;
-    console.log("Lista de proyectos: ", listProject);
 
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);
@@ -171,8 +166,6 @@ export async function deleteUserFromGroupAction(groupId, userId) {
   try {
     let response = await deleteUserFromGroup(groupId, userId);
 
-    console.log("Response para eliminar un usuario al grupo: ", response);
-
     if (response.detail !== "El usuario ha sido eliminado del grupo") {
       throw new Error(response.detail);
     }
@@ -189,7 +182,6 @@ export async function deleteUserFromGroupAction(groupId, userId) {
 
     const listProject = await getProjectsFromGroup(groupId);
     groupData.projects = listProject;
-    console.log("Lista de proyectos: ", listProject);
 
     // Volver a renderizar la información del grupo
     const content = newRenderGroupInModal(groupData);

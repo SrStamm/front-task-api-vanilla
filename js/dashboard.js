@@ -10,6 +10,7 @@ import {
   getUsers,
   getProjectsFromGroup,
   getUsersFromProject,
+  getTasksFromProject,
 } from "./api.js";
 import { showMessage } from "./utils/utils.js";
 import {
@@ -33,8 +34,11 @@ import {
 import {
   addUserToProjectAction,
   createProjectAction,
+  deleteProjectAction,
+  editPermissionAction,
   loadProjects,
   refreshCurrentProject,
+  removeUserFromProjectAction,
 } from "./actions/projectActions.js";
 import { loadGroup } from "./actions/groupActions.js";
 import {
@@ -44,6 +48,8 @@ import {
   deleteUserFromGroupAction,
   editRoleAction,
 } from "./actions/groupActions.js";
+import { renderCreateTask } from "./render/taskRender.js";
+import { createTaskAction } from "./actions/taskActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -112,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     try {
       let response = await auth.logout();
 
-      if (response.message === "Sesión cerrada") {
+      if (response.message === "Closed all sessions") {
         showMessage("Sesión cerrada", "info");
         unauthorized();
       } else {
@@ -455,16 +461,20 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     //
+    //
+    //
     // PROYECTOS
     //
+    //
+    //
 
-    if (event.target.id === "showListUserToAdd") {
+    if (target.id === "showListUserToAdd") {
       showModal("allUsersList");
 
       const modal = document.getElementById("allUsersList");
       const userList = modal.querySelector(".allUsersList");
-      const groupId = event.target.dataset.groupId;
-      const projectId = event.target.dataset.projectId;
+      const groupId = target.dataset.groupId;
+      const projectId = target.dataset.projectId;
 
       userList.innerHTML = "";
       const allUsers = await getUsersInGroup(groupId);
@@ -479,6 +489,142 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         );
         userList.appendChild(renderizedUser);
       });
+    }
+
+    if (target.id === "deleteUserProject") {
+      const groupId = target.dataset.groupId;
+      const projectId = target.dataset.projectId;
+      const userId = target.dataset.userId;
+      const title = target.dataset.title;
+      const description = target.dataset.description;
+
+      target.textContent = "Eliminando...";
+      target.disabled = true;
+
+      // Llama a la función para eliminar el usuario del proyecto
+      const response = await removeUserFromProjectAction(
+        groupId,
+        projectId,
+        userId,
+      );
+
+      if (response && response.success) {
+        await refreshCurrentProject(groupId, projectId, title, description);
+        showMessage("Usuario eliminado del proyecto", "success");
+        return;
+      } else {
+        showMessage(
+          "Error al eliminar el usuario: " + response.detail,
+          "error",
+        );
+        return;
+      }
+    }
+
+    if (target.id === "deleteProject") {
+      const response = await deleteProjectAction(
+        target.dataset.groupId,
+        target.dataset.projectId,
+      );
+
+      if (response && response.success) {
+        showMessage("Proyecto eliminado exitosamente", "success");
+        occultModal("genericModal");
+        await loadProjects();
+      } else {
+        showMessage(
+          "Error al eliminar el proyecto: " + response.detail,
+          "error",
+        );
+      }
+    }
+
+    if (target.id == "editPermissionProject") {
+      const userId = target.dataset.userId;
+      const projectId = target.dataset.projectId;
+      const groupId = target.dataset.groupId;
+      const select = document.querySelector(
+        `.permission-select[data-user-id="${userId}"]`,
+      );
+
+      const selectPermission = select.value;
+      const currentPermission = select.dataset.permission;
+
+      // Si el permiso ha cambiado, llama a la API para actualizarlo
+
+      if (currentPermission !== selectPermission) {
+        let response = await editPermissionAction(
+          groupId,
+          projectId,
+          userId,
+          selectPermission,
+        );
+
+        if (response && response.success) {
+          showMessage("Rol cambiado exitosamente", "success");
+          await refreshCurrentProject(groupId, projectId);
+        } else {
+          showMessage("Error al cambiar el rol: " + response.detail, "error");
+          return; // Sale de la función si hubo un error
+        }
+      }
+
+      select.disabled = !select.disabled; // activa/desactiva edición
+
+      if (select.style.display === "none") {
+        select.style.display = "inline-block"; // muestra el select
+      } else {
+        select.style.display = "none"; // muestra el botón
+      }
+    }
+
+    if (target.id === "showFormTaskToProject") {
+      const projectId = target.dataset.projectId;
+      const groupId = target.dataset.groupId;
+      const userList = await getUsersFromProject(groupId, projectId);
+      const content = renderCreateTask(projectId, userList);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+        content.removeClass,
+      );
+    }
+
+    if (target.id === "confirCreateTask") {
+      const projectId = target.dataset.projectId;
+      const modalContainer = document.getElementById("genericModal");
+      const description = modalContainer.querySelector("#taskDescription");
+      const dueDate = modalContainer.querySelector("#taskDueDate");
+      const usersSelected = modalContainer.querySelectorAll(
+        ".form-input-checkbox",
+      );
+
+      const taskData = {
+        description: description.value,
+        date_exp: dueDate.value,
+        user_ids: usersSelected.value
+          ? Array.from(usersSelected)
+              .filter((checkbox) => checkbox.checked)
+              .map((checkbox) => checkbox.value)
+          : [],
+      };
+
+      const response = await createTaskAction(taskData, projectId);
+
+      if (response.success) {
+        showMessage("Tarea creada exitosamente", "success");
+        occultModal("genericModal");
+        await loadProjects();
+      } else {
+        showMessage("Error al crear la tarea: " + response.detail, "error");
+      }
+    }
+
+    if (target.id === "cancelCreateTask") {
+      occultModal("genericModal");
+      await loadProjects();
     }
   });
 
@@ -526,6 +672,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const title = event.target.dataset.title;
       const description = event.target.dataset.description;
       const listUser = await getUsersFromProject(groupId, projectId);
+      const taskList = await getTasksFromProject(projectId);
 
       const projecData = {
         group_id: groupId,
@@ -533,6 +680,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         title: title,
         description: description,
         users: listUser,
+        tasks: taskList,
       };
 
       // Muestra el modal con los detalles del grupo

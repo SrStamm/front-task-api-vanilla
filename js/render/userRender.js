@@ -72,3 +72,35 @@ export function newRenderUsers(username, groupId, userId) {
 
   return { header: headerContent, body: bodyContent };
 }
+
+export function renderUserInProject(
+  groupId,
+  projectId,
+  userId,
+  username,
+  permission,
+) {
+  const contentHtml = `
+  <li class="user-item">
+    <div class="user-info">
+      <div class="user-details">
+        <p class="user-name">${username}</p>
+        <p class="currentPermission user-role"> ${permission}</p>
+      </div>
+    <div class="user-actions">
+      <select class="permission-select" data-group-id="${groupId}" data-project-id="${projectId}"
+          data-user-id="${userId}" data-permission="${permission}"  style="display: none" disabled>
+        <option value="read" ${permission === "read" ? "selected" : ""}>Lectura</option>
+        <option value="write" ${permission === "write" ? "selected" : ""}>Escritura</option>
+        <option value="admin" ${permission === "admin" ? "selected" : ""}>Administrador</option>
+      </select>
+      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserProject"
+        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Eliminar </button>
+      <button type="button" class="btn btn-vsm btn-secondary" id="editPermissionProject"
+        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Editar </button>
+    </div>
+  </li>
+`;
+
+  return contentHtml;
+}

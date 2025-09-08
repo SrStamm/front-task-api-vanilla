@@ -1,8 +1,12 @@
 import {
   addUserToProject,
   createProject,
+  deleteProject,
+  editPermissionInProject,
   getProjects,
+  getTasksFromProject,
   getUsersFromProject,
+  removeUserToProject,
 } from "../api.js";
 import {
   renderProject,
@@ -106,11 +110,14 @@ export async function addUserToProjectAction(groupId, projectId, userId) {
 export async function refreshCurrentProject(groupId, projectId) {
   // Actualizar la lista de usuarios en el modal de grupo
   const listUsers = await getUsersFromProject(groupId, projectId);
+  const listTask = await getTasksFromProject(projectId);
+  console.log(listTask);
 
   const projectData = {
     groupId: groupId,
     projectId: projectId,
     users: listUsers,
+    tasks: listTask,
   };
 
   // Volver a renderizar la información del grupo
@@ -121,4 +128,62 @@ export async function refreshCurrentProject(groupId, projectId) {
     content.footer,
     content.addClass,
   );
+}
+
+export async function editPermissionAction(
+  groupId,
+  projectId,
+  userId,
+  permission,
+) {
+  try {
+    const response = await editPermissionInProject(
+      groupId,
+      projectId,
+      userId,
+      permission,
+    );
+
+    if (
+      response.detail ===
+      "Se ha cambiado los permisos del usuario en el proyecto"
+    ) {
+      return { success: true, detail: response.detail };
+    } else {
+      return { success: false, detail: response.detail };
+    }
+  } catch (error) {
+    showMessage(`Error: ${error}`, "error");
+    return { success: false, detail: error.detail };
+  }
+}
+
+export async function removeUserFromProjectAction(groupId, projectId, userId) {
+  try {
+    const response = await removeUserToProject(groupId, projectId, userId);
+
+    if (response.detail === "El usuario ha sido eliminado del proyecto") {
+      return { success: true, detail: response.detail };
+    } else {
+      return { success: false, detail: response.detail };
+    }
+  } catch (error) {
+    showMessage(`Error: ${error}`, "error");
+    return { success: false, detail: error.detail };
+  }
+}
+
+export async function deleteProjectAction(groupId, projectId) {
+  try {
+    const response = await deleteProject(projectId, groupId);
+
+    if (response.detail === "Se ha eliminado el proyecto") {
+      return { success: true, detail: response.detail };
+    } else {
+      return { success: false, detail: response.detail };
+    }
+  } catch (error) {
+    showMessage(`Error: ${error}`, "error");
+    return { success: false, detail: error.detail };
+  }
 }

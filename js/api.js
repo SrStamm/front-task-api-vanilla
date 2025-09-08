@@ -172,7 +172,6 @@ export async function editRole(groupId, userId, role) {
   const token = localStorage.getItem("authToken");
 
   const body = { role: role };
-  console.log("Editando rol con body:", body);
   return await fetchData(
     `/group/${groupId}/${userId}`,
     "PATCH",
@@ -277,6 +276,46 @@ export async function getUsers() {
 //
 // --- Lógica de Tareas ---
 //
+
+export async function getTasksFromProject(projectId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/task/${projectId}`, "GET", null, token);
+}
+
+export async function getUsersAssignedToTask(taskId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/task/${taskId}/users`, "GET", null, token);
+}
+
+export async function createTask(taskData, projectId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/task/${projectId}`,
+    "POST",
+    JSON.stringify(taskData),
+    token,
+  );
+}
+
+export async function editTask(taskData, projectId, taskId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/task/${projectId}/${taskId}`,
+    "PATCH",
+    JSON.stringify(taskData),
+    token,
+  );
+}
+
+export async function deleteTask(groupId, projectId, taskId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/task/${groupId}/${projectId}/${taskId}`,
+    "DELETE",
+    null,
+    token,
+  );
+}
 
 //
 // --- Lógica de Comentarios ---

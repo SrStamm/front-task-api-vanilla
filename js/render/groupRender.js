@@ -96,13 +96,17 @@ export function newRenderGroupInModal(groupData) {
   <div class="modal-section tab-content active" id="projects-tab">
     <div class="modal-section-header">
       <h4 class="modal-subtitle" >Proyectos</h4>
-      <button type="button" class="btn btn-accent btn-vsm" id="createProject"
+      <button type="button" class="btn btn-primary btn-vsm" id="createProject"
         data-group-id="${groupData.group_id}"> Crear proyecto </button>
     </div>
     <ol class="listProject">
-      ${(groupData.projects || [])
-        .map((project) => renderProjectInGroup(project.title))
-        .join("")}
+      ${
+        groupData.projects.length <= 0 || groupData.projects === null
+          ? "<li>No hay proyectos en este grupo</li>"
+          : groupData.projects
+              .map((project) => renderProjectInGroup(project.title))
+              .join("")
+      }
     </ol>
   </div>
 
@@ -114,16 +118,20 @@ export function newRenderGroupInModal(groupData) {
       > Agregar Usuario </button>
     </div>
     <ol class="listUser">
-        ${groupData.users
-          .map((user) =>
-            newRenderUserInGroup(
-              groupData.group_id,
-              user.user_id,
-              user.username,
-              user.role,
-            ),
-          )
-          .join("")}
+        ${
+          groupData.users.length <= 0 || groupData.users === null
+            ? "<li>No hay usuarios en este grupo</li>;"
+            : groupData.users
+                .map((user) =>
+                  newRenderUserInGroup(
+                    groupData.group_id,
+                    user.user_id,
+                    user.username,
+                    user.role,
+                  ),
+                )
+                .join("")
+        }
     </ol>
   </div>
 `;
@@ -160,10 +168,10 @@ export function newRenderUserInGroup(groupId, userId, username, role) {
         <option value="editor" ${role === "editor" ? "selected" : ""}>Editor</option>
         <option value="admin" ${role === "admin" ? "selected" : ""}>Administrador</option>
       </select>
-      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
-        data-group-id="${groupId}" data-user-id="${userId}" > Eliminar </button>
       <button type="button" class="btn btn-vsm btn-secondary" id="editRoleGroup"
         data-group-id="${groupId}" data-user-id="${userId}" > Editar </button>
+      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserGroup"
+        data-group-id="${groupId}" data-user-id="${userId}" > Eliminar </button>
     </div>
   </li>
 `;

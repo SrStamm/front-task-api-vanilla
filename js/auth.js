@@ -23,7 +23,7 @@ class Auth {
   async validateToken() {
     try {
       const response = await getCurrentUser();
-      console.log("UserId: ", response.user_id);
+
       return { success: true, message: "Usario validado" };
     } catch (error) {
       unauthorized();

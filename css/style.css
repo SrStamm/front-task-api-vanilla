@@ -965,6 +965,50 @@ modal-header {
   align-items: center;
 }
 
+.user-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  overflow: scroll;
+}
+
+.user-checkbox input {
+  margin: 0;
+}
+
+.user-checkbox input {
+  margin-right: 0.5rem;
+  max-width: 20px;
+}
+
+.list-task {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+}
+
 .body-template {
   display: flex;
   flex-direction: row;
@@ -983,6 +1027,8 @@ modal-header {
   gap: 1rem;
   padding: 1rem 0;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .listUser {

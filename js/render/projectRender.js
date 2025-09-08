@@ -1,5 +1,7 @@
 import { showModal, updateModalContent } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
+import { renderTaskInProject } from "./taskRender.js";
+import { renderUserInProject } from "./userRender.js";
 
 // Función que renderiza los proyectos
 export function renderProject(elementId, projectData) {
@@ -42,9 +44,10 @@ export function renderProject(elementId, projectData) {
 }
 
 export function renderProjectInModal(projectData) {
-  console.log("Renderizando modal de proyecto:", projectData);
   // Crea el contenido del modal
   const headerHtml = `<h4>${projectData.title}</h4>`;
+
+  console.log(projectData);
 
   const bodyHtml = `
   <div class="modal-section">
@@ -66,17 +69,21 @@ export function renderProjectInModal(projectData) {
         data-group-id="${projectData.group_id}"> Añadir usuario</button>
     </div>
       <ul id="projectUsersList" class="listUser">
-        ${projectData.users
-          .map((user) =>
-            renderUserInProject(
-              projectData.group_id,
-              projectData.project_id,
-              user.user_id,
-              user.username,
-              user.permission,
-            ),
-          )
-          .join("")}
+        ${
+          projectData.users.length === 0
+            ? "<li>No hay usuarios en el proyecto</li>"
+            : projectData.users
+                .map((user) =>
+                  renderUserInProject(
+                    projectData.group_id,
+                    projectData.project_id,
+                    user.user_id,
+                    user.username,
+                    user.permission,
+                  ),
+                )
+                .join("")
+        }
       </ul>
     </div>
   </div>
@@ -84,20 +91,29 @@ export function renderProjectInModal(projectData) {
   <div class="modal-section tab-content" id="tasks-tab">
     <div class="modal-section-header">
       <h4 class="modal-subtitle">  Tareas </h4>
-      <button type="button" class="btn btn-accent btn-vsm" id="createTaskToProject"
-        data-project-id="${projectData.project_id}"
-        data-group-id="${projectData.group_id}"> Crear tarea</button>
+      <div>
+        <button type="button" class="btn btn-accent btn-vsm" id="showFormTaskToProject"
+          data-project-id="${projectData.project_id}"
+          data-group-id="${projectData.group_id}"> Crear tarea</button>
+        <button type="button" class="btn btn-primary btn-vsm" id="showTaskSection"
+          data-project-id="${projectData.project_id}"
+          data-group-id="${projectData.group_id}"> Mostrar panel </button>
+      </div>
     </div>
-    <ul id="projectTaskList" class="list-template">
-    <!-- Aquí se agregarán las tareas del proyecto -->
-      <li> No hay tareas </li>
+    <ul id="projectTaskList" class="list-task">
+      ${
+        projectData.tasks.length === 0
+          ? "<li>No hay tareas en el proyecto</li>"
+          : projectData.tasks.map((task) => renderTaskInProject(task)).join("")
+      }
     </ul>
   </div>
   `;
 
   const footerHtml = `
     <button type="button" class="btn btn-secondary btn-sm" id="editProject" > Editar </button>
-    <button type="button" class="btn btn-error btn-sm" id="deleteProject" > Eliminar </button>
+    <button type="button" class="btn btn-error btn-sm" id="deleteProject"
+     data-group-id="${projectData.group_id}" data-project-id="${projectData.project_id}" > Eliminar </button>
   `;
 
   return {
@@ -109,34 +125,7 @@ export function renderProjectInModal(projectData) {
   };
 }
 
-export function renderUserInProject(
-  groupId,
-  projectId,
-  userId,
-  username,
-  permission,
-) {
-  const contentHtml = `
-  <li class="user-item">
-    <div class="user-info">
-      <div class="user-details">
-        <p class="user-name">${username}</p>
-        <p class="currentPermission user-role"> ${permission}</p>
-      </div>
-    <div class="user-actions">
-      <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserProject"
-        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Eliminar </button>
-      <button type="button" class="btn btn-vsm btn-secondary" id="editPermissionProject"
-        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Editar </button>
-    </div>
-  </li>
-`;
-
-  return contentHtml;
-}
-
 export function showProjectDetailsModal(projectData) {
-  console.log("Mostrando detalles del proyecto en modal:", projectData);
   const content = renderProjectInModal(projectData);
   showModal("genericModal");
   updateModalContent(
@@ -152,13 +141,12 @@ export function showProjectDetailsModal(projectData) {
   modalContainer.dataset.projectData = JSON.stringify(projectData);
 
   const tabsContainer = document.querySelector(".modal-tabs");
-  console.log("Contenedor de pestañas:", tabsContainer);
+
   tabsContainer.addEventListener("click", (event) => {
     const target = event.target;
 
     // Maneja el cambio de pestañas
     if (target.classList.contains("tab-btn")) {
-      console.log("Cambiando a la pestaña:", target.dataset.tab);
       // Muestra la sección correspondiente
       showTab(target.dataset.tab + "-tab");
     }
@@ -170,7 +158,6 @@ export function showProjectDetailsModal(projectData) {
 // Para renderizar modal de creación de proyecto
 
 export function renderCreateProject(groupData) {
-  console.log("Renderizando modal de creación de proyecto:", groupData);
   // Crea el contenido del modal
   const headerHtml = `<h4>Crear proyecto</h4>`;
 
