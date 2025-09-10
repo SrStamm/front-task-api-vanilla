@@ -9,11 +9,18 @@ import {
   removeUserToProject,
 } from "../api.js";
 import {
+  renderMinimalProject,
   renderProject,
   renderProjectInModal,
 } from "../render/projectRender.js";
 import { updateModalContent } from "../utils/modal.js";
-import { hideSpinner, showMessage, showSpinner } from "../utils/utils.js";
+import {
+  hideSpinner,
+  initializeTabListeners,
+  showMessage,
+  showSpinner,
+  showTab,
+} from "../utils/utils.js";
 
 export async function loadProjects() {
   try {
@@ -37,6 +44,31 @@ export async function loadProjects() {
 
     // Agregar el event listener después de renderizar los proyectos
     projectContainer.addEventListener("click", handleProjectCardClick);
+  } catch (error) {
+    hideSpinner();
+    console.error("No se pudo cargar la lista de proyectos: ", error);
+  }
+}
+
+export async function loadMinimalProjects() {
+  try {
+    // Llama a la funcion que obtendra los proyectos
+    const projects = await getProjects();
+
+    showSpinner();
+
+    const projectContainer = document.getElementById("listProject");
+    projectContainer.innerHTML = "";
+
+    hideSpinner();
+    if (projects.length <= 0) {
+      projectContainer.textContent = "No eres parte de ningun grupo.";
+    } else {
+      projects.forEach((project) => {
+        let clone = renderMinimalProject(project);
+        projectContainer.appendChild(clone);
+      });
+    }
   } catch (error) {
     hideSpinner();
     console.error("No se pudo cargar la lista de proyectos: ", error);

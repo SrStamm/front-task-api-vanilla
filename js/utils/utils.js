@@ -39,7 +39,6 @@ export function showTab(tabId) {
     section.classList.remove("active");
   });
 
-  console.log("Mostrando pestaña:", tabId);
   const tab = document.getElementById(tabId);
   tab.classList.add("active");
 

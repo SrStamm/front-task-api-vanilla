@@ -95,9 +95,9 @@ export function renderUserInProject(
         <option value="admin" ${permission === "admin" ? "selected" : ""}>Administrador</option>
       </select>
       <button type="button" class="btn btn-vsm btn-outline-error manage-btn" id="deleteUserProject"
-        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Eliminar </button>
-      <button type="button" class="btn btn-vsm btn-secondary" id="editPermissionProject"
-        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > Editar </button>
+        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > <img src="./assets/trash.png" alt=""> Eliminar </button>
+      <button type="button" class="btn btn-vsm btn-outline-secondary" id="editPermissionProject"
+        data-group-id="${groupId}" data-project-id="${projectId}" data-user-id="${userId}" > <img src="./assets/pencil.png" alt=""> Editar </button>
     </div>
   </li>
 `;

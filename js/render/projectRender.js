@@ -111,9 +111,12 @@ export function renderProjectInModal(projectData) {
   `;
 
   const footerHtml = `
-    <button type="button" class="btn btn-secondary btn-sm" id="editProject" > Editar </button>
+    <button type="button" class="btn btn-secondary btn-sm" id="editProject" >
+    <img src="./assets/pencil.png" alt=""> Editar
+    </button>
     <button type="button" class="btn btn-error btn-sm" id="deleteProject"
-     data-group-id="${projectData.group_id}" data-project-id="${projectData.project_id}" > Eliminar </button>
+     data-group-id="${projectData.group_id}" data-project-id="${projectData.project_id}" >
+    <img src="./assets/trash.png" alt=""> Eliminar </button>
   `;
 
   return {
@@ -200,4 +203,34 @@ export function renderProjectInGroup(projectTitle) {
   </li>
 `;
   return contentHtml;
+}
+
+// Renderiza lista de proyectos para acceder a las tareas
+export function renderMinimalProject(projectData) {
+  // Obtiene el template
+  const projectTemplate = document.getElementById("minimalistProjectTemplate");
+  const clon = projectTemplate.content.cloneNode(true);
+
+  // Accede al elemento principal y al titulo
+  const projectCard = clon.querySelector(".mini-card");
+  const projectTitle = clon.querySelector(".projectTitle");
+
+  // VERIFICAR que los elementos existen antes de usarlos
+  if (!projectTitle) {
+    console.error(
+      "Error: No se encontraron todos los elementos en projectTemplate",
+    );
+    return;
+  }
+
+  // Actualiza con los datos obtenidos
+  projectTitle.textContent = projectData.title;
+
+  //
+  projectCard.dataset.groupId = projectData.group_id;
+  projectCard.dataset.projectId = projectData.project_id;
+  projectCard.dataset.title = projectData.title;
+
+  // Agrega los datos
+  return clon;
 }

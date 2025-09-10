@@ -245,13 +245,13 @@
 
         <!-- Dashboard - Task section -->
         <section class="dashboard-section splitSections" id="taskSection">
-          <h2>Tareas</h2>
           <div class="partSections taskPartSection">
             <h3 class="headerPartSection">Proyectos</h3>
+            <div id="listProject" class="mini-card-list"></div>
           </div>
           <div class="partSections taskPartSection">
             <h3 class="headerPartSection">Tareas</h3>
-            <ol id="taskList"></ol>
+            <ol class="list-task"></ol>
           </div>
         </section>
 
@@ -363,6 +363,17 @@
             Ver mas detalles
           </button>
         </div>
+      </div>
+    </template>
+
+    <template
+      id="minimalistProjectTemplate"
+      data-group-id="{{group_id}}"
+      data-project-id="{{project_id}}"
+      data-project-title="{{title}}"
+    >
+      <div class="mini-card">
+        <h4 class="projectTitle"></h4>
       </div>
     </template>
 

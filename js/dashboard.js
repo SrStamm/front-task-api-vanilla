@@ -41,6 +41,7 @@ import {
   createProjectAction,
   deleteProjectAction,
   editPermissionAction,
+  loadMinimalProjects,
   loadProjects,
   refreshCurrentProject,
   removeUserFromProjectAction,
@@ -164,6 +165,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
     if (sectionId === "projectSection") {
       await loadProjects();
+    }
+    if (sectionId === "taskSection") {
+      await loadMinimalProjects();
     }
   });
 
