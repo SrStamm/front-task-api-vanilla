@@ -128,6 +128,10 @@ export async function refreshCurrentProject(groupId, projectId) {
     content.footer,
     content.addClass,
   );
+
+  initializeTabListeners();
+
+  showTab("members-tab");
 }
 
 export async function editPermissionAction(

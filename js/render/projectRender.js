@@ -195,12 +195,8 @@ export function renderCreateProject(groupData) {
 // Para renderizar lista de proyectos en modal de grupo
 export function renderProjectInGroup(projectTitle) {
   const contentHtml = `
-  <li>
-    <div class="body-template">
-      <div class="info-template">
-        <p> ${projectTitle}</p>
-      </div>
-    </div>
+  <li class="project-item">
+      <p> ${projectTitle}</p>
   </li>
 `;
   return contentHtml;

@@ -60,7 +60,7 @@ class Auth {
     try {
       let response = await logoutFetch();
 
-      if (response.detail == "Closed all sessions") {
+      if (response.detail === "Closed all sessions") {
         localStorage.removeItem("authToken");
         localStorage.removeItem("refrToken");
         return { success: true, message: "Sesión cerrada" };

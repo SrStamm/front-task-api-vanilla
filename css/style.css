@@ -986,27 +986,62 @@ modal-header {
   display: grid;
   grid-template-columns: repeat(2, minmax(200px, 1fr));
   gap: 1rem;
+  overflow: scroll;
+  max-height: 400px;
 }
 
-.task-item {
+.task-item,
+.project-item {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.task-item {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
   background: var(--gray-100);
   border-radius: var(--border-radius);
-  margin-bottom: 0.5rem;
 }
 
-.task-details {
+.task-details,
+.project-details {
   display: flex;
   flex-direction: column;
+}
+
+.task-info {
+  overflow: auto;
+  max-height: 100px;
+}
+
+.task-info p {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--gray-600);
+}
+
+.task-meta p {
+  font-size: 0.9rem;
+}
+
+.task-card {
+  background-color: var(--surface);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  max-width: 300px;
+  min-width: 200px;
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
 }
 
 .body-template {
@@ -1046,50 +1081,50 @@ modal-header {
   margin: 0;
 }
 
-/*
-.listUser div {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 1rem;
-}
-*/
-
-.listUser li,
-.listProject li {
+.listUser li {
   background: var(--gray-100);
   padding: 1rem;
   border-radius: var(--border-radius);
   transition: all 0.2s ease;
 }
 
-.listUser li:hover,
-.listProject li:hover {
+.listUser li:hover {
   background: var(--gray-200);
   transform: translateX(5px);
   box-shadow: var(--shadow-sm);
 }
 
-.listuser p,
-.listProject p {
+.listuser p {
   margin-right: 1rem;
 }
 
-.listUser p:last-child,
-.listProject p:last-child {
+.listUser p:last-child {
   margin-bottom: 0;
   margin-right: 0;
 }
 
 .listProject {
   display: grid;
-  grid-column: 1 / -1;
   grid-template-columns: repeat(2, minmax(200px, 1fr));
+  grid-column: 1 / -1;
   gap: 1rem;
   margin: 1rem 0;
 
   max-height: 300px;
   overflow: scroll;
+}
+
+.project-item {
+  background: var(--gray-100);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
+}
+
+.project-item:hover {
+  background: var(--gray-200);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
 }
 
 .allUsersList {

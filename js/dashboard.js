@@ -12,7 +12,7 @@ import {
   getUsersFromProject,
   getTasksFromProject,
 } from "./api.js";
-import { showMessage } from "./utils/utils.js";
+import { initializeTabListeners, showMessage, showTab } from "./utils/utils.js";
 import {
   showSections,
   showModal,
@@ -25,7 +25,12 @@ import {
   renderGroupToEdit,
   showGroupDetailsModal,
 } from "./render/groupRender.js";
-import { showLoginForm, showRegisterForm, loginSucces } from "./dom.js";
+import {
+  showLoginForm,
+  showRegisterForm,
+  loginSucces,
+  unauthorized,
+} from "./dom.js";
 import { auth } from "./auth.js";
 import {
   renderCreateProject,
@@ -40,7 +45,7 @@ import {
   refreshCurrentProject,
   removeUserFromProjectAction,
 } from "./actions/projectActions.js";
-import { loadGroup } from "./actions/groupActions.js";
+import { deleteGroupAction, loadGroup } from "./actions/groupActions.js";
 import {
   editGroupAction,
   createGroupEvent,
@@ -111,6 +116,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       loginSucces();
     } else {
       showMessage(response.message, "error");
+
+      target.textContent = "Iniciar sesión";
+      target.disabled = false;
     }
   });
 
@@ -118,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     try {
       let response = await auth.logout();
 
-      if (response.message === "Closed all sessions") {
+      if (response.success || response.message === "Sesión cerrada") {
         showMessage("Sesión cerrada", "info");
         unauthorized();
       } else {
@@ -220,11 +228,16 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       occultModal("modalGroup");
     }
     if (target.id === "saveGroup") {
+      target.textContent = "Creando...";
+      target.disabled = true;
+
       let response = await createGroupEvent();
 
       if (response == "Se ha creado un nuevo grupo de forma exitosa") {
       } else {
         showMessage("Error al crear el grupo: " + response.detail, "error");
+        target.textContent = "Crear";
+        target.disabled = false;
       }
       occultModal("modalGroup");
       await loadGroup();
@@ -279,6 +292,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       );
       const groupId = target.dataset.groupId;
 
+      target.textContent = "Editando...";
+      target.disabled = true;
+
       await editGroupAction(groupId, groupName.value, groupDescription.value);
     }
 
@@ -309,24 +325,48 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         content.body,
         content.footer,
         content.addClass,
-        "modal-small",
+        content.removeClass,
       );
+
+      initializeTabListeners();
+
+      showTab("projects-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
     }
 
     if (target.id === "deleteGroup") {
+      target.textContent = "Eliminando...";
+      target.disabled = true;
+
       const groupId = target.dataset.groupId;
-      await editGroupAction(groupId);
-      occultModal("genericModal");
-      await loadGroup();
+      const response = await deleteGroupAction(groupId);
+
+      if (response.success) {
+        occultModal("genericModal");
+        await loadGroup();
+      } else {
+        showMessage("Error al eliminar el grupo: " + response.detail, "error");
+        target.textContent = "Eliminar";
+        target.disabled = false;
+      }
     }
 
     if (target.id === "deleteUserGroup") {
+      target.textContent = "Eliminando...";
+      target.disabled = true;
+
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
-      await deleteUserFromGroupAction(groupId, userId);
+      let response = await deleteUserFromGroupAction(groupId, userId);
+
+      if (response.success) {
+        target.textContent = "Eliminado";
+      } else {
+        target.textContent = "Eliminar";
+        target.disabled = false;
+      }
     }
 
     if (target.id == "editRoleGroup") {
@@ -376,6 +416,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     if (target.id === "confirCreateProject") {
+      target.textContent = "Creando...";
+      target.disabled = true;
+
       const modalContainer = document.getElementById("genericModal");
       const projectTitle = modalContainer.querySelector(
         "#createProjectNameName",
@@ -394,8 +437,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       if (response && response.success) {
         showMessage("Proyecto creado exitosamente", "success");
-        occultModal("genericModal");
-        await loadProjects();
 
         // Actualizar la lista de usuarios en el modal de grupo
         const listUser = await getUsersInGroup(target.dataset.groupId);
@@ -416,13 +457,19 @@ document.addEventListener("DOMContentLoaded", async (event) => {
           content.body,
           content.footer,
           content.addClass,
-          "modal-small",
+          content.removeClass,
         );
+
+        initializeTabListeners();
+
+        showTab("projects-tab");
 
         // Actualizar el dataset con los nuevos datos
         modalContainer.dataset.groupData = JSON.stringify(groupData);
       } else {
         showMessage("Error al crear el proyecto: " + response.detail, "error");
+        target.textContent = "Eliminar";
+        target.disabled = false;
       }
     }
 
@@ -453,8 +500,12 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         content.body,
         content.footer,
         content.addClass,
-        "modal-small",
+        content.removeClass,
       );
+
+      initializeTabListeners();
+
+      showTab("projects-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
@@ -634,10 +685,19 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     const target = event.target;
 
     if (target.id === "addUser" && target.dataset.target == "group") {
+      target.textContent = "Agregando...";
+      target.disabled = true;
+
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
 
-      await addUserToGroupAction(groupId, userId);
+      let response = await addUserToGroupAction(groupId, userId);
+
+      if (response.success) {
+        target.textContent = "Agregado";
+      } else {
+        target.disabled = false;
+      }
     } else if (target.id === "addUser" && target.dataset.target == "project") {
       target.textContent = "Agregando...";
       target.disabled = true;

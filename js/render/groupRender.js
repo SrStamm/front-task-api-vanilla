@@ -54,6 +54,7 @@ export function showGroupDetailsModal(groupData) {
     content.body,
     content.footer,
     content.addClass,
+    content.removeClass,
   );
 
   // Accede a los botones
@@ -61,13 +62,11 @@ export function showGroupDetailsModal(groupData) {
   modalContainer.dataset.groupData = JSON.stringify(groupData);
 
   const tabsContainer = document.querySelector(".modal-tabs");
-  console.log("Contenedor de pestañas:", tabsContainer);
   tabsContainer.addEventListener("click", (event) => {
     const target = event.target;
 
     // Maneja el cambio de pestañas
     if (target.classList.contains("tab-btn")) {
-      console.log("Cambiando a la pestaña:", target.dataset.tab);
       // Muestra la sección correspondiente
       showTab(target.dataset.tab + "-tab");
     }
@@ -150,6 +149,7 @@ export function newRenderGroupInModal(groupData) {
     body: bodyHtml,
     footer: footerHtml,
     addClass: "modal-large",
+    removeClass: "modal-small",
   };
 }
 

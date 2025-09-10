@@ -1,13 +1,17 @@
 export function renderTaskInProject(TaskData) {
+  const dueDate = new Date(TaskData.date_exp);
+  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  const formattedDate = dueDate.toLocaleDateString("es-ES", options);
+
   const contentHtml = `
-  <li class="task-item">
+  <li class="task-item task-card">
     <div class="task-details">
+      <div class="task-meta">
+        <p class="task-state"> ${TaskData.state}</p>
+        <p class="task-due"> ${formattedDate}</p>
+      </div>
       <div class="task-info">
         <p class="task-description">${TaskData.description}</p>
-        <p class="task-state"> ${TaskData.state}</p>
-      </div>
-      <div>
-        <p class="task-due"> ${TaskData.date_exp}</p>
       </div>
     </div>
   </li>

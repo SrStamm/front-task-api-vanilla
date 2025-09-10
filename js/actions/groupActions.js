@@ -11,7 +11,13 @@ import {
 } from "../api.js";
 import { newRenderGroupInModal, renderGroup } from "../render/groupRender.js";
 import { occultModal, updateModalContent } from "../utils/modal.js";
-import { showSpinner, hideSpinner, showMessage } from "../utils/utils.js";
+import {
+  showSpinner,
+  hideSpinner,
+  showMessage,
+  showTab,
+  initializeTabListeners,
+} from "../utils/utils.js";
 
 export async function loadGroup() {
   try {
@@ -75,6 +81,7 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
     if (groupDescription || groupDescription !== null) {
       groupEditData.description = groupDescription;
     }
+
     let response = await editGroup(groupId, groupEditData);
 
     if (response.detail !== "Se ha actualizado la informacion del grupo") {
@@ -101,7 +108,12 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
       content.body,
       content.footer,
       content.addClass,
+      content.removeClass,
     );
+
+    initializeTabListeners();
+
+    showTab("projects-tab");
 
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.groupData = JSON.stringify(groupData);
@@ -116,10 +128,13 @@ export async function deleteGroupAction(groupId) {
     let result = await deleteGroup(groupId);
 
     if (result.detail !== "Se ha eliminado el grupo") {
-      throw new Error(result.detail);
+      return { success: false, detail: result.detail };
+    } else {
+      return { success: true, detail: result.detail };
     }
   } catch (error) {
     console.log(`Error al eliminar el grupo ${groupId}: `, error);
+    return { success: false, detail: error.message };
   }
 }
 
@@ -151,14 +166,22 @@ export async function addUserToGroupAction(groupId, userId) {
       content.body,
       content.footer,
       content.addClass,
+      content.removeClass,
     );
+
+    initializeTabListeners();
+
+    showTab("members-tab");
 
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.groupData = JSON.stringify(groupData);
+
+    return { success: true };
   } catch (error) {
     console.log("Error al agregar usaurio al grupo: ", error);
-    showMessage("Error al añadir el usuario: ", error.message);
-    occultModal("allUsersList");
+    showMessage("Error al añadir el usuario: ", "error");
+
+    return { success: false };
   }
 }
 
@@ -190,13 +213,21 @@ export async function deleteUserFromGroupAction(groupId, userId) {
       content.body,
       content.footer,
       content.addClass,
+      content.removeClass,
     );
+
+    initializeTabListeners();
+
+    showTab("members-tab");
 
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.groupData = JSON.stringify(groupData);
+
+    return { success: true };
   } catch (error) {
     console.log("Error al eliminar usaurio al grupo: ", error);
     showMessage("Error al eliminar el usuario: ", error.message);
+    return { success: false };
   }
 }
 
@@ -233,8 +264,12 @@ export async function editRoleAction(groupId, userId, role) {
         content.body,
         content.footer,
         content.addClass,
+        content.removeClass,
       );
 
+      initializeTabListeners();
+
+      showTab("members-tab");
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
       return { success: true, detail: response.detail };

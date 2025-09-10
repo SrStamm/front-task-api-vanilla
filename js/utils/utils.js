@@ -58,3 +58,20 @@ export function showTab(tabId) {
     console.warn("No se encontró el botón para la pestaña:", tabId);
   }
 }
+
+export function initializeTabListeners() {
+  const tabsContainer = document.querySelector(".modal-tabs");
+  if (tabsContainer) {
+    tabsContainer.addEventListener("click", (event) => {
+      const target = event.target;
+
+      // Maneja el cambio de pestañas
+      if (target.classList.contains("tab-btn")) {
+        // Muestra la sección correspondiente
+        showTab(target.dataset.tab + "-tab");
+      }
+    });
+  } else {
+    console.warn("No se encontró el contenedor de pestañas.");
+  }
+}

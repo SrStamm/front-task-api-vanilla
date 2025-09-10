@@ -5,7 +5,7 @@ import { auth } from "./auth.js";
 import { unauthorized } from "./dom.js";
 import { showMessage } from "./utils/utils.js";
 
-const url = "http://localhost:8000";
+const url = "http://100.110.201.56:8000";
 
 async function fetchData(endpoint, method, body, token) {
   if (!token) {
