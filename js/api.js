@@ -23,7 +23,10 @@ async function fetchData(endpoint, method, body, token) {
   // Verifica que no haya ningún error
   const dataResponse = await response.json();
 
-  if (response.status === 401 && dataResponse.detail == "Invalid Token") {
+  if (
+    dataResponse.detail == "Invalid Token" ||
+    dataResponse.detail == "Token Not Authorized"
+  ) {
     try {
       // Nuevo token
       let newToken = await auth.refresh();

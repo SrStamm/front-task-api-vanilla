@@ -357,7 +357,7 @@ a {
 /* LAYOUT PRINCIPAL CORREGIDO */
 .principal-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 250px 1fr;
   min-height: 100vh;
   width: 100vw;
   margin: 0;
@@ -410,7 +410,6 @@ a {
   border-radius: 12px;
   display: grid;
   gap: 1rem;
-  align-items: center;
   grid-template-columns: 50px 0fr;
   color: var(--gray-50);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -478,7 +477,7 @@ a {
 
 /* DASHBOARD LAYOUT */
 .dashboard-layout {
-  padding: 2rem 3rem;
+  padding: 1.5rem;
   background: var(--background);
   min-height: 100vh;
   width: 100%;
@@ -511,7 +510,7 @@ a {
   backdrop-filter: blur(20px);
   border-radius: var(--border-radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 2.5rem; /* Más padding */
+  padding: 20px; /* Más padding */
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   min-height: 250px; /* Altura mínima */
@@ -526,11 +525,9 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
   border-bottom: 2px solid var(--gray-100);
   flex-wrap: wrap;
-  gap: 1rem;
+  margin-bottom: 20px;
 }
 
 /* GRIDS MEJORADOS */
@@ -569,8 +566,9 @@ template {
 .card-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Más ancho */
-  gap: 2.5rem; /* Más espacio */
+  gap: 2rem;
   width: 100%;
+  padding: 1rem;
   overflow: scroll;
   overflow-x: hidden;
   max-height: 500px;
@@ -677,13 +675,15 @@ template {
 /* Mini Cards */
 
 .mini-card-list {
+  list-style: none;
   display: flex;
   flex-direction: column;
   gap: 1rem; /* Más espacio */
   width: 100%;
+  padding: 1rem;
   overflow: scroll;
   overflow-x: hidden;
-  min-height: 70vh;
+  max-height: 70vh;
 }
 
 .mini-card {
@@ -1039,10 +1039,11 @@ modal-header {
 
 .list-task {
   display: grid;
-  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
   gap: 1rem;
   overflow: scroll;
   max-height: 400px;
+  padding: 1rem;
 }
 
 .task-item,
@@ -1082,7 +1083,7 @@ modal-header {
   font-size: 0.9rem;
 }
 
-.task-card {
+.task-card-project {
   background-color: var(--surface);
   border: 1px solid var(--gray-200);
   border-radius: var(--border-radius);
@@ -1094,10 +1095,44 @@ modal-header {
   min-width: 200px;
 }
 
-.task-card:hover {
+.task-card-project:hover {
   box-shadow: var(--shadow);
   transform: translateY(-2px);
 }
+
+/* Tasks en section */
+.task-card {
+  background: var(--gray-100);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+
+  width: 100%;
+}
+
+.task-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-card-meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.task-card-meta p {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.task-card-hide {
+  display: none;
+}
+
+/**/
 
 .body-template {
   display: flex;
@@ -1125,11 +1160,12 @@ modal-header {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem 0;
+  padding: 1rem;
 
   max-width: 100%;
   max-height: 300px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .listUser:last-child {

@@ -60,7 +60,10 @@ import {
   editRoleAction,
 } from "./actions/groupActions.js";
 import { renderCreateTask } from "./render/taskRender.js";
-import { createTaskAction } from "./actions/taskActions.js";
+import {
+  createTaskAction,
+  showTasksFromProjectAction,
+} from "./actions/taskActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -193,6 +196,26 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
     if (sectionId === "chatSection") {
       await loadMinimalProjects(sectionId);
+    }
+  });
+
+  //
+  //
+  // Eventos de TaskSection
+  //
+  //
+
+  const taskContainer = document.getElementById("taskSection");
+  taskContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+
+    const miniCard = target.closest(".mini-card");
+
+    if (miniCard) {
+      await showTasksFromProjectAction(
+        miniCard.dataset.projectId,
+        ".list-task",
+      );
     }
   });
 

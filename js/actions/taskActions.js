@@ -1,4 +1,5 @@
-import { createTask } from "../api.js";
+import { createTask, getTasksFromProject } from "../api.js";
+import { renderTask } from "../render/taskRender.js";
 import { showMessage } from "../utils/utils.js";
 
 export async function createTaskAction(taskData, projectId) {
@@ -17,4 +18,22 @@ export async function createTaskAction(taskData, projectId) {
     showMessage("Error al crear la tarea");
     return { success: false, detail: error };
   }
+}
+
+export async function showTasksFromProjectAction(projectId, containerClass) {
+  const container = document.querySelector(containerClass);
+  container.innerHTML = "";
+
+  const response = await getTasksFromProject(projectId);
+
+  if (response.length === 0) {
+    container.innerHTML = "<p>No hay tareas en este proyecto.</p>";
+    return;
+  }
+
+  response.forEach((task) => {
+    let content = renderTask(task);
+
+    container.insertAdjacentHTML("beforeend", content);
+  });
 }

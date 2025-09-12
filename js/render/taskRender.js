@@ -4,7 +4,7 @@ export function renderTaskInProject(TaskData) {
   const formattedDate = dueDate.toLocaleDateString("es-ES", options);
 
   const contentHtml = `
-  <li class="task-item task-card">
+  <li class="task-item task-card-project">
     <div class="task-details">
       <div class="task-meta">
         <p class="task-state"> ${TaskData.state}</p>
@@ -67,4 +67,47 @@ export function renderCreateTask(projectId, projectUsers) {
     addClass: "modal-small",
     removeClass: "modal-large",
   };
+}
+
+export function renderTask(taskData) {
+  const dueDate = new Date(taskData.date_exp);
+  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  const formattedDate = dueDate.toLocaleDateString("es-ES", options);
+
+  taskData.state = modifyState(taskData.state);
+
+  const contentHtml = `
+  <li class="task-card">
+    <div class="task-card-details ">
+      <div class="task-card-meta">
+        <div>
+          <p class="task-state"> ${taskData.state}</p>
+        </div>
+        <div>
+          <p class=""> ${formattedDate}</p>
+        </div>
+        <div>
+          <p class="task-label"> ${taskData.task_label_links}</p>
+        </div>
+      </div>
+      <div class="task-info">
+        <p class="task-title">${taskData.title}</p>
+      </div>
+    </div>
+  </li>
+`;
+
+  return contentHtml;
+}
+
+function modifyState(state) {
+  if (state === "completado") {
+    return "Done";
+  } else if (state === "en proceso") {
+    return "In Progress";
+  } else if (state === "sin empezar") {
+    return "To Do";
+  } else {
+    return "Canceled";
+  }
 }
