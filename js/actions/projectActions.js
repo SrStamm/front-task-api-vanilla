@@ -50,14 +50,15 @@ export async function loadProjects() {
   }
 }
 
-export async function loadMinimalProjects() {
+export async function loadMinimalProjects(sectionId) {
   try {
     // Llama a la funcion que obtendra los proyectos
     const projects = await getProjects();
 
     showSpinner();
 
-    const projectContainer = document.getElementById("listProject");
+    const sectionContainer = document.getElementById(sectionId);
+    const projectContainer = sectionContainer.querySelector(".list-project");
     projectContainer.innerHTML = "";
 
     hideSpinner();
@@ -143,7 +144,7 @@ export async function refreshCurrentProject(groupId, projectId) {
   // Actualizar la lista de usuarios en el modal de grupo
   const listUsers = await getUsersFromProject(groupId, projectId);
   const listTask = await getTasksFromProject(projectId);
-  console.log(listTask);
+  console.log("Lista de tareas: ", listTask);
 
   const projectData = {
     groupId: groupId,

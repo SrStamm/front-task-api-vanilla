@@ -74,3 +74,13 @@ export function initializeTabListeners() {
     console.warn("No se encontró el contenedor de pestañas.");
   }
 }
+
+export function setButtonState(button, isLoading, text = null) {
+  button.disabled = isLoading;
+
+  if (text !== null) {
+    button.textContent = text;
+  }
+
+  button.dataset.loading = isLoading;
+}

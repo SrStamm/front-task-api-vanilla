@@ -66,7 +66,11 @@ export async function createGroupEvent() {
 
     let response = await createGroup(data);
 
-    return response.detail;
+    if (response.detail !== "Se ha creado un nuevo grupo de forma exitosa") {
+      return { success: false, detail: response.detail };
+    } else {
+      return { success: true, detail: response.detail };
+    }
   } catch (error) {
     console.log("Error en crear un grupo: ", error);
   }

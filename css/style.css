@@ -683,7 +683,7 @@ template {
   width: 100%;
   overflow: scroll;
   overflow-x: hidden;
-  min-height: 75vh;
+  min-height: 70vh;
 }
 
 .mini-card {

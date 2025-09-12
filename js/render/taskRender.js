@@ -11,7 +11,7 @@ export function renderTaskInProject(TaskData) {
         <p class="task-due"> ${formattedDate}</p>
       </div>
       <div class="task-info">
-        <p class="task-description">${TaskData.description}</p>
+        <p class="task-title">${TaskData.title}</p>
       </div>
     </div>
   </li>
@@ -38,10 +38,12 @@ export function renderCreateTask(projectId, projectUsers) {
 
   const bodyHtml = `
     <form class="">
+      <label for="taskTitle">Titulo:</label>
+      <input type="text" id="taskTitle" required />
       <label for="taskDescription">Descripción:</label>
       <textarea rows="3" cols="3" id="taskDescription" ></textarea>
-      <label for="taskDueDate">Descripción:</label>
-      <input type="date" id="taskDueDate" />
+      <label for="taskDueDate">Fecha de vencimiento:</label>
+      <input type="date" id="taskDueDate" required />
       <div class="user-selection-container">
         <h5>Asignar a usuarios:</h5>
         ${userListHtml}
@@ -50,7 +52,7 @@ export function renderCreateTask(projectId, projectUsers) {
   `;
 
   const footerHtml = `
-    <button type="button" class="btn btn-primary btn-sm" id="confirCreateTask"
+    <button type="button" class="btn btn-primary btn-sm" id="confirmCreateTask"
       data-project-id="${projectId}"
     > Confirmar </button>
     <button type="button" class="btn btn-error btn-sm" id="cancelCreateTask"

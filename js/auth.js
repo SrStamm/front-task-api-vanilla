@@ -74,11 +74,8 @@ class Auth {
     }
   }
 
-  async login() {
+  async login(username, password) {
     // Obtiene los datos ingresados
-    const username = document.getElementById("usernameLogin").value;
-    const password = document.getElementById("passwordLogin").value;
-
     if (!username || !password) {
       showMessage("Por favor, complete todos los campos", "warning");
       throw new Error("Faltan campos por completar");

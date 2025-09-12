@@ -18,7 +18,7 @@
     </div>
 
     <div class="container" id="formLogContainer" style="display: none">
-      <div class="form-container" id="loginSection">
+      <section class="form-container" id="loginSection">
         <h2>Ingresar</h2>
         <form id="loginForm">
           <div class="form-group">
@@ -52,9 +52,13 @@
             <a href="#" id="registerLink">Registrate aquí</a>
           </p>
         </form>
-      </div>
+      </section>
 
-      <div class="form-container" id="registerSection" style="display: none">
+      <section
+        class="form-container"
+        id="registerSection"
+        style="display: none"
+      >
         <h2>Registro</h2>
         <form id="registerForm">
           <div class="form-group">
@@ -91,7 +95,7 @@
           <div class="btn-container">
             <button
               type="button"
-              class="btn"
+              class="btn btn-primary"
               id="registerBtn"
               data-action="register"
             >
@@ -100,13 +104,13 @@
           </div>
         </form>
         <p>Ya tienes una cuenta? <a href="#" id="loginLink">Ingresa aquí</a></p>
-      </div>
+      </section>
     </div>
 
     <!-- Contenedor principal del layout -->
     <main class="principal-layout">
       <!-- Side bar -->
-      <div class="sidebar-container">
+      <nav class="sidebar-container">
         <aside class="sidebar" id="sidebar">
           <ul class="sidebar_list">
             <li
@@ -198,13 +202,15 @@
             </li>
           </ul>
         </aside>
-      </div>
+      </nav>
 
       <!-- Dashboard Layout -->
       <div class="dashboard-layout">
         <!-- Dashboard - Inicio section -->
         <section class="dashboard-section" id="inicioSection">
-          <h2>Dashboard</h2>
+          <header>
+            <h2>Dashboard</h2>
+          </header>
           <div class="inicioSection">
             <div id="pendingTaskWidget" class="partSections">
               <h3 class="headerPartSection">Tareas próximas a vencer</h3>
@@ -220,7 +226,9 @@
 
         <!-- Dashboard - Group section -->
         <section class="dashboard-section" id="groupSection">
-          <h2>Mis Grupos</h2>
+          <header>
+            <h2>Mis Grupos</h2>
+          </header>
           <div class="partSections">
             <div class="headerPartSection">
               <h3>Grupos</h3>
@@ -234,42 +242,47 @@
 
         <!-- Dashboard - Project section -->
         <section class="dashboard-section" id="projectSection">
-          <h2>Proyectos</h2>
-          <div class="partSections">
-            <div class="headerPartSection">
+          <header>
+            <h2>Proyectos</h2>
+          </header>
+          <article class="partSections">
+            <header class="headerPartSection">
               <h3>Mis Proyectos</h3>
-            </div>
+            </header>
             <ol class="card-list" id="projectList"></ol>
-          </div>
+          </article>
         </section>
 
         <!-- Dashboard - Task section -->
         <section class="dashboard-section splitSections" id="taskSection">
-          <div class="partSections taskPartSection">
-            <h3 class="headerPartSection">Proyectos</h3>
-            <div id="listProject" class="mini-card-list"></div>
-          </div>
-          <div class="partSections taskPartSection">
-            <h3 class="headerPartSection">Tareas</h3>
+          <article class="partSections taskPartSection">
+            <header class="headerPartSection">
+              <h3>Proyectos</h3>
+            </header>
+            <div class="mini-card-list list-project"></div>
+          </article>
+          <article class="partSections taskPartSection">
+            <header class="headerPartSection">
+              <h3>Tareas</h3>
+            </header>
             <ol class="list-task"></ol>
-          </div>
+          </article>
         </section>
 
         <!-- Dashboard - Chat section -->
-        <section
-          class="dashboard-section splitSections"
-          id="chatSection"
-          style="display: none"
-        >
-          <h2>Chat</h2>
-          <div class="partSections">
-            <h3 class="headerPartSection">Proyectos</h3>
-            <ol id="projectListToChat"></ol>
-          </div>
-          <div class="partSections">
-            <h3 class="headerPartSection">Chat</h3>
+        <section class="dashboard-section splitSections" id="chatSection">
+          <article class="partSections">
+            <header class="headerPartSection">
+              <h3>Proyectos</h3>
+            </header>
+            <div class="mini-card-list list-project"></div>
+          </article>
+          <article class="partSections">
+            <header class="headerPartSection">
+              <h3>Chat</h3>
+            </header>
             <ul id=""></ul>
-          </div>
+          </article>
         </section>
       </div>
     </main>
