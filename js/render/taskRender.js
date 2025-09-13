@@ -1,6 +1,6 @@
 export function renderTaskInProject(TaskData) {
   const dueDate = new Date(TaskData.date_exp);
-  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  const options = { year: "numeric", month: "short", day: "numeric" };
   const formattedDate = dueDate.toLocaleDateString("es-ES", options);
 
   const contentHtml = `
@@ -71,7 +71,7 @@ export function renderCreateTask(projectId, projectUsers) {
 
 export function renderTask(taskData) {
   const dueDate = new Date(taskData.date_exp);
-  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  const options = { year: "numeric", month: "short", day: "numeric" };
   const formattedDate = dueDate.toLocaleDateString("es-ES", options);
 
   taskData.state = modifyState(taskData.state);
@@ -79,19 +79,19 @@ export function renderTask(taskData) {
   const contentHtml = `
   <li class="task-card">
     <div class="task-card-details ">
+      <div class="task-info">
+        <h3 class="task-title">${taskData.title}</h3>
+      </div>
+      <div class="task-description">
+        <p>${taskData.description === null || taskData.description === "" ? "No hay descripción" : taskData.description}</p>
+      </div>
       <div class="task-card-meta">
-        <div>
-          <p class="task-state"> ${taskData.state}</p>
-        </div>
         <div>
           <p class=""> ${formattedDate}</p>
         </div>
         <div>
           <p class="task-label"> ${taskData.task_label_links}</p>
         </div>
-      </div>
-      <div class="task-info">
-        <p class="task-title">${taskData.title}</p>
       </div>
     </div>
   </li>

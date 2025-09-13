@@ -397,12 +397,10 @@ a {
 }
 
 .sidebar_list {
-  list-style: none;
-  padding: 0;
-  min-height: 600px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 .sidebar_element {
@@ -477,10 +475,9 @@ a {
 
 /* DASHBOARD LAYOUT */
 .dashboard-layout {
-  padding: 1.5rem;
+  padding: 2rem;
   background: var(--background);
   min-height: 100vh;
-  width: 100%;
   overflow-x: auto;
 }
 
@@ -491,13 +488,13 @@ a {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: left;
   padding: 0;
   text-align: center;
 }
 
-.dashboard-layout h3 {
+.dashboard-layout-h3 {
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;
@@ -513,7 +510,6 @@ a {
   padding: 20px; /* Más padding */
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
-  min-height: 250px; /* Altura mínima */
 }
 
 .partSections:hover {
@@ -550,7 +546,7 @@ a {
 
 .splitSections {
   display: grid;
-  grid-template-columns: minmax(200px, 1fr) 2fr;
+  grid-template-columns: minmax(200px, 1fr) 3fr;
   gap: 1rem;
   width: 100%;
 }
@@ -569,8 +565,8 @@ template {
   gap: 2rem;
   width: 100%;
   padding: 1rem;
-  overflow: scroll;
   overflow-x: hidden;
+  overflow-y: auto;
   max-height: 500px;
 }
 
@@ -681,7 +677,7 @@ template {
   gap: 1rem; /* Más espacio */
   width: 100%;
   padding: 1rem;
-  overflow: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   max-height: 70vh;
 }
@@ -776,8 +772,7 @@ template {
   margin-bottom: 0.5rem;
 }
 
-.modal-header h3,
-h3 {
+.modal-header h3 {
   font-size: 2.5em;
   text-align: center;
 }
@@ -839,7 +834,7 @@ modal-header {
 }
 
 .modal-section {
-  padding: 1.5rem 0;
+  padding: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -872,7 +867,7 @@ modal-header {
 .modal-tabs {
   display: flex;
   border-bottom: 1px solid var(--gray-200);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .tab-btn {
@@ -971,6 +966,8 @@ modal-header {
   background: var(--gray-100);
   border-radius: var(--border-radius);
   margin-bottom: 0.5rem;
+
+  border-left: 4px solid var(--primary);
 }
 
 .user-info {
@@ -1038,22 +1035,41 @@ modal-header {
 }
 
 .list-task {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(100px, 1fr));
-  gap: 1rem;
-  overflow: scroll;
-  max-height: 400px;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
 }
 
 .task-item,
 .project-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-  background: var(--gray-100);
+  padding: 15px;
+  background: var(--background);
   border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s;
+  border-left: 4px solid var(--primary);
+}
+
+.project-item:hover {
+  background: var(--gray-200);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.project-item.active {
+  background: var(--primary);
+  color: white;
+  border-left: 4px solid var(--accent);
+}
+
+.project-item.active:hover {
+  background: var(--secondary);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
 }
 
 .task-details,
@@ -1062,37 +1078,49 @@ modal-header {
   flex-direction: column;
 }
 
-.task-info {
-  overflow: auto;
-  max-height: 100px;
+.task-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
-.task-info p {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+.task-description {
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .task-meta {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  color: var(--gray-600);
+  font-size: 12px;
+  color: var(--text-light);
 }
 
 .task-meta p {
   font-size: 0.9rem;
 }
 
+.task-project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 1rem;
+  padding: 0.2rem;
+}
+
 .task-card-project {
-  background-color: var(--surface);
+  background-color: var(--gray-50);
   border: 1px solid var(--gray-200);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
-  margin-bottom: 1rem;
   transition: all 0.3s ease;
-  max-width: 300px;
-  min-width: 200px;
 }
 
 .task-card-project:hover {
@@ -1102,13 +1130,13 @@ modal-header {
 
 /* Tasks en section */
 .task-card {
-  background: var(--gray-100);
+  background: var(--gray-50);
   border-radius: var(--border-radius);
-  padding: 1rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
-
-  width: 100%;
+  padding: 15px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s;
+  border-left: 5px solid var(--primary);
 }
 
 .task-card-details {
@@ -1121,15 +1149,38 @@ modal-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
 
-.task-card-meta p {
-  font-size: 0.9rem;
-  color: var(--gray-600);
+  font-size: 12px;
+  color: var(--text-light);
 }
 
 .task-card-hide {
   display: none;
+}
+
+/* Tablero de tareas */
+
+.task-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Más ancho */
+}
+
+.task-column {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.column-header {
+  border-bottom: 2px solid var(--gray-100);
+  padding-bottom: 0.5rem;
 }
 
 /**/
@@ -1163,8 +1214,8 @@ modal-header {
   padding: 1rem;
 
   max-width: 100%;
-  max-height: 300px;
-  overflow: scroll;
+  max-height: 250px;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -1201,21 +1252,11 @@ modal-header {
   gap: 1rem;
   margin: 1rem 0;
 
-  max-height: 300px;
-  overflow: scroll;
-}
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-.project-item {
-  background: var(--gray-100);
   padding: 1rem;
-  border-radius: var(--border-radius);
-  transition: all 0.2s ease;
-}
-
-.project-item:hover {
-  background: var(--gray-200);
-  transform: translateX(5px);
-  box-shadow: var(--shadow-sm);
 }
 
 .allUsersList {
@@ -1347,11 +1388,6 @@ modal-header {
   #taskSection,
   #chatSection {
     grid-template-columns: 1fr;
-  }
-
-  .partSections {
-    padding: 1.5rem;
-    min-height: 200px;
   }
 
   .card {

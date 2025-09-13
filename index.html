@@ -217,13 +217,19 @@
           </header>
           <div class="inicioSection">
             <div id="pendingTaskWidget" class="partSections">
-              <h3 class="headerPartSection">Tareas próximas a vencer</h3>
+              <h3 class="headerPartSection dashboard-layout-h3">
+                Tareas próximas a vencer
+              </h3>
             </div>
             <div id="projectProgress" class="partSections">
-              <h3 class="headerPartSection">Progreso de proyectos</h3>
+              <h3 class="headerPartSection dashboard-layout-h3">
+                Progreso de proyectos
+              </h3>
             </div>
             <div class="partSections">
-              <h3 class="headerPartSection">Notificaciones</h3>
+              <h3 class="headerPartSection dashboard-layout-h3">
+                Notificaciones
+              </h3>
             </div>
           </div>
         </section>
@@ -235,7 +241,7 @@
           </header>
           <div class="partSections">
             <div class="headerPartSection">
-              <h3>Grupos</h3>
+              <h3 class="dashboard-layout-h3">Grupos</h3>
               <button type="button" class="btn btn-primary" id="createGroupBtn">
                 <span>+ Crear grupo</span>
               </button>
@@ -251,7 +257,7 @@
           </header>
           <article class="partSections">
             <header class="headerPartSection">
-              <h3>Mis Proyectos</h3>
+              <h3 class="dashboard-layout-h3">Mis Proyectos</h3>
             </header>
             <ol class="card-list" id="projectList"></ol>
           </article>
@@ -261,15 +267,42 @@
         <section class="dashboard-section splitSections" id="taskSection">
           <article class="partSections taskPartSection">
             <header class="headerPartSection">
-              <h3>Proyectos</h3>
+              <h3 class="dashboard-layout-h3">Proyectos</h3>
             </header>
             <div class="mini-card-list list-project"></div>
           </article>
           <article class="partSections taskPartSection">
             <header class="headerPartSection">
-              <h3>Tareas</h3>
+              <h3 class="dashboard-layout-h3">Tareas</h3>
             </header>
-            <ol class="list-task"></ol>
+            <div class="task-container">
+              <div class="task-column" id="taskColumnToDo">
+                <div class="column-header">
+                  <div class="column-title">
+                    <h4>Sin Empezar</h4>
+                  </div>
+                </div>
+                <ol class="list-task"></ol>
+              </div>
+
+              <div class="task-column" id="taskColumnInProgress">
+                <div class="column-header">
+                  <div class="column-title">
+                    <h4>En Progreso</h4>
+                  </div>
+                </div>
+                <ol class="list-task"></ol>
+              </div>
+
+              <div class="task-column" id="taskColumnCompleted">
+                <div class="column-header">
+                  <div class="column-title">
+                    <h4>Completadas</h4>
+                  </div>
+                </div>
+                <ol class="list-task"></ol>
+              </div>
+            </div>
           </article>
         </section>
 
@@ -277,13 +310,13 @@
         <section class="dashboard-section splitSections" id="chatSection">
           <article class="partSections">
             <header class="headerPartSection">
-              <h3>Proyectos</h3>
+              <h3 class="dashboard-layout-h3">Proyectos</h3>
             </header>
             <div class="mini-card-list list-project"></div>
           </article>
           <article class="partSections">
             <header class="headerPartSection">
-              <h3>Chat</h3>
+              <h3 class="dashboard-layout-h3">Chat</h3>
             </header>
             <ul id=""></ul>
           </article>
@@ -389,7 +422,7 @@
       data-project-id="{{project_id}}"
       data-project-title="{{title}}"
     >
-      <div class="mini-card">
+      <div class="project-item">
         <h4 class="projectTitle"></h4>
       </div>
     </template>

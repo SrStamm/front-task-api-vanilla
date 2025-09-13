@@ -209,13 +209,24 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   taskContainer.addEventListener("click", async (event) => {
     const target = event.target;
 
-    const miniCard = target.closest(".mini-card");
+    const projectItem = target.closest(".project-item");
 
-    if (miniCard) {
+    if (projectItem) {
       await showTasksFromProjectAction(
-        miniCard.dataset.projectId,
+        projectItem.dataset.projectId,
         ".list-task",
       );
+    }
+
+    const allProjectItem = taskContainer.querySelectorAll(".project-item");
+    allProjectItem.forEach((item) => {
+      if (item !== projectItem) {
+        item.classList.remove("active");
+      }
+    });
+
+    if (projectItem) {
+      projectItem.classList.add("active");
     }
   });
 

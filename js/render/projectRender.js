@@ -100,7 +100,7 @@ export function renderProjectInModal(projectData) {
           data-group-id="${projectData.group_id}"> Mostrar panel </button>
       </div>
     </div>
-    <ul id="projectTaskList" class="list-task">
+    <ul id="projectTaskList" class="task-project-list">
       ${
         projectData.tasks.length === 0
           ? "<li>No hay tareas en el proyecto</li>"
@@ -212,7 +212,7 @@ export function renderMinimalProject(projectData) {
   const clon = projectTemplate.content.cloneNode(true);
 
   // Accede al elemento principal y al titulo
-  const projectCard = clon.querySelector(".mini-card");
+  const projectCard = clon.querySelector(".project-item");
   const projectTitle = clon.querySelector(".projectTitle");
 
   // VERIFICAR que los elementos existen antes de usarlos

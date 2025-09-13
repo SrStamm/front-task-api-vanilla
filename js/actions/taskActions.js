@@ -27,13 +27,38 @@ export async function showTasksFromProjectAction(projectId, containerClass) {
   const response = await getTasksFromProject(projectId);
 
   if (response.length === 0) {
-    container.innerHTML = "<p>No hay tareas en este proyecto.</p>";
+    showMessage("No hay tareas en este proyecto", "info");
     return;
   }
 
   response.forEach((task) => {
     let content = renderTask(task);
 
-    container.insertAdjacentHTML("beforeend", content);
+    if (task.state === "Done") {
+      const completedTasksContainer = document.getElementById(
+        "taskColumnCompleted",
+      );
+
+      const completedList =
+        completedTasksContainer.querySelector("containerClass");
+
+      completedList.insertAdjacentHTML("beforeend", content);
+    } else if (task.state === "In Progress") {
+      const inProgressTasksContainer = document.getElementById(
+        "taskColumnInProgress",
+      );
+
+      const inProgressList =
+        inProgressTasksContainer.querySelector(containerClass);
+      inProgressList.insertAdjacentHTML("beforeend", content);
+    } else if (task.state === "To Do") {
+      const toDoTasksContainer = document.getElementById("taskColumnToDo");
+
+      const toDoList = toDoTasksContainer.querySelector(containerClass);
+
+      toDoList.insertAdjacentHTML("beforeend", content);
+    } else {
+      console.log("Estado de tarea desconocido", task);
+    }
   });
 }
