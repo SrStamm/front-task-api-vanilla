@@ -10,7 +10,7 @@ import {
   getUsersInGroup,
 } from "../api.js";
 import { newRenderGroupInModal, renderGroup } from "../render/groupRender.js";
-import { occultModal, updateModalContent } from "../utils/modal.js";
+import { updateModalContent } from "../utils/modal.js";
 import {
   showSpinner,
   hideSpinner,

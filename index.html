@@ -364,7 +364,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-vsm btn-secondary"
+              class="btn btn-vsm btn-outline-secondary"
               id="editRoleGroup"
               data-group-id="{{group_id}}"
               data-user-id="{{user_id}}"
@@ -460,9 +460,13 @@
 
     <!-- Modal de lista de usuarios para agregar -->
     <div class="modal-backdrop hidden" id="allUsersList">
-      <div class="modal modal-small modal-body">
-        <h3>Usuarios</h3>
-        <ol class="allUsersList"></ol>
+      <div class="modal modal-small">
+        <div class="modal-header">
+          <h3 class="modal-subtitle">Usuarios</h3>
+        </div>
+        <div class="modal-body">
+          <ol class="allUsersList"></ol>
+        </div>
       </div>
     </div>
 

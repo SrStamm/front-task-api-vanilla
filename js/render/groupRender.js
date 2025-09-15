@@ -80,7 +80,7 @@ export function newRenderGroupInModal(groupData) {
   console.log("Renderizando modal de grupo:", groupData);
 
   // Crea el contenido del modal
-  const headerHtml = `<h3>${groupData.name}</h3>`;
+  const headerHtml = `<h3 class="modal-title">${groupData.name}</h3>`;
 
   const bodyHtml = `
   <div class="modal-section">
@@ -148,7 +148,7 @@ export function newRenderGroupInModal(groupData) {
     header: headerHtml,
     body: bodyHtml,
     footer: footerHtml,
-    addClass: "modal-large",
+    addClass: "modal-med",
     removeClass: "modal-small",
   };
 }
@@ -209,7 +209,6 @@ export function renderGroupToEdit(groupData) {
     header: headerHtml,
     body: bodyHtml,
     footer: footerHtml,
-    addClass: "modal-small",
-    removeClass: "modal-large",
+    addClass: "modal-med",
   };
 }

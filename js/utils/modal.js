@@ -39,16 +39,14 @@ export function updateModalContent(
   const modalContainer = document.getElementById("genericModal");
   const modalDiv = modalContainer.querySelector(".modal");
 
+  // Remueve todas las clases de modales en tamaños
+
+  modalDiv.classList.remove("modal-small", "modal-med", "modal-large");
+
   if (!addClass) {
     console.log("No se proporcionó una clase para agregar al modal.");
   } else {
     modalDiv.classList.add(addClass);
-  }
-
-  if (!removeClass) {
-    console.log("No se proporcionó una clase para remover del modal.");
-  } else {
-    modalDiv.classList.remove(removeClass);
   }
 
   if (header) {

@@ -11,6 +11,7 @@ import {
   getProjectsFromGroup,
   getUsersFromProject,
   getTasksFromProject,
+  getUsersAssignedToTask,
 } from "./api.js";
 import {
   initializeTabListeners,
@@ -59,7 +60,7 @@ import {
   deleteUserFromGroupAction,
   editRoleAction,
 } from "./actions/groupActions.js";
-import { renderCreateTask } from "./render/taskRender.js";
+import { renderCreateTask, showTaskDetailsModal } from "./render/taskRender.js";
 import {
   createTaskAction,
   showTasksFromProjectAction,
@@ -208,25 +209,40 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   const taskContainer = document.getElementById("taskSection");
   taskContainer.addEventListener("click", async (event) => {
     const target = event.target;
-
     const projectItem = target.closest(".project-item");
+    const taskCard = target.closest(".task-card");
 
+    // Al seleccionar un proyecto, muestra sus tareas
     if (projectItem) {
       await showTasksFromProjectAction(
         projectItem.dataset.projectId,
         ".list-task",
       );
+
+      const allProjectItem = taskContainer.querySelectorAll(".project-item");
+      allProjectItem.forEach((item) => {
+        if (item !== projectItem) {
+          item.classList.remove("active");
+        }
+      });
+
+      if (projectItem) {
+        projectItem.classList.add("active");
+      }
     }
 
-    const allProjectItem = taskContainer.querySelectorAll(".project-item");
-    allProjectItem.forEach((item) => {
-      if (item !== projectItem) {
-        item.classList.remove("active");
-      }
-    });
+    if (taskCard) {
+      const taskData = JSON.parse(taskCard.dataset.taskData || "{}");
+      const assignedUsers = await getUsersAssignedToTask(taskData.task_id);
 
-    if (projectItem) {
-      projectItem.classList.add("active");
+      console.log(assignedUsers);
+
+      taskData.asigned = assignedUsers;
+
+      taskData.comments = []; // No hay función para renderizar comentarios aún
+
+      // Muestra el modal con los detalles de la tarea)
+      showTaskDetailsModal(taskData);
     }
   });
 
