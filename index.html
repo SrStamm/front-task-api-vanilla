@@ -6,7 +6,7 @@
     <meta name="description" content="Task Manager Application" />
     <link rel="icon" href="favicon.ico" />
     <title>Task Manager</title>
-    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/newStyle.css" rel="stylesheet" />
   </head>
   <body>
     <!-- Mensaje de error -->
@@ -26,7 +26,7 @@
             <input
               type="text"
               id="usernameLogin"
-              class="form-input"
+              class="input-base"
               placeholder="Ingrese su nombre de usuario"
               required
               autofocus
@@ -37,7 +37,7 @@
             <input
               type="password"
               id="passwordLogin"
-              class="form-input"
+              class="input-base"
               placeholder="Ingresa tu contraseña"
               required
             />
@@ -66,7 +66,7 @@
             <input
               type="text"
               id="usernameRegister"
-              class="form-input"
+              class="input-base"
               placeholder="Ingresa un nombre de usuario"
               required
               autofocus
@@ -77,7 +77,7 @@
             <input
               type="email"
               id="emailRegister"
-              class="form-input"
+              class="input-base"
               placeholder="Ingrese su email"
               required
               minlength="6"
@@ -88,7 +88,7 @@
             <input
               type="password"
               id="passwordRegister"
-              class="form-input"
+              class="input-base"
               placeholder="Ingresa una nueva contraseña"
             />
           </div>
@@ -436,7 +436,7 @@
         <main class="modal-body">
           <form>
             <label for="newGroupName">Nombre del grupo:</label>
-            <input type="text" id="newGroupName" />
+            <input type="text" id="newGroupName" class="input-base" />
             <label for="newGroupDescription">Descripción:</label>
             <textarea rows="3" cols="3" id="newGroupDescription"></textarea>
           </form>

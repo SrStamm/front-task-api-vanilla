@@ -8,7 +8,7 @@ export function renderTaskInProject(TaskData) {
     <div class="task-details">
       <div class="task-meta">
         <p class="task-state"> ${TaskData.state}</p>
-        <p class="task-due"> ${formattedDate}</p>
+        <p class="task-due"> <img src="../assets/calendar-alt.png">${formattedDate}</p>
       </div>
       <div class="task-info">
         <p class="task-title">${TaskData.title}</p>
@@ -86,8 +86,8 @@ export function renderTask(taskData) {
         <p>${taskData.description === null || taskData.description === "" ? "No hay descripción" : taskData.description}</p>
       </div>
       <div class="task-card-meta">
-        <div>
-          <p class=""> ${formattedDate}</p>
+        <div class="">
+          <p class="task-date"> <img src="../assets/calendar-alt.png"> ${formattedDate}</p>
         </div>
         <div>
           <p class="task-label"> ${taskData.task_label_links}</p>
