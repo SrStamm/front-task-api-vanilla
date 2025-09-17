@@ -40,6 +40,7 @@ import {
 import { auth } from "./auth.js";
 import {
   renderCreateProject,
+  renderProjectToEdit,
   showProjectDetailsModal,
 } from "./render/projectRender.js";
 import {
@@ -47,6 +48,7 @@ import {
   createProjectAction,
   deleteProjectAction,
   editPermissionAction,
+  editProjectAction,
   loadMinimalProjects,
   loadProjects,
   refreshCurrentProject,
@@ -60,9 +62,14 @@ import {
   deleteUserFromGroupAction,
   editRoleAction,
 } from "./actions/groupActions.js";
-import { renderCreateTask, showTaskDetailsModal } from "./render/taskRender.js";
+import {
+  renderCreateTask,
+  renderTaskToEdit,
+  showTaskDetailsModal,
+} from "./render/taskRender.js";
 import {
   createTaskAction,
+  editTaskAction,
   showTasksFromProjectAction,
 } from "./actions/taskActions.js";
 
@@ -374,6 +381,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const groupId = target.dataset.groupId;
 
       setButtonState(target, true, "Editando...");
+
+      console.log(groupId, groupName.value, groupDescription.value);
 
       await editGroupAction(groupId, groupName.value, groupDescription.value);
     }
@@ -705,6 +714,45 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       }
     }
 
+    if (target.id === "editProject") {
+      const modalContainer = document.getElementById("genericModal");
+      const projectData = JSON.parse(
+        modalContainer.dataset.projectData || "{}",
+      );
+      const content = renderProjectToEdit(projectData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+      );
+    }
+
+    if (target.id === "confirmEditProject") {
+      // Accede al contenedor
+      const modalContainer = document.getElementById("genericModal");
+
+      // Accede a los campos del formulario dentro del contenedor
+      const projectTitle = modalContainer.querySelector("#editProjectTitle");
+      const projectDescription = modalContainer.querySelector(
+        "#editProjectDescription",
+      );
+
+      // Accede a los datos del proyecto desde el dataset del modal
+      const projectData = JSON.parse(modalContainer.dataset.projectData || {});
+      const groupId = projectData.group_id;
+      const projectId = projectData.project_id;
+
+      setButtonState(target, true, "Editando...");
+
+      await editProjectAction(
+        groupId,
+        projectId,
+        projectTitle.value,
+        projectDescription.value,
+      );
+    }
+
     if (target.id === "showFormTaskToProject") {
       const projectId = target.dataset.projectId;
       const groupId = target.dataset.groupId;
@@ -770,6 +818,62 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "cancelCreateTask") {
       occultModal("genericModal");
       await loadProjects();
+    }
+
+    //
+    //
+    //
+    // TASK
+    //
+    //
+
+    if (target.id === "editTask") {
+      console.log("Editar tarea");
+      const modalContainer = document.getElementById("genericModal");
+      const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+      const content = renderTaskToEdit(taskData);
+      updateModalContent(
+        content.header,
+        content.body,
+        content.footer,
+        content.addClass,
+      );
+    }
+
+    if (target.id === "confirmEditTask") {
+      setButtonState(target, true, "Editando...");
+
+      const modalContainer = document.getElementById("genericModal");
+
+      const taskTitle = modalContainer.querySelector("#editTaskTitle");
+      const taskDescription = modalContainer.querySelector(
+        "#editTaskDescription",
+      );
+      const taskDateExp = modalContainer.querySelector("#editTaskDateExp");
+
+      // Obtiene los Ids
+      const projectId = target.dataset.projectId;
+      const taskId = target.dataset.taskId;
+
+      const editTaskData = {};
+
+      const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+
+      if (taskData.title !== taskTitle.value) {
+        editTaskData.title = taskTitle.value;
+      }
+
+      if (taskData.description !== taskDescription.value) {
+        editTaskData.description = taskDescription.value;
+      }
+
+      if (taskData.date_exp !== taskDateExp.value && taskDateExp.value !== "") {
+        editTaskData.date_exp = taskDateExp.value;
+      }
+
+      console.log("Infomración de tarea a editar: ", editTaskData);
+
+      await editTaskAction(projectId, taskId, editTaskData);
     }
   });
 

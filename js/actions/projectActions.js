@@ -3,6 +3,7 @@ import {
   createProject,
   deleteProject,
   editPermissionInProject,
+  editProject,
   getProjects,
   getTasksFromProject,
   getUsersFromProject,
@@ -222,5 +223,58 @@ export async function deleteProjectAction(groupId, projectId) {
   } catch (error) {
     showMessage(`Error: ${error}`, "error");
     return { success: false, detail: error.detail };
+  }
+}
+
+//
+export async function editProjectAction(
+  groupId,
+  projectId,
+  projectTitle,
+  projectDescription,
+) {
+  try {
+    let projectEditData = {
+      title: projectTitle,
+      description: projectDescription,
+    };
+
+    let response = await editProject(groupId, projectId, projectEditData);
+
+    if (response.detail !== "Se ha actualizado la informacion del projecto") {
+      throw new Error(response.detail);
+    }
+
+    showMessage("Proyecto editado exitosamente", "success");
+
+    // Obtener los datos del grupo desde el dataset del modal
+    const modalContainer = document.getElementById("genericModal");
+    const projectData = JSON.parse(modalContainer.dataset.projectData || "{}");
+
+    const listUsers = await getUsersFromProject(groupId, projectId);
+    const listTask = await getTasksFromProject(projectId);
+
+    projectData.users = listUsers;
+    projectData.tasks = listTask;
+
+    // Volver a renderizar la información del grupo
+    const content = renderProjectInModal(projectData);
+    updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+      content.removeClass,
+    );
+
+    initializeTabListeners();
+
+    showTab("members-tab");
+
+    // Actualizar el dataset con los nuevos datos
+    modalContainer.dataset.projectData = JSON.stringify(projectData);
+  } catch (error) {
+    console.log("Error al editar el proyecto: ", error);
+    showMessage("Error al editar el proyecto: ", error.message);
   }
 }

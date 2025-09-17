@@ -235,3 +235,42 @@ export function renderMinimalProject(projectData) {
   // Agrega los datos
   return clon;
 }
+
+// Renderiza el modal para editar el proyecto
+export function renderProjectToEdit(projectData) {
+  console.log(projectData);
+  // Crea el contenido del modal
+  const headerHtml = `<h4 class="modal-subtitle">Editar proyecto</h4>`;
+
+  const bodyHtml = `
+    <form>
+      <div>
+        <label for="editProjectTitle">Nombre del proyecto:</label>
+        <input type="text" class="input-base" id="editProjectTitle" value="${projectData.title}"/>
+      </div>
+
+      <div>
+        <label for="editProjectDescription">Descripción:</label>
+        <textarea rows="3" cols="3" class="input-base" id="editProjectDescription"> ${projectData.description} </textarea>
+      </div>
+    </form>
+  `;
+
+  const footerHtml = `
+    <button type="button" class="btn btn-primary btn-sm" id="confirmEditProject"
+      data-project-id="${projectData.project_id}"
+    > Confirmar </button>
+    <button type="button" class="btn btn-error btn-sm" id="cancelEditProject"
+    data-project-id="${projectData.project_id}"
+    data-project-title="${projectData.title}"
+    data-project-description="${projectData.description}"
+    > Cancelar </button>
+  `;
+
+  return {
+    header: headerHtml,
+    body: bodyHtml,
+    footer: footerHtml,
+    addClass: "modal-small",
+  };
+}

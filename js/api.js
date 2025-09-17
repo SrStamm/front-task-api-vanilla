@@ -216,6 +216,16 @@ export async function createProject(projectData, groupId) {
   );
 }
 
+export async function editProject(groupId, projectId, projectData) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/project/${groupId}/${projectId}`,
+    "PATCH",
+    JSON.stringify(projectData),
+    token,
+  );
+}
+
 export async function deleteProject(projectId, groupId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(
@@ -299,7 +309,7 @@ export async function createTask(taskData, projectId) {
   );
 }
 
-export async function editTask(taskData, projectId, taskId) {
+export async function editTask(projectId, taskId, taskData) {
   const token = localStorage.getItem("authToken");
   return await fetchData(
     `/task/${projectId}/${taskId}`,

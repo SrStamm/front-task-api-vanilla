@@ -61,7 +61,7 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: var(--text);
   min-height: 100vh;
-  line-height: 1.6;
+  padding: 2rem;
   font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -546,9 +546,12 @@ a {
 
 .splitSections {
   display: grid;
-  grid-template-columns: minmax(200px, 1fr) 3fr;
-  gap: 1rem;
-  width: 100%;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 .splitSections h2 {
@@ -729,14 +732,14 @@ template {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
@@ -747,12 +750,11 @@ template {
 
 .modal {
   background: white;
-  max-width: 800px;
-  min-width: 400px;
-  padding: 2rem;
   border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
   transform: translateY(-20px);
-  opacity: 0;
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
@@ -863,6 +865,11 @@ modal-header {
   margin-bottom: 1.5rem;
 }
 
+.modal-backdrop.show .modal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Estilos para los tabs */
 .modal-tabs {
   display: flex;
@@ -949,13 +956,8 @@ modal-header {
 .modal textarea {
   margin-bottom: 1rem;
   border-radius: var(--border-radius);
+  height: 2.8rem;
 }
-
-/*
-.modal p {
-  margin-bottom: 1rem;
-}
-*/
 
 /* Estilos de la lista de usuarios */
 .user-item {

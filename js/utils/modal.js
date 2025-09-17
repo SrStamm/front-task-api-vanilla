@@ -49,6 +49,12 @@ export function updateModalContent(
     modalDiv.classList.add(addClass);
   }
 
+  if (!removeClass) {
+    console.log("No se proporcionó una clase para agregar al modal.");
+  } else {
+    modalDiv.classList.remove(removeClass);
+  }
+
   if (header) {
     modalContainer.querySelector(".modal-header").innerHTML = header;
   }

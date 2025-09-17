@@ -122,8 +122,8 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.groupData = JSON.stringify(groupData);
   } catch (error) {
-    console.log("Error al eliminar usaurio al grupo: ", error);
-    showMessage("Error al eliminar el usuario: ", error.message);
+    console.log("Error al editar el grupo: ", error);
+    showMessage("Error al editar el grupo: ", error.message);
   }
 }
 

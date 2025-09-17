@@ -187,10 +187,14 @@ export function renderGroupToEdit(groupData) {
 
   const bodyHtml = `
     <form>
-      <label for="editGroupName">Nombre del grupo:</label>
-      <input type="text" id="editGroupName" value="${groupData.name}"/>
-      <label for="editGroupDescription">Descripción:</label>
-      <textarea rows="3" cols="3" id="editGroupDescription" value="${groupData.description}"></textarea>
+      <div>
+        <label for="editGroupName">Nombre del grupo:</label>
+        <input type="text" class="input-base" id="editGroupName" value="${groupData.name}"/>
+      </div>
+      <div>
+        <label for="editGroupDescription">Descripción:</label>
+        <textarea rows="3" cols="3" class="input-base"  id="editGroupDescription"> ${groupData.description} </textarea>
+      </div>
     </form>
   `;
 
@@ -209,6 +213,6 @@ export function renderGroupToEdit(groupData) {
     header: headerHtml,
     body: bodyHtml,
     footer: footerHtml,
-    addClass: "modal-med",
+    addClass: "modal-small",
   };
 }

@@ -1,5 +1,6 @@
-import { createTask, getTasksFromProject } from "../api.js";
+import { createTask, editTask, getTasksFromProject } from "../api.js";
 import { renderTask } from "../render/taskRender.js";
+import { updateModalContent } from "../utils/modal.js";
 import { showMessage } from "../utils/utils.js";
 
 export async function createTaskAction(taskData, projectId) {
@@ -32,7 +33,7 @@ export async function showTasksFromProjectAction(projectId, containerClass) {
   }
 
   response.forEach((task) => {
-    let content = renderTask(task);
+    let content = renderTask(task, projectId);
 
     if (task.state === "Done") {
       const completedTasksContainer = document.getElementById(
@@ -61,4 +62,41 @@ export async function showTasksFromProjectAction(projectId, containerClass) {
       console.log("Estado de tarea desconocido", task);
     }
   });
+}
+
+//
+export async function editTaskAction(projectId, taskId, taskData) {
+  try {
+    let response = await editTask(projectId, taskId, taskData);
+
+    if (response.detail !== "A task has been successfully updated") {
+      throw new Error(response.detail);
+    }
+
+    showMessage("Tarea editada exitosamente", "success");
+
+    const modalContainer = document.getElementById("genericModal");
+    const currentTaskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+
+    // Aca iría la obtención de los comentarios
+    //
+    //
+
+    // Volver a renderizar la información del grupo
+    const content = renderTask(currentTaskData);
+
+    updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+      content.removeClass,
+    );
+
+    // Actualizar el dataset con los nuevos datos
+    modalContainer.dataset.taskData = JSON.stringify(currentTaskData);
+  } catch (error) {
+    console.log("Error al editar la tarea: ", error);
+    showMessage("Error al editar la tarea: ", error.message);
+  }
 }

@@ -71,7 +71,7 @@ export function renderCreateTask(projectId, projectUsers) {
   };
 }
 
-export function renderTask(taskData) {
+export function renderTask(taskData, projectId) {
   // Formatear la fecha de vencimiento
   const dueDate = new Date(taskData.date_exp);
   const options = { year: "numeric", month: "short", day: "numeric" };
@@ -79,6 +79,8 @@ export function renderTask(taskData) {
 
   // Modificar el estado al formato en inglés
   taskData.state = modifyState(taskData.state);
+
+  taskData.project_id = projectId;
 
   // Convertir el objeto taskData a una cadena JSON
   const taskDataString = JSON.stringify(taskData);
@@ -90,7 +92,7 @@ export function renderTask(taskData) {
         <h3 class="task-title">${taskData.title}</h3>
       </div>
       <div class="task-description">
-        <p>${taskData.description === null || taskData.description === "" ? "No hay descripción" : taskData.description}</p>
+        ${taskData.description === null || taskData.description === "" ? "No hay descripción" : taskData.description}
       </div>
       <div class="task-card-meta">
         <div class="">
@@ -146,7 +148,7 @@ function renderModalTask(taskData) {
       </div>
     </div>
     <div class="task-description-full">
-      <h4 class="modal-subtitle ">Descripción</h4>
+      <h4 class="modal-subtitle-left ">Descripción</h4>
       <p>${taskData.description === null || taskData.description === "" ? "No hay descripción" : taskData.description}</p>
     </div>
 
@@ -154,14 +156,25 @@ function renderModalTask(taskData) {
       <button class="tab-btn active" data-tab="comments">Comentarios</button>
     </div>
 
-    <div class="modal-section tab-content active"></div>
-    <ol class="listComments">
-      ${
-        taskData.comments.length <= 0 || taskData.comments === null
-          ? "<li>No hay comentarios</li>"
-          : "<li>Sin funcion para renderizar</li>"
-      }
-    </ol>
+    <div class="modal-section tab-content active">
+      <ol class="listComments">
+        ${
+          taskData.comments.length <= 0 || taskData.comments === null
+            ? "<li style='text-align: center'>No hay comentarios</li>"
+            : "<li>Sin funcion para renderizar</li>"
+        }
+      </ol>
+
+      <div class="comment-input">
+        <input class="input-base"
+          type="text" id="newComment"
+          placeholder="Escribe un comentario..."
+        />
+
+       <button class="btn btn-primary btn-sm" id="addComment">Enviar Comentario</button>
+      </div>
+
+    </div>
 
   `;
 
@@ -172,7 +185,7 @@ function renderModalTask(taskData) {
   const footerHtml = `
   <button type="button" class="btn btn-primary btn-sm" id="editTask"
     data-task-id="${taskData.task_id}"
-  > Editar </button>
+  > Editar Tarea </button>
   <button type="button" class="btn btn-secondary btn-sm" id="editStateTask"
     data-task-id="${taskData.task_id}"
   > Cambiar estado </button>
@@ -182,7 +195,7 @@ function renderModalTask(taskData) {
     header: headerHtml,
     body: bodyHtml,
     footer: footerHtml,
-    addClass: "modal-med",
+    addClass: "task-modal",
   };
 }
 
@@ -197,6 +210,7 @@ export function showTaskDetailsModal(taskData) {
     content.body,
     content.footer,
     content.addClass,
+    content.removeClass,
   );
 
   // Accede a los botones
@@ -215,4 +229,54 @@ export function showTaskDetailsModal(taskData) {
   }
 
   return modalContainer;
+}
+
+// Renderiza el modal para editar el proyecto
+export function renderTaskToEdit(taskData) {
+  const dueDate = new Date(taskData.date_exp);
+  const options = { year: "numeric", month: "numeric", day: "numeric" };
+  const formattedDate = dueDate.toLocaleDateString("es-ES", options);
+  console.log(formattedDate);
+
+  // Crea el contenido del modal
+  const headerHtml = `<h4 class="modal-subtitle">Editar Tarea </h4>`;
+
+  const bodyHtml = `
+    <form>
+      <div>
+        <label for="editTaskTitle">Titulo de la tarea:</label>
+        <input type="text" class="input-base" id="editTaskTitle" value="${taskData.title}"/>
+      </div>
+
+      <div>
+        <label for="editTaskDateExp">Fecha de vencimiento:</label>
+        <input type="date" class="input-base" id="editTaskDateExp" value="${formattedDate}"/>
+      </div>
+
+      <div>
+        <label for="editTaskDescription">Descripción:</label>
+        <textarea rows="100" cols="30" class="input-base textarea" id="editTaskDescription"> ${taskData.description} </textarea>
+      </div>
+    </form>
+  `;
+
+  const footerHtml = `
+    <button type="button" class="btn btn-primary btn-sm" id="confirmEditTask"
+      data-project-id="${taskData.project_id}"
+      data-task-id="${taskData.task_id}"
+    > Confirmar </button>
+    <button type="button" class="btn btn-error btn-sm" id="cancelEditTask"
+    data-project-id="${taskData.project_id}"
+      data-task-id="${taskData.task_id}"
+    data-project-title="${taskData.title}"
+    data-project-description="${taskData.description}"
+    > Cancelar </button>
+  `;
+
+  return {
+    header: headerHtml,
+    body: bodyHtml,
+    footer: footerHtml,
+    addClass: "modal-med",
+  };
 }
