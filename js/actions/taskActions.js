@@ -96,7 +96,6 @@ export async function editTaskAction(projectId, taskId, taskData) {
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.taskData = JSON.stringify(currentTaskData);
   } catch (error) {
-    console.log("Error al editar la tarea: ", error);
     showMessage("Error al editar la tarea: ", error.message);
   }
 }

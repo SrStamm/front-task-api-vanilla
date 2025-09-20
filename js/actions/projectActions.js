@@ -141,13 +141,19 @@ export async function addUserToProjectAction(groupId, projectId, userId) {
   }
 }
 
-export async function refreshCurrentProject(groupId, projectId) {
+export async function refreshCurrentProject(
+  groupId,
+  projectId,
+  title,
+  description,
+) {
   // Actualizar la lista de usuarios en el modal de grupo
   const listUsers = await getUsersFromProject(groupId, projectId);
   const listTask = await getTasksFromProject(projectId);
-  console.log("Lista de tareas: ", listTask);
 
   const projectData = {
+    title: title,
+    description: description,
     groupId: groupId,
     projectId: projectId,
     users: listUsers,
@@ -251,30 +257,16 @@ export async function editProjectAction(
     const modalContainer = document.getElementById("genericModal");
     const projectData = JSON.parse(modalContainer.dataset.projectData || "{}");
 
-    const listUsers = await getUsersFromProject(groupId, projectId);
-    const listTask = await getTasksFromProject(projectId);
-
-    projectData.users = listUsers;
-    projectData.tasks = listTask;
-
-    // Volver a renderizar la información del grupo
-    const content = renderProjectInModal(projectData);
-    updateModalContent(
-      content.header,
-      content.body,
-      content.footer,
-      content.addClass,
-      content.removeClass,
+    await refreshCurrentProject(
+      groupId,
+      projectId,
+      projectTitle,
+      projectDescription,
     );
-
-    initializeTabListeners();
-
-    showTab("members-tab");
 
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.projectData = JSON.stringify(projectData);
   } catch (error) {
-    console.log("Error al editar el proyecto: ", error);
     showMessage("Error al editar el proyecto: ", error.message);
   }
 }

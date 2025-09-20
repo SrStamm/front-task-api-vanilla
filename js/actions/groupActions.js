@@ -122,7 +122,6 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
     // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.groupData = JSON.stringify(groupData);
   } catch (error) {
-    console.log("Error al editar el grupo: ", error);
     showMessage("Error al editar el grupo: ", error.message);
   }
 }
@@ -137,7 +136,6 @@ export async function deleteGroupAction(groupId) {
       return { success: true, detail: result.detail };
     }
   } catch (error) {
-    console.log(`Error al eliminar el grupo ${groupId}: `, error);
     return { success: false, detail: error.message };
   }
 }
@@ -182,7 +180,6 @@ export async function addUserToGroupAction(groupId, userId) {
 
     return { success: true };
   } catch (error) {
-    console.log("Error al agregar usaurio al grupo: ", error);
     showMessage("Error al añadir el usuario: ", "error");
 
     return { success: false };
@@ -229,7 +226,6 @@ export async function deleteUserFromGroupAction(groupId, userId) {
 
     return { success: true };
   } catch (error) {
-    console.log("Error al eliminar usaurio al grupo: ", error);
     showMessage("Error al eliminar el usuario: ", error.message);
     return { success: false };
   }

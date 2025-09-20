@@ -64,6 +64,7 @@ import {
 } from "./actions/groupActions.js";
 import {
   renderCreateTask,
+  renderTask,
   renderTaskToEdit,
   showTaskDetailsModal,
 } from "./render/taskRender.js";
@@ -242,8 +243,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const taskData = JSON.parse(taskCard.dataset.taskData || "{}");
       const assignedUsers = await getUsersAssignedToTask(taskData.task_id);
 
-      console.log(assignedUsers);
-
       taskData.asigned = assignedUsers;
 
       taskData.comments = []; // No hay función para renderizar comentarios aún
@@ -381,8 +380,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const groupId = target.dataset.groupId;
 
       setButtonState(target, true, "Editando...");
-
-      console.log(groupId, groupName.value, groupDescription.value);
 
       await editGroupAction(groupId, groupName.value, groupDescription.value);
     }
@@ -698,7 +695,17 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
         if (response && response.success) {
           showMessage("Rol cambiado exitosamente", "success");
-          await refreshCurrentProject(groupId, projectId);
+
+          const modalContainer = document.getElementById("genericModal");
+          const projectData = JSON.parse(
+            modalContainer.dataset.projectData || "{}",
+          );
+          await refreshCurrentProject(
+            groupId,
+            projectId,
+            projectData.title,
+            projectData.description,
+          );
         } else {
           showMessage("Error al cambiar el rol: " + response.detail, "error");
           return; // Sale de la función si hubo un error
@@ -751,6 +758,24 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         projectTitle.value,
         projectDescription.value,
       );
+    }
+
+    if (target.id === "cancelEditProject") {
+      const modalContainer = document.getElementById("genericModal");
+      const projectData = JSON.parse(
+        modalContainer.dataset.projectData || "{}",
+      );
+
+      // Refresca el modal
+      await refreshCurrentProject(
+        projectData.group_id,
+        projectData.project_id,
+        projectData.title,
+        projectData.description,
+      );
+
+      // Actualizar el dataset con los nuevos datos
+      modalContainer.dataset.projectData = JSON.stringify(projectData);
     }
 
     if (target.id === "showFormTaskToProject") {
@@ -828,7 +853,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     //
 
     if (target.id === "editTask") {
-      console.log("Editar tarea");
       const modalContainer = document.getElementById("genericModal");
       const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
       const content = renderTaskToEdit(taskData);
@@ -871,9 +895,17 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         editTaskData.date_exp = taskDateExp.value;
       }
 
-      console.log("Infomración de tarea a editar: ", editTaskData);
-
       await editTaskAction(projectId, taskId, editTaskData);
+    }
+
+    if (target.id === "cancelEditTask") {
+      const modalContainer = document.getElementById("genericModal");
+      const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+
+      showTaskDetailsModal(taskData);
+
+      // Actualizar el dataset con los nuevos datos
+      modalContainer.dataset.taskData = JSON.stringify(taskData);
     }
   });
 
@@ -906,7 +938,17 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       if (response && response.success) {
         showMessage("Usuario agregado al proyecto", "success");
         setButtonState(target, true, "Agregado");
-        await refreshCurrentProject(groupId, projectId);
+
+        const modalContainer = document.getElementById("genericModal");
+        const projectData = JSON.parse(
+          modalContainer.dataset.projectData || "{}",
+        );
+        await refreshCurrentProject(
+          groupId,
+          projectId,
+          projectData.title,
+          projectData.description,
+        );
       } else {
         showMessage("Error al agregar el usuario: " + response.detail, "error");
         setButtonState(target, false, "Agregar");
