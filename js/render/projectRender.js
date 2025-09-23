@@ -168,9 +168,9 @@ export function renderCreateProject(groupData) {
   const bodyHtml = `
     <form>
       <label for="createProjectName">Nombre del proyecto:</label>
-      <input type="text" id="createProjectNameName"/>
+      <input type="text" class="input-base" id="createProjectName"/>
       <label for="createProjectDescription">Descripción:</label>
-      <textarea rows="3" cols="3" id="createProjectName" ></textarea>
+      <textarea rows="3" cols="3" class="input-base textarea" id="createProjectName" ></textarea>
     </form>
   `;
 

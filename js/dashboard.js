@@ -51,6 +51,7 @@ import {
   editProjectAction,
   loadMinimalProjects,
   loadProjects,
+  resetProjects,
   refreshCurrentProject,
   removeUserFromProjectAction,
 } from "./actions/projectActions.js";
@@ -64,7 +65,6 @@ import {
 } from "./actions/groupActions.js";
 import {
   renderCreateTask,
-  renderTask,
   renderTaskToEdit,
   showTaskDetailsModal,
 } from "./render/taskRender.js";
@@ -73,6 +73,7 @@ import {
   editTaskAction,
   showTasksFromProjectAction,
 } from "./actions/taskActions.js";
+import { createCommentAction } from "./actions/commentActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -137,6 +138,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       localStorage.setItem("authToken", response.accessToken);
       localStorage.setItem("refrToken", response.refreshToken);
       showMessage("Sesión iniciada con suceso", "success");
+
+      setButtonState(loginBtn, false, "Iniciar sesión");
       loginSucces();
     } else {
       showMessage(response.message, "error");
@@ -198,10 +201,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       await loadGroup();
     }
     if (sectionId === "projectSection") {
-      await loadProjects();
+      resetProjects();
+      await loadProjects(true);
     }
     if (sectionId === "taskSection") {
-      await loadMinimalProjects(sectionId);
+      await loadMinimalProjects(sectionId, false);
     }
     if (sectionId === "chatSection") {
       await loadMinimalProjects(sectionId);
@@ -501,9 +505,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       setButtonState(target, true, "Creando...");
 
       const modalContainer = document.getElementById("genericModal");
-      const projectTitle = modalContainer.querySelector(
-        "#createProjectNameName",
-      ).value;
+      const projectTitle =
+        modalContainer.querySelector("#createProjectName").value;
       const projectDescription =
         modalContainer.querySelector("#createProjectName").value;
 
@@ -887,6 +890,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         editTaskData.title = taskTitle.value;
       }
 
+      taskDescription = taskDescription.trim();
       if (taskData.description !== taskDescription.value) {
         editTaskData.description = taskDescription.value;
       }
@@ -895,7 +899,12 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         editTaskData.date_exp = taskDateExp.value;
       }
 
-      await editTaskAction(projectId, taskId, editTaskData);
+      const response = await editTaskAction(projectId, taskId, editTaskData);
+
+      if (response.success) {
+        showTaskDetailsModal(response.taskData);
+        setButtonState(target, false, "Editar");
+      }
     }
 
     if (target.id === "cancelEditTask") {
@@ -906,6 +915,38 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.taskData = JSON.stringify(taskData);
+    }
+
+    //
+    //
+    // Comments
+    //
+    //
+
+    if (target.id === "addComment") {
+      const modalContainer = document.getElementById("genericModal");
+      const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+
+      const content = modalContainer.querySelector("#newComment");
+
+      if (!content.value.trim()) {
+        showMessage("Falta escribir el contenido", "error");
+        return;
+      }
+      const response = await createCommentAction(
+        taskData.task_id,
+        content.value,
+      );
+
+      if (response.success) {
+        showMessage("Comentario agregado", "success");
+        console.log(response);
+      } else {
+        showMessage(
+          "Error al agregar el comentario: " + response.detail,
+          "error",
+        );
+      }
     }
   });
 

@@ -1,6 +1,5 @@
 import { createTask, editTask, getTasksFromProject } from "../api.js";
 import { renderTask } from "../render/taskRender.js";
-import { updateModalContent } from "../utils/modal.js";
 import { showMessage } from "../utils/utils.js";
 
 export async function createTaskAction(taskData, projectId) {
@@ -82,19 +81,9 @@ export async function editTaskAction(projectId, taskId, taskData) {
     //
     //
 
-    // Volver a renderizar la información del grupo
-    const content = renderTask(currentTaskData);
-
-    updateModalContent(
-      content.header,
-      content.body,
-      content.footer,
-      content.addClass,
-      content.removeClass,
-    );
-
-    // Actualizar el dataset con los nuevos datos
     modalContainer.dataset.taskData = JSON.stringify(currentTaskData);
+
+    return { success: true, taskData: currentTaskData };
   } catch (error) {
     showMessage("Error al editar la tarea: ", error.message);
   }

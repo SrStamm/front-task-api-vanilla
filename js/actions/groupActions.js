@@ -82,6 +82,8 @@ export async function editGroupAction(groupId, groupName, groupDescription) {
       name: groupName,
     };
 
+    groupDescription = groupDescription.trim();
+
     if (groupDescription || groupDescription !== null) {
       groupEditData.description = groupDescription;
     }

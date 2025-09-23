@@ -10,7 +10,10 @@ export function renderTaskInProject(TaskData) {
     <div class="task-details">
       <div class="task-meta">
         <p class="task-state"> ${TaskData.state}</p>
-        <p class="task-due"> <img src="../assets/calendar-alt.png">${formattedDate}</p>
+        <p class="task-date">
+          <img src="../assets/calendar-alt.png">
+          ${formattedDate}
+        </p>
       </div>
       <div class="task-info">
         <p class="task-title">${TaskData.title}</p>
@@ -32,7 +35,7 @@ export function renderCreateTask(projectId, projectUsers) {
         `
       <div class="user-checkbox">
         <input type=checkbox id="user-${user.user_id}" class="form-input-checkbox" name="assignedUsers" value="${user.user_id}">
-        <label for="user-${user.user_id}"> Usuario ${user.username} </label>
+        <label for="user-${user.user_id}"> ${user.username} </label>
       </div>
       `,
     )
@@ -41,14 +44,16 @@ export function renderCreateTask(projectId, projectUsers) {
   const bodyHtml = `
     <form class="">
       <label for="taskTitle">Titulo:</label>
-      <input type="text" id="taskTitle" required />
+      <input type="text" id="taskTitle" class="input-base" required />
       <label for="taskDescription">Descripción:</label>
-      <textarea rows="3" cols="3" id="taskDescription" ></textarea>
+      <textarea rows="3" cols="3" id="taskDescription" class="input-base textarea"></textarea>
       <label for="taskDueDate">Fecha de vencimiento:</label>
-      <input type="date" id="taskDueDate" required />
+      <input type="date" id="taskDueDate" class="input-base" required />
       <div class="user-selection-container">
-        <h5>Asignar a usuarios:</h5>
-        ${userListHtml}
+        <label> Asignar a usuarios: </label>
+        <ul>
+          ${userListHtml}
+        </ul>
       </div>
     </form>
   `;

@@ -23,57 +23,178 @@ import {
   showTab,
 } from "../utils/utils.js";
 
-export async function loadProjects() {
-  try {
-    // Llama a la funcion que obtendra los proyectos
-    const projects = await getProjects();
+// Variables para proyectos
+let projectOffset = 0;
+const projectLimit = 10;
+let loadingProjects = false;
+let allProjectsLoaded = false;
+let observer = false;
 
+export function resetProjects() {
+  projectOffset = 0;
+  allProjectsLoaded = false;
+}
+
+export function resetMiniProjects() {
+  miniProjectOffset = 0;
+  allMiniProjectsLoaded = false;
+}
+
+export async function loadProjects(initial = false) {
+  if (loadingProjects || allProjectsLoaded) return;
+  loadingProjects = true;
+
+  try {
     showSpinner();
 
-    const projectContainer = document.getElementById("projectList");
-    projectContainer.innerHTML = "";
+    // Llama a la funcion que obtendra los proyectos
+    const projects = await getProjects(projectLimit, projectOffset);
 
-    hideSpinner();
-    if (projects.length <= 0) {
-      projectContainer.textContent = "No eres parte de ningun grupo.";
+    const projectContainer = document.getElementById("projectList");
+    if (initial) {
+      projectContainer.innerHTML = "";
+
+      const sentinel = document.createElement("li");
+      sentinel.id = "projectSentinel";
+      projectContainer.appendChild(sentinel);
+    }
+
+    if (projects.length === 0 && initial) {
+      projectContainer.textContent = "No eres parte de ningun proyecto.";
     } else {
       projects.forEach((project) => {
         let clone = renderProject("projectTemplate", project);
         projectContainer.appendChild(clone);
       });
+
+      const oldSentinel = document.getElementById("projectSentinel");
+
+      if (oldSentinel) {
+        oldSentinel.remove();
+      }
+
+      const sentinel = document.createElement("li");
+      sentinel.id = "projectSentinel";
+      projectContainer.appendChild(sentinel);
     }
 
-    // Agregar el event listener después de renderizar los proyectos
+    projectOffset += projects.length;
+
+    if (projects.lenght < projectLimit) {
+      allProjectsLoaded = true;
+    }
+
     projectContainer.addEventListener("click", handleProjectCardClick);
+
+    // 👇 Solo se crea el observer la primera vez
+    if (!observer) {
+      const sentinel = document.getElementById("projectSentinel");
+
+      if (sentinel) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              loadProjects(false);
+            }
+          },
+          {
+            root: null,
+            rootMargin: "0px 0px 200px 0px",
+            threshold: 1.0,
+          },
+        );
+
+        observer.observe(sentinel);
+      }
+    }
   } catch (error) {
-    hideSpinner();
     console.error("No se pudo cargar la lista de proyectos: ", error);
+  } finally {
+    hideSpinner();
+    loadingProjects = false;
   }
 }
 
-export async function loadMinimalProjects(sectionId) {
-  try {
-    // Llama a la funcion que obtendra los proyectos
-    const projects = await getProjects();
+// Variables para mini proyectos
+let miniProjectOffset = 0;
+const miniProjectLimit = 10;
+let loadingMiniProjects = false;
+let allMiniProjectsLoaded = false;
 
+let miniObserver = false;
+
+export async function loadMinimalProjects(sectionId, initial = false) {
+  if (loadingMiniProjects || allMiniProjectsLoaded) return;
+  loadingMiniProjects = true;
+
+  try {
     showSpinner();
+
+    // Llama a la funcion que obtendra los proyectos
+    const projects = await getProjects(miniProjectLimit, miniProjectOffset);
 
     const sectionContainer = document.getElementById(sectionId);
     const projectContainer = sectionContainer.querySelector(".list-project");
-    projectContainer.innerHTML = "";
 
-    hideSpinner();
-    if (projects.length <= 0) {
-      projectContainer.textContent = "No eres parte de ningun grupo.";
+    if (initial) {
+      projectContainer.innerHTML = "";
+
+      const sentinel = document.createElement("li");
+      sentinel.id = "miniProjectSentinel";
+      projectContainer.appendChild(sentinel);
+    }
+
+    if (projects.lenght <= 0 && initial) {
+      projectContainer.textContent = "No eres parte de ningun proyecto.";
     } else {
       projects.forEach((project) => {
         let clone = renderMinimalProject(project);
         projectContainer.appendChild(clone);
       });
+
+      const oldSentinel = document.getElementById("miniProjectSentinel");
+
+      if (oldSentinel) {
+        oldSentinel.remove();
+      }
+
+      const sentinel = document.createElement("li");
+      sentinel.id = "miniProjectSentinel";
+      projectContainer.appendChild(sentinel);
+    }
+
+    miniProjectOffset += projects.length;
+
+    if (projects.lenght < miniProjectLimit) {
+      allMiniProjectsLoaded = true;
+    }
+
+    // 👇 Solo se crea el observer la primera vez
+    if (!miniObserver) {
+      const miniSentinel = document.getElementById("miniProjectSentinel");
+
+      if (miniSentinel) {
+        miniObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              loadMinimalProjects("taskSection");
+            }
+          },
+          {
+            root: null,
+            rootMargin: "0px 0px 200px 0px",
+            threshold: 1.0,
+          },
+        );
+
+        miniObserver.observe(miniSentinel);
+      }
     }
   } catch (error) {
-    hideSpinner();
     console.error("No se pudo cargar la lista de proyectos: ", error);
+  } finally {
+    hideSpinner();
+    loadingMiniProjects = false;
   }
 }
 
@@ -242,7 +363,7 @@ export async function editProjectAction(
   try {
     let projectEditData = {
       title: projectTitle,
-      description: projectDescription,
+      description: projectDescription.trim(),
     };
 
     let response = await editProject(groupId, projectId, projectEditData);

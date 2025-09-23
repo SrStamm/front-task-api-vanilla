@@ -24,8 +24,9 @@ async function fetchData(endpoint, method, body, token) {
   const dataResponse = await response.json();
 
   if (
-    dataResponse.detail == "Invalid Token" ||
-    dataResponse.detail == "Token Not Authorized"
+    dataResponse.detail === "Invalid Token" ||
+    dataResponse.detail === "Token Not Authorized" ||
+    dataResponse.detail === "JWT Error: Error decoding token claims."
   ) {
     try {
       // Nuevo token
@@ -119,9 +120,14 @@ export async function logoutFetch() {
 //  --- Lógica de Grupos ---
 //
 
-export async function getGroups() {
+export async function getGroups(limit = 10, offset = 0) {
   const token = localStorage.getItem("authToken");
-  return await fetchData("/group/me", "GET", null, token);
+  return await fetchData(
+    `/group/me?limit=${limit}&offset=${offset}`,
+    "GET",
+    null,
+    token,
+  );
 }
 
 export async function getUsersInGroup(groupId) {
@@ -186,9 +192,14 @@ export async function editRole(groupId, userId, role) {
 // --- Lógica de Proyectos ---
 //
 
-export async function getProjects() {
+export async function getProjects(limit = 10, offset = 0) {
   const token = localStorage.getItem("authToken");
-  return await fetchData("/project/me", "GET", null, token);
+  return await fetchData(
+    `/project/me?limit=${limit}&offset=${offset}`,
+    "GET",
+    null,
+    token,
+  );
 }
 
 export async function getProjectsFromGroup(groupId) {
@@ -332,3 +343,18 @@ export async function deleteTask(groupId, projectId, taskId) {
 //
 // --- Lógica de Comentarios ---
 //
+
+export async function createComment(taskId, content) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(
+    `/task/${taskId}/comments`,
+    "POST",
+    JSON.stringify(content),
+    token,
+  );
+}
+
+export async function getComments(taskId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/task/${taskId}/comments`, "GET", null, token);
+}

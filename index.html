@@ -13,7 +13,7 @@
     <div class="alert" id="messageContainer"></div>
 
     <!-- spinner -->
-    <div id="spinner-container" class="spinner-hidden">
+    <div id="spinner-container" class="spinner spinner-hidden">
       <div class="spinner"></div>
     </div>
 
@@ -281,7 +281,7 @@
             <header class="headerPartSection">
               <h3 class="dashboard-layout-h3">Proyectos</h3>
             </header>
-            <div class="mini-card-list list-project"></div>
+            <ol class="mini-card-list list-project"></ol>
           </article>
           <article class="partSections taskPartSection">
             <header class="headerPartSection">
@@ -454,7 +454,12 @@
             <label for="newGroupName">Nombre del grupo:</label>
             <input type="text" id="newGroupName" class="input-base" />
             <label for="newGroupDescription">Descripción:</label>
-            <textarea rows="3" cols="3" id="newGroupDescription"></textarea>
+            <textarea
+              rows="3"
+              cols="3"
+              id="newGroupDescription"
+              class="input-base small-textarea"
+            ></textarea>
           </form>
         </main>
         <footer class="modal-footer">

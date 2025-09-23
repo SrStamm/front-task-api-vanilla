@@ -147,7 +147,10 @@ body:has(.container:not([style*="display: none"])) {
 }
 
 .textarea {
-  min-height: 100px;
+  max-height: 200px;
+}
+
+.small-texarea {
   max-height: 200px;
 }
 
@@ -809,8 +812,6 @@ template {
   flex-direction: column;
   padding: 1rem;
   gap: 1rem;
-
-  border-bottom: 0.5px solid var(--gray-200);
 }
 
 .modal-body label {
@@ -1053,7 +1054,7 @@ template {
 
 .task-item,
 .project-item {
-  padding: 15px;
+  padding: 0.8rem;
   background: var(--gray-100);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -1106,6 +1107,7 @@ template {
   font-size: var(--font-size-lg);
   font-weight: 600;
   margin-bottom: 4px;
+  padding: 0.5rem;
 }
 
 .task-description {
@@ -1142,7 +1144,7 @@ template {
   gap: 1rem;
   padding: 0.2rem;
   margin: auto;
-  max-width: 80%;
+  max-width: 90%;
   max-height: 300px;
 }
 
@@ -1151,7 +1153,6 @@ template {
   border: 1px solid var(--gray-200);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
-  padding: 1.5rem;
   transition: all 0.3s ease;
 }
 
@@ -1414,9 +1415,12 @@ template {
   border-radius: 50%;
   border-left-color: #7d47ff;
   animation: spin 1s ease infinite;
+  margin: auto;
+
   position: absolute;
-  z-index: 2;
-  margin: 0 auto;
+  z-index: 2000;
+  top: 50%;
+  left: 50%;
 }
 
 @keyframes spin {
