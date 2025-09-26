@@ -241,7 +241,8 @@ export function renderTaskToEdit(taskData) {
   const dueDate = new Date(taskData.date_exp);
   const options = { year: "numeric", month: "numeric", day: "numeric" };
   const formattedDate = dueDate.toLocaleDateString("es-ES", options);
-  console.log(formattedDate);
+
+  taskData.description = taskData.description.trim();
 
   // Crea el contenido del modal
   const headerHtml = `<h4 class="modal-subtitle">Editar Tarea </h4>`;
@@ -260,7 +261,11 @@ export function renderTaskToEdit(taskData) {
 
       <div>
         <label for="editTaskDescription">Descripción:</label>
-        <textarea rows="100" cols="30" class="input-base textarea" id="editTaskDescription"> ${taskData.description} </textarea>
+        <textarea
+          rows="100"
+          cols="30"
+          class="input-base textarea"
+          id="editTaskDescription">${taskData.description}</textarea>
       </div>
     </form>
   `;

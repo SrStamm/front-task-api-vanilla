@@ -1,7 +1,7 @@
 import { showModal, updateModalContent } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
-import { renderTaskInProject } from "./taskRender.js";
-import { renderUserInProject } from "./userRender.js";
+import { renderTaskInProject } from "../task/taskRender.js";
+import { renderUserInProject } from "../user/userRender.js";
 
 // Función que renderiza los proyectos
 export function renderProject(elementId, projectData) {
@@ -239,6 +239,11 @@ export function renderMinimalProject(projectData) {
 // Renderiza el modal para editar el proyecto
 export function renderProjectToEdit(projectData) {
   console.log(projectData);
+
+  projectData.description = projectData.description.trim();
+
+  console.log(projectData);
+
   // Crea el contenido del modal
   const headerHtml = `<h4 class="modal-subtitle">Editar proyecto</h4>`;
 
@@ -251,7 +256,7 @@ export function renderProjectToEdit(projectData) {
 
       <div>
         <label for="editProjectDescription">Descripción:</label>
-        <textarea rows="3" cols="3" class="input-base" id="editProjectDescription"> ${projectData.description} </textarea>
+        <textarea rows="3" cols="3" class="input-base" id="editProjectDescription">${projectData.description}</textarea>
       </div>
     </form>
   `;

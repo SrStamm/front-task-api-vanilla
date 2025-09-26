@@ -148,6 +148,7 @@ body:has(.container:not([style*="display: none"])) {
 
 .textarea {
   max-height: 200px;
+  height: 100%;
 }
 
 .small-texarea {

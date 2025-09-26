@@ -3,7 +3,7 @@
 
 import { showModal, updateModalContent } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
-import { renderProjectInGroup } from "./projectRender.js";
+import { renderProjectInGroup } from "../project/projectRender.js";
 
 // Función que renderiza los grupos
 export function renderGroup(elementId, groupData) {

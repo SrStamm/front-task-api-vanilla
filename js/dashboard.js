@@ -25,12 +25,12 @@ import {
   occultModal,
   updateModalContent,
 } from "./utils/modal.js";
-import { renderUsers, renderUsersFromGroup } from "./render/userRender.js";
+import { renderUsers, renderUsersFromGroup } from "./user/userRender.js";
 import {
   newRenderGroupInModal,
   renderGroupToEdit,
   showGroupDetailsModal,
-} from "./render/groupRender.js";
+} from "./group/groupRender.js";
 import {
   showLoginForm,
   showRegisterForm,
@@ -42,7 +42,7 @@ import {
   renderCreateProject,
   renderProjectToEdit,
   showProjectDetailsModal,
-} from "./render/projectRender.js";
+} from "./project/projectRender.js";
 import {
   addUserToProjectAction,
   createProjectAction,
@@ -54,26 +54,26 @@ import {
   resetProjects,
   refreshCurrentProject,
   removeUserFromProjectAction,
-} from "./actions/projectActions.js";
-import { deleteGroupAction, loadGroup } from "./actions/groupActions.js";
+} from "./project/projectActions.js";
+import { deleteGroupAction, loadGroup } from "./group/groupActions.js";
 import {
   editGroupAction,
   createGroupEvent,
   addUserToGroupAction,
   deleteUserFromGroupAction,
   editRoleAction,
-} from "./actions/groupActions.js";
+} from "./group/groupActions.js";
 import {
   renderCreateTask,
   renderTaskToEdit,
   showTaskDetailsModal,
-} from "./render/taskRender.js";
+} from "./task/taskRender.js";
 import {
   createTaskAction,
   editTaskAction,
   showTasksFromProjectAction,
-} from "./actions/taskActions.js";
-import { createCommentAction } from "./actions/commentActions.js";
+} from "./task/taskActions.js";
+import { createCommentAction } from "./comment/commentActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -255,6 +255,43 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       showTaskDetailsModal(taskData);
     }
   });
+
+  //
+  //
+  // Chat Section
+  //
+  //
+
+  const chatContainer = document.getElementById("chatSection");
+  chatContainer.addEventListener("click", async (event) => {
+    const target = event.target;
+    const projectItem = target.closest(".project-item");
+
+    // Al seleccionar un proyecto, muestra su chat
+    if (projectItem) {
+      // Action para obtener y renderizar los mensajes
+      //
+      //
+
+      const allProjectItem = taskContainer.querySelectorAll(".project-item");
+
+      allProjectItem.forEach((item) => {
+        if (item !== projectItem) {
+          item.classList.remove("active");
+        }
+      });
+
+      if (projectItem) {
+        projectItem.classList.add("active");
+      }
+    }
+  });
+
+  //
+  //
+  // Group Section
+  //
+  //
 
   // Event delegation para #groupList (cards, botones de grupo, usuarios)
   const groupContainer = document.getElementById("groupList");
@@ -731,7 +768,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const projectData = JSON.parse(
         modalContainer.dataset.projectData || "{}",
       );
+
       const content = renderProjectToEdit(projectData);
+
       updateModalContent(
         content.header,
         content.body,

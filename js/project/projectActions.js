@@ -13,7 +13,7 @@ import {
   renderMinimalProject,
   renderProject,
   renderProjectInModal,
-} from "../render/projectRender.js";
+} from "./projectRender.js";
 import { updateModalContent } from "../utils/modal.js";
 import {
   hideSpinner,

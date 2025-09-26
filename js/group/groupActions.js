@@ -9,7 +9,7 @@ import {
   getProjectsFromGroup,
   getUsersInGroup,
 } from "../api.js";
-import { newRenderGroupInModal, renderGroup } from "../render/groupRender.js";
+import { newRenderGroupInModal, renderGroup } from "./groupRender.js";
 import { updateModalContent } from "../utils/modal.js";
 import {
   showSpinner,
