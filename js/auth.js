@@ -24,7 +24,9 @@ class Auth {
     try {
       const response = await getCurrentUser();
 
-      return { success: true, message: "Usario validado" };
+      if (response.ok) {
+        return { success: true, message: "Usario validado" };
+      }
     } catch (error) {
       unauthorized();
       localStorage.removeItem("authToken");

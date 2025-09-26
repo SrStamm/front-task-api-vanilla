@@ -71,7 +71,7 @@ export function renderCreateTask(projectId, projectUsers) {
     header: headerHtml,
     body: bodyHtml,
     footer: footerHtml,
-    addClass: "modal-small",
+    addClass: "modal-med",
     removeClass: "modal-large",
   };
 }

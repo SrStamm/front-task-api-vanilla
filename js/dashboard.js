@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       await loadProjects(true);
     }
     if (sectionId === "taskSection") {
-      await loadMinimalProjects(sectionId, false);
+      await loadMinimalProjects(sectionId, true);
     }
     if (sectionId === "chatSection") {
       await loadMinimalProjects(sectionId);
@@ -657,12 +657,14 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     if (target.id === "deleteProject") {
       setButtonState(target, true, "Eliminando...");
+
+      console.log(target.dataset.groupId, target.dataset.projectId);
       const response = await deleteProjectAction(
         target.dataset.groupId,
         target.dataset.projectId,
       );
 
-      if (response && response.success) {
+      if (response.success) {
         showMessage("Proyecto eliminado exitosamente", "success");
         occultModal("genericModal");
         await loadProjects();
