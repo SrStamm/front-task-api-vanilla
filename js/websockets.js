@@ -84,29 +84,24 @@ socket.onopen = () => {
     initialPayload,
   );
   socket.send(initialEvent);
-
-  function sendChatMessage(content, project_id) {
-    if (!content || !project_id) {
-      console.log("Error! Información incompleta");
-      return;
-    }
-
-    const chatPayload = new ChatMessage(content, project_id);
-
-    const eventToSend = new WebSocketEvent.createAndSerialize(
-      "group_message",
-      chatPayload,
-    );
-
-    socket.send(eventToSend);
-  }
 };
 
 // Escuchar mensajes que llegan desde el backend
 socket.onmessage = (event) => {
   const data = WebSocketEvent.parse(event);
   console.log("Mensaje recibido:", data);
+
   // Aquí actualizaría el DOM
+  switch (data.type) {
+    case "group_message":
+      break;
+
+    case "personal_message":
+      break;
+
+    default:
+      console.warn("Evento desconocido: ", data);
+  }
 };
 
 // Manejar cierre de conexión
@@ -118,3 +113,22 @@ socket.onclose = () => {
 socket.onerror = (error) => {
   console.error("Error en WebSocket:", error);
 };
+
+// Enviar mensaje en el chat
+export function sendChatMessage(content, project_id) {
+  if (!content || !project_id) {
+    console.log("Error! Información incompleta");
+    return;
+  }
+
+  const chatPayload = new ChatMessage(content, project_id);
+
+  const eventToSend = WebSocketEvent.createAndSerialize(
+    "group_message",
+    chatPayload,
+  );
+
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.send(eventToSend);
+  }
+}

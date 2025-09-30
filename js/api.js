@@ -66,11 +66,11 @@ async function fetchData(endpoint, method, body, token) {
   }
 
   // Lanza excepción por otro error
-  if (!response.ok) {
-    throw new Error(
-      `HTTP ${response.status}: ${response.detail || "Error desconocido"}`,
-    );
-  }
+  // if (!response.ok) {
+  //   throw new Error(
+  //     `HTTP ${response.status}: ${response.detail || "Error desconocido"}`,
+  //   );
+  // }
 
   return dataResponse;
 }
@@ -357,4 +357,15 @@ export async function createComment(taskId, content) {
 export async function getComments(taskId) {
   const token = localStorage.getItem("authToken");
   return await fetchData(`/task/${taskId}/comments`, "GET", null, token);
+}
+
+//
+//
+// Lógica de chat
+//
+//
+
+export async function getMessages(projectId) {
+  const token = localStorage.getItem("authToken");
+  return await fetchData(`/chat/${projectId}`, "GET", null, token);
 }

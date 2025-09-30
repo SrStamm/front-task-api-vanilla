@@ -74,6 +74,7 @@ import {
   showTasksFromProjectAction,
 } from "./task/taskActions.js";
 import { createCommentAction } from "./comment/commentActions.js";
+import { showChatAction } from "./chat/chatActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -270,10 +271,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // Al seleccionar un proyecto, muestra su chat
     if (projectItem) {
       // Action para obtener y renderizar los mensajes
-      //
-      //
+      await showChatAction(projectItem.dataset.projectId, ".list-message");
 
-      const allProjectItem = taskContainer.querySelectorAll(".project-item");
+      const allProjectItem = chatContainer.querySelectorAll(".project-item");
 
       allProjectItem.forEach((item) => {
         if (item !== projectItem) {
@@ -704,7 +704,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       if (response.success) {
         showMessage("Proyecto eliminado exitosamente", "success");
         occultModal("genericModal");
-        await loadProjects();
+        await loadProjects(true);
       } else {
         showMessage(
           "Error al eliminar el proyecto: " + response.detail,

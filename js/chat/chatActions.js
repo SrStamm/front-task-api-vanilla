@@ -1,42 +1,27 @@
+import { getMessages } from "../api.js";
+import { renderMessage } from "./chatRender.js";
+
 export async function showChatAction(projectId, containerClass) {
   const container = document.querySelector(containerClass);
   container.innerHTML = "";
 
-  const response = await getTasksFromProject(projectId);
+  // Obtiene los mensajes
+  const response = await getMessages(projectId);
 
-  if (response.length === 0) {
-    showMessage("No hay tareas en este proyecto", "info");
+  // Valida que haya mensajes
+  if (
+    response.length === 0 ||
+    response.detail == `Chat with project_id ${projectId} not found`
+  ) {
+    const message = `<p style="text-align: center;">No hay mensajes en este chat</p>`;
+    container.insertAdjacentHTML("beforeend", message);
     return;
   }
 
-  response.forEach((task) => {
-    let content = renderTask(task, projectId);
+  // Renderiza los mensajes
+  response.forEach((message) => {
+    let content = renderMessage(message);
 
-    if (task.state === "Done") {
-      const completedTasksContainer = document.getElementById(
-        "taskColumnCompleted",
-      );
-
-      const completedList =
-        completedTasksContainer.querySelector("containerClass");
-
-      completedList.insertAdjacentHTML("beforeend", content);
-    } else if (task.state === "In Progress") {
-      const inProgressTasksContainer = document.getElementById(
-        "taskColumnInProgress",
-      );
-
-      const inProgressList =
-        inProgressTasksContainer.querySelector(containerClass);
-      inProgressList.insertAdjacentHTML("beforeend", content);
-    } else if (task.state === "To Do") {
-      const toDoTasksContainer = document.getElementById("taskColumnToDo");
-
-      const toDoList = toDoTasksContainer.querySelector(containerClass);
-
-      toDoList.insertAdjacentHTML("beforeend", content);
-    } else {
-      console.log("Estado de tarea desconocido", task);
-    }
+    container.insertAdjacentHTML("beforeend", content);
   });
 }

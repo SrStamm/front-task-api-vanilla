@@ -1467,3 +1467,30 @@ template {
 .partSections:nth-child(5) {
   animation-delay: 0.4s;
 }
+
+/*  Mensajes */
+
+.chat-column {
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+}
+.message-container {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+  height: 100%;
+}
+
+.list-message {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.form-message {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
