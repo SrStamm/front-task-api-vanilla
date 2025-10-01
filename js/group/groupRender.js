@@ -1,88 +1,85 @@
-// Move renderGroup, renderUserInGroup, and renderUsers into this file
 // Rendering group-related elements. This file would handle the creation of the HTML templates and their population data
 
-import { showModal, updateModalContent } from "../utils/modal.js";
+import { modal } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
-import { renderProjectInGroup } from "../project/projectRender.js";
+import { renderProject } from "../project/projectRender.js";
 
-// Función que renderiza los grupos
-export function renderGroup(elementId, groupData) {
-  // Obtiene el template
-  const groupTemplate = document.getElementById(elementId);
+export const groupRender = {
+  renderGroup(elementId, groupData) {
+    // Obtiene el template
+    const groupTemplate = document.getElementById(elementId);
 
-  // Copia el template
-  const clonTemplate = groupTemplate.content.cloneNode(true);
+    // Copia el template
+    const clonTemplate = groupTemplate.content.cloneNode(true);
 
-  // Accede a cada parte del template
-  const groupName = clonTemplate.querySelector(".groupName");
-  const groupDescription = clonTemplate.querySelector(".groupDescription");
-  const manageBtn = clonTemplate.querySelector(".btn-manage");
+    // Accede a cada parte del template
+    const groupName = clonTemplate.querySelector(".groupName");
+    const groupDescription = clonTemplate.querySelector(".groupDescription");
+    const manageBtn = clonTemplate.querySelector(".btn-manage");
 
-  // VERIFICAR que los elementos existen antes de usarlos
-  if (!groupName || !groupDescription) {
-    console.error(
-      "Error: No se encontraron todos los elementos en: ",
-      elementId,
-    );
-    return;
-  }
-
-  if (groupData.description === null) {
-    groupData.description = "Sin descripción";
-  }
-
-  // Actualiza con los datos obtenidos
-  groupName.textContent = groupData.name;
-  groupDescription.textContent = groupData.description;
-
-  //
-  manageBtn.dataset.groupId = groupData.group_id;
-  manageBtn.dataset.name = groupData.name;
-  manageBtn.dataset.description = groupData.description;
-
-  // Agrega los datos
-  return clonTemplate;
-}
-
-// Muestra el modal de Group
-export function showGroupDetailsModal(groupData) {
-  // Renderiza el modal con la información del grupo
-  const content = newRenderGroupInModal(groupData);
-  showModal("genericModal");
-  updateModalContent(
-    content.header,
-    content.body,
-    content.footer,
-    content.addClass,
-    content.removeClass,
-  );
-
-  // Accede a los botones
-  const modalContainer = document.getElementById("genericModal");
-  modalContainer.dataset.groupData = JSON.stringify(groupData);
-
-  const tabsContainer = document.querySelector(".modal-tabs");
-  tabsContainer.addEventListener("click", (event) => {
-    const target = event.target;
-
-    // Maneja el cambio de pestañas
-    if (target.classList.contains("tab-btn")) {
-      // Muestra la sección correspondiente
-      showTab(target.dataset.tab + "-tab");
+    // VERIFICAR que los elementos existen antes de usarlos
+    if (!groupName || !groupDescription) {
+      console.error(
+        "Error: No se encontraron todos los elementos en: ",
+        elementId,
+      );
+      return;
     }
-  });
 
-  return modalContainer;
-}
+    if (groupData.description === null) {
+      groupData.description = "Sin descripción";
+    }
 
-// Renderiza el modal de detalles del grupo
-export function newRenderGroupInModal(groupData) {
-  console.log("Renderizando modal de grupo:", groupData);
+    // Actualiza con los datos obtenidos
+    groupName.textContent = groupData.name;
+    groupDescription.textContent = groupData.description;
 
-  // Crea el contenido del modal
-  const headerHtml = `<h3 class="modal-title">${groupData.name}</h3>`;
+    //
+    manageBtn.dataset.groupId = groupData.group_id;
+    manageBtn.dataset.name = groupData.name;
+    manageBtn.dataset.description = groupData.description;
 
-  const bodyHtml = `
+    // Agrega los datos
+    return clonTemplate;
+  },
+
+  showGroupDetailsModal(groupData) {
+    // Renderiza el modal con la información del grupo
+    const content = newRenderGroupInModal(groupData);
+    modal.showModal("genericModal");
+    modal.updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+      content.removeClass,
+    );
+
+    // Accede a los botones
+    const modalContainer = document.getElementById("genericModal");
+    modalContainer.dataset.groupData = JSON.stringify(groupData);
+
+    const tabsContainer = document.querySelector(".modal-tabs");
+    tabsContainer.addEventListener("click", (event) => {
+      const target = event.target;
+
+      // Maneja el cambio de pestañas
+      if (target.classList.contains("tab-btn")) {
+        // Muestra la sección correspondiente
+        showTab(target.dataset.tab + "-tab");
+      }
+    });
+
+    return modalContainer;
+  },
+
+  newRenderGroupInModal(groupData) {
+    console.log("Renderizando modal de grupo:", groupData);
+
+    // Crea el contenido del modal
+    const headerHtml = `<h3 class="modal-title">${groupData.name}</h3>`;
+
+    const bodyHtml = `
   <div class="modal-section">
     <p class="modal-description"> ${groupData.description} </p>
   </div>
@@ -103,7 +100,9 @@ export function newRenderGroupInModal(groupData) {
         groupData.projects.length <= 0 || groupData.projects === null
           ? "<li>No hay proyectos en este grupo</li>"
           : groupData.projects
-              .map((project) => renderProjectInGroup(project.title))
+              .map((project) =>
+                renderProject.renderProjectInGroup(project.title),
+              )
               .join("")
       }
     </ol>
@@ -135,7 +134,7 @@ export function newRenderGroupInModal(groupData) {
   </div>
 `;
 
-  const footerHtml = `
+    const footerHtml = `
       <button type="button" class="btn btn-secondary btn-sm" id="editGroup"
         data-group-id="${groupData.group_id}"
       > Editar Grupo </button>
@@ -144,17 +143,17 @@ export function newRenderGroupInModal(groupData) {
       > Eliminar Grupo </button>
   `;
 
-  return {
-    header: headerHtml,
-    body: bodyHtml,
-    footer: footerHtml,
-    addClass: "modal-med",
-    removeClass: "modal-small",
-  };
-}
+    return {
+      header: headerHtml,
+      body: bodyHtml,
+      footer: footerHtml,
+      addClass: "modal-med",
+      removeClass: "modal-small",
+    };
+  },
 
-export function newRenderUserInGroup(groupId, userId, username, role) {
-  const contentHtml = `
+  newRenderUserInGroup(groupId, userId, username, role) {
+    const contentHtml = `
   <li class="user-item">
     <div class="user-info">
       <div class="user-details">
@@ -176,16 +175,15 @@ export function newRenderUserInGroup(groupId, userId, username, role) {
   </li>
 `;
 
-  return contentHtml;
-}
+    return contentHtml;
+  },
 
-//
-export function renderGroupToEdit(groupData) {
-  console.log("Renderizando modal de edición de grupo:", groupData);
-  // Crea el contenido del modal
-  const headerHtml = `<h4>Editar el grupo</h4>`;
+  renderGroupToEdit(groupData) {
+    console.log("Renderizando modal de edición de grupo:", groupData);
+    // Crea el contenido del modal
+    const headerHtml = `<h4>Editar el grupo</h4>`;
 
-  const bodyHtml = `
+    const bodyHtml = `
     <form>
       <div>
         <label for="editGroupName">Nombre del grupo:</label>
@@ -198,7 +196,7 @@ export function renderGroupToEdit(groupData) {
     </form>
   `;
 
-  const footerHtml = `
+    const footerHtml = `
     <button type="button" class="btn btn-primary btn-sm" id="confirmEditGroup"
       data-group-id="${groupData.group_id}"
     > Confirmar </button>
@@ -209,10 +207,11 @@ export function renderGroupToEdit(groupData) {
     > Cancelar </button>
   `;
 
-  return {
-    header: headerHtml,
-    body: bodyHtml,
-    footer: footerHtml,
-    addClass: "modal-small",
-  };
-}
+    return {
+      header: headerHtml,
+      body: bodyHtml,
+      footer: footerHtml,
+      addClass: "modal-small",
+    };
+  },
+};

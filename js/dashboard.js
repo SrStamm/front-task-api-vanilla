@@ -1,9 +1,4 @@
-// Archivo como 'punto de entrada' despues del login
-// Carga inicial de secciones y datos del panel
-// Gestiona eventos del sidebar y los paneles
-
-// UPDATE: This file should now act as the central orchestrator for the dashboard* functionality.
-// It will import the rendering functions from render/ and the UI utilities from utils/ to build the page.
+// Central orchestrator for dashboard ( panels and sidebar )
 
 import {
   getUsersInGroup,
@@ -13,68 +8,30 @@ import {
   getTasksFromProject,
   getUsersAssignedToTask,
 } from "./api.js";
-import {
-  initializeTabListeners,
-  setButtonState,
-  showMessage,
-  showTab,
-} from "./utils/utils.js";
-import {
-  showSections,
-  showModal,
-  occultModal,
-  updateModalContent,
-} from "./utils/modal.js";
-import { renderUsers, renderUsersFromGroup } from "./user/userRender.js";
-import {
-  newRenderGroupInModal,
-  renderGroupToEdit,
-  showGroupDetailsModal,
-} from "./group/groupRender.js";
+import { utils } from "./utils/utils.js";
+
 import {
   showLoginForm,
   showRegisterForm,
   loginSucces,
   unauthorized,
 } from "./dom.js";
+
+import { modal } from "./utils/modal.js";
+
+// Render
+import { groupRender } from "./group/groupRender.js";
+import { renderProject } from "./project/projectRender.js";
+import { taskRender } from "./task/taskRender.js";
+import { renderUsers, renderUsersFromGroup } from "./user/userRender.js";
+
+// Actions
 import { auth } from "./auth.js";
-import {
-  renderCreateProject,
-  renderProjectToEdit,
-  showProjectDetailsModal,
-} from "./project/projectRender.js";
-import {
-  addUserToProjectAction,
-  createProjectAction,
-  deleteProjectAction,
-  editPermissionAction,
-  editProjectAction,
-  loadMinimalProjects,
-  loadProjects,
-  resetProjects,
-  refreshCurrentProject,
-  removeUserFromProjectAction,
-} from "./project/projectActions.js";
-import { deleteGroupAction, loadGroup } from "./group/groupActions.js";
-import {
-  editGroupAction,
-  createGroupEvent,
-  addUserToGroupAction,
-  deleteUserFromGroupAction,
-  editRoleAction,
-} from "./group/groupActions.js";
-import {
-  renderCreateTask,
-  renderTaskToEdit,
-  showTaskDetailsModal,
-} from "./task/taskRender.js";
-import {
-  createTaskAction,
-  editTaskAction,
-  showTasksFromProjectAction,
-} from "./task/taskActions.js";
+import { projectAction } from "./project/projectActions.js";
+import { groupAction } from "./group/groupActions.js";
+import { taskAction } from "./task/taskActions.js";
 import { createCommentAction } from "./comment/commentActions.js";
-import { sendMessageToChatAction, showChatAction } from "./chat/chatActions.js";
+import { chatAction } from "./chat/chatActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -126,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   loginBtn.addEventListener("click", async (event) => {
     event.preventDefault();
 
-    setButtonState(loginBtn, true, "Iniciando...");
+    utils.setButtonState(loginBtn, true, "Iniciando...");
 
     // Obtiene los datos ingresados
     const username = document.getElementById("usernameLogin").value;
@@ -138,52 +95,55 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       // Obtiene los token de iniciar sesión
       localStorage.setItem("authToken", response.accessToken);
       localStorage.setItem("refrToken", response.refreshToken);
-      showMessage("Sesión iniciada con suceso", "success");
+      utils.showMessage("Sesión iniciada con suceso", "success");
 
-      setButtonState(loginBtn, false, "Iniciar sesión");
+      utils.setButtonState(loginBtn, false, "Iniciar sesión");
       loginSucces();
     } else {
-      showMessage(response.message, "error");
+      utils.showMessage(response.message, "error");
 
-      setButtonState(loginBtn, false, "Iniciar sesión");
+      utils.setButtonState(loginBtn, false, "Iniciar sesión");
     }
   });
 
   logoutBtn.addEventListener("click", async () => {
     try {
-      setButtonState(logoutBtn, true, "Cerrando...");
+      utils.setButtonState(logoutBtn, true, "Cerrando...");
 
       let response = await auth.logout();
 
       if (response.success || response.message === "Sesión cerrada") {
-        showMessage("Sesión cerrada", "info");
+        utils.showMessage("Sesión cerrada", "info");
         unauthorized();
       } else {
         throw new Error(response.detail);
       }
     } catch (error) {
-      showMessage("Ocurrió un error inesperado al cerrar sesión.", "error");
-      setButtonState(logoutBtn, false, "Cerrar sesión");
+      utils.showMessage(
+        "Ocurrió un error inesperado al cerrar sesión.",
+        "error",
+      );
+      utils.setButtonState(logoutBtn, false, "Cerrar sesión");
     }
   });
 
   registerBtn.addEventListener("click", async () => {
     try {
-      setButtonState(registerBtn, true, "Registrando...");
+      utils.setButtonState(registerBtn, true, "Registrando...");
 
       let response = await auth.register();
 
       if (response.success) {
-        showMessage(response.detail, "success");
+        utils.showMessage(response.detail, "success");
         showLoginForm();
 
-        setButtonState(registerBtn, false, "Registrarse");
+        utils.setButtonState(registerBtn, false, "Registrarse");
       } else {
         throw new Error(response.detail);
       }
     } catch (error) {
-      setButtonState(registerBtn, false, "Registrarse");
-      showMessage(response.message, "error");
+      utils.setButtonState(registerBtn, false, "Registrarse");
+      utils.showMessage(response.message, "error");
     }
   });
 
@@ -196,20 +156,20 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     const sectionId = targetLi.dataset.target;
-    showSections(sectionId);
+    modal.showSections(sectionId);
 
     if (sectionId === "groupSection") {
-      await loadGroup();
+      await groupAction.loadGroup();
     }
     if (sectionId === "projectSection") {
-      resetProjects();
-      await loadProjects(true);
+      projectAction.resetProjects();
+      await projectAction.loadProjects(true);
     }
     if (sectionId === "taskSection") {
-      await loadMinimalProjects(sectionId, true);
+      await projectAction.loadMinimalProjects(sectionId, true);
     }
     if (sectionId === "chatSection") {
-      await loadMinimalProjects(sectionId, true);
+      await projectAction.loadMinimalProjects(sectionId, true);
     }
   });
 
@@ -227,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     // Al seleccionar un proyecto, muestra sus tareas
     if (projectItem) {
-      await showTasksFromProjectAction(
+      await taskAction.showTasksFromProjectAction(
         projectItem.dataset.projectId,
         ".list-task",
       );
@@ -253,7 +213,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       taskData.comments = []; // No hay función para renderizar comentarios aún
 
       // Muestra el modal con los detalles de la tarea)
-      showTaskDetailsModal(taskData);
+      taskRender.showTaskDetailsModal(taskData);
     }
   });
 
@@ -271,7 +231,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // Al seleccionar un proyecto, muestra su chat
     if (projectItem) {
       // Action para obtener y renderizar los mensajes
-      await showChatAction(projectItem.dataset.projectId, ".list-message");
+      await chatAction.showChatAction(
+        projectItem.dataset.projectId,
+        ".list-message",
+      );
 
       const allProjectItem = chatContainer.querySelectorAll(".project-item");
 
@@ -287,13 +250,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     if (target.id === "sendNewMessage") {
-      setButtonState(target, true, "Enviando...");
+      utils.setButtonState(target, true, "Enviando...");
 
       const principalContainer = document.querySelector(".message-container");
       const projectId = principalContainer.dataset.projectId;
       const contentInput = chatContainer.querySelector("#newMessage");
 
-      await sendMessageToChatAction(
+      await chatAction.sendMessageToChatAction(
         contentInput.value,
         projectId,
         contentInput,
@@ -325,7 +288,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const listProject = await getProjectsFromGroup(groupId);
 
       // Muestra el modal con los detalles del grupo
-      showGroupDetailsModal({
+      groupRender.showGroupDetailsModal({
         group_id: groupId,
         name: groupName,
         description: groupDescription,
@@ -366,23 +329,26 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     const target = event.target;
 
     if (target.id === "cancelGroup") {
-      occultModal("modalGroup");
+      modal.occultModal("modalGroup");
     }
     if (target.id === "saveGroup") {
-      setButtonState(target, true, "Creando...");
+      utils.setButtonState(target, true, "Creando...");
 
-      let response = await createGroupEvent();
+      let response = await groupAction.createGroupEvent();
 
       if (response.success) {
-        showMessage(response.detail, "success");
+        utils.showMessage(response.detail, "success");
 
-        setButtonState(target, false, "Crear");
-        occultModal("modalGroup");
+        utils.setButtonState(target, false, "Crear");
+        modal.occultModal("modalGroup");
 
-        await loadGroup();
+        await groupAction.loadGroup();
       } else {
-        showMessage("Error al crear el grupo: " + response.detail, "error");
-        setButtonState(target, false, "Crear");
+        utils.showMessage(
+          "Error al crear el grupo: " + response.detail,
+          "error",
+        );
+        utils.setButtonState(target, false, "Crear");
       }
     }
   });
@@ -397,7 +363,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     //
 
     if (target.id === "addUserGroup") {
-      showModal("allUsersList");
+      modal.showModal("allUsersList");
       const modal = document.getElementById("allUsersList");
       const userList = modal.querySelector(".allUsersList");
       const groupId = target.dataset.groupId;
@@ -417,8 +383,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "editGroup") {
       const modalContainer = document.getElementById("genericModal");
       const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-      const content = renderGroupToEdit(groupData);
-      updateModalContent(
+      const content = groupRender.renderGroupToEdit(groupData);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -435,9 +401,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       );
       const groupId = target.dataset.groupId;
 
-      setButtonState(target, true, "Editando...");
+      utils.setButtonState(target, true, "Editando...");
 
-      await editGroupAction(groupId, groupName.value, groupDescription.value);
+      await groupAction.editGroupAction(
+        groupId,
+        groupName.value,
+        groupDescription.value,
+      );
     }
 
     if (target.id === "cancelEditGroup") {
@@ -461,8 +431,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       };
 
       // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
-      updateModalContent(
+      const content = groupRender.newRenderGroupInModal(groupData);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -470,40 +440,46 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         content.removeClass,
       );
 
-      initializeTabListeners();
+      utils.initializeTabListeners();
 
-      showTab("projects-tab");
+      utils.showTab("projects-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
     }
 
     if (target.id === "deleteGroup") {
-      setButtonState(target, true, "Eliminando...");
+      utils.setButtonState(target, true, "Eliminando...");
 
       const groupId = target.dataset.groupId;
-      const response = await deleteGroupAction(groupId);
+      const response = await groupAction.deleteGroupAction(groupId);
 
       if (response.success) {
-        occultModal("genericModal");
-        await loadGroup();
+        modal.occultModal("genericModal");
+        await groupAction.loadGroup();
       } else {
-        showMessage("Error al eliminar el grupo: " + response.detail, "error");
-        setButtonState(target, false, "Eliminar");
+        utils.showMessage(
+          "Error al eliminar el grupo: " + response.detail,
+          "error",
+        );
+        utils.setButtonState(target, false, "Eliminar");
       }
     }
 
     if (target.id === "deleteUserGroup") {
-      setButtonState(target, true, "Eliminando...");
+      utils.setButtonState(target, true, "Eliminando...");
 
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
-      let response = await deleteUserFromGroupAction(groupId, userId);
+      let response = await groupAction.deleteUserFromGroupAction(
+        groupId,
+        userId,
+      );
 
       if (response.success) {
-        setButtonState(target, true, "Eliminado");
+        utils.setButtonState(target, true, "Eliminado");
       } else {
-        setButtonState(target, false, "Eliminar");
+        utils.setButtonState(target, false, "Eliminar");
       }
     }
 
@@ -521,12 +497,19 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       // Si el rol ha cambiado, llama a la API para actualizarlo
 
       if (currentRole !== selectRole) {
-        let response = await editRoleAction(groupId, userId, selectRole);
+        let response = await groupAction.editRoleAction(
+          groupId,
+          userId,
+          selectRole,
+        );
 
         if (response && response.success) {
-          showMessage("Rol cambiado exitosamente", "success");
+          utils.showMessage("Rol cambiado exitosamente", "success");
         } else {
-          showMessage("Error al cambiar el rol: " + response.detail, "error");
+          utils.showMessage(
+            "Error al cambiar el rol: " + response.detail,
+            "error",
+          );
           return; // Sale de la función si hubo un error
         }
       }
@@ -543,8 +526,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "createProject") {
       const modalContainer = document.getElementById("genericModal");
       const groupData = JSON.parse(modalContainer.dataset.groupData || "{}");
-      const content = renderCreateProject(groupData);
-      updateModalContent(
+      const content = renderProject.renderCreateProject(groupData);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -554,7 +537,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     if (target.id === "confirCreateProject") {
-      setButtonState(target, true, "Creando...");
+      utils.setButtonState(target, true, "Creando...");
 
       const modalContainer = document.getElementById("genericModal");
       const projectTitle =
@@ -569,10 +552,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       const groupId = target.dataset.groupId;
 
-      let response = await createProjectAction(projectData, groupId);
+      let response = await projectAction.createProjectAction(
+        projectData,
+        groupId,
+      );
 
       if (response && response.success) {
-        showMessage("Proyecto creado exitosamente", "success");
+        utils.showMessage("Proyecto creado exitosamente", "success");
 
         // Actualizar la lista de usuarios en el modal de grupo
         const listUser = await getUsersInGroup(target.dataset.groupId);
@@ -587,8 +573,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         };
 
         // Volver a renderizar la información del grupo
-        const content = newRenderGroupInModal(groupData);
-        updateModalContent(
+        const content = groupRender.newRenderGroupInModal(groupData);
+        modal.updateModalContent(
           content.header,
           content.body,
           content.footer,
@@ -596,15 +582,18 @@ document.addEventListener("DOMContentLoaded", async (event) => {
           content.removeClass,
         );
 
-        initializeTabListeners();
+        utils.initializeTabListeners();
 
-        showTab("projects-tab");
+        utils.showTab("projects-tab");
 
         // Actualizar el dataset con los nuevos datos
         modalContainer.dataset.groupData = JSON.stringify(groupData);
       } else {
-        showMessage("Error al crear el proyecto: " + response.detail, "error");
-        setButtonState(target, false, "Crear");
+        utils.showMessage(
+          "Error al crear el proyecto: " + response.detail,
+          "error",
+        );
+        utils.setButtonState(target, false, "Crear");
       }
     }
 
@@ -629,8 +618,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       };
 
       // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
-      updateModalContent(
+      const content = groupRender.newRenderGroupInModal(groupData);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -638,9 +627,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         content.removeClass,
       );
 
-      initializeTabListeners();
+      utils.initializeTabListeners();
 
-      showTab("projects-tab");
+      utils.showTab("projects-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
@@ -655,7 +644,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     //
 
     if (target.id === "showListUserToAdd") {
-      showModal("allUsersList");
+      modal.showModal("allUsersList");
 
       const modal = document.getElementById("allUsersList");
       const userList = modal.querySelector(".allUsersList");
@@ -684,48 +673,53 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const title = target.dataset.title;
       const description = target.dataset.description;
 
-      setButtonState(target, true, "Eliminando...");
+      utils.setButtonState(target, true, "Eliminando...");
 
       // Llama a la función para eliminar el usuario del proyecto
-      const response = await removeUserFromProjectAction(
+      const response = await projectAction.removeUserFromProjectAction(
         groupId,
         projectId,
         userId,
       );
 
       if (response && response.success) {
-        await refreshCurrentProject(groupId, projectId, title, description);
-        showMessage("Usuario eliminado del proyecto", "success");
+        await projectAction.refreshCurrentProject(
+          groupId,
+          projectId,
+          title,
+          description,
+        );
+        utils.showMessage("Usuario eliminado del proyecto", "success");
         return;
       } else {
-        showMessage(
+        utils.showMessage(
           "Error al eliminar el usuario: " + response.detail,
           "error",
         );
-        setButtonState(target, false, "Eliminar");
+        utils.setButtonState(target, false, "Eliminar");
         return;
       }
     }
 
     if (target.id === "deleteProject") {
-      setButtonState(target, true, "Eliminando...");
+      utils.setButtonState(target, true, "Eliminando...");
 
       console.log(target.dataset.groupId, target.dataset.projectId);
-      const response = await deleteProjectAction(
+      const response = await projectAction.deleteProjectAction(
         target.dataset.groupId,
         target.dataset.projectId,
       );
 
       if (response.success) {
-        showMessage("Proyecto eliminado exitosamente", "success");
-        occultModal("genericModal");
-        await loadProjects(true);
+        utils.showMessage("Proyecto eliminado exitosamente", "success");
+        modal.occultModal("genericModal");
+        await projectAction.loadProjects(true);
       } else {
-        showMessage(
+        utils.showMessage(
           "Error al eliminar el proyecto: " + response.detail,
           "error",
         );
-        setButtonState(target, true, "Eliminar");
+        utils.setButtonState(target, true, "Eliminar");
       }
     }
 
@@ -743,7 +737,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       // Si el permiso ha cambiado, llama a la API para actualizarlo
 
       if (currentPermission !== selectPermission) {
-        let response = await editPermissionAction(
+        let response = await projectAction.editPermissionAction(
           groupId,
           projectId,
           userId,
@@ -751,20 +745,23 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         );
 
         if (response && response.success) {
-          showMessage("Rol cambiado exitosamente", "success");
+          utils.showMessage("Rol cambiado exitosamente", "success");
 
           const modalContainer = document.getElementById("genericModal");
           const projectData = JSON.parse(
             modalContainer.dataset.projectData || "{}",
           );
-          await refreshCurrentProject(
+          await projectAction.refreshCurrentProject(
             groupId,
             projectId,
             projectData.title,
             projectData.description,
           );
         } else {
-          showMessage("Error al cambiar el rol: " + response.detail, "error");
+          utils.showMessage(
+            "Error al cambiar el rol: " + response.detail,
+            "error",
+          );
           return; // Sale de la función si hubo un error
         }
       }
@@ -784,9 +781,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         modalContainer.dataset.projectData || "{}",
       );
 
-      const content = renderProjectToEdit(projectData);
+      const content = renderProject.renderProjectToEdit(projectData);
 
-      updateModalContent(
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -809,9 +806,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const groupId = projectData.group_id;
       const projectId = projectData.project_id;
 
-      setButtonState(target, true, "Editando...");
+      utils.setButtonState(target, true, "Editando...");
 
-      await editProjectAction(
+      await projectAction.editProjectAction(
         groupId,
         projectId,
         projectTitle.value,
@@ -826,7 +823,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       );
 
       // Refresca el modal
-      await refreshCurrentProject(
+      await projectAction.refreshCurrentProject(
         projectData.group_id,
         projectData.project_id,
         projectData.title,
@@ -841,8 +838,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const projectId = target.dataset.projectId;
       const groupId = target.dataset.groupId;
       const userList = await getUsersFromProject(groupId, projectId);
-      const content = renderCreateTask(projectId, userList);
-      updateModalContent(
+      const content = taskRender.renderCreateTask(projectId, userList);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -861,18 +858,18 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         ".form-input-checkbox",
       );
 
-      setButtonState(target, true, "Creando...");
+      utils.setButtonState(target, true, "Creando...");
 
       if (!title.value) {
-        showMessage("Faltan campos obligatorios: Titulo", "error");
-        setButtonState(target, false, "Crear");
+        utils.showMessage("Faltan campos obligatorios: Titulo", "error");
+        utils.setButtonState(target, false, "Crear");
         return;
       } else if (!dueDate.value) {
-        showMessage(
+        utils.showMessage(
           "Faltan campos obligatorios: Fecha de vencimiento",
           "error",
         );
-        setButtonState(target, false, "Crear");
+        utils.setButtonState(target, false, "Crear");
         return;
       }
 
@@ -887,21 +884,24 @@ document.addEventListener("DOMContentLoaded", async (event) => {
           : [],
       };
 
-      const response = await createTaskAction(taskData, projectId);
+      const response = await taskAction.createTaskAction(taskData, projectId);
 
       if (response.success) {
-        showMessage("Tarea creada exitosamente", "success");
-        occultModal("genericModal");
-        await loadProjects();
+        utils.showMessage("Tarea creada exitosamente", "success");
+        modal.occultModal("genericModal");
+        await projectAction.loadProjects();
       } else {
-        showMessage("Error al crear la tarea: " + response.detail, "error");
-        setButtonState(target, false, "Crear");
+        utils.showMessage(
+          "Error al crear la tarea: " + response.detail,
+          "error",
+        );
+        utils.setButtonState(target, false, "Crear");
       }
     }
 
     if (target.id === "cancelCreateTask") {
-      occultModal("genericModal");
-      await loadProjects();
+      modal.occultModal("genericModal");
+      await projectAction.loadProjects();
     }
 
     //
@@ -914,8 +914,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "editTask") {
       const modalContainer = document.getElementById("genericModal");
       const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
-      const content = renderTaskToEdit(taskData);
-      updateModalContent(
+      const content = taskRender.renderTaskToEdit(taskData);
+      modal.updateModalContent(
         content.header,
         content.body,
         content.footer,
@@ -924,7 +924,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     if (target.id === "confirmEditTask") {
-      setButtonState(target, true, "Editando...");
+      utils.setButtonState(target, true, "Editando...");
 
       const modalContainer = document.getElementById("genericModal");
 
@@ -954,11 +954,15 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         editTaskData.date_exp = taskDateExp.value;
       }
 
-      const response = await editTaskAction(projectId, taskId, editTaskData);
+      const response = await taskAction.editTaskAction(
+        projectId,
+        taskId,
+        editTaskData,
+      );
 
       if (response.success) {
-        showTaskDetailsModal(response.taskData);
-        setButtonState(target, false, "Editar");
+        taskRender.showTaskDetailsModal(response.taskData);
+        utils.setButtonState(target, false, "Editar");
       }
     }
 
@@ -966,7 +970,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const modalContainer = document.getElementById("genericModal");
       const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
 
-      showTaskDetailsModal(taskData);
+      taskRender.showTaskDetailsModal(taskData);
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.taskData = JSON.stringify(taskData);
@@ -985,7 +989,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const content = modalContainer.querySelector("#newComment");
 
       if (!content.value.trim()) {
-        showMessage("Falta escribir el contenido", "error");
+        utils.showMessage("Falta escribir el contenido", "error");
         return;
       }
       const response = await createCommentAction(
@@ -994,10 +998,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       );
 
       if (response.success) {
-        showMessage("Comentario agregado", "success");
+        utils.showMessage("Comentario agregado", "success");
         console.log(response);
       } else {
-        showMessage(
+        utils.showMessage(
           "Error al agregar el comentario: " + response.detail,
           "error",
         );
@@ -1011,46 +1015,53 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     const target = event.target;
 
     if (target.id === "addUser" && target.dataset.target == "group") {
-      setButtonState(target, true, "Agregando...");
+      utils.setButtonState(target, true, "Agregando...");
 
       const groupId = target.dataset.groupId;
       const userId = target.dataset.userId;
 
-      let response = await addUserToGroupAction(groupId, userId);
+      let response = await groupAction.addUserToGroupAction(groupId, userId);
 
       if (response.success) {
-        setButtonState(target, true, "Agregado");
+        utils.setButtonState(target, true, "Agregado");
       } else {
-        setButtonState(target, false, "Agregar");
+        utils.setButtonState(target, false, "Agregar");
       }
     } else if (target.id === "addUser" && target.dataset.target == "project") {
-      setButtonState(target, true, "Agregando...");
+      utils.setButtonState(target, true, "Agregando...");
 
       const groupId = target.dataset.groupId;
       const projectId = target.dataset.projectId;
       const userId = target.dataset.userId;
-      let response = await addUserToProjectAction(groupId, projectId, userId);
+      let response = await projectAction.addUserToProjectAction(
+        groupId,
+        projectId,
+        userId,
+      );
 
       if (response && response.success) {
-        showMessage("Usuario agregado al proyecto", "success");
-        setButtonState(target, true, "Agregado");
+        utils.showMessage("Usuario agregado al proyecto", "success");
+        utils.setButtonState(target, true, "Agregado");
 
         const modalContainer = document.getElementById("genericModal");
         const projectData = JSON.parse(
           modalContainer.dataset.projectData || "{}",
         );
-        await refreshCurrentProject(
+        await projectAction.refreshCurrentProject(
           groupId,
           projectId,
           projectData.title,
           projectData.description,
         );
       } else {
-        showMessage("Error al agregar el usuario: " + response.detail, "error");
-        setButtonState(target, false, "Agregar");
+        utils.showMessage(
+          "Error al agregar el usuario: " + response.detail,
+          "error",
+        );
+        utils.setButtonState(target, false, "Agregar");
       }
     } else if (target.id === "closeUserList") {
-      occultModal("allUsersList");
+      modal.occultModal("allUsersList");
     }
   });
 
@@ -1077,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       };
 
       // Muestra el modal con los detalles del grupo
-      showProjectDetailsModal(projecData);
+      renderProject.showProjectDetailsModal(projecData);
     }
   });
 });
@@ -1091,12 +1102,12 @@ document.addEventListener("click", (event) => {
     !modalContent &&
     modalBackdrop.classList.contains("show")
   ) {
-    occultModal(modalBackdrop.id);
+    modal.occultModal(modalBackdrop.id);
   }
 });
 
 // Botones en dashboard
 
 createGroupBtn.addEventListener("click", () => {
-  showModal("modalGroup");
+  modal.showModal("modalGroup");
 });

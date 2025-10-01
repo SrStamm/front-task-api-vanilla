@@ -1,7 +1,7 @@
 // Manipulación del DOM y renderizado
 // Contiene funciones para mostrar/ocultar secciones, modals, y renderizar datos
 
-import { showSections } from "./utils/modal.js";
+import { modal } from "./utils/modal.js";
 
 export function unauthorized() {
   // No autorizado, se oculta todo
@@ -13,7 +13,7 @@ export function unauthorized() {
 
 export function loginSucces() {
   document.querySelector(".principal-layout").style.display = "grid";
-  showSections("inicioSection");
+  modal.showSections("inicioSection");
 
   document.getElementById("formLogContainer").style.display = "none";
 }

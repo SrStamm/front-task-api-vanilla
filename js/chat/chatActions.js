@@ -3,66 +3,68 @@ import { setButtonState, showMessage } from "../utils/utils.js";
 import { sendChatMessage } from "../websockets.js";
 import { renderMessage } from "./chatRender.js";
 
-export async function showChatAction(projectId, containerClass) {
-  const container = document.querySelector(containerClass);
-  container.innerHTML = "";
+export const chatAction = {
+  async showChatAction(projectId, containerClass) {
+    const container = document.querySelector(containerClass);
+    container.innerHTML = "";
 
-  const containerPrincipal = document.querySelector(".message-container");
-  containerPrincipal.dataset.projectId = projectId; // projectId es una variable JS
+    const containerPrincipal = document.querySelector(".message-container");
+    containerPrincipal.dataset.projectId = projectId;
 
-  // Obtiene los mensajes
-  const response = await getMessages(projectId);
+    // Obtiene los mensajes
+    const response = await getMessages(projectId);
 
-  // Valida que haya mensajes
-  if (
-    response.length === 0 ||
-    response.detail == `Chat with project_id ${projectId} not found`
+    // Valida que haya mensajes
+    if (
+      response.length === 0 ||
+      response.detail == `Chat with project_id ${projectId} not found`
+    ) {
+      const message = `<p style="text-align: center;">No hay mensajes en este chat</p>`;
+      container.insertAdjacentHTML("beforeend", message);
+      return;
+    }
+
+    // Renderiza los mensajes
+    response.forEach((message) => {
+      let content = renderMessage(message);
+
+      container.insertAdjacentHTML("beforeend", content);
+    });
+  },
+
+  async sendMessageToChatAction(
+    content,
+    projectId,
+    inputElement,
+    buttonElement,
   ) {
-    const message = `<p style="text-align: center;">No hay mensajes en este chat</p>`;
-    container.insertAdjacentHTML("beforeend", message);
-    return;
-  }
+    if (!content || !projectId) {
+      console.log("Error! Información incompleta");
+      return;
+    }
 
-  // Renderiza los mensajes
-  response.forEach((message) => {
-    let content = renderMessage(message);
+    sendChatMessage(content, projectId);
 
-    container.insertAdjacentHTML("beforeend", content);
-  });
-}
+    inputElement.value = "";
 
-export async function sendMessageToChatAction(
-  content,
-  projectId,
-  inputElement,
-  buttonElement,
-) {
-  if (!content || !projectId) {
-    console.log("Error! Información incompleta");
-    return;
-  }
+    setButtonState(buttonElement, false, "Enviar");
+  },
 
-  sendChatMessage(content, projectId);
+  showNewMessage(payload, containerClass) {
+    const container = document.querySelector(containerClass);
 
-  inputElement.value = "";
+    const containerPrincipal = document.querySelector(".message-container");
+    const projectId = Number(containerPrincipal.dataset.projectId);
 
-  setButtonState(buttonElement, false, "Enviar");
-}
+    console.log("projectId: ", projectId);
+    console.log("payload: ", payload);
 
-export function showNewMessage(payload, containerClass) {
-  const container = document.querySelector(containerClass);
-
-  const containerPrincipal = document.querySelector(".message-container");
-  const projectId = Number(containerPrincipal.dataset.projectId);
-
-  console.log("projectId: ", projectId);
-  console.log("payload: ", payload);
-
-  // Valida que haya mensajes
-  if (projectId === payload.project_id) {
-    const message = renderMessage(payload);
-    container.insertAdjacentHTML("beforeend", message);
-  } else {
-    showMessage("Nuevo mensaje en el chat");
-  }
-}
+    // Valida que haya mensajes
+    if (projectId === payload.project_id) {
+      const message = renderMessage(payload);
+      container.insertAdjacentHTML("beforeend", message);
+    } else {
+      showMessage("Nuevo mensaje en el chat");
+    }
+  },
+};

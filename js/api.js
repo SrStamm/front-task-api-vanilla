@@ -4,7 +4,7 @@
 import { auth } from "./auth.js";
 import { url } from "./config.js";
 import { unauthorized } from "./dom.js";
-import { showMessage } from "./utils/utils.js";
+import { utils } from "./utils/utils.js";
 
 async function fetchData(endpoint, method, body, token) {
   if (!token) {
@@ -46,7 +46,7 @@ async function fetchData(endpoint, method, body, token) {
         const newResponseData = await newResponse.json();
 
         if (!newResponse.ok) {
-          showMessage(
+          utils.showMessage(
             "Sesion expirada. Por favor, vuelve a iniciar sesion",
             "error",
           );

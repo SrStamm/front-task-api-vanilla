@@ -1519,6 +1519,10 @@ template {
   max-width: max-content;
 }
 
+.message-content {
+  font-size: var(--font-size-base);
+}
+
 .message-meta {
   font-size: var(--font-size-xs);
 }

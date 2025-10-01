@@ -16,7 +16,7 @@ import {
   registerFetch,
 } from "./api.js";
 import { unauthorized, loginSucces } from "./dom.js";
-import { showMessage } from "./utils/utils.js";
+import { utils } from "./utils/utils.js";
 
 class Auth {
   // Validar la autenticación del usuario
@@ -68,7 +68,10 @@ class Auth {
         return { success: true, message: "Sesión cerrada" };
       }
     } catch (error) {
-      showMessage("Ocurrió un error inesperado al cerrar sesión.", "error");
+      utils.showMessage(
+        "Ocurrió un error inesperado al cerrar sesión.",
+        "error",
+      );
       return {
         success: false,
         message: error.message || "Error al cerrar sesión",
@@ -79,7 +82,7 @@ class Auth {
   async login(username, password) {
     // Obtiene los datos ingresados
     if (!username || !password) {
-      showMessage("Por favor, complete todos los campos", "warning");
+      utils.showMessage("Por favor, complete todos los campos", "warning");
       throw new Error("Faltan campos por completar");
     }
 
@@ -116,7 +119,7 @@ class Auth {
 
     // Validación de campos
     if (!username || !email || !password) {
-      showMessage("Por favor, complete todos los campos", "warning");
+      utils.showMessage("Por favor, complete todos los campos", "warning");
       throw new Error("Faltan campos por completar");
     }
 

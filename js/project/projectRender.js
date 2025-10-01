@@ -1,55 +1,58 @@
-import { showModal, updateModalContent } from "../utils/modal.js";
+import { modal } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
-import { renderTaskInProject } from "../task/taskRender.js";
+import { taskRender } from "../task/taskRender.js";
 import { renderUserInProject } from "../user/userRender.js";
 
-// Función que renderiza los proyectos
-export function renderProject(elementId, projectData) {
-  // Obtiene el template
-  const projectTemplate = document.getElementById(elementId);
+export const renderProject = {
+  // Función que renderiza los proyectos
+  renderProject(elementId, projectData) {
+    // Obtiene el template
+    const projectTemplate = document.getElementById(elementId);
 
-  // Copia el template
-  const clonTemplate = projectTemplate.content.cloneNode(true);
+    // Copia el template
+    const clonTemplate = projectTemplate.content.cloneNode(true);
 
-  // Accede a cada parte del template
-  const projectTitle = clonTemplate.querySelector(".projectTitle");
-  const projectDescription = clonTemplate.querySelector(".projectDescription");
-  const viewBtn = clonTemplate.querySelector(".view-project-btn");
-
-  // VERIFICAR que los elementos existen antes de usarlos
-  if (!projectTitle || !projectDescription) {
-    console.error(
-      "Error: No se encontraron todos los elementos en: ",
-      elementId,
+    // Accede a cada parte del template
+    const projectTitle = clonTemplate.querySelector(".projectTitle");
+    const projectDescription = clonTemplate.querySelector(
+      ".projectDescription",
     );
-    return;
-  }
+    const viewBtn = clonTemplate.querySelector(".view-project-btn");
 
-  if (projectData.description === null) {
-    projectData.description = "Sin descripción";
-  }
+    // VERIFICAR que los elementos existen antes de usarlos
+    if (!projectTitle || !projectDescription) {
+      console.error(
+        "Error: No se encontraron todos los elementos en: ",
+        elementId,
+      );
+      return;
+    }
 
-  // Actualiza con los datos obtenidos
-  projectTitle.textContent = projectData.title;
-  projectDescription.textContent = projectData.description;
+    if (projectData.description === null) {
+      projectData.description = "Sin descripción";
+    }
 
-  //
-  viewBtn.dataset.groupId = projectData.group_id;
-  viewBtn.dataset.projectId = projectData.project_id;
-  viewBtn.dataset.title = projectData.title;
-  viewBtn.dataset.description = projectData.description;
+    // Actualiza con los datos obtenidos
+    projectTitle.textContent = projectData.title;
+    projectDescription.textContent = projectData.description;
 
-  // Agrega los datos
-  return clonTemplate;
-}
+    //
+    viewBtn.dataset.groupId = projectData.group_id;
+    viewBtn.dataset.projectId = projectData.project_id;
+    viewBtn.dataset.title = projectData.title;
+    viewBtn.dataset.description = projectData.description;
 
-export function renderProjectInModal(projectData) {
-  // Crea el contenido del modal
-  const headerHtml = `<h3 class="modal-title">${projectData.title}</h3>`;
+    // Agrega los datos
+    return clonTemplate;
+  },
 
-  console.log(projectData);
+  renderProjectInModal(projectData) {
+    // Crea el contenido del modal
+    const headerHtml = `<h3 class="modal-title">${projectData.title}</h3>`;
 
-  const bodyHtml = `
+    console.log(projectData);
+
+    const bodyHtml = `
   <div class="modal-section">
     <p class="modal-description">${projectData.description}</p>
   </div>
@@ -104,14 +107,16 @@ export function renderProjectInModal(projectData) {
       ${
         projectData.tasks.length === 0
           ? "<li>No hay tareas en el proyecto</li>"
-          : projectData.tasks.map((task) => renderTaskInProject(task)).join("")
+          : projectData.tasks
+              .map((task) => taskRender.renderTaskInProject(task))
+              .join("")
       }
     </ul>
 
   </div>
   `;
 
-  const footerHtml = `
+    const footerHtml = `
     <button type="button" class="btn btn-secondary btn-sm" id="editProject" >
     <img src="./assets/pencil.png" alt=""> Editar
     </button>
@@ -120,52 +125,51 @@ export function renderProjectInModal(projectData) {
     <img src="./assets/trash.png" alt=""> Eliminar </button>
   `;
 
-  return {
-    header: headerHtml,
-    body: bodyHtml,
-    footer: footerHtml,
-    addClass: "modal-med",
-    removeClass: "modal-large",
-  };
-}
+    return {
+      header: headerHtml,
+      body: bodyHtml,
+      footer: footerHtml,
+      addClass: "modal-med",
+      removeClass: "modal-large",
+    };
+  },
 
-export function showProjectDetailsModal(projectData) {
-  const content = renderProjectInModal(projectData);
-  showModal("genericModal");
-  updateModalContent(
-    content.header,
-    content.body,
-    content.footer,
-    content.addClass,
-    content.removeClass,
-  );
+  showProjectDetailsModal(projectData) {
+    const content = renderProjectInModal(projectData);
+    modal.showModal("genericModal");
+    modal.updateModalContent(
+      content.header,
+      content.body,
+      content.footer,
+      content.addClass,
+      content.removeClass,
+    );
 
-  // Accede a los botones
-  const modalContainer = document.getElementById("genericModal");
-  modalContainer.dataset.projectData = JSON.stringify(projectData);
+    // Accede a los botones
+    const modalContainer = document.getElementById("genericModal");
+    modalContainer.dataset.projectData = JSON.stringify(projectData);
 
-  const tabsContainer = document.querySelector(".modal-tabs");
+    const tabsContainer = document.querySelector(".modal-tabs");
 
-  tabsContainer.addEventListener("click", (event) => {
-    const target = event.target;
+    tabsContainer.addEventListener("click", (event) => {
+      const target = event.target;
 
-    // Maneja el cambio de pestañas
-    if (target.classList.contains("tab-btn")) {
-      // Muestra la sección correspondiente
-      showTab(target.dataset.tab + "-tab");
-    }
-  });
+      // Maneja el cambio de pestañas
+      if (target.classList.contains("tab-btn")) {
+        // Muestra la sección correspondiente
+        showTab(target.dataset.tab + "-tab");
+      }
+    });
 
-  return modalContainer;
-}
+    return modalContainer;
+  },
 
-// Para renderizar modal de creación de proyecto
+  // Para renderizar modal de creación de proyecto
+  renderCreateProject(groupData) {
+    // Crea el contenido del modal
+    const headerHtml = `<h4>Crear proyecto</h4>`;
 
-export function renderCreateProject(groupData) {
-  // Crea el contenido del modal
-  const headerHtml = `<h4>Crear proyecto</h4>`;
-
-  const bodyHtml = `
+    const bodyHtml = `
     <form>
       <label for="createProjectName">Nombre del proyecto:</label>
       <input type="text" class="input-base" id="createProjectName"/>
@@ -174,7 +178,7 @@ export function renderCreateProject(groupData) {
     </form>
   `;
 
-  const footerHtml = `
+    const footerHtml = `
     <button type="button" class="btn btn-primary btn-sm" id="confirCreateProject"
       data-group-id="${groupData.group_id}"
       data-group-name="${groupData.name}"
@@ -187,67 +191,69 @@ export function renderCreateProject(groupData) {
     > Cancelar </button>
   `;
 
-  return {
-    header: headerHtml,
-    body: bodyHtml,
-    footer: footerHtml,
-    addClass: "modal-small",
-    removeClass: "modal-large",
-  };
-}
+    return {
+      header: headerHtml,
+      body: bodyHtml,
+      footer: footerHtml,
+      addClass: "modal-small",
+      removeClass: "modal-large",
+    };
+  },
 
-// Para renderizar lista de proyectos en modal de grupo
-export function renderProjectInGroup(projectTitle) {
-  const contentHtml = `
+  // Para renderizar lista de proyectos en modal de grupo
+  renderProjectInGroup(projectTitle) {
+    const contentHtml = `
   <li class="project-item">
       <p> ${projectTitle}</p>
   </li>
 `;
-  return contentHtml;
-}
+    return contentHtml;
+  },
 
-// Renderiza lista de proyectos para acceder a las tareas
-export function renderMinimalProject(projectData) {
-  // Obtiene el template
-  const projectTemplate = document.getElementById("minimalistProjectTemplate");
-  const clon = projectTemplate.content.cloneNode(true);
-
-  // Accede al elemento principal y al titulo
-  const projectCard = clon.querySelector(".project-item");
-  const projectTitle = clon.querySelector(".projectTitle");
-
-  // VERIFICAR que los elementos existen antes de usarlos
-  if (!projectTitle) {
-    console.error(
-      "Error: No se encontraron todos los elementos en projectTemplate",
+  // Renderiza lista de proyectos para acceder a las tareas
+  renderMinimalProject(projectData) {
+    // Obtiene el template
+    const projectTemplate = document.getElementById(
+      "minimalistProjectTemplate",
     );
-    return;
-  }
+    const clon = projectTemplate.content.cloneNode(true);
 
-  // Actualiza con los datos obtenidos
-  projectTitle.textContent = projectData.title;
+    // Accede al elemento principal y al titulo
+    const projectCard = clon.querySelector(".project-item");
+    const projectTitle = clon.querySelector(".projectTitle");
 
-  //
-  projectCard.dataset.groupId = projectData.group_id;
-  projectCard.dataset.projectId = projectData.project_id;
-  projectCard.dataset.title = projectData.title;
+    // VERIFICAR que los elementos existen antes de usarlos
+    if (!projectTitle) {
+      console.error(
+        "Error: No se encontraron todos los elementos en projectTemplate",
+      );
+      return;
+    }
 
-  // Agrega los datos
-  return clon;
-}
+    // Actualiza con los datos obtenidos
+    projectTitle.textContent = projectData.title;
 
-// Renderiza el modal para editar el proyecto
-export function renderProjectToEdit(projectData) {
-  console.log(projectData);
+    //
+    projectCard.dataset.groupId = projectData.group_id;
+    projectCard.dataset.projectId = projectData.project_id;
+    projectCard.dataset.title = projectData.title;
 
-  projectData.description = projectData.description.trim();
+    // Agrega los datos
+    return clon;
+  },
 
-  console.log(projectData);
+  // Renderiza el modal para editar el proyecto
+  renderProjectToEdit(projectData) {
+    console.log(projectData);
 
-  // Crea el contenido del modal
-  const headerHtml = `<h4 class="modal-subtitle">Editar proyecto</h4>`;
+    projectData.description = projectData.description.trim();
 
-  const bodyHtml = `
+    console.log(projectData);
+
+    // Crea el contenido del modal
+    const headerHtml = `<h4 class="modal-subtitle">Editar proyecto</h4>`;
+
+    const bodyHtml = `
     <form>
       <div>
         <label for="editProjectTitle">Nombre del proyecto:</label>
@@ -261,7 +267,7 @@ export function renderProjectToEdit(projectData) {
     </form>
   `;
 
-  const footerHtml = `
+    const footerHtml = `
     <button type="button" class="btn btn-primary btn-sm" id="confirmEditProject"
       data-project-id="${projectData.project_id}"
     > Confirmar </button>
@@ -272,10 +278,11 @@ export function renderProjectToEdit(projectData) {
     > Cancelar </button>
   `;
 
-  return {
-    header: headerHtml,
-    body: bodyHtml,
-    footer: footerHtml,
-    addClass: "modal-small",
-  };
-}
+    return {
+      header: headerHtml,
+      body: bodyHtml,
+      footer: footerHtml,
+      addClass: "modal-small",
+    };
+  },
+};
