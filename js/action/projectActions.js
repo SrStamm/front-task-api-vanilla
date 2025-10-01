@@ -13,7 +13,7 @@ import {
   renderMinimalProject,
   renderProject,
   renderProjectInModal,
-} from "./projectRender.js";
+} from "../render/projectRender.js";
 import { modal } from "../utils/modal.js";
 import { utils } from "../utils/utils.js";
 

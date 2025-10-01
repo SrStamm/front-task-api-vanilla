@@ -1,57 +1,52 @@
-// Renderiza una lista de usuarios
-export function renderUsers(target, username, groupId, userId) {
-  // Accede al template de users
-  const userTemplate = document.getElementById("userList");
-  const clonTemplate = userTemplate.content.cloneNode(true);
+export const renderUser = {
+  // Renderiza una lista de usuarios
+  renderUsers(target, username, groupId, userId) {
+    // Accede al template de users
+    const userTemplate = document.getElementById("userList");
+    const clonTemplate = userTemplate.content.cloneNode(true);
 
-  // Obtiene cada parte del template
-  const userNameTemplate = clonTemplate.querySelector(".userName");
-  const addBtn = clonTemplate.getElementById("addUser");
+    // Obtiene cada parte del template
+    const userNameTemplate = clonTemplate.querySelector(".userName");
+    const addBtn = clonTemplate.getElementById("addUser");
 
-  // Modifica cada parte
-  userNameTemplate.textContent = username;
+    // Modifica cada parte
+    userNameTemplate.textContent = username;
 
-  // Setea los datos
-  addBtn.dataset.userId = userId;
-  addBtn.dataset.groupId = groupId;
-  addBtn.dataset.target = target;
+    // Setea los datos
+    addBtn.dataset.userId = userId;
+    addBtn.dataset.groupId = groupId;
+    addBtn.dataset.target = target;
 
-  return clonTemplate;
-}
+    return clonTemplate;
+  },
 
-export function renderUsersFromGroup(
-  target,
-  username,
-  groupId,
-  projectId,
-  userId,
-) {
-  // Accede al template de users
-  const userTemplate = document.getElementById("userList");
-  const clonTemplate = userTemplate.content.cloneNode(true);
+  renderUsersFromGroup(target, username, groupId, projectId, userId) {
+    // Accede al template de users
+    const userTemplate = document.getElementById("userList");
+    const clonTemplate = userTemplate.content.cloneNode(true);
 
-  // Obtiene cada parte del template
-  const userNameTemplate = clonTemplate.querySelector(".userName");
-  const addBtn = clonTemplate.getElementById("addUser");
+    // Obtiene cada parte del template
+    const userNameTemplate = clonTemplate.querySelector(".userName");
+    const addBtn = clonTemplate.getElementById("addUser");
 
-  // Modifica cada parte
-  userNameTemplate.textContent = username;
+    // Modifica cada parte
+    userNameTemplate.textContent = username;
 
-  // Setea los datos
-  addBtn.dataset.userId = userId;
-  addBtn.dataset.groupId = groupId;
-  addBtn.dataset.projectId = projectId;
-  addBtn.dataset.target = target;
+    // Setea los datos
+    addBtn.dataset.userId = userId;
+    addBtn.dataset.groupId = groupId;
+    addBtn.dataset.projectId = projectId;
+    addBtn.dataset.target = target;
 
-  return clonTemplate;
-}
+    return clonTemplate;
+  },
 
-export function newRenderUsers(username, groupId, userId) {
-  headerContent = `
+  newRenderUsers(username, groupId, userId) {
+    headerContent = `
       <h3>Usuarios</h3>
     `;
 
-  bodyContent = `
+    bodyContent = `
       <ul id="listUser">
         <div class="body-template">
           <p>${username}</p>
@@ -70,17 +65,11 @@ export function newRenderUsers(username, groupId, userId) {
       </ul>
     `;
 
-  return { header: headerContent, body: bodyContent };
-}
+    return { header: headerContent, body: bodyContent };
+  },
 
-export function renderUserInProject(
-  groupId,
-  projectId,
-  userId,
-  username,
-  permission,
-) {
-  const contentHtml = `
+  renderUserInProject(groupId, projectId, userId, username, permission) {
+    const contentHtml = `
   <li class="user-item">
     <div class="user-info">
       <div class="user-details">
@@ -102,5 +91,6 @@ export function renderUserInProject(
   </li>
 `;
 
-  return contentHtml;
-}
+    return contentHtml;
+  },
+};

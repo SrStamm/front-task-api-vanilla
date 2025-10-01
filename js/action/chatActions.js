@@ -1,7 +1,7 @@
 import { getMessages } from "../api.js";
 import { setButtonState, showMessage } from "../utils/utils.js";
 import { sendChatMessage } from "../websockets.js";
-import { renderMessage } from "./chatRender.js";
+import { renderMessage } from "../render/chatRender.js";
 
 export const chatAction = {
   async showChatAction(projectId, containerClass) {

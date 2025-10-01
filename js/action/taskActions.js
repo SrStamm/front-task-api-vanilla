@@ -1,5 +1,5 @@
 import { createTask, editTask, getTasksFromProject } from "../api.js";
-import { renderTask } from "./taskRender.js";
+import { renderTask } from "../render/taskRender.js";
 import { utils } from "../utils/utils.js";
 
 export const taskAction = {

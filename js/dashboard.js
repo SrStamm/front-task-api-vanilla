@@ -23,7 +23,7 @@ import { modal } from "./utils/modal.js";
 import { groupRender } from "./group/groupRender.js";
 import { renderProject } from "./project/projectRender.js";
 import { taskRender } from "./task/taskRender.js";
-import { renderUsers, renderUsersFromGroup } from "./user/userRender.js";
+import { renderUser } from "./user/userRender.js";
 
 // Actions
 import { auth } from "./auth.js";
@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       userList.innerHTML = "";
       const allUsers = await getUsers();
       allUsers.forEach((user) => {
-        const renderizedUser = renderUsers(
+        const renderizedUser = renderUser.renderUsers(
           "group",
           user.username,
           groupId,
@@ -655,7 +655,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       const allUsers = await getUsersInGroup(groupId);
 
       allUsers.forEach((user) => {
-        const renderizedUser = renderUsersFromGroup(
+        const renderizedUser = renderUser.renderUsersFromGroup(
           "project",
           user.username,
           groupId,

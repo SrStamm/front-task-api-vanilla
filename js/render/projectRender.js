@@ -1,7 +1,7 @@
 import { modal } from "../utils/modal.js";
 import { showTab } from "../utils/utils.js";
 import { taskRender } from "../task/taskRender.js";
-import { renderUserInProject } from "../user/userRender.js";
+import { renderUser } from "../user/userRender.js";
 
 export const renderProject = {
   // Función que renderiza los proyectos
@@ -78,7 +78,7 @@ export const renderProject = {
           ? "<li>No hay usuarios en el proyecto</li>"
           : projectData.users
               .map((user) =>
-                renderUserInProject(
+                renderUser.renderUserInProject(
                   projectData.group_id,
                   projectData.project_id,
                   user.user_id,
