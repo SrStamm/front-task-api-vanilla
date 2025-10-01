@@ -74,7 +74,7 @@ import {
   showTasksFromProjectAction,
 } from "./task/taskActions.js";
 import { createCommentAction } from "./comment/commentActions.js";
-import { showChatAction } from "./chat/chatActions.js";
+import { sendMessageToChatAction, showChatAction } from "./chat/chatActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       await loadMinimalProjects(sectionId, true);
     }
     if (sectionId === "chatSection") {
-      await loadMinimalProjects(sectionId);
+      await loadMinimalProjects(sectionId, true);
     }
   });
 
@@ -284,6 +284,21 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       if (projectItem) {
         projectItem.classList.add("active");
       }
+    }
+
+    if (target.id === "sendNewMessage") {
+      setButtonState(target, true, "Enviando...");
+
+      const principalContainer = document.querySelector(".message-container");
+      const projectId = principalContainer.dataset.projectId;
+      const contentInput = chatContainer.querySelector("#newMessage");
+
+      await sendMessageToChatAction(
+        contentInput.value,
+        projectId,
+        contentInput,
+        target,
+      );
     }
   });
 
@@ -931,9 +946,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         editTaskData.title = taskTitle.value;
       }
 
-      taskDescription = taskDescription.trim();
       if (taskData.description !== taskDescription.value) {
-        editTaskData.description = taskDescription.value;
+        editTaskData.description = taskDescription.value.trim();
       }
 
       if (taskData.date_exp !== taskDateExp.value && taskDateExp.value !== "") {

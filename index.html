@@ -212,9 +212,6 @@
       <div class="dashboard-layout">
         <!-- Dashboard - Inicio section -->
         <section class="dashboard-section" id="inicioSection">
-          <header>
-            <h2>Dashboard</h2>
-          </header>
           <div class="inicioSection">
             <div id="pendingTaskWidget" class="partSections">
               <h3 class="headerPartSection dashboard-layout-h3">
@@ -240,9 +237,6 @@
           id="groupSection"
           style="display: none"
         >
-          <header>
-            <h2>Mis Grupos</h2>
-          </header>
           <div class="partSections">
             <div class="headerPartSection">
               <h3 class="dashboard-layout-h3">Grupos</h3>
@@ -260,9 +254,6 @@
           id="projectSection"
           style="display: none"
         >
-          <header>
-            <h2>Proyectos</h2>
-          </header>
           <article class="partSections">
             <header class="headerPartSection">
               <h3 class="dashboard-layout-h3">Mis Proyectos</h3>
@@ -337,11 +328,18 @@
             <header class="headerPartSection">
               <h3 class="dashboard-layout-h3">Chat</h3>
             </header>
-            <div class="message-container">
-              <ol class="list-message list-template"></ol>
+            <div class="message-container" data-project-id="0">
+              <ol class="list-message"></ol>
               <form class="form-message">
-                <input type="text" name="newMessage" class="input-base" />
-                <button type="submit" class="btn btn-sm">Enviar</button>
+                <input
+                  type="text"
+                  name="newMessage"
+                  id="newMessage"
+                  class="input-base"
+                />
+                <button type="button" class="btn btn-sm" id="sendNewMessage">
+                  Enviar
+                </button>
               </form>
             </div>
           </article>

@@ -59,6 +59,11 @@ export async function loadProjects(initial = false) {
       projectContainer.appendChild(sentinel);
     }
 
+    if (!Array.isArray(projects)) {
+      showMessage("Limite alcanzado. Espere un minuto");
+      return;
+    }
+
     if (projects.length === 0 && initial) {
       projectContainer.textContent = "No eres parte de ningun proyecto.";
     } else {
@@ -142,6 +147,11 @@ export async function loadMinimalProjects(sectionId, initial = false) {
       const sentinel = document.createElement("li");
       sentinel.id = "miniProjectSentinel";
       projectContainer.appendChild(sentinel);
+    }
+
+    if (!Array.isArray(projects)) {
+      showMessage("Limite alcanzado. Espere un minuto");
+      return;
     }
 
     if (projects.lenght <= 0 && initial) {
