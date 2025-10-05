@@ -3,7 +3,7 @@
 
 import { auth } from "./auth.js";
 import { url } from "./config.js";
-import { unauthorized } from "./dom.js";
+import { domFunctions } from "./dom.js";
 import { utils } from "./utils/utils.js";
 
 async function fetchData(endpoint, method, body, token) {
@@ -59,7 +59,7 @@ async function fetchData(endpoint, method, body, token) {
     } catch (error) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("refrToken");
-      unauthorized();
+      domFunctions.unauthorized();
       console.log("Error en fetchData 401: ", error);
       throw new Error(`Error: `, error.message);
     }

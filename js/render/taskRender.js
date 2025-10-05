@@ -1,4 +1,5 @@
 import { modal } from "../utils/modal.js";
+import { renderComment } from "./commentRender.js";
 
 export const taskRender = {
   renderTaskInProject(TaskData) {
@@ -30,7 +31,9 @@ export const taskRender = {
     // Crea el contenido del modal
     const headerHtml = `<h4>Crear tarea</h4>`;
 
-    const userListHtml = projectUsers
+    const safeUsers = Array.isArray(projectUsers) ? projectUsers : [];
+
+    const userListHtml = safeUsers
       .map(
         (user) =>
           `
@@ -84,7 +87,7 @@ export const taskRender = {
     const formattedDate = dueDate.toLocaleDateString("es-ES", options);
 
     // Modificar el estado al formato en inglés
-    taskData.state = modifyState(taskData.state);
+    taskData.state = taskRender.modifyState(taskData.state);
 
     taskData.project_id = projectId;
 
@@ -149,8 +152,8 @@ export const taskRender = {
           <div class="detail-value">${formattedDate}</div>
         </div>
         <div class="task-details-row">
-          <div class="detail-label"> Asignado a: </div>
-          <div class="detail-value">${taskData.asigned}</div>
+          <div class="detail-label"> Asignado a:</div>
+          <div class="detail-value">${taskData.asigned.length == 0 ? "Sin asignar" : taskData.asigned}</div>
         </div>
       </div>
       <div class="task-description-full">
@@ -162,31 +165,34 @@ export const taskRender = {
         <button class="tab-btn active" data-tab="comments">Comentarios</button>
       </div>
 
-      <div class="modal-section tab-content active">
-        <ol class="listComments">
-          ${
-            taskData.comments.length <= 0 || taskData.comments === null
-              ? "<li style='text-align: center'>No hay comentarios</li>"
-              : "<li>Sin funcion para renderizar</li>"
-          }
-        </ol>
+      <div class="section tab-content active">
+        <div class="comment-container">
+          <ol class="listComments">
+            ${
+              taskData.comments.length <= 0
+                ? "<li style='text-align: center'>No hay comentarios</li>"
+                : taskData.comments
+                    .map((comment) => {
+                      return renderComment(comment);
+                    })
+                    .join("")
+            }
+          </ol>
 
-        <div class="comment-input">
-          <input class="input-base"
-            type="text" id="newComment"
-            placeholder="Escribe un comentario..."
-          />
+          <div class="form-comment">
+            <input class="input-base"
+              type="text" id="newComment"
+              placeholder="Escribe un comentario..."
+            />
 
-        <button class="btn btn-primary btn-sm" id="addComment">Enviar Comentario</button>
+          <button class="btn btn-primary btn-sm" id="addComment">Enviar</button>
+          </div>
         </div>
+
 
       </div>
 
     `;
-
-    /*
-      taskData.comments.map((comment) => renderComment(comment)).join("")
-    */
 
     const footerHtml = `
     <button type="button" class="btn btn-primary btn-sm" id="editTask"
@@ -206,7 +212,7 @@ export const taskRender = {
   },
 
   showTaskDetailsModal(taskData) {
-    const content = renderModalTask(taskData);
+    const content = taskRender.renderModalTask(taskData);
 
     // Muestra el modal
     modal.showModal("genericModal");

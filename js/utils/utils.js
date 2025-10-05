@@ -68,7 +68,7 @@ export const utils = {
         // Maneja el cambio de pestañas
         if (target.classList.contains("tab-btn")) {
           // Muestra la sección correspondiente
-          showTab(target.dataset.tab + "-tab");
+          utils.showTab(target.dataset.tab + "-tab");
         }
       });
     } else {

@@ -1,5 +1,5 @@
 import { createTask, editTask, getTasksFromProject } from "../api.js";
-import { renderTask } from "../render/taskRender.js";
+import { taskRender } from "../render/taskRender.js";
 import { utils } from "../utils/utils.js";
 
 export const taskAction = {
@@ -33,7 +33,7 @@ export const taskAction = {
     }
 
     response.forEach((task) => {
-      let content = renderTask(task, projectId);
+      let content = taskRender.renderTask(task, projectId);
 
       if (task.state === "Done") {
         const completedTasksContainer = document.getElementById(

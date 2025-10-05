@@ -1,4 +1,4 @@
-import { showNewMessage } from "./chat/chatActions.js";
+import { chatAction } from "./action/chatActions.js";
 import {
   ChatMessage,
   OutgoingGroupMessagePayload,
@@ -18,15 +18,13 @@ socket.onopen = () => {
 // Escuchar mensajes que llegan desde el backend
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  console.log(data);
 
   // Aquí actualizaría el DOM
   switch (data.type) {
     case "group_message":
       const groupMessage = OutgoingGroupMessagePayload.parse(data.payload);
-      console.log("Mensaje del grupo: ", groupMessage);
 
-      showNewMessage(groupMessage, ".list-message");
+      chatAction.showNewMessage(groupMessage, ".list-message");
 
       break;
 

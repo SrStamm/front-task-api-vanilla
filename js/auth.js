@@ -1,12 +1,4 @@
-// Validación del token y manejo de sesion
-// Contiene la logica del refresh y logout
-
-// MERGE login.js and auth.js in this file. Combine both files into a single file.
-// CREATE an auth object: Export a single object that contains all the functions related to authentication (validToken, refresh, logout, etc.).
-// This will help in organizing the code better.
-// DECOUPLE from the DOM: this files directly manipulates the DOM. Instead, it should only handle authentication logic and return status or data.
-// The DOM manipulation should be handled in a separate file or layer.
-// For example, the main script would then handle the button click and call the `auth.login` function, and based on the result, it would update the DOM accordingly.
+// Contains authentication logic
 
 import {
   getCurrentUser,
@@ -15,9 +7,10 @@ import {
   loginFetch,
   registerFetch,
 } from "./api.js";
-import { unauthorized, loginSucces } from "./dom.js";
+import { domFunctions } from "./dom.js";
 import { utils } from "./utils/utils.js";
 
+// Single object that contains all the functions related to authentication
 class Auth {
   // Validar la autenticación del usuario
   async validateToken() {
@@ -28,7 +21,7 @@ class Auth {
         return { success: true, message: "Usario validado" };
       }
     } catch (error) {
-      unauthorized();
+      domFunctions.unauthorized();
       localStorage.removeItem("authToken");
       localStorage.removeItem("refrToken");
     }
@@ -154,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     let validated = await auth.validateToken();
     if (validated.success) {
-      loginSucces();
+      domFunctions.loginSucces();
     }
   } catch (error) {}
 });

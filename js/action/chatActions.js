@@ -1,5 +1,5 @@
 import { getMessages } from "../api.js";
-import { setButtonState, showMessage } from "../utils/utils.js";
+import { utils } from "../utils/utils.js";
 import { sendChatMessage } from "../websockets.js";
 import { renderMessage } from "../render/chatRender.js";
 
@@ -47,7 +47,7 @@ export const chatAction = {
 
     inputElement.value = "";
 
-    setButtonState(buttonElement, false, "Enviar");
+    utils.setButtonState(buttonElement, false, "Enviar");
   },
 
   showNewMessage(payload, containerClass) {
@@ -64,7 +64,7 @@ export const chatAction = {
       const message = renderMessage(payload);
       container.insertAdjacentHTML("beforeend", message);
     } else {
-      showMessage("Nuevo mensaje en el chat");
+      utils.showMessage("Nuevo mensaje en el chat");
     }
   },
 };

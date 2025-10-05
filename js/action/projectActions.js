@@ -9,11 +9,7 @@ import {
   getUsersFromProject,
   removeUserToProject,
 } from "../api.js";
-import {
-  renderMinimalProject,
-  renderProject,
-  renderProjectInModal,
-} from "../render/projectRender.js";
+import { renderProject } from "../render/projectRender.js";
 import { modal } from "../utils/modal.js";
 import { utils } from "../utils/utils.js";
 
@@ -71,7 +67,7 @@ export const projectAction = {
         projectContainer.textContent = "No eres parte de ningun proyecto.";
       } else {
         projects.forEach((project) => {
-          let clone = renderProject("projectTemplate", project);
+          let clone = renderProject.renderProject("projectTemplate", project);
           projectContainer.appendChild(clone);
         });
 
@@ -153,7 +149,7 @@ export const projectAction = {
         projectContainer.textContent = "No eres parte de ningun proyecto.";
       } else {
         projects.forEach((project) => {
-          let clone = renderMinimalProject(project);
+          let clone = renderProject.renderMinimalProject(project);
           projectContainer.appendChild(clone);
         });
 
@@ -254,7 +250,7 @@ export const projectAction = {
     };
 
     // Volver a renderizar la información del grupo
-    const content = renderProjectInModal(projectData);
+    const content = renderProject.renderProjectInModal(projectData);
     modal.updateModalContent(
       content.header,
       content.body,

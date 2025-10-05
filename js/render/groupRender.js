@@ -1,8 +1,8 @@
 // Rendering group-related elements. This file would handle the creation of the HTML templates and their population data
 
 import { modal } from "../utils/modal.js";
-import { showTab } from "../utils/utils.js";
-import { renderProject } from "../project/projectRender.js";
+import { utils } from "../utils/utils.js";
+import { renderProject } from "../render/projectRender.js";
 
 export const groupRender = {
   renderGroup(elementId, groupData) {
@@ -45,7 +45,7 @@ export const groupRender = {
 
   showGroupDetailsModal(groupData) {
     // Renderiza el modal con la información del grupo
-    const content = newRenderGroupInModal(groupData);
+    const content = groupRender.newRenderGroupInModal(groupData);
     modal.showModal("genericModal");
     modal.updateModalContent(
       content.header,
@@ -66,7 +66,7 @@ export const groupRender = {
       // Maneja el cambio de pestañas
       if (target.classList.contains("tab-btn")) {
         // Muestra la sección correspondiente
-        showTab(target.dataset.tab + "-tab");
+        utils.showTab(target.dataset.tab + "-tab");
       }
     });
 
@@ -74,8 +74,6 @@ export const groupRender = {
   },
 
   newRenderGroupInModal(groupData) {
-    console.log("Renderizando modal de grupo:", groupData);
-
     // Crea el contenido del modal
     const headerHtml = `<h3 class="modal-title">${groupData.name}</h3>`;
 
@@ -121,7 +119,7 @@ export const groupRender = {
             ? "<li>No hay usuarios en este grupo</li>;"
             : groupData.users
                 .map((user) =>
-                  newRenderUserInGroup(
+                  groupRender.newRenderUserInGroup(
                     groupData.group_id,
                     user.user_id,
                     user.username,
@@ -179,7 +177,6 @@ export const groupRender = {
   },
 
   renderGroupToEdit(groupData) {
-    console.log("Renderizando modal de edición de grupo:", groupData);
     // Crea el contenido del modal
     const headerHtml = `<h4>Editar el grupo</h4>`;
 

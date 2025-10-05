@@ -7,31 +7,27 @@ import {
   getUsersFromProject,
   getTasksFromProject,
   getUsersAssignedToTask,
+  getComments,
 } from "./api.js";
+
+// Funciones para DOM
 import { utils } from "./utils/utils.js";
-
-import {
-  showLoginForm,
-  showRegisterForm,
-  loginSucces,
-  unauthorized,
-} from "./dom.js";
-
 import { modal } from "./utils/modal.js";
+import { domFunctions } from "./dom.js";
 
 // Render
-import { groupRender } from "./group/groupRender.js";
-import { renderProject } from "./project/projectRender.js";
-import { taskRender } from "./task/taskRender.js";
-import { renderUser } from "./user/userRender.js";
+import { groupRender } from "./render/groupRender.js";
+import { renderProject } from "./render/projectRender.js";
+import { taskRender } from "./render/taskRender.js";
+import { renderUser } from "./render/userRender.js";
 
 // Actions
 import { auth } from "./auth.js";
-import { projectAction } from "./project/projectActions.js";
-import { groupAction } from "./group/groupActions.js";
-import { taskAction } from "./task/taskActions.js";
-import { createCommentAction } from "./comment/commentActions.js";
-import { chatAction } from "./chat/chatActions.js";
+import { projectAction } from "./action/projectActions.js";
+import { groupAction } from "./action/groupActions.js";
+import { taskAction } from "./action/taskActions.js";
+import { commentAction } from "./action/commentActions.js";
+import { chatAction } from "./action/chatActions.js";
 
 // Botones
 const createGroupBtn = document.getElementById("createGroupBtn");
@@ -73,10 +69,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     if (target.id === "registerLink") {
       event.preventDefault();
-      showRegisterForm();
+      domFunctions.showRegisterForm();
     } else if (target.id === "loginLink") {
       event.preventDefault();
-      showLoginForm();
+      domFunctions.showLoginForm();
     }
   });
 
@@ -98,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       utils.showMessage("Sesión iniciada con suceso", "success");
 
       utils.setButtonState(loginBtn, false, "Iniciar sesión");
-      loginSucces();
+      domFunctions.loginSucces();
     } else {
       utils.showMessage(response.message, "error");
 
@@ -114,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       if (response.success || response.message === "Sesión cerrada") {
         utils.showMessage("Sesión cerrada", "info");
-        unauthorized();
+        domFunctions.unauthorized();
       } else {
         throw new Error(response.detail);
       }
@@ -135,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       if (response.success) {
         utils.showMessage(response.detail, "success");
-        showLoginForm();
+        domFunctions.showLoginForm();
 
         utils.setButtonState(registerBtn, false, "Registrarse");
       } else {
@@ -207,10 +203,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (taskCard) {
       const taskData = JSON.parse(taskCard.dataset.taskData || "{}");
       const assignedUsers = await getUsersAssignedToTask(taskData.task_id);
+      const comments = await getComments(taskData.task_id);
 
       taskData.asigned = assignedUsers;
 
-      taskData.comments = []; // No hay función para renderizar comentarios aún
+      taskData.comments = comments;
+      console.log(taskData);
+      console.log(taskData.comments);
 
       // Muestra el modal con los detalles de la tarea)
       taskRender.showTaskDetailsModal(taskData);
@@ -364,8 +363,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     if (target.id === "addUserGroup") {
       modal.showModal("allUsersList");
-      const modal = document.getElementById("allUsersList");
-      const userList = modal.querySelector(".allUsersList");
+      const modalContainer = document.getElementById("allUsersList");
+      const userList = modalContainer.querySelector(".allUsersList");
       const groupId = target.dataset.groupId;
       userList.innerHTML = "";
       const allUsers = await getUsers();
@@ -646,8 +645,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "showListUserToAdd") {
       modal.showModal("allUsersList");
 
-      const modal = document.getElementById("allUsersList");
-      const userList = modal.querySelector(".allUsersList");
+      const modalContainer = document.getElementById("allUsersList");
+      const userList = modalContainer.querySelector(".allUsersList");
       const groupId = target.dataset.groupId;
       const projectId = target.dataset.projectId;
 
@@ -992,7 +991,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         utils.showMessage("Falta escribir el contenido", "error");
         return;
       }
-      const response = await createCommentAction(
+
+      const response = await commentAction.createCommentAction(
         taskData.task_id,
         content.value,
       );
@@ -1055,7 +1055,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         );
       } else {
         utils.showMessage(
-          "Error al agregar el usuario: " + response.detail,
+          "Error al agregar el usuario: " + response.detail || response,
           "error",
         );
         utils.setButtonState(target, false, "Agregar");
@@ -1106,8 +1106,7 @@ document.addEventListener("click", (event) => {
   }
 });
 
-// Botones en dashboard
-
+// Evento para mostrar modal de crear grupo
 createGroupBtn.addEventListener("click", () => {
   modal.showModal("modalGroup");
 });

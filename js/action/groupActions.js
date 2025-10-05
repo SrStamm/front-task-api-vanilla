@@ -9,15 +9,9 @@ import {
   getProjectsFromGroup,
   getUsersInGroup,
 } from "../api.js";
-import { newRenderGroupInModal, renderGroup } from "../render/groupRender.js";
+import { groupRender } from "../render/groupRender.js";
 import { modal } from "../utils/modal.js";
-import {
-  showSpinner,
-  hideSpinner,
-  showMessage,
-  showTab,
-  initializeTabListeners,
-} from "../utils/utils.js";
+import { utils } from "../utils/utils.js";
 
 export const groupAction = {
   async loadGroup() {
@@ -25,22 +19,22 @@ export const groupAction = {
       // Llama a la funcion que obtendra los grupos
       const groups = await getGroups();
 
-      showSpinner();
+      utils.showSpinner();
 
       const groupContainer = document.getElementById("groupList");
       groupContainer.innerHTML = "";
 
-      hideSpinner();
+      utils.hideSpinner();
       if (groups.length <= 0) {
         groupContainer.textContent = "No eres parte de ningun grupo.";
       } else {
         groups.forEach((group) => {
-          let clone = renderGroup("groupTemplate", group);
+          let clone = groupRender.renderGroup("groupTemplate", group);
           groupContainer.appendChild(clone);
         });
       }
     } catch (error) {
-      hideSpinner();
+      utils.hideSpinner();
       console.error("No se pudo cargar la lista de grupos: ", error);
     }
   },
@@ -54,7 +48,7 @@ export const groupAction = {
       ).value;
 
       if (!newGroupName) {
-        showMessage("El nombre del grupo es obligatorio", "error");
+        utils.showMessage("El nombre del grupo es obligatorio", "error");
         return;
       }
 
@@ -95,7 +89,7 @@ export const groupAction = {
         throw new Error(response.detail);
       }
 
-      showMessage("Grupo editado exitosamente", "success");
+      utils.showMessage("Grupo editado exitosamente", "success");
 
       // Obtener los datos del grupo desde el dataset del modal
       const modalContainer = document.getElementById("genericModal");
@@ -109,7 +103,7 @@ export const groupAction = {
       groupData.projects = listProject;
 
       // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
+      const content = groupRender.newRenderGroupInModal(groupData);
       modal.updateModalContent(
         content.header,
         content.body,
@@ -118,14 +112,14 @@ export const groupAction = {
         content.removeClass,
       );
 
-      initializeTabListeners();
+      utils.initializeTabListeners();
 
-      showTab("projects-tab");
+      utils.showTab("projects-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
     } catch (error) {
-      showMessage("Error al editar el grupo: ", error.message);
+      utils.showMessage("Error al editar el grupo: ", error.message);
     }
   },
 
@@ -147,11 +141,13 @@ export const groupAction = {
     try {
       let response = await addUserToGroup(groupId, userId);
 
+      console.log("Response al agregar usuario al grupo: ", response);
+
       if (response.detail !== "El usuario ha sido agregado al grupo") {
         throw new Error(response.detail);
       }
 
-      showMessage("Usuario agregado exitosamente", "success");
+      utils.showMessage("Usuario agregado exitosamente", "success");
 
       // Obtener los datos del grupo desde el dataset del modal
       const modalContainer = document.getElementById("genericModal");
@@ -165,7 +161,7 @@ export const groupAction = {
       groupData.projects = listProject;
 
       // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
+      const content = groupRender.newRenderGroupInModal(groupData);
       modal.updateModalContent(
         content.header,
         content.body,
@@ -174,16 +170,16 @@ export const groupAction = {
         content.removeClass,
       );
 
-      initializeTabListeners();
+      utils.initializeTabListeners();
 
-      showTab("members-tab");
+      utils.showTab("members-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
 
       return { success: true };
     } catch (error) {
-      showMessage("Error al añadir el usuario: ", "error");
+      utils.showMessage("Error al añadir el usuario: ", "error");
 
       return { success: false };
     }
@@ -197,7 +193,7 @@ export const groupAction = {
         throw new Error(response.detail);
       }
 
-      showMessage("Usuario eliminado exitosamente", "success");
+      utils.showMessage("Usuario eliminado exitosamente", "success");
 
       // Obtener los datos del grupo desde el dataset del modal
       const modalContainer = document.getElementById("genericModal");
@@ -211,7 +207,7 @@ export const groupAction = {
       groupData.projects = listProject;
 
       // Volver a renderizar la información del grupo
-      const content = newRenderGroupInModal(groupData);
+      const content = groupRender.newRenderGroupInModal(groupData);
       modal.updateModalContent(
         content.header,
         content.body,
@@ -220,16 +216,16 @@ export const groupAction = {
         content.removeClass,
       );
 
-      initializeTabListeners();
+      utils.initializeTabListeners();
 
-      showTab("members-tab");
+      utils.showTab("members-tab");
 
       // Actualizar el dataset con los nuevos datos
       modalContainer.dataset.groupData = JSON.stringify(groupData);
 
       return { success: true };
     } catch (error) {
-      showMessage("Error al eliminar el usuario: ", error.message);
+      utils.showMessage("Error al eliminar el usuario: ", error.message);
       return { success: false };
     }
   },
@@ -237,7 +233,7 @@ export const groupAction = {
   async editRoleAction(groupId, userId, role) {
     try {
       if (!groupId || !userId || !role) {
-        showMessage("Faltan datos para editar el rol", "error");
+        utils.showMessage("Faltan datos para editar el rol", "error");
         return;
       }
 
@@ -262,7 +258,7 @@ export const groupAction = {
         console.log("Lista de proyectos: ", listProject);
 
         // Volver a renderizar la información del grupo
-        const content = newRenderGroupInModal(groupData);
+        const content = groupRender.newRenderGroupInModal(groupData);
         modal.updateModalContent(
           content.header,
           content.body,
@@ -271,9 +267,9 @@ export const groupAction = {
           content.removeClass,
         );
 
-        initializeTabListeners();
+        utils.initializeTabListeners();
 
-        showTab("members-tab");
+        utils.showTab("members-tab");
         // Actualizar el dataset con los nuevos datos
         modalContainer.dataset.groupData = JSON.stringify(groupData);
         return { success: true, detail: response.detail };

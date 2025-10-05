@@ -1,7 +1,7 @@
 import { modal } from "../utils/modal.js";
-import { showTab } from "../utils/utils.js";
-import { taskRender } from "../task/taskRender.js";
-import { renderUser } from "../user/userRender.js";
+import { utils } from "../utils/utils.js";
+import { taskRender } from "../render/taskRender.js";
+import { renderUser } from "../render/userRender.js";
 
 export const renderProject = {
   // Función que renderiza los proyectos
@@ -135,7 +135,7 @@ export const renderProject = {
   },
 
   showProjectDetailsModal(projectData) {
-    const content = renderProjectInModal(projectData);
+    const content = renderProject.renderProjectInModal(projectData);
     modal.showModal("genericModal");
     modal.updateModalContent(
       content.header,
@@ -157,7 +157,7 @@ export const renderProject = {
       // Maneja el cambio de pestañas
       if (target.classList.contains("tab-btn")) {
         // Muestra la sección correspondiente
-        showTab(target.dataset.tab + "-tab");
+        utils.showTab(target.dataset.tab + "-tab");
       }
     });
 
