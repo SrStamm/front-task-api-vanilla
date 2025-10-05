@@ -8,6 +8,7 @@ import {
   getTasksFromProject,
   getUsersAssignedToTask,
   getComments,
+  getCurrentUser,
 } from "./api.js";
 
 // Funciones para DOM
@@ -95,6 +96,10 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       utils.setButtonState(loginBtn, false, "Iniciar sesión");
       domFunctions.loginSucces();
+
+      const user = await getCurrentUser();
+
+      localStorage.setItem("currentUser", JSON.stringify(user));
     } else {
       utils.showMessage(response.message, "error");
 
@@ -208,8 +213,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       taskData.asigned = assignedUsers;
 
       taskData.comments = comments;
-      console.log(taskData);
-      console.log(taskData.comments);
 
       // Muestra el modal con los detalles de la tarea)
       taskRender.showTaskDetailsModal(taskData);
@@ -703,7 +706,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     if (target.id === "deleteProject") {
       utils.setButtonState(target, true, "Eliminando...");
 
-      console.log(target.dataset.groupId, target.dataset.projectId);
       const response = await projectAction.deleteProjectAction(
         target.dataset.groupId,
         target.dataset.projectId,
@@ -999,7 +1001,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
       if (response.success) {
         utils.showMessage("Comentario agregado", "success");
-        console.log(response);
       } else {
         utils.showMessage(
           "Error al agregar el comentario: " + response.detail,

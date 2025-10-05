@@ -50,8 +50,6 @@ export const renderProject = {
     // Crea el contenido del modal
     const headerHtml = `<h3 class="modal-title">${projectData.title}</h3>`;
 
-    console.log(projectData);
-
     const bodyHtml = `
   <div class="modal-section">
     <p class="modal-description">${projectData.description}</p>
@@ -244,11 +242,7 @@ export const renderProject = {
 
   // Renderiza el modal para editar el proyecto
   renderProjectToEdit(projectData) {
-    console.log(projectData);
-
     projectData.description = projectData.description.trim();
-
-    console.log(projectData);
 
     // Crea el contenido del modal
     const headerHtml = `<h4 class="modal-subtitle">Editar proyecto</h4>`;

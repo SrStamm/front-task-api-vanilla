@@ -148,6 +148,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     let validated = await auth.validateToken();
     if (validated.success) {
       domFunctions.loginSucces();
+    } else {
+      domFunctions.unauthorized();
     }
   } catch (error) {}
 });

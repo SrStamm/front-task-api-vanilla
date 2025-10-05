@@ -24,9 +24,12 @@ export const chatAction = {
       return;
     }
 
+    const userData = localStorage.getItem("currentUser");
+    const userDataParsed = JSON.parse(userData);
+
     // Renderiza los mensajes
     response.forEach((message) => {
-      let content = renderMessage(message);
+      let content = renderMessage(message, userDataParsed.user_id);
 
       container.insertAdjacentHTML("beforeend", content);
     });
@@ -56,12 +59,13 @@ export const chatAction = {
     const containerPrincipal = document.querySelector(".message-container");
     const projectId = Number(containerPrincipal.dataset.projectId);
 
-    console.log("projectId: ", projectId);
-    console.log("payload: ", payload);
+    const userData = localStorage.getItem("currentUser");
+    const userDataParsed = JSON.parse(userData);
 
     // Valida que haya mensajes
     if (projectId === payload.project_id) {
-      const message = renderMessage(payload);
+      console.log("Nuevo mensaje en el chat: ", payload);
+      const message = renderMessage(payload, userDataParsed.user_id);
       container.insertAdjacentHTML("beforeend", message);
     } else {
       utils.showMessage("Nuevo mensaje en el chat");

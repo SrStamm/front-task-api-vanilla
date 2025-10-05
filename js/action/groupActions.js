@@ -141,8 +141,6 @@ export const groupAction = {
     try {
       let response = await addUserToGroup(groupId, userId);
 
-      console.log("Response al agregar usuario al grupo: ", response);
-
       if (response.detail !== "El usuario ha sido agregado al grupo") {
         throw new Error(response.detail);
       }
@@ -255,7 +253,6 @@ export const groupAction = {
 
         const listProject = await getProjectsFromGroup(groupId);
         groupData.projects = listProject;
-        console.log("Lista de proyectos: ", listProject);
 
         // Volver a renderizar la información del grupo
         const content = groupRender.newRenderGroupInModal(groupData);

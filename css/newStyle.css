@@ -1485,16 +1485,30 @@ template {
   gap: 0.4rem;
 }
 
+.message-card {
+  gap: 0.2rem;
+  padding: 0.5rem;
+  max-width: 50%;
+  align-self: flex-start;
+  width: 50%;
+}
+
+.message-card.active {
+  align-self: flex-end;
+}
+
 .message-details {
   background: var(--gray-100);
   padding: 0.5rem;
   border-radius: var(--border-radius);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  min-height: 0.1rem;
   display: flex;
   flex-direction: column;
-  min-width: 5rem;
-  max-width: max-content;
+}
+
+.message-card.active .message-details {
+  background: var(--accent);
+  color: var(--gray-50);
 }
 
 .message-content {
@@ -1503,6 +1517,8 @@ template {
 
 .message-meta {
   font-size: var(--font-size-xs);
+  flex-grow: 1;
+  align-self: flex-end;
 }
 
 /* Comentarios */
