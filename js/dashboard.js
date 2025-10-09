@@ -232,10 +232,12 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     // Al seleccionar un proyecto, muestra su chat
     if (projectItem) {
+      chatAction.resetChat();
       // Action para obtener y renderizar los mensajes
       await chatAction.showChatAction(
         projectItem.dataset.projectId,
         ".list-message",
+        true,
       );
 
       const allProjectItem = chatContainer.querySelectorAll(".project-item");
@@ -366,10 +368,13 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     if (target.id === "addUserGroup") {
       modal.showModal("allUsersList");
+
       const modalContainer = document.getElementById("allUsersList");
       const userList = modalContainer.querySelector(".allUsersList");
       const groupId = target.dataset.groupId;
+
       userList.innerHTML = "";
+
       const allUsers = await getUsers();
       allUsers.forEach((user) => {
         const renderizedUser = renderUser.renderUsers(
@@ -964,6 +969,62 @@ document.addEventListener("DOMContentLoaded", async (event) => {
       if (response.success) {
         taskRender.showTaskDetailsModal(response.taskData);
         utils.setButtonState(target, false, "Editar");
+      }
+    }
+
+    if (target.id === "editStateTask") {
+      const modalContainer = document.getElementById("genericModal");
+      const taskData = JSON.parse(modalContainer.dataset.taskData || "{}");
+      const { project_id, task_id } = taskData;
+
+      const stateSelected = modalContainer.querySelectorAll(".state-cbox");
+
+      const stateValue = Array.from(stateSelected)
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.id);
+
+      if (!stateValue || stateValue.length === 0) {
+        const listState = modalContainer.querySelector(".detail-value");
+        listState.innerHTML = `
+        <div class="check-task-state" style="display: flex; flex-direction: row; gap: 8px; ">
+          <label>
+            <input type="checkbox" id="sin empezar" class="state-cbox" value="todo_cbox" /> To Do
+          </label>
+          <label>
+            <input type="checkbox" id=d="en proceso" class="state-cbox"  value="in_progress_cbox" /> En progreso
+          </label>
+          <label>
+            <input type="checkbox" id=d="completado" class="state-cbox"  value="completed_cbox" /> Completada
+          </label>
+        </div>
+        `;
+        return;
+      }
+
+      if (stateValue.length === 1) {
+        try {
+          let response = await taskAction.editTaskStateAction(
+            project_id,
+            task_id,
+            stateValue[0],
+          );
+
+          if (response.success) {
+            utils.showMessage("Tarea actualizada", "success");
+            modal.occultModal("genericModal");
+            await taskAction.showTasksFromProjectAction(
+              project_id,
+              ".list-task",
+            );
+          } else {
+            utils.showMessage("Error al actualizar la tarea", "error");
+          }
+        } catch (error) {
+          utils.showMessage("Error al actualizar la tarea: " + error, "error");
+        }
+      } else if (stateValue.length > 1) {
+        utils.showMessage("Debe seleccionar una sola opción", "error");
+        return;
       }
     }
 

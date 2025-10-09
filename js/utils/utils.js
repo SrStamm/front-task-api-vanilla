@@ -85,4 +85,14 @@ export const utils = {
 
     button.dataset.loading = isLoading;
   },
+
+  getCurrentUserId() {
+    try {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      return user?.user_id;
+    } catch (e) {
+      console.error("Error parsing currentUser", e);
+      return null;
+    }
+  },
 };

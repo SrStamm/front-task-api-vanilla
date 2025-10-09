@@ -6,6 +6,7 @@ export function renderMessage(messageData, userId) {
   } else {
     createDate = new Date(messageData.timestamp);
   }
+
   const currentDate = new Date();
 
   let formattedDate = "";
@@ -22,11 +23,17 @@ export function renderMessage(messageData, userId) {
     formattedDate = createDate.toLocaleTimeString("es-ES", options);
   }
 
+  const escapeHtml = (str) => {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  };
+
   const contentHtml = `
   <li class="${userId === messageData.user_id || userId === messageData.sender_id ? "message-card active" : "message-card"}">
     <div class="message-details ">
       <div class="message-info">
-        <h3 class="message-content">${messageData.message || messageData.content}</h3>
+        <h3 class="message-content">${escapeHtml(messageData.message || messageData.content)}</h3>
       </div>
       <div class="message-meta">
         <p class="message-date"> ${formattedDate}</p>

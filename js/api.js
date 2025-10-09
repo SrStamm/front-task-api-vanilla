@@ -365,7 +365,12 @@ export async function getComments(taskId) {
 //
 //
 
-export async function getMessages(projectId) {
+export async function getMessages(projectId, limit, offset) {
   const token = localStorage.getItem("authToken");
-  return await fetchData(`/chat/${projectId}`, "GET", null, token);
+  return await fetchData(
+    `/chat/${projectId}?limit=${limit}&offset=${offset}`,
+    "GET",
+    null,
+    token,
+  );
 }

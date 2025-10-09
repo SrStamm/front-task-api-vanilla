@@ -22,8 +22,10 @@ export const taskAction = {
   },
 
   async showTasksFromProjectAction(projectId, containerClass) {
-    const container = document.querySelector(containerClass);
-    container.innerHTML = "";
+    const Allcontainer = document.querySelectorAll(containerClass);
+    Allcontainer.forEach((container) => {
+      container.innerHTML = "";
+    });
 
     const response = await getTasksFromProject(projectId);
 
@@ -41,7 +43,7 @@ export const taskAction = {
         );
 
         const completedList =
-          completedTasksContainer.querySelector("containerClass");
+          completedTasksContainer.querySelector(containerClass);
 
         completedList.insertAdjacentHTML("beforeend", content);
       } else if (task.state === "In Progress") {
@@ -88,6 +90,33 @@ export const taskAction = {
       return { success: true, taskData: currentTaskData };
     } catch (error) {
       utils.showMessage("Error al editar la tarea: ", error.message);
+    }
+  },
+
+  async editTaskStateAction(projectId, taskId, newState) {
+    try {
+      let response = await editTask(projectId, taskId, { state: newState });
+
+      if (response.detail !== "A task has been successfully updated") {
+        throw new Error(response.detail);
+      }
+
+      const modalContainer = document.getElementById("genericModal");
+      const currentTaskData = JSON.parse(
+        modalContainer.dataset.taskData || "{}",
+      );
+
+      currentTaskData.state = newState;
+
+      modalContainer.dataset.taskData = JSON.stringify(currentTaskData);
+
+      return { success: true, taskData: currentTaskData };
+    } catch (error) {
+      utils.showMessage(
+        "Error al actualizar el estado de la tarea: ",
+        error.message,
+      );
+      return { success: false, detail: error.message };
     }
   },
 };

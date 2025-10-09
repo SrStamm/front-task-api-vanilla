@@ -153,7 +153,7 @@ export const taskRender = {
         </div>
         <div class="task-details-row">
           <div class="detail-label"> Asignado a:</div>
-          <div class="detail-value">${taskData.asigned.length == 0 ? "Sin asignar" : taskData.asigned}</div>
+          <div class="detail-value">${taskData.asigned.length === 0 ? "Sin asignar" : taskData.asigned}</div>
         </div>
       </div>
       <div class="task-description-full">

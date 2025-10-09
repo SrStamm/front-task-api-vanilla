@@ -19,6 +19,8 @@ socket.onopen = () => {
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data);
 
+  console.log("Mensaje recibido:", data);
+
   // Aquí actualizaría el DOM
   switch (data.type) {
     case "group_message":
