@@ -5,6 +5,7 @@ import {
   WebSocketEvent,
 } from "./chat/chatClass.js";
 import { url } from "./config.js";
+import { utils } from "./utils/utils.js";
 
 const token = localStorage.getItem("authToken");
 
@@ -31,6 +32,11 @@ socket.onmessage = (event) => {
       break;
 
     case "personal_message":
+      break;
+
+    case "notification":
+      console.log("Mensaje recibido:", data);
+      showNotification(data.payload);
       break;
 
     default:
@@ -62,5 +68,35 @@ export function sendChatMessage(content, projectId) {
   } else {
     console.log("Conexión cerrada");
     return;
+  }
+}
+
+function showNotification(payload) {
+  const { notification_type, message } = payload;
+
+  console.log(payload);
+  console.log(notification_type, message);
+
+  const successTypes = [
+    "comment_mention",
+    "assigned_task",
+    "append_to_group",
+    "update_role_to_group",
+    "add_user_to_project",
+    "permission_update",
+  ];
+
+  const failureTypes = [
+    "not_assigned_task",
+    "remove_user_to_group",
+    "delete_user_from_project",
+  ];
+
+  if (successTypes.includes(notification_type)) {
+    utils.showMessage(message, "info");
+  }
+
+  if (failureTypes.includes(notification_type)) {
+    utils.showMessage(message, "advert");
   }
 }

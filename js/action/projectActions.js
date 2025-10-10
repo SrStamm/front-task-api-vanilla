@@ -272,6 +272,8 @@ export const projectAction = {
         permission,
       );
 
+      console.log(response);
+
       if (
         response.detail ===
         "Se ha cambiado los permisos del usuario en el proyecto"

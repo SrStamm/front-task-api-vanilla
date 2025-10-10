@@ -750,7 +750,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
           selectPermission,
         );
 
-        if (response && response.success) {
+        if (response.success) {
           utils.showMessage("Rol cambiado exitosamente", "success");
 
           const modalContainer = document.getElementById("genericModal");
@@ -1006,7 +1006,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
           let response = await taskAction.editTaskStateAction(
             project_id,
             task_id,
-            stateValue[0],
+            stateValue[0].valueOf,
           );
 
           if (response.success) {
