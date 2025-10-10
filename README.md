@@ -64,7 +64,7 @@ El frontend se comunica con la API mediante:
 - WebSockets → chat y notificaciones en tiempo real
 - Autenticación → mediante tokens JWT generados en la API
 
-### ⚠️ Asegúrate de tener la API de Tareas corriendo y actualiza las URLs del entorno si es necesario (en js/config.js).
+#### ⚠️ Asegúrate de tener la API de Tareas corriendo y actualiza las URLs del entorno si es necesario (en js/config.js).
 
 ---
 
@@ -81,11 +81,25 @@ El frontend se comunica con la API mediante:
 ## 🧰 Fix pendientes
 
 - 🔁 Duplicado de mensajes en chat o proyectos (ajustar el observer).
-- 🔒 Mejorar la conexión/desconexión de websocket
+- 🔒 Mejorar la conexión/desconexión de WebSocket.
+- 🔄 Llamar una sola vez a /refresh.
+- 📱 Mejorar la responsividad.
+- 🎞️ Optimizar animaciones y transiciones.
+
 
 ---
 
 ## 🧩 Futuras features
+
+- 🔐 Restringir botones/acciones según el rol/permiso del usuario.
+- 💬 Mostrar más información sobre el usuario en comentarios o mensajes.
+- 🏷️ Agregar tags para las tareas.
+- 🔎 Filtros avanzados para tareas.
+- ℹ️ Botones de “Más información” para mostrar relaciones inmediatas.
+- 🟢 Indicar usuarios conectados al chat.
+- 🔔 Listado de notificaciones con opción de marcarlas como leídas.
+- 🧮 Badges: cantidad de tareas, mensajes no leídos, etc.
+- 📊 Métricas (tareas completadas, pendientes, progreso de proyecto).
 - 📱 Soporte PWA (modo offline y notificaciones push).
 - 🌙 Tema oscuro / claro.
 - ⚙️ Configuración de usuario.
