@@ -3,10 +3,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import DashboardPage from "../pages/Dashboard";
 import { AuthProvider } from "../providers/AuthProvider";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./ProtectedRoute";
-import DashboardLayout from "../layouts/DashboardLayout";
 import "../App.css";
 
 export const router = createBrowserRouter([
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <PrivateRoute>
-          <DashboardLayout />
+          <DashboardPage />
         </PrivateRoute>
       </AuthProvider>
     ),
