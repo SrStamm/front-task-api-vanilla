@@ -3,9 +3,10 @@
 import App from "../App";
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 export const router = createBrowserRouter([
-  { path: "/dashboard", element: <App /> },
+  { path: "/", element: <App /> },
   { path: "/login", element: <LoginPage /> },
-  { path: "/register" },
+  { path: "/register", element: <RegisterPage /> },
 ]);
