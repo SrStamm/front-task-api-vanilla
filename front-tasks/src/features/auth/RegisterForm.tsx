@@ -1,44 +1,48 @@
 import { Link } from "react-router-dom";
-import "./LoginForm.css";
 import Button from "../../components/common/Button/index.tsx";
 
-function LoginForm() {
+function RegisterForm() {
   return (
     <>
-      <h2>Ingresar</h2>
+      <h2>Registro</h2>
       <form>
         <div className="form-group">
           <label className="form-label">Username:</label>
           <input
             type="text"
-            id="usernameLogin"
             className="input-base"
-            placeholder="Ingrese su nombre de usuario"
+            placeholder="Ingresa un nombre de usuario"
             required
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Email:</label>
+          <input
+            type="email"
+            className="input-base"
+            placeholder="Ingrese su email"
+            required
+            minLength={6}
           />
         </div>
         <div className="form-group">
           <label className="form-label">Contraseña:</label>
           <input
             type="password"
-            id="passwordLogin"
             className="input-base"
-            placeholder="Ingresa tu contraseña"
-            required
+            placeholder="Ingresa una nueva contraseña"
           />
         </div>
         <div className="btn-container">
-          <Button className="btn-primary" text="Ingresar" />
+          <Button className="btn-primary" text=" Registrarse" />
         </div>
-        <p>
-          No tienes una cuenta?
-          <span className="register-link">
-            <Link to="/register">Registrate aquí</Link>
-          </span>
-        </p>
       </form>
+      <p>
+        Ya tienes una cuenta?
+        <Link to={"/login"}> Ingresa aquí</Link>
+      </p>
     </>
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
