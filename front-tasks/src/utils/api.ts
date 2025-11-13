@@ -7,7 +7,7 @@ type FetchProps = {
 };
 
 const Fetch = async ({ path, method, body }: FetchProps) => {
-  const token = localStorage.getItem("auth_token");
+  const token = localStorage.getItem("token");
 
   const Body = body !== undefined ? JSON.stringify(body) : undefined;
 
