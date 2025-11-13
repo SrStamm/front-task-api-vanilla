@@ -1,4 +1,4 @@
-import type { ReadUser } from "./User";
+import type { ReadUser } from "../types/User.ts";
 
 export interface ReadGroup {
   group_id: number;

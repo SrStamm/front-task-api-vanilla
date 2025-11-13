@@ -3,8 +3,8 @@ import type {
   CreateGroup,
   UpdateGroup,
   UpdateRoleUserInGroup,
-} from "../types/Group";
-import Fetch from "../utils/api";
+} from "../schemas/Group.ts";
+import Fetch from "../../../utils/api.ts";
 
 export async function fetchGroups() {
   const res = await Fetch({ path: "group", method: "GET" });
@@ -26,7 +26,6 @@ export async function fetchUsersGroup(group_id: number) {
   if (!res.ok) throw new Error("Failed to fetch user in group");
   return res.json();
 }
-
 
 export async function createGroup(data: CreateGroup) {
   const res = await Fetch({ path: "group", method: "POST", body: data });
@@ -53,7 +52,10 @@ export async function deleteGroup(group_id: number) {
   return res.json();
 }
 
-export async function addUserToGroup({ group_id, user_id }: AddRemoveUserToGroup) {
+export async function addUserToGroup({
+  group_id,
+  user_id,
+}: AddRemoveUserToGroup) {
   const res = await Fetch({
     path: `group/${group_id}/${user_id}`,
     method: "POST",
@@ -63,7 +65,10 @@ export async function addUserToGroup({ group_id, user_id }: AddRemoveUserToGroup
   return res.json();
 }
 
-export async function removeUserToGroup({ group_id, user_id }: AddRemoveUserToGroup) {
+export async function removeUserToGroup({
+  group_id,
+  user_id,
+}: AddRemoveUserToGroup) {
   const res = await Fetch({
     path: `group/${group_id}/${user_id}`,
     method: "DELETE",
@@ -73,15 +78,19 @@ export async function removeUserToGroup({ group_id, user_id }: AddRemoveUserToGr
   return res.json();
 }
 
-export async function updateUserToGroup({ group_id, user_id, role }: UpdateRoleUserInGroup) {
+export async function updateUserToGroup({
+  group_id,
+  user_id,
+  role,
+}: UpdateRoleUserInGroup) {
   const roleData = {
-    role: role
-  }
+    role: role,
+  };
 
   const res = await Fetch({
     path: `group/${group_id}/${user_id}`,
     method: "PATCH",
-    body: roleData
+    body: roleData,
   });
 
   if (!res.ok) throw new Error("Failed to update role for user to group");
