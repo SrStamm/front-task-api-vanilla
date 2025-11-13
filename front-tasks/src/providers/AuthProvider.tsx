@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ReadUser } from "../types/User.ts";
 
-const url = import.meta.env.URL;
+const url = import.meta.env.VITE_URL;
 
 interface AuthContextType {
   user: ReadUser | null;

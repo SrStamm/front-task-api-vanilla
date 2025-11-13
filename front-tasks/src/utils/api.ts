@@ -1,4 +1,4 @@
-const url = import.meta.env.URL;
+const url = import.meta.env.VITE_URL;
 
 type FetchProps = {
   path: string;
