@@ -2,28 +2,17 @@ import GroupCard from "./GroupCard";
 import ListCard from "../../../components/common/ListCard";
 import type { ReadGroup } from "../schemas/Group";
 
-const Groups: ReadGroup[] = [
-  {
-    group_id: 1,
-    name: "Test",
-    users: [{ user_id: 1, username: "test" }],
-  },
-  {
-    group_id: 2,
-    name: "Hola",
-    users: [
-      { user_id: 1, username: "test" },
-      { user_id: 2, username: "Adios" },
-    ],
-  },
-];
+interface listProps {
+  groups: ReadGroup[];
+}
 
-function GroupList() {
+function GroupList({ groups }: listProps) {
   return (
     <ListCard
-      children={Groups.map((group) => {
+      children={groups.map((group) => {
         return (
           <GroupCard
+            key={group.group_id}
             group_id={group.group_id}
             name={group.name}
             users={group.users}
