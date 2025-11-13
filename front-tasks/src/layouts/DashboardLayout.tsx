@@ -4,8 +4,9 @@ import { GoProject } from "react-icons/go";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
+import { Outlet, Link } from "react-router-dom";
 
-function DashboardLayout({ children }) {
+function DashboardLayout() {
   return (
     <div className="principal-layout">
       <aside className="sidebar-container">
@@ -13,10 +14,10 @@ function DashboardLayout({ children }) {
           <h1>Project Manager</h1>
           <nav>
             <div>
-              <div className="sidebar_element">
+              <Link to="/dashboard/groups" className="sidebar_element">
                 <FaUserGroup />
                 <span>"Grupo actual"</span>
-              </div>
+              </Link>
               <div className="sidebar_element">
                 <RxDashboard />
                 <span>Dashboard</span>
@@ -42,7 +43,9 @@ function DashboardLayout({ children }) {
         </div>
       </aside>
 
-      <main className="dashboard-layout">{children}</main>
+      <main className="dashboard-layout">
+        <Outlet />
+      </main>
     </div>
   );
 }

@@ -3,11 +3,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import DashboardPage from "../pages/Dashboard";
 import { AuthProvider } from "../providers/AuthProvider";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./ProtectedRoute";
 import "../App.css";
+import { dashboardRoutes } from "./dashboard.routes";
 
 export const router = createBrowserRouter([
   {
@@ -34,10 +34,9 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <AuthProvider>
-        <PrivateRoute>
-          <DashboardPage />
-        </PrivateRoute>
+        <PrivateRoute> {dashboardRoutes.element}</PrivateRoute>
       </AuthProvider>
     ),
+    children: dashboardRoutes.children,
   },
 ]);
