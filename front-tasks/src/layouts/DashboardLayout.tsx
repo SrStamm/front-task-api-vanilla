@@ -1,3 +1,5 @@
+import "./DashboardLayout.css";
+
 import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { GoProject } from "react-icons/go";
