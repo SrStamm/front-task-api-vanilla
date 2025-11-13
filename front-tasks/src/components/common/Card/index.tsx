@@ -45,7 +45,10 @@ function Card({
             <Button
               className={action.className || ""}
               text={action.text}
-              onClick={action.onClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick();
+              }}
             />
           )}
         </div>
