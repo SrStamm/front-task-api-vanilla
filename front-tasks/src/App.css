@@ -99,7 +99,7 @@ body {
   overflow-x: auto;
 }
 
-.dashboard-layout h2 {
+.dashboard-h2 {
   font-size: 3rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -112,7 +112,7 @@ body {
   text-align: center;
 }
 
-.dashboard-layout-h3 {
+.dashboard-h3 {
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;

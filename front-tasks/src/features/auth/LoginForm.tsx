@@ -38,7 +38,7 @@ function LoginForm() {
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("token", data.access_token);
-        navigate("/");
+        navigate("/dashboard");
       } else {
         const dataError = await res.json();
         console.log("Error: ", dataError.detail);
