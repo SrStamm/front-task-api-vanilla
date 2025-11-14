@@ -16,6 +16,7 @@ function GroupViewModal({ open, onClose, group }: groupModalProps) {
     <Modal
       onClose={onClose}
       showModal={open}
+      size="large"
       modalHeader={header}
       modalBody={body}
       modalActions={actions}
