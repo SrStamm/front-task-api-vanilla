@@ -132,3 +132,46 @@
   align-content: center;
   gap: 1rem;
 }
+
+/* Tamaños de modales */
+.modal.small {
+  width: 100%;
+  max-width: 400px;
+  min-height: 300px;
+}
+
+.modal.med {
+  width: 100%;
+  max-width: 600px;
+  min-height: 400px;
+}
+
+.modal.large {
+  width: 100%;
+  max-width: 900px;
+  min-height: 600px;
+}
+
+.modal.large p {
+  font-size: var(--font-size-lg);
+}
+
+/* Animaciones del fondo de modal */
+.modal-backdrop.show .modal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modal-backdrop.hidden {
+  display: none;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal form btn {
+  margin-top: 1rem;
+}

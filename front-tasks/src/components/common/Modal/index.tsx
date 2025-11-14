@@ -7,6 +7,7 @@ interface ModalProps {
   modalBody: React.ReactNode;
   modalActions: React.ReactNode;
   onClose?: () => void;
+  size: string;
 }
 
 function Modal({
@@ -15,13 +16,14 @@ function Modal({
   modalBody,
   modalActions,
   onClose,
+  size,
 }: ModalProps) {
   return (
     <div
-      className={`modal-backdrop ${showModal ? "show" : ""}`}
+      className={`modal-backdrop ${showModal ? "show" : "hidden"}`}
       onClick={onClose}
     >
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className={`modal ${size}`} onClick={(e) => e.stopPropagation()}>
         <header className="modal-header"> {modalHeader} </header>
         <main className="modal-body">{modalBody}</main>
         <footer className="modal-footer">
