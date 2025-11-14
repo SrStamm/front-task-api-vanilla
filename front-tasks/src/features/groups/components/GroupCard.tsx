@@ -1,7 +1,12 @@
 import Card from "../../../components/common/Card";
 import type { ReadGroup } from "../schemas/Group";
 
-function GroupCard(group: ReadGroup) {
+interface GroupCardProps {
+  group: ReadGroup;
+  onView?: (group: ReadGroup) => void;
+}
+
+function GroupCard({ group, onView }: GroupCardProps) {
   return (
     <Card
       title={group.name}
@@ -10,6 +15,7 @@ function GroupCard(group: ReadGroup) {
       action={{
         text: "Ver más detalles",
         className: "btn-sm btn-outline-primary btn-manage",
+        onClick: () => onView?.(group),
       }}
     />
   );

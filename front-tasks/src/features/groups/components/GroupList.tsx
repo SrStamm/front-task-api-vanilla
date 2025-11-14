@@ -4,19 +4,15 @@ import type { ReadGroup } from "../schemas/Group";
 
 interface listProps {
   groups: ReadGroup[];
+  onViewGroup?: () => void;
 }
 
-function GroupList({ groups }: listProps) {
+function GroupList({ groups, onViewGroup }: listProps) {
   return (
     <ListCard
       children={groups.map((group) => {
         return (
-          <GroupCard
-            key={group.group_id}
-            group_id={group.group_id}
-            name={group.name}
-            users={group.users}
-          />
+          <GroupCard key={group.group_id} group={group} onView={onViewGroup} />
         );
       })}
     />
