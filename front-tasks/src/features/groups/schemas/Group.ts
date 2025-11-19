@@ -41,7 +41,7 @@ export const UserInGroupSchema = z.object({
 });
 
 export type ReadGroup = z.infer<typeof ReadGroupSchema>;
-export type CreateGroup = z.infer<typeof CreateGroupSchema>;
+export type CreateGroupInterface = z.infer<typeof CreateGroupSchema>;
 export type UpdateGroup = z.infer<typeof UpdateGroupSchema>;
 export type DeleteGroup = z.infer<typeof DeleteGroupSchema>;
 export type AddRemoveUserToGroup = z.infer<typeof AddRemoveUserToGroupSchema>;
