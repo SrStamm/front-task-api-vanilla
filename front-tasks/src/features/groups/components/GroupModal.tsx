@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
+import "./GroupModal.css"
 
 interface groupModalProps {
   open: boolean;
