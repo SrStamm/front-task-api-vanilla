@@ -7,7 +7,7 @@ import type { ReadGroup } from "../../features/groups/schemas/Group";
 import GroupCreateModal from "../../features/groups/components/GroupCreateModal";
 
 function GroupsPage() {
-  const { groups, loading, error, createGroup } = useGroups();
+  const { groups, loading, error, createGroup, deleteGroup } = useGroups();
 
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -29,6 +29,11 @@ function GroupsPage() {
 
   const handleCloseCreateModal = () => {
     setOpenCreateModal(false);
+  };
+
+  const handleDeleteGroup = async (group_id: number) => {
+    await deleteGroup(group_id);
+    handleCloseModal();
   };
 
   if (loading) return <p>Cargando...</p>;
@@ -60,6 +65,7 @@ function GroupsPage() {
           open={openModal}
           onClose={handleCloseModal}
           group={selectedGroup}
+          deleteGroup={handleDeleteGroup}
         />
       )}
 

@@ -2,15 +2,21 @@ import { useState } from "react";
 import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
-import "./GroupModal.css"
+import "./GroupModal.css";
 
 interface groupModalProps {
   open: boolean;
   onClose: () => void;
   group: ReadGroup;
+  deleteGroup: (group_id: number) => void;
 }
 
-function GroupViewModal({ open, onClose, group }: groupModalProps) {
+function GroupViewModal({
+  open,
+  onClose,
+  group,
+  deleteGroup,
+}: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
 
   const header = <h2 className="modal-title">{group.name}</h2>;
@@ -69,7 +75,11 @@ function GroupViewModal({ open, onClose, group }: groupModalProps) {
   const actions = (
     <>
       <Button className="bt-sm btn-secondary btn-sm" text="Editar" />
-      <Button className="btn-sm btn-error btn-sm" text="Eliminar" />
+      <Button
+        className="btn-sm btn-error btn-sm"
+        text="Eliminar"
+        onClick={() => deleteGroup(group.group_id)}
+      />
     </>
   );
 
