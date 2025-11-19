@@ -4,12 +4,14 @@ import GroupList from "../../features/groups/components/GroupList";
 import GroupViewModal from "../../features/groups/components/GroupModal";
 import { useGroups } from "../../features/groups/hooks/useGroups";
 import type { ReadGroup } from "../../features/groups/schemas/Group";
+import GroupCreateModal from "../../features/groups/components/GroupCreateModal";
 
 function GroupsPage() {
-  const { groups, loading, error } = useGroups();
+  const { groups, loading, error, createGroup } = useGroups();
 
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
 
   const handleOpenModal = (group: ReadGroup) => {
     setSelectedGroup(group);
@@ -21,6 +23,14 @@ function GroupsPage() {
     setOpenModal(false);
   };
 
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setOpenCreateModal(false);
+  };
+
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>{error}</p>;
 
@@ -30,7 +40,11 @@ function GroupsPage() {
         <div className="partSections">
           <div className="headerPartSection">
             <h3 className="dashboard-h3"> Grupos </h3>
-            <Button text=" + " className="btn-primary" />
+            <Button
+              text=" + "
+              className="btn-primary"
+              onClick={handleOpenCreateModal}
+            />
           </div>
 
           {groups.length > 0 ? (
@@ -48,6 +62,12 @@ function GroupsPage() {
           group={selectedGroup}
         />
       )}
+
+      <GroupCreateModal
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+        createGroup={createGroup}
+      />
     </>
   );
 }
