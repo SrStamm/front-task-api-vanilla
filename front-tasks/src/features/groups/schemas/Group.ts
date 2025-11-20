@@ -6,6 +6,7 @@ export const RoleGroupEnum = z.enum(["admin", "editor", "member"]);
 export const ReadGroupSchema = z.object({
   group_id: z.number(),
   name: z.string(),
+  description: z.string(),
   users: z.array(ReadUserSchema),
 });
 
@@ -42,7 +43,7 @@ export const UserInGroupSchema = z.object({
 
 export type ReadGroup = z.infer<typeof ReadGroupSchema>;
 export type CreateGroupInterface = z.infer<typeof CreateGroupSchema>;
-export type UpdateGroup = z.infer<typeof UpdateGroupSchema>;
+export type UpdateGroupInterface = z.infer<typeof UpdateGroupSchema>;
 export type DeleteGroup = z.infer<typeof DeleteGroupSchema>;
 export type AddRemoveUserToGroup = z.infer<typeof AddRemoveUserToGroupSchema>;
 export type UpdateRoleUserInGroup = z.infer<typeof UpdateRoleUserInGroupSchema>;

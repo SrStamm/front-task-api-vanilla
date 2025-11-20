@@ -1,6 +1,6 @@
 import type {
   AddRemoveUserToGroup,
-  CreateGroup,
+  CreateGroupInterface,
   UpdateGroup,
   UpdateRoleUserInGroup,
 } from "../schemas/Group.ts";
@@ -27,7 +27,7 @@ export async function fetchUsersGroup(group_id: number) {
   return res.json();
 }
 
-export async function createGroupApi(data: CreateGroup) {
+export async function createGroupApi(data: CreateGroupInterface) {
   const res = await Fetch({ path: "group", method: "POST", body: data });
 
   if (!res.ok) throw new Error("Failed to create group");

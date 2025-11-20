@@ -8,7 +8,7 @@ import {
 import type {
   CreateGroupInterface,
   ReadGroup,
-  UpdateGroup,
+  UpdateGroupInterface,
 } from "../schemas/Group";
 
 export function useGroups() {
@@ -38,7 +38,7 @@ export function useGroups() {
     setGroups((prev) => [...prev, newGroup]);
   }
 
-  async function updateGroup(id: number, payload: UpdateGroup) {
+  async function updateGroup(id: number, payload: UpdateGroupInterface) {
     const updated = await updateGroupApi(id, payload);
     setGroups((prev) => prev.map((g) => (g.group_id === id ? updated : g)));
   }
