@@ -4,7 +4,7 @@ import type { ReadGroup } from "../schemas/Group";
 
 interface listProps {
   groups: ReadGroup[];
-  onViewGroup?: () => void;
+  onViewGroup?: (group: ReadGroup) => void;
 }
 
 function GroupList({ groups, onViewGroup }: listProps) {

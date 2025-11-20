@@ -1,6 +1,6 @@
 import type {
   AddRemoveUserToGroup,
-  CreateGroup,
+  CreateGroupInterface,
   UpdateGroup,
   UpdateRoleUserInGroup,
 } from "../schemas/Group.ts";
@@ -27,14 +27,14 @@ export async function fetchUsersGroup(group_id: number) {
   return res.json();
 }
 
-export async function createGroup(data: CreateGroup) {
+export async function createGroupApi(data: CreateGroupInterface) {
   const res = await Fetch({ path: "group", method: "POST", body: data });
 
   if (!res.ok) throw new Error("Failed to create group");
   return res.json();
 }
 
-export async function updateGroup(group_id: number, data: UpdateGroup) {
+export async function updateGroupApi(group_id: number, data: UpdateGroup) {
   const res = await Fetch({
     path: `group/${group_id}`,
     method: "PATCH",
@@ -45,7 +45,7 @@ export async function updateGroup(group_id: number, data: UpdateGroup) {
   return res.json();
 }
 
-export async function deleteGroup(group_id: number) {
+export async function deleteGroupApi(group_id: number) {
   const res = await Fetch({ path: `group/${group_id}`, method: "DELETE" });
 
   if (!res.ok) throw new Error("Failed to delete group");
