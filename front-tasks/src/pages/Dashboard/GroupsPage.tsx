@@ -4,14 +4,16 @@ import GroupList from "../../features/groups/components/GroupList";
 import GroupViewModal from "../../features/groups/components/GroupModal";
 import { useGroups } from "../../features/groups/hooks/useGroups";
 import type { ReadGroup } from "../../features/groups/schemas/Group";
-import GroupCreateModal from "../../features/groups/components/GroupCreateModal";
+import GroupCreateUpdateModal from "../../features/groups/components/GroupCreateUpdateModal.tsx";
 
 function GroupsPage() {
-  const { groups, loading, error, createGroup, deleteGroup } = useGroups();
+  const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
+    useGroups();
 
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
 
   const handleOpenModal = (group: ReadGroup) => {
     setSelectedGroup(group);
@@ -25,6 +27,13 @@ function GroupsPage() {
 
   const handleOpenCreateModal = () => {
     setOpenCreateModal(true);
+    setTypeModal("create");
+  };
+
+  const handleOpenUpdateModal = (group: ReadGroup) => {
+    setSelectedGroup(group);
+    setOpenCreateModal(true);
+    setTypeModal("update");
   };
 
   const handleCloseCreateModal = () => {
@@ -66,13 +75,17 @@ function GroupsPage() {
           onClose={handleCloseModal}
           group={selectedGroup}
           deleteGroup={handleDeleteGroup}
+          onEdit={handleOpenUpdateModal}
         />
       )}
 
-      <GroupCreateModal
+      <GroupCreateUpdateModal
+        type={typeModal}
+        group={selectedGroup && selectedGroup}
         open={openCreateModal}
         onClose={handleCloseCreateModal}
         createGroup={createGroup}
+        editGroupEvent={updateGroup}
       />
     </>
   );

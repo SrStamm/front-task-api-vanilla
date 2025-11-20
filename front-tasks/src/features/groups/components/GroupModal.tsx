@@ -9,6 +9,7 @@ interface groupModalProps {
   onClose: () => void;
   group: ReadGroup;
   deleteGroup: (group_id: number) => void;
+  onEdit: (group: ReadGroup) => void;
 }
 
 function GroupViewModal({
@@ -16,6 +17,7 @@ function GroupViewModal({
   onClose,
   group,
   deleteGroup,
+  onEdit,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
 
@@ -74,7 +76,11 @@ function GroupViewModal({
 
   const actions = (
     <>
-      <Button className="bt-sm btn-secondary btn-sm" text="Editar" />
+      <Button
+        className="bt-sm btn-secondary btn-sm"
+        text="Editar"
+        onClick={() => onEdit(group)}
+      />
       <Button
         className="btn-sm btn-error btn-sm"
         text="Eliminar"
