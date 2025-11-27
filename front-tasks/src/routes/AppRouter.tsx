@@ -8,6 +8,7 @@ import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./ProtectedRoute";
 import "../App.css";
 import { dashboardRoutes } from "./dashboard.routes";
+import { GroupProjectProvider } from "../providers/GroupProjectProvider";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +35,9 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <AuthProvider>
-        <PrivateRoute> {dashboardRoutes.element}</PrivateRoute>
+        <GroupProjectProvider>
+          <PrivateRoute> {dashboardRoutes.element}</PrivateRoute>
+        </GroupProjectProvider>
       </AuthProvider>
     ),
     children: dashboardRoutes.children,
