@@ -1,30 +1,19 @@
 import { useState } from "react";
 import Button from "../../common/Button";
-import "./Selector.css";
 import { useGroupProject } from "../../../hooks/useGroupProject";
-import { Link } from "react-router-dom";
+import { useProjects } from "../../../features/projects/hooks/useProject";
+import "./Selector.css";
 
 type selectorProps = {
   text: string;
   setTitle: (name: string) => void;
 };
 
-const projects = [
-  { id: 1, title: "Probando" },
-  { id: 2, title: "Insomnia" },
-  { id: 3, title: "Insomnia" },
-  { id: 4, title: "Insomnia" },
-  { id: 5, title: "Insomnia" },
-  { id: 6, title: "Insomnia" },
-  { id: 7, title: "Insomnia" },
-  { id: 8, title: "Insomnia" },
-  { id: 9, title: "Insomnia" },
-];
-
 function ProjectSelector({ text, setTitle }: selectorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { setProjectId } = useGroupProject();
+  const { projects } = useProjects();
 
   const toggleDropDown = () => {
     setIsOpen(!isOpen);
@@ -40,19 +29,25 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
 
       <div className={`dropdown-menu ${isOpen ? "is-open" : ""}`}>
         <ol className="menu">
-          {projects.map((p) => (
-            <li
-              key={p.id}
-              className="item"
-              onClick={() => {
-                setProjectId(p.id);
-                setIsOpen(false);
-                setTitle(p.title);
-              }}
-            >
-              {p.title}
-            </li>
-          ))}
+          {projects == undefined ? (
+            <li className="error">Selecciona un grupo</li>
+          ) : projects.length > 0 ? (
+            projects.map((p) => (
+              <li
+                key={p.project_id}
+                className="item"
+                onClick={() => {
+                  setProjectId(p.project_id);
+                  setIsOpen(false);
+                  setTitle(p.title);
+                }}
+              >
+                {p.title}
+              </li>
+            ))
+          ) : (
+            <li className="warning">No hay proyectos</li>
+          )}
         </ol>
       </div>
     </div>
