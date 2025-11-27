@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
+  const [elementSelected, setElementSelected] = useState("");
 
   return (
     <aside className="sidebar-container">
@@ -37,25 +38,36 @@ function Sidebar() {
 
             {/* Zona 2: Navegación */}
             <div>
-              <div className="sidebar_element">
+              <div
+                className={`sidebar_element ${elementSelected == "dashboard" ? "active" : ""}`}
+                onClick={() => setElementSelected("dashboard")}
+              >
                 <RxDashboard />
                 <span>Dashboard</span>
               </div>
 
-              <div className="sidebar_element">
+              <div
+                className={`sidebar_element ${elementSelected == "projects" ? "active" : ""}`}
+                onClick={() => setElementSelected("projects")}
+              >
                 <GoProject />
-
                 <Link to="/dashboard/projects">
                   <span>Proyectos</span>
                 </Link>
               </div>
 
-              <div className="sidebar_element">
+              <div
+                className={`sidebar_element ${elementSelected == "tasks" ? "active" : ""}`}
+                onClick={() => setElementSelected("tasks")}
+              >
                 <FaTasks />
                 <span>Tareas</span>
               </div>
 
-              <div className="sidebar_element">
+              <div
+                className={`sidebar_element ${elementSelected == "chat" ? "active" : ""}`}
+                onClick={() => setElementSelected("chat")}
+              >
                 <IoChatboxEllipsesOutline /> Chat
               </div>
             </div>
