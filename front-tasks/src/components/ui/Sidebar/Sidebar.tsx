@@ -2,13 +2,12 @@ import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { GoProject } from "react-icons/go";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { FaUserGroup } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import GroupSelector from "../Selector/GroupSelector";
 import ProjectSelector from "../Selector/ProjectSelector";
 import { useState } from "react";
 import "./Sidebar.css";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
@@ -19,39 +18,46 @@ function Sidebar() {
       <div className="sidebar">
         <h1>Project Manager</h1>
         <nav>
-          <div>
+          <div className="sidebar_intern">
             {/* Zona 1: Contexto */}
 
-            <GroupSelector
-              text={groupName == undefined ? "Grupo actual" : groupName}
-              setName={setGroupName}
-            />
+            <div className="selectors">
+              <GroupSelector
+                text={groupName == undefined ? "Grupo actual" : groupName}
+                setName={setGroupName}
+              />
 
-            <ProjectSelector
-              text={
-                projectTitle == undefined ? "Proyecto actual" : projectTitle
-              }
-              setTitle={setProjectTitle}
-            />
+              <ProjectSelector
+                text={
+                  projectTitle == undefined ? "Proyecto actual" : projectTitle
+                }
+                setTitle={setProjectTitle}
+              />
+            </div>
 
             {/* Zona 2: Navegación */}
-            <div className="sidebar_element">
-              <RxDashboard />
-              <span>Dashboard</span>
-            </div>
+            <div>
+              <div className="sidebar_element">
+                <RxDashboard />
+                <span>Dashboard</span>
+              </div>
 
-            <div className="sidebar_element">
-              <GoProject />
-              <span>Proyectos</span>
-            </div>
+              <div className="sidebar_element">
+                <GoProject />
 
-            <div className="sidebar_element">
-              <FaTasks />
-              <span>Tareas</span>
-            </div>
+                <Link to="/dashboard/projects">
+                  <span>Proyectos</span>
+                </Link>
+              </div>
 
-            <div className="sidebar_element">
-              <IoChatboxEllipsesOutline /> Chat
+              <div className="sidebar_element">
+                <FaTasks />
+                <span>Tareas</span>
+              </div>
+
+              <div className="sidebar_element">
+                <IoChatboxEllipsesOutline /> Chat
+              </div>
             </div>
           </div>
         </nav>

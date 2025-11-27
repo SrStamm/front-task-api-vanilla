@@ -33,7 +33,7 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
   return (
     <div className="workspace-selector">
       <Button
-        className="btn-outline-primary btn-long"
+        className="btn-outline-primary btn-med"
         text={`${text} ▼`}
         onClick={toggleDropDown}
       />
@@ -54,14 +54,6 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
             </li>
           ))}
         </ol>
-
-        <Link to="/dashboard/projects">
-          <Button
-            className="btn-outline-secondary btn-med"
-            text="Todos los proyectos"
-            onClick={toggleDropDown}
-          />
-        </Link>
       </div>
     </div>
   );

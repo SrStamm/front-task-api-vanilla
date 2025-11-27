@@ -23,7 +23,7 @@ function GroupSelector({ text, setName }: selectorProps) {
   return (
     <div className="workspace-selector">
       <Button
-        className="btn-outline-primary btn-long"
+        className="btn-outline-primary btn-med"
         text={`${text} ▼`}
         onClick={toggleDropDown}
       />
