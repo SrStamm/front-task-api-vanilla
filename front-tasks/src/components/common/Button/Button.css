@@ -50,6 +50,16 @@
   font-size: 0.875rem;
 }
 
+.btn-long {
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+}
+
+.btn-vsm-long {
+  padding: 0.3rem 3rem;
+  font-size: 1rem;
+}
+
 .btn-lg {
   padding: 1rem 2rem;
   font-size: 1.125rem;
