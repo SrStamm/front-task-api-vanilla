@@ -5,9 +5,15 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import GroupSelector from "../Selector/GroupSelector";
+import ProjectSelector from "../Selector/ProjectSelector";
+import { useState } from "react";
 import "./Sidebar.css";
 
 function Sidebar() {
+  const [groupName, setGroupName] = useState<string | undefined>();
+  const [projectTitle, setProjectTitle] = useState<string | undefined>();
+
   return (
     <aside className="sidebar-container">
       <div className="sidebar">
@@ -15,14 +21,18 @@ function Sidebar() {
         <nav>
           <div>
             {/* Zona 1: Contexto */}
-            <Link to="/dashboard/groups" className="sidebar_element">
-              <FaUserGroup />
-              <span>Grupo actual ▼</span>
-            </Link>
-            <Link to="/dashboard/projects" className="sidebar_element">
-              <FaUserGroup />
-              <span>Proyecto actual ▼</span>
-            </Link>
+
+            <GroupSelector
+              text={groupName == undefined ? "Grupo actual" : groupName}
+              setName={setGroupName}
+            />
+
+            <ProjectSelector
+              text={
+                projectTitle == undefined ? "Proyecto actual" : projectTitle
+              }
+              setTitle={setProjectTitle}
+            />
 
             {/* Zona 2: Navegación */}
             <div className="sidebar_element">
