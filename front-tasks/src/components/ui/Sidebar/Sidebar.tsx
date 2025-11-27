@@ -2,46 +2,74 @@ import { FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { GoProject } from "react-icons/go";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { FaUserGroup } from "react-icons/fa6";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import GroupSelector from "../Selector/GroupSelector";
+import ProjectSelector from "../Selector/ProjectSelector";
+import { useState } from "react";
 import "./Sidebar.css";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
+  const [groupName, setGroupName] = useState<string | undefined>();
+  const [projectTitle, setProjectTitle] = useState<string | undefined>();
+  const [elementSelected, setElementSelected] = useState("");
+
   return (
     <aside className="sidebar-container">
       <div className="sidebar">
         <h1>Project Manager</h1>
         <nav>
-          <div>
+          <div className="sidebar_intern">
             {/* Zona 1: Contexto */}
-            <Link to="/dashboard/groups" className="sidebar_element">
-              <FaUserGroup />
-              <span>Grupo actual ▼</span>
-            </Link>
-            <Link to="/dashboard/projects" className="sidebar_element">
-              <FaUserGroup />
-              <span>Proyecto actual ▼</span>
-            </Link>
+
+            <div className="selectors">
+              <GroupSelector
+                text={groupName == undefined ? "Grupo actual" : groupName}
+                setName={setGroupName}
+              />
+
+              <ProjectSelector
+                text={
+                  projectTitle == undefined ? "Proyecto actual" : projectTitle
+                }
+                setTitle={setProjectTitle}
+              />
+            </div>
 
             {/* Zona 2: Navegación */}
-            <div className="sidebar_element">
-              <RxDashboard />
-              <span>Dashboard</span>
-            </div>
+            <div>
+              <div
+                className={`sidebar_element ${elementSelected == "dashboard" ? "active" : ""}`}
+                onClick={() => setElementSelected("dashboard")}
+              >
+                <RxDashboard />
+                <span>Dashboard</span>
+              </div>
 
-            <div className="sidebar_element">
-              <GoProject />
-              <span>Proyectos</span>
-            </div>
+              <div
+                className={`sidebar_element ${elementSelected == "projects" ? "active" : ""}`}
+                onClick={() => setElementSelected("projects")}
+              >
+                <GoProject />
+                <Link to="/dashboard/projects">
+                  <span>Proyectos</span>
+                </Link>
+              </div>
 
-            <div className="sidebar_element">
-              <FaTasks />
-              <span>Tareas</span>
-            </div>
+              <div
+                className={`sidebar_element ${elementSelected == "tasks" ? "active" : ""}`}
+                onClick={() => setElementSelected("tasks")}
+              >
+                <FaTasks />
+                <span>Tareas</span>
+              </div>
 
-            <div className="sidebar_element">
-              <IoChatboxEllipsesOutline /> Chat
+              <div
+                className={`sidebar_element ${elementSelected == "chat" ? "active" : ""}`}
+                onClick={() => setElementSelected("chat")}
+              >
+                <IoChatboxEllipsesOutline /> Chat
+              </div>
             </div>
           </div>
         </nav>
