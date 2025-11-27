@@ -80,3 +80,50 @@
   padding: 0.5rem;
   font-size: 1rem;
 }
+
+.error {
+  padding: 0.3rem 1rem;
+  width: 100%;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  background: var(--error);
+
+  border: 2px solid var(--error);
+  border-radius: 8px;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.warning {
+  padding: 0.3rem 1rem;
+  width: 100%;
+
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  background: var(--warning);
+
+  border: 2px solid var(--warning);
+  border-radius: 8px;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  user-select: none;
+  line-height: 1.5;
+}
