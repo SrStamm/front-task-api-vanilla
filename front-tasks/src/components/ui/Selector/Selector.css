@@ -1,0 +1,42 @@
+.workspace-selector {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: var(--bg-card-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: none;
+}
+
+.dropdown-menu.is-open {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  gap: 0.4rem;
+}
+
+.menu li:hover {
+  background-color: var(--primary);
+}
