@@ -76,7 +76,7 @@ function GroupCreateUpdateModal({
 
   const header =
     type == "create" ? (
-      <h2 className="modal-title">Crear un nuevo grupo"</h2>
+      <h2 className="modal-title">Crear un nuevo grupo</h2>
     ) : (
       <h2 className="modal-title">Editar grupo</h2>
     );
