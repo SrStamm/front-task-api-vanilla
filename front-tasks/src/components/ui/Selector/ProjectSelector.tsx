@@ -41,17 +41,16 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
       <div className={`dropdown-menu ${isOpen ? "is-open" : ""}`}>
         <ol className="menu">
           {projects.map((p) => (
-            <li key={p.id}>
-              <Button
-                className="btn-primary btn-vsm-long"
-                text={p.title}
-                onClick={() => {
-                  setProjectId(p.id);
-                  setIsOpen(false);
-                  console.log(p.title);
-                  setTitle(p.title);
-                }}
-              />
+            <li
+              key={p.id}
+              className="item"
+              onClick={() => {
+                setProjectId(p.id);
+                setIsOpen(false);
+                setTitle(p.title);
+              }}
+            >
+              {p.title}
             </li>
           ))}
         </ol>
