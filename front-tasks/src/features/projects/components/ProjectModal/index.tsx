@@ -14,14 +14,6 @@ interface projectModalProps {
   onEdit: (project: ReadProject) => void;
 }
 
-const users = [
-  { user_id: 1, username: "test", permission: "admin" },
-  { user_id: 2, username: "test", permission: "admin" },
-  { user_id: 3, username: "test", permission: "admin" },
-  { user_id: 4, username: "test", permission: "admin" },
-  { user_id: 5, username: "test", permission: "admin" },
-];
-
 function ProjectModal({
   open,
   onClose,
@@ -81,7 +73,7 @@ function ProjectModal({
         </div>
 
         <UserListProject
-          users={users}
+          users={project.users}
           groupId={project.group_id}
           projectId={project.project_id}
           onDelete={removeUserFromProject}
