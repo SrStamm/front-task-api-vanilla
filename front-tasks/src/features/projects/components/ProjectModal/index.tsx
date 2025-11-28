@@ -9,6 +9,8 @@ interface projectModalProps {
   open: boolean;
   onClose: () => void;
   project: ReadProject;
+  deleteProject: (groupId: number, projectId: number) => void;
+  onEdit: (project: ReadProject) => void;
 }
 
 const users = [
@@ -19,7 +21,13 @@ const users = [
   { user_id: 5, username: "test", permission: "admin" },
 ];
 
-function ProjectModal({ open, onClose, project }: projectModalProps) {
+function ProjectModal({
+  open,
+  onClose,
+  project,
+  deleteProject,
+  onEdit,
+}: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
 
   const header = <h2 className="modal-title">{project.title}</h2>;
@@ -80,12 +88,12 @@ function ProjectModal({ open, onClose, project }: projectModalProps) {
       <Button
         className="bt-sm btn-secondary btn-sm"
         text="Editar"
-        // onClick={() => onEdit(project)}
+        onClick={() => onEdit(project)}
       />
       <Button
         className="btn-sm btn-error btn-sm"
         text="Eliminar"
-        // onClick={() => deleteGroup(project.project_id)}
+        onClick={() => deleteProject(project.group_id, project.project_id)}
       />
     </>
   );
