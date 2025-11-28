@@ -7,6 +7,7 @@ import type {
   UpdateProject,
 } from "../../schemas/Project";
 import { useProjects } from "../../hooks/useProject";
+import { useGroupProject } from "../../../../hooks/useGroupProject";
 
 interface projectModalProps {
   type: string;
@@ -27,6 +28,7 @@ function ProjectCreateUpdateModal({
   const [projectId, setProjectId] = useState(0);
 
   const { createProject, updateProject } = useProjects();
+  const { groupId: selectedGroupId } = useGroupProject();
 
   useEffect(() => {
     if (type === "update" && project) {
@@ -39,8 +41,9 @@ function ProjectCreateUpdateModal({
     if (type === "create") {
       setTitle("");
       setDescription("");
+      setGroupId(selectedGroupId);
     }
-  }, [type, project, open]);
+  }, [type, project, open, selectedGroupId]);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
