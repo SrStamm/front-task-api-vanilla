@@ -1,0 +1,23 @@
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  margin: 0;
+}
+
+.user-role {
+  color: var(--gray-600);
+  font-size: 0.875rem;
+  margin: 0;
+}
