@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { ReadProject } from "../../../projects/schemas/Project";
+import UserListProject from "../../../users/component/UserListProject";
 import "./ProjectModal.css";
 
 interface projectModalProps {
@@ -9,6 +10,14 @@ interface projectModalProps {
   onClose: () => void;
   project: ReadProject;
 }
+
+const users = [
+  { user_id: 1, username: "test", permission: "admin" },
+  { user_id: 2, username: "test", permission: "admin" },
+  { user_id: 3, username: "test", permission: "admin" },
+  { user_id: 4, username: "test", permission: "admin" },
+  { user_id: 5, username: "test", permission: "admin" },
+];
 
 function ProjectModal({ open, onClose, project }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
@@ -60,11 +69,8 @@ function ProjectModal({ open, onClose, project }: projectModalProps) {
           <h4 className="modal-subtitle">Miembros</h4>
           <Button className="btn-primary btn-vsm" text="Agregar Usuario" />
         </div>
-        <ol className="listUser">
-          <li>Test</li>
-          <li>Test</li>
-          <li>Test</li>
-        </ol>
+
+        <UserListProject users={users} />
       </div>
     </>
   );
