@@ -3,6 +3,7 @@ import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
 import "./GroupModal.css";
+import UserListGroup from "../../users/component/UserListGroup";
 
 interface groupModalProps {
   open: boolean;
@@ -11,6 +12,13 @@ interface groupModalProps {
   deleteGroup: (group_id: number) => void;
   onEdit: (group: ReadGroup) => void;
 }
+
+const users = [
+  { user_id: 1, username: "test", role: "admin" },
+  { user_id: 2, username: "test", role: "admin" },
+  { user_id: 3, username: "test", role: "admin" },
+  { user_id: 4, username: "test", role: "admin" },
+];
 
 function GroupViewModal({
   open,
@@ -65,11 +73,8 @@ function GroupViewModal({
           <h4 className="modal-subtitle">Miembros</h4>
           <Button className="btn-primary btn-vsm" text="Agregar Usuario" />
         </div>
-        <ol className="listUser">
-          <li>Test</li>
-          <li>Test</li>
-          <li>Test</li>
-        </ol>
+
+        <UserListGroup users={users} />
       </div>
     </>
   );
