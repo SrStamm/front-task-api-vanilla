@@ -7,7 +7,6 @@ import {
   removeUserToProject,
 } from "../api/ProjectService";
 import {
-  AddRemoveUserToProjectSchema,
   type AddRemoveUserToProject,
   type CreateProject,
   type ReadProject,
@@ -79,9 +78,12 @@ export function useProjects() {
     await removeUserToProject(data);
 
     setProjects((prevProjects) => {
+      if (!prevProjects) return undefined;
+
       return prevProjects.map((project) => {
         if (project.project_id === projectId) {
           return {
+            ...project,
             users: project.users.filter((user) => user.user_id !== userId),
           };
         }
