@@ -28,11 +28,6 @@ function ProjectsPage() {
     setOpenModal(false);
   };
 
-  const handleOpenCreateModal = () => {
-    setOpenCreateModal(true);
-    setTypeModal("create");
-  };
-
   const handleCloseCreateModal = () => {
     setOpenCreateModal(false);
   };

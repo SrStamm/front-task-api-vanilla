@@ -4,6 +4,7 @@ import Modal from "../../../../components/common/Modal";
 import type { ReadProject } from "../../../projects/schemas/Project";
 import UserListProject from "../../../users/component/UserListProject";
 import "./ProjectModal.css";
+import { useProjects } from "../../hooks/useProject";
 
 interface projectModalProps {
   open: boolean;
@@ -29,6 +30,7 @@ function ProjectModal({
   onEdit,
 }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
+  const { removeUserFromProject } = useProjects();
 
   const header = <h2 className="modal-title">{project.title}</h2>;
 
@@ -78,7 +80,12 @@ function ProjectModal({
           <Button className="btn-primary btn-vsm" text="Agregar Usuario" />
         </div>
 
-        <UserListProject users={users} />
+        <UserListProject
+          users={users}
+          groupId={project.group_id}
+          projectId={project.project_id}
+          onDelete={removeUserFromProject}
+        />
       </div>
     </>
   );
