@@ -22,13 +22,15 @@ export function useProjects() {
 
   const loadProjects = useCallback(async () => {
     try {
+      console.log("group_id", groupId);
       if (groupId === undefined) {
         setProjects(undefined);
         return;
+      } else {
+        setLoading(true);
+        const data = await fetchProjects(groupId);
+        setProjects(data);
       }
-      setLoading(true);
-      const data = await fetchProjects(groupId);
-      setProjects(data);
     } catch (err) {
       setError("Failed to load projects");
       console.error(err);
