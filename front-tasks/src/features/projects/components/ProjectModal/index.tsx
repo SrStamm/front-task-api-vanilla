@@ -11,22 +11,22 @@ interface projectModalProps {
 }
 
 function ProjectModal({ open, onClose, project }: projectModalProps) {
-  const [tabSelected, setTabSelected] = useState("projects");
+  const [tabSelected, setTabSelected] = useState("members");
 
   const header = <h2 className="modal-title">{project.title}</h2>;
 
   const body = (
     <>
       <div className="modal-section">
-        <p className="modal-description"> </p>
+        <p className="modal-description">{project.description}</p>
       </div>
 
       <div className="modal-tabs">
         <button
-          className={`tab-btn ${tabSelected == "projects" ? "active" : ""}`}
-          onClick={() => setTabSelected("projects")}
+          className={`tab-btn ${tabSelected == "tasks" ? "active" : ""}`}
+          onClick={() => setTabSelected("tasks")}
         >
-          Proyectos
+          Tareas
         </button>
         <button
           className={`tab-btn ${tabSelected == "members" ? "active" : ""}`}
@@ -37,17 +37,20 @@ function ProjectModal({ open, onClose, project }: projectModalProps) {
       </div>
 
       <div
-        className={`modal-section tab-content ${tabSelected == "projects" ? "active" : ""}`}
+        className={`modal-section tab-content ${tabSelected == "tasks" ? "active" : ""}`}
       >
         <div className="modal-section-header">
-          <h4 className="modal-subtitle">Proyectos</h4>
-          <Button className="btn-primary btn-vsm" text="Crear Proyecto" />
+          <h4 className="modal-subtitle">Tareas</h4>
+          <div className="modal-section-action ">
+            <Button className="btn-primary btn-vsm" text="Crear Tarea" />
+          </div>
         </div>
-        <ol className="listProject">
-          <li className="project-item">Test</li>
-          <li className="project-item">Test</li>
-          <li className="project-item">Test</li>
-        </ol>
+
+        <ul className="task-project-list">
+          <li className="task-item task-card-project">Test</li>
+          <li className="task-item task-card-project">Test</li>
+          <li className="task-item task-card-project">Test</li>
+        </ul>
       </div>
 
       <div
