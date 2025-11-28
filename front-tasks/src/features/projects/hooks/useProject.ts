@@ -22,9 +22,10 @@ export function useProjects() {
 
   const loadProjects = useCallback(async () => {
     try {
+      setError(null);
+
       if (groupId === undefined) {
         setProjects(undefined);
-        return;
       } else {
         setLoading(true);
         const data = await fetchProjects(groupId);
