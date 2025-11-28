@@ -122,10 +122,10 @@
 }
 
 .modal-description {
-  color: var(--gray-600);
   line-height: 1.6;
   text-indent: var(--spacing-xs);
   margin-bottom: 1.5rem;
+  font-size: 1.2em;
 }
 
 .modal-section-action {
@@ -154,10 +154,6 @@
   width: 100%;
   max-width: 900px;
   min-height: 600px;
-}
-
-.modal.large p {
-  font-size: var(--font-size-lg);
 }
 
 /* Animaciones del fondo de modal */
@@ -220,4 +216,3 @@
 .tab-content.active {
   display: block;
 }
-
