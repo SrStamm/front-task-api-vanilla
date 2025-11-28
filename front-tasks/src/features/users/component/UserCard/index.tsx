@@ -1,3 +1,4 @@
+import type React from "react";
 import type { ReadUser } from "../../../../types/User";
 import type { UserInGroup } from "../../../groups/schemas/Group";
 import type { UserInProject } from "../../../projects/schemas/Project";
@@ -9,9 +10,16 @@ interface UserCardProps {
   userGroup?: UserInGroup;
 
   type: string;
+  actions: React.ReactNode;
 }
 
-function UserCard({ user, userProject, userGroup, type }: UserCardProps) {
+function UserCard({
+  user,
+  userProject,
+  userGroup,
+  type,
+  actions,
+}: UserCardProps) {
   const username =
     type == "project"
       ? userProject?.username
@@ -33,6 +41,7 @@ function UserCard({ user, userProject, userGroup, type }: UserCardProps) {
           <p className="currentPermission user-role"> {permission}</p>
         </div>
       </div>
+      <div className="user-actions">{actions}</div>
     </>
   );
 }
