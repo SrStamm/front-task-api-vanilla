@@ -32,6 +32,11 @@ function ProjectsPage() {
     setOpenCreateModal(false);
   };
 
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
+    setTypeModal("create");
+  };
+
   const handleOpenUpdateModal = (project: ReadProject) => {
     setSelectedProject(project);
     setOpenCreateModal(true);
@@ -49,10 +54,14 @@ function ProjectsPage() {
         <div className="partSections">
           <div className="headerPartSection">
             <h3 className="dashboard-h3"> Proyectos </h3>
-            <Button text=" + " className="btn-primary" />
+            <Button
+              text=" + "
+              className="btn-primary"
+              onClick={handleOpenCreateModal}
+            />
           </div>
 
-          {projects.length > 0 ? (
+          {projects && projects.length > 0 ? (
             <ProjectList projects={projects} onViewProject={handleOpenModal} />
           ) : (
             <p>No perteneces a ningún proyecto</p>
