@@ -4,10 +4,13 @@ import ProjectList from "../../features/projects/components/ProjectList";
 import { useState } from "react";
 import type { ReadProject } from "../../features/projects/schemas/Project";
 import ProjectModal from "../../features/projects/components/ProjectModal";
+import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal";
 
 function ProjectsPage() {
-  const { projects, loading, error } = useProjects();
+  const { projects, loading, error, deleteProject } = useProjects();
   const [openModal, setOpenModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
   const [selectedProject, setSelectedProject] = useState<ReadProject | null>(
     null,
   );
@@ -23,6 +26,26 @@ function ProjectsPage() {
   const handleCloseModal = () => {
     setSelectedProject(null);
     setOpenModal(false);
+  };
+
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
+    setTypeModal("create");
+  };
+
+  const handleCloseCreateModal = () => {
+    setOpenCreateModal(false);
+  };
+
+  const handleOpenUpdateModal = (project: ReadProject) => {
+    setSelectedProject(project);
+    setOpenCreateModal(true);
+    setTypeModal("update");
+  };
+
+  const handleDeleteProject = async (groupId: number, projectId: number) => {
+    await deleteProject(groupId, projectId);
+    handleCloseModal();
   };
 
   return (
@@ -47,10 +70,17 @@ function ProjectsPage() {
           open={openModal}
           onClose={handleCloseModal}
           project={selectedProject}
-          // deleteGroup={handleDeleteGroup}
-          // onEdit={handleOpenUpdateModal}
+          deleteProject={handleDeleteProject}
+          onEdit={handleOpenUpdateModal}
         />
       )}
+
+      <ProjectCreateUpdateModal
+        type={typeModal}
+        project={selectedProject && selectedProject}
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+      />
     </>
   );
 }

@@ -22,7 +22,6 @@ export function useProjects() {
 
   const loadProjects = useCallback(async () => {
     try {
-      console.log("group_id", groupId);
       if (groupId === undefined) {
         setProjects(undefined);
         return;
