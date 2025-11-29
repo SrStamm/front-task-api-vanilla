@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import { useGroups } from "../../../features/groups/hooks/useGroups";
@@ -11,17 +11,35 @@ type selectorProps = {
 };
 
 function GroupSelector({ text, setName }: selectorProps) {
+  const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { setGroupId } = useGroupProject();
   const { groups, loading, error } = useGroups();
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      selectorRef.current &&
+      !selectorRef.current.contains(e.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
   const toggleDropDown = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectorRef]);
+
   return (
-    <div className="workspace-selector">
+    <div className="workspace-selector" ref={selectorRef}>
       <Button
         className="btn-outline-primary btn-med"
         text={`${text} ▼`}
