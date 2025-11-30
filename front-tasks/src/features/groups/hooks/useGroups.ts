@@ -3,6 +3,7 @@ import {
   createGroupApi,
   deleteGroupApi,
   fetchGroupsMe,
+  fetchUsersGroup,
   updateGroupApi,
 } from "../api/GroupService";
 import type {
@@ -48,6 +49,11 @@ export function useGroups() {
     setGroups((prev) => prev.filter((g) => g.group_id !== id));
   }
 
+  async function getUsersInGroup(id: number) {
+    const users = await fetchUsersGroup(id);
+    return users;
+  }
+
   return {
     groups,
     loading,
@@ -55,5 +61,6 @@ export function useGroups() {
     createGroup,
     updateGroup,
     deleteGroup,
+    getUsersInGroup,
   };
 }
