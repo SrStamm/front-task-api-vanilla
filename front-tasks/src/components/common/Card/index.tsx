@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../Button";
 import "./Card.css";
 
@@ -27,13 +27,29 @@ function Card({
   className = "",
 }: CardProps) {
   const [expanded, setExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const toogleExpand = () => setExpanded((prev) => !prev);
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+      setExpanded(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [cardRef]);
 
   return (
     <div
       className={`card ${expanded ? "expanded" : ""} ${className}`}
       onClick={toogleExpand}
+      ref={cardRef}
     >
       {title && <h3>{title}</h3>}
       {details && <div className="card-details">{details}</div>}
