@@ -50,6 +50,11 @@
   color: #ffffff;
 }
 
+.sidebar_link {
+  display: flex;
+  gap: 1rem;
+}
+
 .selectors {
   display: flex;
   flex-direction: column;

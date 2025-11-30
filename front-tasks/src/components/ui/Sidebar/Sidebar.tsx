@@ -50,8 +50,8 @@ function Sidebar() {
                 className={`sidebar_element ${elementSelected == "projects" ? "active" : ""}`}
                 onClick={() => setElementSelected("projects")}
               >
-                <GoProject />
-                <Link to="/dashboard/projects">
+                <Link to="/dashboard/projects" className="sidebar_link">
+                  <GoProject />
                   <span>Proyectos</span>
                 </Link>
               </div>
