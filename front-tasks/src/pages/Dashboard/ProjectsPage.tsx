@@ -5,11 +5,17 @@ import { useState } from "react";
 import type { ReadProject } from "../../features/projects/schemas/Project";
 import ProjectModal from "../../features/projects/components/ProjectModal";
 import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal";
+import UserAddModal from "../../features/users/component/UserAddModal";
+import type { UserInGroup } from "../../features/groups/schemas/Group";
+import { useGroups } from "../../features/groups/hooks/useGroups";
 
 function ProjectsPage() {
   const { projects, loading, error, deleteProject } = useProjects();
+  const { getUsersInGroup } = useGroups();
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [usersInGroup, setUsersInGroup] = useState<UserInGroup[]>([]);
   const [typeModal, setTypeModal] = useState("");
   const [selectedProject, setSelectedProject] = useState<ReadProject | null>(
     null,
@@ -48,6 +54,16 @@ function ProjectsPage() {
     handleCloseModal();
   };
 
+  const handleOpenUserModal = async () => {
+    const users = await getUsersInGroup(selectedProject?.group_id);
+    setShowUserModal(true);
+    setUsersInGroup(users);
+  };
+
+  const handleCloseUserModal = () => {
+    setShowUserModal(false);
+  };
+
   return (
     <>
       <section className="dashboard-section">
@@ -76,6 +92,7 @@ function ProjectsPage() {
           project={selectedProject}
           deleteProject={handleDeleteProject}
           onEdit={handleOpenUpdateModal}
+          onShowListUser={handleOpenUserModal}
         />
       )}
 
@@ -84,6 +101,12 @@ function ProjectsPage() {
         project={selectedProject && selectedProject}
         open={openCreateModal}
         onClose={handleCloseCreateModal}
+      />
+
+      <UserAddModal
+        show={showUserModal}
+        onClose={handleCloseUserModal}
+        usersInGroup={usersInGroup}
       />
     </>
   );
