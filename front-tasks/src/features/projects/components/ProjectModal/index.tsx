@@ -12,6 +12,7 @@ interface projectModalProps {
   project: ReadProject;
   deleteProject: (groupId: number, projectId: number) => void;
   onEdit: (project: ReadProject) => void;
+  onShowListUser: () => void;
 }
 
 function ProjectModal({
@@ -20,6 +21,7 @@ function ProjectModal({
   project,
   deleteProject,
   onEdit,
+  onShowListUser,
 }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
   const { removeUserFromProject } = useProjects();
@@ -69,7 +71,11 @@ function ProjectModal({
       >
         <div className="modal-section-header ">
           <h4 className="modal-subtitle">Miembros</h4>
-          <Button className="btn-primary btn-vsm" text="Agregar Usuario" />
+          <Button
+            className="btn-primary btn-vsm"
+            text="Agregar Usuario"
+            onClick={onShowListUser}
+          />
         </div>
 
         <UserListProject
