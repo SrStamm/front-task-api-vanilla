@@ -66,7 +66,7 @@ export async function deleteProjectApi({
   return res.json();
 }
 
-export async function addUserToProject({
+export async function addUserToProjectApi({
   group_id,
   project_id,
   user_id,
