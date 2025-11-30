@@ -103,11 +103,14 @@ function ProjectsPage() {
         onClose={handleCloseCreateModal}
       />
 
-      <UserAddModal
-        show={showUserModal}
-        onClose={handleCloseUserModal}
-        usersInGroup={usersInGroup}
-      />
+      {showUserModal && selectedProject && (
+        <UserAddModal
+          show={showUserModal}
+          onClose={handleCloseUserModal}
+          usersInGroup={usersInGroup}
+          project={selectedProject}
+        />
+      )}
     </>
   );
 }
