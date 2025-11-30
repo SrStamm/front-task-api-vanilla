@@ -55,9 +55,18 @@ function ProjectsPage() {
   };
 
   const handleOpenUserModal = async () => {
-    const users = await getUsersInGroup(selectedProject?.group_id);
+    const usersInGroup = await getUsersInGroup(selectedProject?.group_id);
+
+    const usersInProjectIds = new Set(
+      selectedProject?.users.map((u) => u.user_id),
+    );
+
+    const usersNotInProject = usersInGroup.filter((u) => {
+      return !usersInProjectIds.has(u.user_id);
+    });
+
     setShowUserModal(true);
-    setUsersInGroup(users);
+    setUsersInGroup(usersNotInProject);
   };
 
   const handleCloseUserModal = () => {
