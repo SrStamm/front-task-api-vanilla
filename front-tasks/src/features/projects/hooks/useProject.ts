@@ -5,6 +5,7 @@ import {
   fetchProjects,
   updateProjectApi,
   removeUserToProject,
+  addUserToProjectApi,
 } from "../api/ProjectService";
 import {
   type AddRemoveUserToProject,
@@ -13,7 +14,6 @@ import {
   type UpdateProject,
 } from "../schemas/Project";
 import { useGroupProject } from "../../../hooks/useGroupProject";
-import { addUserToGroup } from "../../groups/api/GroupService";
 
 export function useProjects() {
   const [projects, setProjects] = useState<ReadProject[] | undefined>(
@@ -104,7 +104,8 @@ export function useProjects() {
       user_id: userId,
     };
 
-    await addUserToGroup(data);
+    await addUserToProjectApi(data);
+    await loadProjects();
   }
 
   return {
