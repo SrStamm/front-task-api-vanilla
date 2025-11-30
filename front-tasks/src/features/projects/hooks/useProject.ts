@@ -5,6 +5,7 @@ import {
   fetchProjects,
   updateProjectApi,
   removeUserToProject,
+  addUserToProjectApi,
 } from "../api/ProjectService";
 import {
   type AddRemoveUserToProject,
@@ -92,6 +93,21 @@ export function useProjects() {
     });
   }
 
+  async function addUserToProject(
+    groupId: number,
+    projectId: number,
+    userId: number,
+  ) {
+    const data: AddRemoveUserToProject = {
+      group_id: groupId,
+      project_id: projectId,
+      user_id: userId,
+    };
+
+    await addUserToProjectApi(data);
+    await loadProjects();
+  }
+
   return {
     projects,
     loading,
@@ -100,5 +116,6 @@ export function useProjects() {
     updateProject,
     deleteProject,
     removeUserFromProject,
+    addUserToProject,
   };
 }
