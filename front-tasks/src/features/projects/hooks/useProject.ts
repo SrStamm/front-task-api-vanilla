@@ -13,6 +13,7 @@ import {
   type UpdateProject,
 } from "../schemas/Project";
 import { useGroupProject } from "../../../hooks/useGroupProject";
+import { addUserToGroup } from "../../groups/api/GroupService";
 
 export function useProjects() {
   const [projects, setProjects] = useState<ReadProject[] | undefined>(
@@ -92,6 +93,20 @@ export function useProjects() {
     });
   }
 
+  async function addUserToProject(
+    groupId: number,
+    projectId: number,
+    userId: number,
+  ) {
+    const data: AddRemoveUserToProject = {
+      group_id: groupId,
+      project_id: projectId,
+      user_id: userId,
+    };
+
+    await addUserToGroup(data);
+  }
+
   return {
     projects,
     loading,
@@ -100,5 +115,6 @@ export function useProjects() {
     updateProject,
     deleteProject,
     removeUserFromProject,
+    addUserToProject,
   };
 }
