@@ -12,31 +12,37 @@ interface userListProps {
 function UserListGroup({ users, addUser, onAdd }: userListProps) {
   return addUser ? (
     <ul className="list-add-user">
-      {users.map((u) => {
-        return (
-          <li key={u.user_id} className="user-add">
-            <UserCard
-              userGroup={u}
-              type="group"
-              actions={
-                <>
-                  <Button
-                    className="btn-vsm btn-outline-secondary"
-                    text="Agregar"
-                    onClick={() => onAdd(u.user_id)}
-                  />
-                </>
-              }
-            />
-          </li>
-        );
-      })}
+      {users.length > 0 ? (
+        users.map((u) => {
+          return (
+            <li key={u.user_id} className="user-add">
+              <UserCard
+                userGroup={u}
+                type="group"
+                actions={
+                  <>
+                    <Button
+                      className="btn-vsm btn-outline-secondary"
+                      text="Agregar"
+                      onClick={() => onAdd(u.user_id)}
+                    />
+                  </>
+                }
+              />
+            </li>
+          );
+        })
+      ) : (
+        <p style={{ textAlign: "center" }}>
+          No hay usuarios en el grupo para agregar
+        </p>
+      )}
     </ul>
   ) : (
     <ul className="listUser">
       {users.map((u) => {
         return (
-          <li key={u.user_id} className="user-add">
+          <li key={u.user_id} className="user-item">
             <UserCard
               userGroup={u}
               type="group"

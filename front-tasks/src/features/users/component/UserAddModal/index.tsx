@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { UserInGroup } from "../../../groups/schemas/Group";
@@ -25,7 +26,7 @@ function UserAddModal({
     onClose();
   };
 
-  const header = <h2>Lista de usuarios</h2>;
+  const header = <h2 className="modal-title-center">Lista de usuarios</h2>;
   const body = (
     <UserListGroup
       users={usersInGroup}
