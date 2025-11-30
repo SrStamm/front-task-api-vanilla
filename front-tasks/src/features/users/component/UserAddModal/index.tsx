@@ -22,6 +22,7 @@ function UserAddModal({
 
   const handleAddUserToProject = async (userId: number) => {
     await addUserToProject(project.group_id, project.project_id, userId);
+    onClose();
   };
 
   const header = <h2>Lista de usuarios</h2>;
