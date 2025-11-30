@@ -12,9 +12,9 @@ export const ReadProjectForUserSchema = z.object({
 
 export const ReadProjectSchema = z.object({
   project_id: z.number(),
-  group_id: z.number,
-  title: z.string,
-  description: z.string,
+  group_id: z.number(),
+  title: z.string(),
+  description: z.string(),
   users: z.array(ReadUserSchema),
 });
 

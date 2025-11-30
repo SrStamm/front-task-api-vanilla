@@ -4,11 +4,13 @@ import {
   deleteProjectApi,
   fetchProjects,
   updateProjectApi,
+  removeUserToProject,
 } from "../api/ProjectService";
-import type {
-  CreateProject,
-  ReadProject,
-  UpdateProject,
+import {
+  type AddRemoveUserToProject,
+  type CreateProject,
+  type ReadProject,
+  type UpdateProject,
 } from "../schemas/Project";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 
@@ -22,10 +24,10 @@ export function useProjects() {
 
   const loadProjects = useCallback(async () => {
     try {
-      console.log("group_id", groupId);
+      setError(null);
+
       if (groupId === undefined) {
         setProjects(undefined);
-        return;
       } else {
         setLoading(true);
         const data = await fetchProjects(groupId);
@@ -62,6 +64,34 @@ export function useProjects() {
     setProjects((prev) => prev.filter((g) => g.project_id !== project_id));
   }
 
+  async function removeUserFromProject(
+    groupId: number,
+    projectId: number,
+    userId: number,
+  ) {
+    const data: AddRemoveUserToProject = {
+      group_id: groupId,
+      project_id: projectId,
+      user_id: userId,
+    };
+
+    await removeUserToProject(data);
+
+    setProjects((prevProjects) => {
+      if (!prevProjects) return undefined;
+
+      return prevProjects.map((project) => {
+        if (project.project_id === projectId) {
+          return {
+            ...project,
+            users: project.users.filter((user) => user.user_id !== userId),
+          };
+        }
+        return project;
+      });
+    });
+  }
+
   return {
     projects,
     loading,
@@ -69,5 +99,6 @@ export function useProjects() {
     createProject,
     updateProject,
     deleteProject,
+    removeUserFromProject,
   };
 }
