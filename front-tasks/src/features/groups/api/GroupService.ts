@@ -52,7 +52,7 @@ export async function deleteGroupApi(group_id: number) {
   return res.json();
 }
 
-export async function addUserToGroup({
+export async function addUserToGroupApi({
   group_id,
   user_id,
 }: AddRemoveUserToGroup) {

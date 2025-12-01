@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import {
+  addUserToGroupApi,
   createGroupApi,
   deleteGroupApi,
   fetchGroupsMe,
   fetchUsersGroup,
   updateGroupApi,
 } from "../api/GroupService";
-import type {
-  CreateGroupInterface,
-  ReadGroup,
-  UpdateGroupInterface,
+import {
+  type CreateGroupInterface,
+  type ReadGroup,
+  type UpdateGroupInterface,
+  type AddRemoveUserToGroupInterface,
 } from "../schemas/Group";
 
 export function useGroups() {
@@ -54,6 +56,15 @@ export function useGroups() {
     return users;
   }
 
+  async function addUserToGroup(groupId: number, userId: number) {
+    const data: AddRemoveUserToGroupInterface = {
+      group_id: groupId,
+      user_id: userId,
+    };
+    const user = await addUserToGroupApi(data);
+    return user;
+  }
+
   return {
     groups,
     loading,
@@ -62,5 +73,6 @@ export function useGroups() {
     updateGroup,
     deleteGroup,
     getUsersInGroup,
+    addUserToGroup,
   };
 }
