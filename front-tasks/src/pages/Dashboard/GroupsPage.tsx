@@ -5,6 +5,9 @@ import GroupViewModal from "../../features/groups/components/GroupModal";
 import { useGroups } from "../../features/groups/hooks/useGroups";
 import type { ReadGroup } from "../../features/groups/schemas/Group";
 import GroupCreateUpdateModal from "../../features/groups/components/GroupCreateUpdateModal.tsx";
+import UserAddToGroupModal from "../../features/users/component/UserAddToGroupModal/index.tsx";
+import type { ReadUser } from "../../types/User.ts";
+import { fetchGetAllUsers } from "../../features/users/api/userServices.ts";
 
 function GroupsPage() {
   const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
@@ -13,7 +16,19 @@ function GroupsPage() {
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [showUserAddModal, setShowUserAddModal] = useState(false);
+  const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
+
+  const handleShowUserAddModal = async () => {
+    setShowUserAddModal(true);
+    const users = await fetchGetAllUsers();
+    setAllUsers(users);
+  };
+
+  const handleHideUserAddModal = () => {
+    setShowUserAddModal(false);
+  };
 
   const handleOpenModal = (group: ReadGroup) => {
     setSelectedGroup(group);
@@ -76,6 +91,7 @@ function GroupsPage() {
           group={selectedGroup}
           deleteGroup={handleDeleteGroup}
           onEdit={handleOpenUpdateModal}
+          onAddUser={handleShowUserAddModal}
         />
       )}
 
@@ -86,6 +102,13 @@ function GroupsPage() {
         onClose={handleCloseCreateModal}
         createGroup={createGroup}
         editGroupEvent={updateGroup}
+      />
+
+      <UserAddToGroupModal
+        users={allUsers}
+        groupId={selectedGroup?.group_id}
+        onClose={handleHideUserAddModal}
+        show={showUserAddModal}
       />
     </>
   );
