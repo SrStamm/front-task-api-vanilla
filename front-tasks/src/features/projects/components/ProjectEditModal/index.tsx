@@ -14,6 +14,7 @@ interface projectModalProps {
   open: boolean;
   onClose: () => void;
   project?: ReadProject;
+  groupIdCharged?: number;
 }
 
 function ProjectCreateUpdateModal({
@@ -21,6 +22,7 @@ function ProjectCreateUpdateModal({
   open,
   onClose,
   project,
+  groupIdCharged,
 }: projectModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -41,9 +43,11 @@ function ProjectCreateUpdateModal({
     if (type === "create") {
       setTitle("");
       setDescription("");
-      setGroupId(selectedGroupId);
+      groupIdCharged && groupIdCharged
+        ? setGroupId(groupIdCharged)
+        : setGroupId(selectedGroupId);
     }
-  }, [type, project, open, selectedGroupId]);
+  }, [type, project, open, selectedGroupId, groupIdCharged]);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
