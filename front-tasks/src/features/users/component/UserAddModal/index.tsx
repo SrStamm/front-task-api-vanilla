@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { UserInGroup } from "../../../groups/schemas/Group";

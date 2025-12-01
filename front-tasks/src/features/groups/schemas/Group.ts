@@ -45,6 +45,8 @@ export type ReadGroup = z.infer<typeof ReadGroupSchema>;
 export type CreateGroupInterface = z.infer<typeof CreateGroupSchema>;
 export type UpdateGroupInterface = z.infer<typeof UpdateGroupSchema>;
 export type DeleteGroup = z.infer<typeof DeleteGroupSchema>;
-export type AddRemoveUserToGroup = z.infer<typeof AddRemoveUserToGroupSchema>;
+export type AddRemoveUserToGroupInterface = z.infer<
+  typeof AddRemoveUserToGroupSchema
+>;
 export type UpdateRoleUserInGroup = z.infer<typeof UpdateRoleUserInGroupSchema>;
 export type UserInGroup = z.infer<typeof UserInGroupSchema>;
