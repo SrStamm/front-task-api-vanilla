@@ -6,7 +6,7 @@ import "./UserListGroup.css";
 interface userListProps {
   users: UserInGroup[];
   addUser: boolean;
-  onAdd: (userId: number) => void;
+  onAdd?: (userId: number) => void;
 }
 
 function UserListGroup({ users, addUser, onAdd }: userListProps) {
