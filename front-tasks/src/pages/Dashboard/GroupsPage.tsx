@@ -3,7 +3,7 @@ import Button from "../../components/common/Button";
 import GroupList from "../../features/groups/components/GroupList";
 import GroupViewModal from "../../features/groups/components/GroupModal";
 import { useGroups } from "../../features/groups/hooks/useGroups";
-import type { ReadGroup } from "../../features/groups/schemas/Group";
+import { type ReadGroup } from "../../features/groups/schemas/Group";
 import GroupCreateUpdateModal from "../../features/groups/components/GroupCreateUpdateModal.tsx";
 import UserAddToGroupModal from "../../features/users/component/UserAddToGroupModal/index.tsx";
 import type { ReadUser } from "../../types/User.ts";
@@ -23,7 +23,14 @@ function GroupsPage() {
   const handleShowUserAddModal = async () => {
     setShowUserAddModal(true);
     const users = await fetchGetAllUsers();
-    setAllUsers(users);
+
+    const usersInGroupIDs = new Set(selectedGroup?.users.map((u) => u.user_id));
+
+    const usersNotInGroup = users.filter((u) => {
+      return !usersInGroupIDs.has(u.user_id);
+    });
+
+    setAllUsers(usersNotInGroup);
   };
 
   const handleHideUserAddModal = () => {
