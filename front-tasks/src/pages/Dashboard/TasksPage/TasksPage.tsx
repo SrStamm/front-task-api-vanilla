@@ -1,8 +1,17 @@
+import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
+import "./TasksPage.css";
+
 function TaskPage() {
   return (
-    <>
-      <p>Página de tareas</p>
-    </>
+    <section className="dashboard-section ">
+      <article className="partSections ">
+        <header className="headerPartSection">
+          <h3 className="dashboard-layout-h3">Tareas</h3>
+        </header>
+
+        <KanbanBoard />
+      </article>
+    </section>
   );
 }
 
