@@ -1,5 +1,5 @@
 import RegisterForm from "../features/auth/RegisterForm";
-import AuthLayout from "../layouts/AuthLayout";
+import AuthLayout from "../layouts/AuthLayout/AuthLayout";
 
 function RegisterPage() {
   return (

@@ -1,4 +1,4 @@
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
 import GroupsPage from "../pages/Dashboard/GroupsPage";
 import ProjectsPage from "../pages/Dashboard/ProjectsPage";
 
