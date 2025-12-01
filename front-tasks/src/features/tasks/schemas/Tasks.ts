@@ -29,7 +29,6 @@ export const ReadAllTaskFromProjectSchema = z.object({
 });
 
 export const CreateTaskSchema = z.object({
-  project_id: z.number(),
   title: z.string(),
   description: z.string().optional(),
   task_labels_links: z.array(z.string()),
@@ -37,8 +36,6 @@ export const CreateTaskSchema = z.object({
 });
 
 export const UpdateTaskSchema = z.object({
-  task_id: z.number(),
-  project_id: z.number(),
   title: z.string().optional(),
   description: z.string().optional(),
   remove_label: z.array(z.string()).optional(),
