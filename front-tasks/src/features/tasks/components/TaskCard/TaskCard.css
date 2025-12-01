@@ -1,0 +1,64 @@
+.task-card {
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  padding: 15px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s;
+  border-left: 5px solid var(--primary);
+}
+
+.task-card:hover {
+  background: var(--gray-200);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(5px);
+  transition: all 0.3s;
+}
+
+.task-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.task-card-meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.task-date {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.task-card-hide {
+  display: none;
+}
+
+.task-state {
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.task-state.todo {
+  background-color: var(--warning);
+  color: white;
+}
+
+.task-state.in-progress {
+  background-color: var(--info);
+  color: white;
+}
+
+.task-state.done {
+  background-color: var(--success);
+  color: white;
+}
