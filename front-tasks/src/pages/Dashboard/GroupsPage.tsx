@@ -8,6 +8,7 @@ import GroupCreateUpdateModal from "../../features/groups/components/GroupCreate
 import UserAddToGroupModal from "../../features/users/component/UserAddToGroupModal/index.tsx";
 import type { ReadUser } from "../../types/User.ts";
 import { fetchGetAllUsers } from "../../features/users/api/userServices.ts";
+import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal/index.tsx";
 
 function GroupsPage() {
   const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
@@ -17,8 +18,17 @@ function GroupsPage() {
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [showUserAddModal, setShowUserAddModal] = useState(false);
+  const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
+
+  const handleHideCreateProjectModal = () => {
+    setShowCreateProjectModal(false);
+  };
+
+  const handleShowCreateProjectModal = () => {
+    setShowCreateProjectModal(true);
+  };
 
   const handleShowUserAddModal = async () => {
     setShowUserAddModal(true);
@@ -99,6 +109,7 @@ function GroupsPage() {
           deleteGroup={handleDeleteGroup}
           onEdit={handleOpenUpdateModal}
           onAddUser={handleShowUserAddModal}
+          onCreateProject={handleShowCreateProjectModal}
         />
       )}
 
@@ -109,6 +120,13 @@ function GroupsPage() {
         onClose={handleCloseCreateModal}
         createGroup={createGroup}
         editGroupEvent={updateGroup}
+      />
+
+      <ProjectCreateUpdateModal
+        type="create"
+        onClose={handleHideCreateProjectModal}
+        open={showCreateProjectModal}
+        groupIdCharged={selectedGroup?.group_id}
       />
 
       <UserAddToGroupModal

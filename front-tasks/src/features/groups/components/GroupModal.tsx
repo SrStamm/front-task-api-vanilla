@@ -12,6 +12,7 @@ interface groupModalProps {
   deleteGroup: (group_id: number) => void;
   onEdit: (group: ReadGroup) => void;
   onAddUser: () => void;
+  onCreateProject: () => void;
 }
 
 function GroupViewModal({
@@ -21,6 +22,7 @@ function GroupViewModal({
   deleteGroup,
   onEdit,
   onAddUser,
+  onCreateProject,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
 
@@ -52,7 +54,11 @@ function GroupViewModal({
       >
         <div className="modal-section-header">
           <h4 className="modal-subtitle">Proyectos</h4>
-          <Button className="btn-primary btn-vsm" text="Crear Proyecto" />
+          <Button
+            className="btn-primary btn-vsm"
+            text="Crear Proyecto"
+            onClick={onCreateProject}
+          />
         </div>
         <ol className="listProject">
           <li className="project-item">Test</li>
