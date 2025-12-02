@@ -13,11 +13,12 @@ function TaskCard({ task }: TaskCardProps) {
   const formatedDate = dueDate.toLocaleDateString("es-ES", options);
 
   const state =
-    task.state == "En progreso"
+    task.state == "en proceso"
       ? "in-progress"
-      : task.state == "Completado"
+      : task.state == "completado"
         ? "done"
         : "todo";
+
   return (
     <li className={`task-card ${state}`}>
       <div className="task-card-details">
