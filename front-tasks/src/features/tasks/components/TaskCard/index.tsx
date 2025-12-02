@@ -5,9 +5,10 @@ import "./TaskCard.css";
 
 interface TaskCardProps {
   task: ReadAllTaskFromProjectInterface;
+  onShowTaskModal: (taskId: number) => void;
 }
 
-function TaskCard({ task }: TaskCardProps) {
+function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
   const dueDate = new Date(task.date_exp);
   const options = { year: "numeric", month: "short", day: "numeric" };
   const formatedDate = dueDate.toLocaleDateString("es-ES", options);
@@ -20,7 +21,10 @@ function TaskCard({ task }: TaskCardProps) {
         : "todo";
 
   return (
-    <li className={`task-card ${state}`}>
+    <li
+      className={`task-card ${state}`}
+      onClick={() => onShowTaskModal(task.task_id)}
+    >
       <div className="task-card-details">
         <div className="task-card-meta">
           <div className="task-info">
