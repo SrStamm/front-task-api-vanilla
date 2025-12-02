@@ -68,7 +68,7 @@ export function useTasks() {
     }
   };
 
-  return [
+  return {
     loadTasksFromProject,
     isLoading,
     error,
@@ -76,5 +76,5 @@ export function useTasks() {
     create,
     update,
     remove,
-  ];
+  };
 }
