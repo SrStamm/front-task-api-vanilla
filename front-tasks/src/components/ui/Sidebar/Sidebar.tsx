@@ -60,8 +60,10 @@ function Sidebar() {
                 className={`sidebar_element ${elementSelected == "tasks" ? "active" : ""}`}
                 onClick={() => setElementSelected("tasks")}
               >
-                <FaTasks />
-                <span>Tareas</span>
+                <Link to="/dashboard/tasks" className="sidebar_link">
+                  <FaTasks />
+                  <span>Tareas</span>
+                </Link>
               </div>
 
               <div

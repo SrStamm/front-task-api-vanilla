@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const TaskState = z.enum(["en proceso"]);
+const TaskState = z.enum(["sin empezar", "en proceso", "completado"]);
 
 export const ReadTaskSchema = z.object({
   task_id: z.number(),
