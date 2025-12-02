@@ -1,5 +1,5 @@
 .task-card {
-  background: var(--gray-50);
+  background: var(--bg-card-light);
   border-radius: var(--radius);
   padding: 15px;
   box-shadow: var(--shadow);
@@ -20,7 +20,7 @@
 }
 
 .task-card:hover {
-  background: var(--gray-200);
+  background: var(--gray-100);
   box-shadow: var(--shadow-lg);
   transform: translateX(5px);
   transition: all 0.3s;
