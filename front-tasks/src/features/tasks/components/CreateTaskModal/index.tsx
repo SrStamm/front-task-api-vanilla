@@ -9,9 +9,10 @@ import "./CreateTaskModal.css";
 
 interface CreateTaskModalProps {
   showModal: boolean;
+  onClose: () => void;
 }
 
-function CreateTaskModal({ showModal }: CreateTaskModalProps) {
+function CreateTaskModal({ showModal, onClose }: CreateTaskModalProps) {
   const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
   const { projects } = useProjects();
   const { projectId } = useGroupProject();
@@ -53,7 +54,7 @@ function CreateTaskModal({ showModal }: CreateTaskModalProps) {
   const actions = (
     <>
       <Button className="btn-primary btn-sm" text="Confirmar" />
-      <Button className="btn-error btn-sm" text="Cancelar" />
+      <Button className="btn-error btn-sm" text="Cancelar" onClick={onClose} />
     </>
   );
 
@@ -64,6 +65,7 @@ function CreateTaskModal({ showModal }: CreateTaskModalProps) {
       modalHeader={header}
       modalBody={body}
       modalActions={actions}
+      onClose={onClose}
     />
   );
 }
