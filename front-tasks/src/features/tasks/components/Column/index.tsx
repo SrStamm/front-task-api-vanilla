@@ -6,9 +6,10 @@ import "./Column.css";
 interface ColumnProps {
   column_text: string;
   tasks: ReadAllTaskFromProjectInterface[];
+  onShowModal: (taskId: number) => void;
 }
 
-function Column({ column_text, tasks }: ColumnProps) {
+function Column({ column_text, tasks, onShowModal }: ColumnProps) {
   return (
     <div className="task-column">
       <div className="column-header">
@@ -19,7 +20,7 @@ function Column({ column_text, tasks }: ColumnProps) {
       </div>
       <ol className="list-task">
         {tasks.map((t) => {
-          return <TaskCard task={t} />;
+          return <TaskCard task={t} onShowTaskModal={onShowModal} />;
         })}
       </ol>
     </div>
