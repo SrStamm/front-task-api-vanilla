@@ -5,6 +5,7 @@ import { useGroupProject } from "../../../../hooks/useGroupProject";
 import { useProjects } from "../../../projects/hooks/useProject";
 import UserList from "../../../users/component/UserList";
 import type { ReadUser } from "../../../../types/User.ts";
+import "./CreateTaskModal.css";
 
 interface CreateTaskModalProps {
   showModal: boolean;
