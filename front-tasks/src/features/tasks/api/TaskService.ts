@@ -23,7 +23,7 @@ export async function FetchCreateTask(projectId: number, data: CreateTask) {
   const res = await Fetch({
     path: `task/${projectId}`,
     method: "POST",
-    body: { data },
+    body: data,
   });
   if (!res) throw new Error("Failed to create a task");
   return res.json();
