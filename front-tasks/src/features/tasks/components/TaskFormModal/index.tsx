@@ -8,14 +8,16 @@ import type { ReadUser } from "../../../../types/User.ts";
 import type { CreateTask, UpdateTask } from "../../../../types/Task.ts";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
-import type { Update } from "vite/types/hmrPayload.js";
 
 interface TaskFormModalProps {
   showModal: boolean;
   mode: "create" | "edit";
   initialData?: ReadAllTaskFromProjectInterface;
   onClose: () => void;
-  onSubmit: (data: CreateTask | UpdateTask) => Promise<void>;
+  onCreate: (data: CreateTask) => Promise<void>;
+  onUpdate: (data: UpdateTask) => Promise<void>;
+  isCreating?: boolean;
+  isUpdating?: boolean;
   onSuccess: () => void;
 }
 
@@ -24,7 +26,10 @@ function TaskFormModal({
   mode,
   initialData,
   onClose,
-  onSubmit,
+  onCreate,
+  onUpdate,
+  isCreating = false,
+  isUpdating = false,
   onSuccess,
 }: TaskFormModalProps) {
   const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
@@ -38,19 +43,24 @@ function TaskFormModal({
   useEffect(() => {
     if (projectId && projects) {
       const project = projects.find((p) => p.project_id == projectId);
-
       setUsersSelected(project ? project.users : []);
     }
 
     if (mode === "edit" && initialData) {
-      console.log("Initial Data:", initialData);
-      setTitle(initialData.title);
-      setDescription(initialData.description);
-      const datePart = initialData.date_exp.substring(0, 10);
+      setTitle(initialData.title || "");
+      setDescription(initialData.description || "");
+      const datePart = initialData.date_exp?.substring(0, 10) || "";
       setDueDate(datePart);
+      setUserIds(initialData.user_ids || []);
+    } else {
+      setTitle("");
+      setDescription("");
+      setDueDate("");
+      setUserIds([]);
     }
-  }, [projectId, projects, mode, initialData]);
+  }, [projectId, projects, mode, initialData, showModal]);
 
+  // Al cambiar algún dato de la tarea, se edita
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -64,11 +74,20 @@ function TaskFormModal({
   };
 
   const handleUserSelect = (userId: number) => {
-    setUserIds((prevUserIds) => [...prevUserIds, userId]);
+    setUserIds((prevUserIds) =>
+      prevUserIds.includes(userId)
+        ? prevUserIds.filter((id) => id !== userId) // Toggle
+        : [...prevUserIds, userId],
+    );
   };
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!projectId) {
+      alert("No se ha podido obtener el proyecto.");
+      return;
+    }
 
     const payload: CreateTask = {
       project_id: projectId,
@@ -78,136 +97,119 @@ function TaskFormModal({
       date_exp: dueDate,
     };
 
-    await onSubmit(payload);
-
-    onSuccess();
-    onClose();
+    if (onCreate) {
+      try {
+        await onCreate(payload);
+        onSuccess();
+        onClose();
+      } catch (error) {
+        console.error("Error al crear la tarea:", error);
+      }
+    }
   };
 
   const handleEditTask = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!projectId || !initialData) {
+      return;
+    }
 
     const payload: UpdateTask = {
       project_id: projectId,
       task_id: initialData!.task_id,
       title: title,
       description: description,
-      user_ids: userIds,
       date_exp: dueDate,
     };
 
-    await onSubmit(payload);
-
-    onSuccess();
-    onClose();
+    if (onUpdate) {
+      try {
+        await onUpdate(payload);
+        onSuccess();
+        onClose();
+      } catch (error) {
+        console.error("Error al actualizar la tarea:", error);
+      }
+    }
   };
+
+  const isSubmitDisabled =
+    mode === "create"
+      ? isCreating || !title.trim()
+      : isUpdating || !title.trim();
 
   const header =
     mode == "create" ? <h2>Crear una nueva tarea</h2> : <h2>Editar tarea</h2>;
 
-  const body =
-    mode === "create" ? (
-      <form id="create-task-form" onSubmit={handleCreateTask}>
-        <label>Titulo:</label>
-        <input
-          type="text"
-          className="input-base"
-          value={title}
-          onChange={onTitleChange}
-        />
+  const body = (
+    <form
+      id={mode === "create" ? "create-task-form" : "edit-task-form"}
+      onSubmit={mode === "create" ? handleCreateTask : handleEditTask}
+    >
+      <label>Titulo:</label>
+      <input
+        type="text"
+        className="input-base"
+        value={title}
+        onChange={onTitleChange}
+        disabled={mode === "create" ? isCreating : isUpdating}
+      />
 
-        <label>Descripción:</label>
-        <textarea
-          rows={3}
-          cols={3}
-          className="input-base small-textarea"
-          onChange={onDescriptionChange}
-          value={description}
-        ></textarea>
+      <label>Descripción:</label>
+      <textarea
+        rows={3}
+        cols={3}
+        className="input-base small-textarea"
+        onChange={onDescriptionChange}
+        value={description}
+        disabled={mode === "create" ? isCreating : isUpdating}
+      ></textarea>
 
-        <label>Fecha de vencimiento:</label>
-        <input
-          type="date"
-          className="input-base"
-          onChange={onDueDateChange}
-          value={dueDate}
-          required
-        />
+      <label>Fecha de vencimiento:</label>
+      <input
+        type="date"
+        className="input-base"
+        onChange={onDueDateChange}
+        value={dueDate}
+        disabled={mode === "create" ? isCreating : isUpdating}
+        required
+      />
 
-        <div className="user-selection-container">
-          <label> Asignar a usuarios: </label>
-          <ul>
-            <UserList users={usersSelected} onAdd={handleUserSelect} />
-          </ul>
-        </div>
-      </form>
-    ) : (
-      <form id="edit-task-form" onSubmit={handleEditTask}>
-        <label>Titulo:</label>
-        <input
-          type="text"
-          className="input-base"
-          onChange={onTitleChange}
-          value={title}
-        />
-
-        <label>Descripción:</label>
-        <textarea
-          rows={3}
-          cols={3}
-          className="input-base small-textarea"
-          value={description}
-          onChange={onDescriptionChange}
-        ></textarea>
-
-        <label>Fecha de vencimiento:</label>
-        <input
-          type="date"
-          className="input-base"
-          onChange={onDueDateChange}
-          value={dueDate}
-          required
-        />
-
-        <div className="user-selection-container">
-          <label> Asignar a usuarios: </label>
-          <ul>
-            <UserList users={usersSelected} onAdd={handleUserSelect} />
-          </ul>
-        </div>
-      </form>
-    );
-
-  const actions =
-    mode === "create" ? (
-      <>
-        <Button
-          className="btn-primary btn-sm"
-          text="Confirmar"
-          type="submit"
-          form="create-task-form"
-        />
-        <Button
-          className="btn-error btn-sm"
-          text="Cancelar"
-          onClick={onClose}
-        />
-      </>
-    ) : (
-      <>
-        <Button
-          className="btn-primary btn-sm"
-          text="Confirmar"
-          type="submit"
-          form="edit-task-form"
-        />
-        <Button
-          className="btn-error btn-sm"
-          text="Cancelar"
-          onClick={onClose}
-        />
-      </>
-    );
+      <div className="user-selection-container">
+        <label> Asignar a usuarios: </label>
+        <ul>
+          <UserList users={usersSelected} onAdd={handleUserSelect} />
+        </ul>
+      </div>
+    </form>
+  );
+  const actions = (
+    <>
+      <Button
+        className="btn-primary btn-sm"
+        text={
+          mode === "create"
+            ? isCreating
+              ? "Creando..."
+              : "Confirmar"
+            : isUpdating
+              ? "Actualizando..."
+              : "Confirmar"
+        }
+        type="submit"
+        form={mode === "create" ? "create-task-form" : "edit-task-form"}
+        disabled={isSubmitDisabled}
+        loading={mode === "create" ? isCreating : isUpdating}
+      />
+      <Button
+        className="btn-error btn-sm"
+        text="Cancelar"
+        onClick={onClose}
+        disabled={mode === "create" ? isCreating : isUpdating}
+      />
+    </>
+  );
 
   return (
     <Modal
