@@ -10,7 +10,7 @@ interface KanbanBoardProps {
   tasksInProject: ReadAllTaskFromProjectInterface[];
   isLoading: boolean;
   error: string | null;
-  onEdit: () => void;
+  onEdit: (t: ReadAllTaskFromProjectInterface) => void;
 }
 
 function KanbanBoard({

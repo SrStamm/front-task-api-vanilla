@@ -1,29 +1,36 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useTasks } from "../../../features/tasks/hooks/useTasks";
 import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
 import TaskFormModal from "../../../features/tasks/components/TaskFormModal";
-import "./TasksPage.css";
 import Button from "../../../components/common/Button";
-import { useTasks } from "../../../features/tasks/hooks/useTasks";
+import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
+import "./TasksPage.css";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
   const [typeFormModal, setTypeFormModal] = useState<"create" | "edit">("edit");
+  const [selectedTask, setSelectedTask] =
+    useState<ReadAllTaskFromProjectInterface | null>(null);
   const { loadTasksFromProject, tasksInProject, isLoading, error, create } =
     useTasks();
 
-  const handleOpenCreateModal = () => {
+  const handleOpenCreateModal = useCallback(() => {
     setTypeFormModal("create");
     setShowFormModal(true);
-  };
+  }, [setShowFormModal]);
 
-  const handleOpenEditModal = () => {
-    setTypeFormModal("edit");
-    setShowFormModal(true);
-  };
+  const handleOpenEditModal = useCallback(
+    (t: ReadAllTaskFromProjectInterface) => {
+      setTypeFormModal("edit");
+      setSelectedTask(t);
+      setShowFormModal(true);
+    },
+    [setSelectedTask, setShowFormModal],
+  );
 
-  const handleCloseCreateModal = () => {
+  const handleCloseCreateModal = useCallback(() => {
     setShowFormModal(false);
-  };
+  }, [setShowFormModal]);
 
   return (
     <section className="dashboard-section ">
@@ -46,6 +53,7 @@ function TaskPage() {
       <TaskFormModal
         showModal={showFormModal}
         mode={typeFormModal}
+        initialData={selectedTask || undefined}
         onClose={handleCloseCreateModal}
         onSubmit={create}
         onSuccess={loadTasksFromProject}

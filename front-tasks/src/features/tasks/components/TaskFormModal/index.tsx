@@ -18,9 +18,10 @@ interface TaskFormModalProps {
   onSuccess: () => void;
 }
 
-function CreateTaskModal({
+function TaskFormModal({
   showModal,
   mode,
+  initialData,
   onClose,
   onSubmit,
   onSuccess,
@@ -28,7 +29,7 @@ function CreateTaskModal({
   const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [dueDate, setDueDate] = useState<string>("");
+  const [dueDate, setDueDate] = useState<string>();
   const [userIds, setUserIds] = useState<number[]>([]);
   const { projects } = useProjects();
   const { projectId } = useGroupProject();
@@ -39,7 +40,15 @@ function CreateTaskModal({
 
       setUsersSelected(project ? project.users : []);
     }
-  }, [projectId, projects]);
+
+    if (mode === "edit" && initialData) {
+      console.log("Initial Data:", initialData);
+      setTitle(initialData.title);
+      setDescription(initialData.description);
+      const datePart = initialData.date_exp.substring(0, 10);
+      setDueDate(datePart);
+    }
+  }, [projectId, projects, mode, initialData]);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -81,7 +90,12 @@ function CreateTaskModal({
     mode === "create" ? (
       <form id="create-task-form" onSubmit={handleCreateTask}>
         <label>Titulo:</label>
-        <input type="text" className="input-base" onChange={onTitleChange} />
+        <input
+          type="text"
+          className="input-base"
+          value={title}
+          onChange={onTitleChange}
+        />
 
         <label>Descripción:</label>
         <textarea
@@ -89,6 +103,7 @@ function CreateTaskModal({
           cols={3}
           className="input-base small-textarea"
           onChange={onDescriptionChange}
+          value={description}
         ></textarea>
 
         <label>Fecha de vencimiento:</label>
@@ -96,6 +111,7 @@ function CreateTaskModal({
           type="date"
           className="input-base"
           onChange={onDueDateChange}
+          value={dueDate}
           required
         />
 
@@ -109,13 +125,19 @@ function CreateTaskModal({
     ) : (
       <form id="edit-task-form">
         <label>Titulo:</label>
-        <input type="text" className="input-base" onChange={onTitleChange} />
+        <input
+          type="text"
+          className="input-base"
+          onChange={onTitleChange}
+          value={title}
+        />
 
         <label>Descripción:</label>
         <textarea
           rows={3}
           cols={3}
           className="input-base small-textarea"
+          value={description}
           onChange={onDescriptionChange}
         ></textarea>
 
@@ -124,6 +146,7 @@ function CreateTaskModal({
           type="date"
           className="input-base"
           onChange={onDueDateChange}
+          value={dueDate}
           required
         />
 
@@ -179,4 +202,4 @@ function CreateTaskModal({
   );
 }
 
-export default CreateTaskModal;
+export default TaskFormModal;

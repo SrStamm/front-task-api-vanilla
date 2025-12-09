@@ -8,7 +8,7 @@ interface TaskModalProps {
   isShow: boolean;
   task: ReadAllTaskFromProjectInterface;
   onClose?: () => void;
-  onEdit?: () => void;
+  onEdit: (t: ReadAllTaskFromProjectInterface) => void;
 }
 
 function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
@@ -74,7 +74,11 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
   );
 
   const actions = (
-    <Button className="btn-primary" text="Editar" onClick={onEdit} />
+    <Button
+      className="btn-primary"
+      text="Editar"
+      onClick={() => onEdit(task)}
+    />
   );
 
   return (
