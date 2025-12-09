@@ -2,16 +2,52 @@
 
 import "./KanbanBoard.css";
 import Column from "../Column";
-import { useTasks } from "../../hooks/useTasks";
 import TaskModal from "../../components/TaskModal/index.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 
-function KanbanBoard() {
-  const { tasksInProject, isLoading, error } = useTasks();
+interface KanbanBoardProps {
+  tasksInProject: ReadAllTaskFromProjectInterface[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+function KanbanBoard({ tasksInProject, isLoading, error }: KanbanBoardProps) {
   const [isShowModal, setShowModal] = useState(false);
   const [taskSelected, setTaskSelected] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
+
+  const [todoTasks, setTodoTasks] = useState<ReadAllTaskFromProjectInterface[]>(
+    [],
+  );
+  const [inProgressTasks, setInProgressTasks] = useState<
+    ReadAllTaskFromProjectInterface[]
+  >([]);
+  const [doneTasks, setDoneTasks] = useState<ReadAllTaskFromProjectInterface[]>(
+    [],
+  );
+
+  useEffect(() => {
+    if (tasksInProject.length > 0) {
+      const todo = tasksInProject.filter((t) => t.state === "sin empezar");
+      setTodoTasks(todo);
+
+      const inProgress = tasksInProject.filter((t) => t.state === "en proceso");
+      setInProgressTasks(inProgress);
+
+      const done = tasksInProject.filter((t) => t.state === "completado");
+      setDoneTasks(done);
+    }
+  }, [tasksInProject]);
+
+  if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
+
+  if (error)
+    return (
+      <p
+        style={{ textAlign: "center", color: "red" }}
+      >{`Error al cargar las tareas: ${error}`}</p>
+    );
 
   const handleShowModal = (taskId: number) => {
     const selected = tasksInProject.find((t) => t.task_id === taskId);
@@ -28,22 +64,6 @@ function KanbanBoard() {
     setShowModal(false);
     setTaskSelected(null);
   };
-
-  if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
-  if (error)
-    return (
-      <p
-        style={{ textAlign: "center", color: "red" }}
-      >{`Error al cargar las tareas: ${error}`}</p>
-    );
-
-  const todoTasks = tasksInProject.filter((t) => t.state === "sin empezar");
-  const inProgressTasks = tasksInProject.filter(
-    (t) => t.state === "en proceso",
-  );
-  const doneTasks = tasksInProject.filter((t) => t.state === "completado");
-
-  console.log(todoTasks);
 
   return (
     <>

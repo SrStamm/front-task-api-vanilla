@@ -12,7 +12,7 @@ import type { CreateTask, UpdateTask } from "../../../types/Task";
 export function useTasks() {
   const { projectId } = useGroupProject();
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [tasksInProject, setTasksInProject] = useState<
     ReadAllTaskFromProjectInterface[]
   >([]);
@@ -35,9 +35,9 @@ export function useTasks() {
     loadTasksFromProject();
   }, [loadTasksFromProject]);
 
-  const create = async (projectId: number, payload: CreateTask) => {
+  const create = async (payload: CreateTask) => {
     try {
-      const t = await FetchCreateTask(projectId, payload);
+      const t = await FetchCreateTask(payload.project_id, payload);
       setTasksInProject((prev) => [...prev, t]);
     } catch (err) {
       setError(err);

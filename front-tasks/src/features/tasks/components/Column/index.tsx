@@ -20,7 +20,9 @@ function Column({ column_text, tasks, onShowModal }: ColumnProps) {
       </div>
       <ol className="list-task">
         {tasks.map((t) => {
-          return <TaskCard task={t} onShowTaskModal={onShowModal} />;
+          return (
+            <TaskCard key={t.task_id} task={t} onShowTaskModal={onShowModal} />
+          );
         })}
       </ol>
     </div>
