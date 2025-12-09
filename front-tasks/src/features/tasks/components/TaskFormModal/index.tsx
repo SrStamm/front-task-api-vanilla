@@ -5,16 +5,17 @@ import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import UserList from "../../../users/component/UserList";
 import type { ReadUser } from "../../../../types/User.ts";
-import type { CreateTask } from "../../../../types/Task.ts";
+import type { CreateTask, UpdateTask } from "../../../../types/Task.ts";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
+import type { Update } from "vite/types/hmrPayload.js";
 
 interface TaskFormModalProps {
   showModal: boolean;
   mode: "create" | "edit";
   initialData?: ReadAllTaskFromProjectInterface;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: CreateTask | UpdateTask) => Promise<void>;
   onSuccess: () => void;
 }
 
@@ -83,6 +84,24 @@ function TaskFormModal({
     onClose();
   };
 
+  const handleEditTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const payload: UpdateTask = {
+      project_id: projectId,
+      task_id: initialData!.task_id,
+      title: title,
+      description: description,
+      user_ids: userIds,
+      date_exp: dueDate,
+    };
+
+    await onSubmit(payload);
+
+    onSuccess();
+    onClose();
+  };
+
   const header =
     mode == "create" ? <h2>Crear una nueva tarea</h2> : <h2>Editar tarea</h2>;
 
@@ -123,7 +142,7 @@ function TaskFormModal({
         </div>
       </form>
     ) : (
-      <form id="edit-task-form">
+      <form id="edit-task-form" onSubmit={handleEditTask}>
         <label>Titulo:</label>
         <input
           type="text"
@@ -180,7 +199,7 @@ function TaskFormModal({
           className="btn-primary btn-sm"
           text="Confirmar"
           type="submit"
-          form="create-task-form"
+          form="edit-task-form"
         />
         <Button
           className="btn-error btn-sm"

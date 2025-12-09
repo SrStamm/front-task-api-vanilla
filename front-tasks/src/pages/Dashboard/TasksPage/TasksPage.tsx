@@ -11,8 +11,14 @@ function TaskPage() {
   const [typeFormModal, setTypeFormModal] = useState<"create" | "edit">("edit");
   const [selectedTask, setSelectedTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
-  const { loadTasksFromProject, tasksInProject, isLoading, error, create } =
-    useTasks();
+  const {
+    loadTasksFromProject,
+    tasksInProject,
+    isLoading,
+    error,
+    create,
+    update,
+  } = useTasks();
 
   const handleOpenCreateModal = useCallback(() => {
     setTypeFormModal("create");
@@ -55,7 +61,7 @@ function TaskPage() {
         mode={typeFormModal}
         initialData={selectedTask || undefined}
         onClose={handleCloseCreateModal}
-        onSubmit={create}
+        onSubmit={typeFormModal === "create" ? create : update}
         onSuccess={loadTasksFromProject}
       />
     </section>

@@ -46,6 +46,7 @@ export interface CreateTask {
 
 export interface UpdateTask {
   project_id: number;
+  task_id: number;
   title?: string;
   description?: string;
   date_exp?: string;
