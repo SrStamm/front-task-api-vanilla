@@ -36,7 +36,7 @@ export async function FetchUpdateTask(
 ) {
   const res = await Fetch({
     path: `task/${projectId}/${taskId}`,
-    method: "POST",
+    method: "PATCH",
     body: { data },
   });
   if (!res)
