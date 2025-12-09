@@ -3,8 +3,9 @@
 import "./KanbanBoard.css";
 import Column from "../Column";
 import TaskModal from "../../components/TaskModal/index.tsx";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
+import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
 
 interface KanbanBoardProps {
   tasksInProject: ReadAllTaskFromProjectInterface[];
@@ -19,40 +20,37 @@ function KanbanBoard({
   error,
   onEdit,
 }: KanbanBoardProps) {
+  const { projectId } = useGroupProject();
   const [isShowModal, setShowModal] = useState(false);
   const [taskSelected, setTaskSelected] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
 
-  const [todoTasks, setTodoTasks] = useState<ReadAllTaskFromProjectInterface[]>(
-    [],
-  );
-  const [inProgressTasks, setInProgressTasks] = useState<
-    ReadAllTaskFromProjectInterface[]
-  >([]);
-  const [doneTasks, setDoneTasks] = useState<ReadAllTaskFromProjectInterface[]>(
-    [],
-  );
-
-  useEffect(() => {
-    if (tasksInProject.length > 0) {
-      const todo = tasksInProject.filter((t) => t.state === "sin empezar");
-      setTodoTasks(todo);
-
-      const inProgress = tasksInProject.filter((t) => t.state === "en proceso");
-      setInProgressTasks(inProgress);
-
-      const done = tasksInProject.filter((t) => t.state === "completado");
-      setDoneTasks(done);
+  const { todoTasks, inProgressTasks, doneTasks } = useMemo(() => {
+    if (!tasksInProject.length) {
+      return { todoTasks: [], inProgressTasks: [], doneTasks: [] };
     }
+
+    const todo = tasksInProject.filter((t) => t.state === "sin empezar");
+    const inProgress = tasksInProject.filter((t) => t.state === "en proceso");
+    const done = tasksInProject.filter((t) => t.state === "completado");
+
+    return { todoTasks: todo, inProgressTasks: inProgress, doneTasks: done };
   }, [tasksInProject]);
 
   if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
 
   if (error)
     return (
-      <p
-        style={{ textAlign: "center", color: "red" }}
-      >{`Error al cargar las tareas: ${error}`}</p>
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "red" }}>Error al cargar las tareas</p>
+        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          style={{ marginTop: "1rem" }}
+        >
+          Reintentar
+        </button>
+      </div>
     );
 
   const handleShowModal = (taskId: number) => {
@@ -70,6 +68,17 @@ function KanbanBoard({
     setShowModal(false);
     setTaskSelected(null);
   };
+
+  if (tasksInProject.length === 0) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
+        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
+          Crea tu primera tarea haciendo clic en el botón "+"
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>

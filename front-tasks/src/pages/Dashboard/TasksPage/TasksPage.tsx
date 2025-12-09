@@ -18,6 +18,8 @@ function TaskPage() {
     error,
     create,
     update,
+    isCreating,
+    isUpdating,
   } = useTasks();
 
   const handleOpenCreateModal = useCallback(() => {
@@ -61,7 +63,10 @@ function TaskPage() {
         mode={typeFormModal}
         initialData={selectedTask || undefined}
         onClose={handleCloseCreateModal}
-        onSubmit={typeFormModal === "create" ? create : update}
+        onCreate={create}
+        onUpdate={update}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
         onSuccess={loadTasksFromProject}
       />
     </section>
