@@ -11,7 +11,7 @@ import "./CreateTaskModal.css";
 interface CreateTaskModalProps {
   showModal: boolean;
   onClose: () => void;
-  onCreate: (payload: CreateTask) => void;
+  onCreate: (payload: CreateTask) => Promise<void>;
   onSuccess: () => void;
 }
 
