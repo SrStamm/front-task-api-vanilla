@@ -12,7 +12,7 @@ import type { CreateTask, UpdateTask } from "../../../types/Task";
 export function useTasks() {
   const { projectId } = useGroupProject();
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [tasksInProject, setTasksInProject] = useState<
     ReadAllTaskFromProjectInterface[]
   >([]);

@@ -3,9 +3,12 @@ import CreateTaskModal from "../../../features/tasks/components/CreateTaskModal"
 import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
 import "./TasksPage.css";
 import Button from "../../../components/common/Button";
+import { useTasks } from "../../../features/tasks/hooks/useTasks";
 
 function TaskPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const { loadTasksFromProject, tasksInProject, isLoading, error, create } =
+    useTasks();
 
   const handleOpenCreateModal = () => {
     setShowCreateModal(true);
@@ -26,10 +29,17 @@ function TaskPage() {
         />
       </header>
 
-      <KanbanBoard />
+      <KanbanBoard
+        tasksInProject={tasksInProject}
+        isLoading={isLoading}
+        error={error}
+      />
+
       <CreateTaskModal
         showModal={showCreateModal}
         onClose={handleCloseCreateModal}
+        onCreate={create}
+        onSuccess={loadTasksFromProject}
       />
     </section>
   );
