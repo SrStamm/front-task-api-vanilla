@@ -13,10 +13,8 @@ function Column({ column_text, tasks, onShowModal }: ColumnProps) {
   return (
     <div className="task-column">
       <div className="column-header">
-        <div>
-          <h4>{column_text}</h4>
-          <p className="task-quantity"></p>
-        </div>
+        <h4>{column_text}</h4>
+        <p className={"task-quantity"}>{tasks.length}</p>
       </div>
       <ol className="list-task">
         {tasks.map((t) => {
