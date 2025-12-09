@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   FetchCreateTask,
   FetchDeleteTask,
@@ -8,73 +7,90 @@ import {
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import type { ReadAllTaskFromProjectInterface } from "../schemas/Tasks";
 import type { CreateTask, UpdateTask } from "../../../types/Task";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useTasks() {
   const { projectId } = useGroupProject();
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [tasksInProject, setTasksInProject] = useState<
-    ReadAllTaskFromProjectInterface[]
-  >([]);
+  const queryClient = useQueryClient();
 
-  const loadTasksFromProject = useCallback(async () => {
-    setLoading(true);
-    try {
-      if (projectId == null) return setError("Project not selected");
-      const projects = await FetchTaskToProject(projectId);
-      setTasksInProject(projects);
-      setError(null);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [projectId]);
-
-  useEffect(() => {
-    loadTasksFromProject();
-  }, [loadTasksFromProject]);
-
-  const create = async (payload: CreateTask) => {
-    try {
-      const t = await FetchCreateTask(payload.project_id, payload);
-      setTasksInProject((prev) => [...prev, t]);
-    } catch (err) {
-      setError(err);
-    }
-  };
-
-  const update = async (payload: UpdateTask) => {
-    try {
-      const t = await FetchUpdateTask(
-        payload.project_id,
-        payload.task_id,
-        payload,
-      );
-      setTasksInProject((prev) =>
-        prev.map((p) => (p.task_id === payload.task_id ? t : p)),
-      );
-    } catch (err) {
-      setError(err);
-    }
-  };
-
-  const remove = async (projectId: number, taskId: number) => {
-    try {
-      await FetchDeleteTask(projectId, taskId);
-      setTasksInProject((prev) => prev.filter((p) => p.task_id !== taskId));
-    } catch (err) {
-      setError(err);
-    }
-  };
-
-  return {
-    loadTasksFromProject,
+  // --- GET ---
+  const {
+    data: tasksInProject = [],
     isLoading,
     error,
+    refetch: loadTasksFromProject,
+  } = useQuery({
+    queryKey: ["tasks", projectId],
+    queryFn: () => {
+      if (!projectId) throw new Error("Project not selected");
+      return FetchTaskToProject(projectId);
+    },
+    enabled: !!projectId,
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000,
+  });
+
+  // --- POST ---
+  const create = useMutation({
+    mutationFn: (payload: CreateTask) =>
+      FetchCreateTask(payload.project_id, payload),
+    onSuccess: (newTask, variables) => {
+      queryClient.setQueryData(
+        ["tasks", variables.project_id],
+        (oldTasks: ReadAllTaskFromProjectInterface[] = []) => [
+          ...oldTasks,
+          newTask,
+        ],
+      );
+    },
+  });
+
+  // --- PATCH ---
+  const update = useMutation({
+    mutationFn: (payload: UpdateTask) =>
+      FetchUpdateTask(payload.project_id, payload.task_id, payload),
+    onSuccess: (updatedTask) => {
+      queryClient.setQueryData(["tasks", projectId], (oldTasks = []) =>
+        oldTasks.map((task) =>
+          task.task_id === updatedTask.task_id ? updatedTask : task,
+        ),
+      );
+    },
+  });
+
+  // --- DELETE ---
+  const remove = useMutation({
+    mutationFn: ({
+      projectId,
+      taskId,
+    }: {
+      projectId: number;
+      taskId: number;
+    }) => FetchDeleteTask(projectId, taskId),
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData(
+        ["tasks", projectId],
+        (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
+          oldTasks.filter((t) => t.task_id !== variables.task_id),
+      );
+    },
+  });
+
+  return {
+    // Datos y estados
     tasksInProject,
-    create,
-    update,
-    remove,
+    isLoading,
+    error,
+
+    // Acciones
+    loadTasksFromProject,
+    create: create.mutate,
+    update: update.mutate,
+    remove: remove.mutate,
+
+    // Estados de mutaciones
+    isCreating: create.isPending,
+    isUpdating: update.isPending,
+    isDeleting: remove.isPending,
   };
 }
