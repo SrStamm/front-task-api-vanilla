@@ -8,9 +8,10 @@ interface TaskModalProps {
   isShow: boolean;
   task: ReadAllTaskFromProjectInterface;
   onClose?: () => void;
+  onEdit: (t: ReadAllTaskFromProjectInterface) => void;
 }
 
-function TaskModal({ isShow, task, onClose }: TaskModalProps) {
+function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
   const dueDate = new Date(task.date_exp);
   const options = { year: "numeric", month: "short", day: "numeric" };
   const formatedDate = dueDate.toLocaleDateString("es-ES", options);
@@ -71,7 +72,15 @@ function TaskModal({ isShow, task, onClose }: TaskModalProps) {
       </div>
     </>
   );
-  const actions = <Button className="btn-primary" text="Editar" />;
+
+  const actions = (
+    <Button
+      className="btn-primary"
+      text="Editar"
+      onClick={() => onEdit(task)}
+    />
+  );
+
   return (
     <Modal
       showModal={isShow}

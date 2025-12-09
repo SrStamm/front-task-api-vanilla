@@ -44,15 +44,15 @@ export function useTasks() {
     }
   };
 
-  const update = async (
-    projectId: number,
-    taskId: number,
-    payload: UpdateTask,
-  ) => {
+  const update = async (payload: UpdateTask) => {
     try {
-      const t = await FetchUpdateTask(projectId, taskId, payload);
+      const t = await FetchUpdateTask(
+        payload.project_id,
+        payload.task_id,
+        payload,
+      );
       setTasksInProject((prev) =>
-        prev.map((p) => (p.task_id === taskId ? t : p)),
+        prev.map((p) => (p.task_id === payload.task_id ? t : p)),
       );
     } catch (err) {
       setError(err);
