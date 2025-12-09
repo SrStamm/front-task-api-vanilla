@@ -49,6 +49,7 @@ export const RemoveTaskSchema = z.object({
   project_id: z.number(),
 });
 
+export type TaskStateEnum = z.infer<typeof TaskState>;
 export type ReadTaskInterface = z.infer<typeof ReadTaskSchema>;
 export type ReadUserAssignedInterface = z.infer<typeof ReadUserAssignedSchema>;
 export type ReadAllTaskFromProjectInterface = z.infer<

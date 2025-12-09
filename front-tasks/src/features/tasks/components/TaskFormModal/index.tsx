@@ -6,7 +6,10 @@ import Modal from "../../../../components/common/Modal";
 import UserList from "../../../users/component/UserList";
 import type { ReadUser } from "../../../../types/User.ts";
 import type { CreateTask, UpdateTask } from "../../../../types/Task.ts";
-import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
+import type {
+  ReadAllTaskFromProjectInterface,
+  TaskStateEnum,
+} from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
 
 interface TaskFormModalProps {
@@ -37,6 +40,8 @@ function TaskFormModal({
   const [description, setDescription] = useState<string>("");
   const [dueDate, setDueDate] = useState<string>();
   const [userIds, setUserIds] = useState<number[]>([]);
+  const [selectedStatus, setSelectedStatus] =
+    useState<TaskStateEnum>("sin empezar");
   const { projects } = useProjects();
   const { projectId } = useGroupProject();
 
@@ -52,6 +57,7 @@ function TaskFormModal({
       const datePart = initialData.date_exp?.substring(0, 10) || "";
       setDueDate(datePart);
       setUserIds(initialData.user_ids || []);
+      setSelectedStatus(initialData.state || "sin empezar");
     } else {
       setTitle("");
       setDescription("");
@@ -71,6 +77,10 @@ function TaskFormModal({
 
   const onDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDueDate(e.target.value);
+  };
+
+  const onStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStatus(e.target.value);
   };
 
   const handleUserSelect = (userId: number) => {
@@ -121,6 +131,7 @@ function TaskFormModal({
       title: title,
       description: description,
       date_exp: dueDate,
+      state: selectedStatus,
     };
 
     if (onUpdate) {
@@ -147,37 +158,60 @@ function TaskFormModal({
       id={mode === "create" ? "create-task-form" : "edit-task-form"}
       onSubmit={mode === "create" ? handleCreateTask : handleEditTask}
     >
-      <label>Titulo:</label>
-      <input
-        type="text"
-        className="input-base"
-        value={title}
-        onChange={onTitleChange}
-        disabled={mode === "create" ? isCreating : isUpdating}
-      />
+      <div>
+        <label>Titulo:</label>
+        <input
+          type="text"
+          className="input-base"
+          value={title}
+          onChange={onTitleChange}
+          disabled={mode === "create" ? isCreating : isUpdating}
+        />
+      </div>
 
-      <label>Descripción:</label>
-      <textarea
-        rows={3}
-        cols={3}
-        className="input-base small-textarea"
-        onChange={onDescriptionChange}
-        value={description}
-        disabled={mode === "create" ? isCreating : isUpdating}
-      ></textarea>
+      <div>
+        <label>Descripción:</label>
+        <textarea
+          rows={3}
+          cols={3}
+          className="input-base small-textarea"
+          onChange={onDescriptionChange}
+          value={description}
+          disabled={mode === "create" ? isCreating : isUpdating}
+        ></textarea>
+      </div>
 
-      <label>Fecha de vencimiento:</label>
-      <input
-        type="date"
-        className="input-base"
-        onChange={onDueDateChange}
-        value={dueDate}
-        disabled={mode === "create" ? isCreating : isUpdating}
-        required
-      />
+      <div>
+        <label>Fecha de vencimiento:</label>
+        <input
+          type="date"
+          className="input-base"
+          onChange={onDueDateChange}
+          value={dueDate}
+          disabled={mode === "create" ? isCreating : isUpdating}
+          required
+        />
+      </div>
+
+      {mode === "edit" ? (
+        <div className="">
+          <label>Estado:</label>
+          <select
+            className="input-base status-select"
+            value={selectedStatus}
+            onChange={onStatusChange}
+          >
+            <option value="sin empezar">To Do</option>
+            <option value="en proceso">In progress</option>
+            <option value="completado">Completed</option>
+          </select>
+        </div>
+      ) : (
+        ""
+      )}
 
       <div className="user-selection-container">
-        <label> Asignar a usuarios: </label>
+        <label>Asignar a usuarios:</label>
         <ul>
           <UserList users={usersSelected} onAdd={handleUserSelect} />
         </ul>
