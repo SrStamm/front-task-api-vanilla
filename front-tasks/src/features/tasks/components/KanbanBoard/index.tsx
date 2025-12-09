@@ -10,9 +10,15 @@ interface KanbanBoardProps {
   tasksInProject: ReadAllTaskFromProjectInterface[];
   isLoading: boolean;
   error: string | null;
+  onEdit: () => void;
 }
 
-function KanbanBoard({ tasksInProject, isLoading, error }: KanbanBoardProps) {
+function KanbanBoard({
+  tasksInProject,
+  isLoading,
+  error,
+  onEdit,
+}: KanbanBoardProps) {
   const [isShowModal, setShowModal] = useState(false);
   const [taskSelected, setTaskSelected] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
@@ -90,6 +96,7 @@ function KanbanBoard({ tasksInProject, isLoading, error }: KanbanBoardProps) {
           isShow={isShowModal}
           task={taskSelected}
           onClose={handleHideModal}
+          onEdit={onEdit}
         />
       )}
     </>

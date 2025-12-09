@@ -1,21 +1,28 @@
 import { useState } from "react";
-import CreateTaskModal from "../../../features/tasks/components/CreateTaskModal";
 import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
+import TaskFormModal from "../../../features/tasks/components/TaskFormModal";
 import "./TasksPage.css";
 import Button from "../../../components/common/Button";
 import { useTasks } from "../../../features/tasks/hooks/useTasks";
 
 function TaskPage() {
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showFormModal, setShowFormModal] = useState(false);
+  const [typeFormModal, setTypeFormModal] = useState<"create" | "edit">("edit");
   const { loadTasksFromProject, tasksInProject, isLoading, error, create } =
     useTasks();
 
   const handleOpenCreateModal = () => {
-    setShowCreateModal(true);
+    setTypeFormModal("create");
+    setShowFormModal(true);
+  };
+
+  const handleOpenEditModal = () => {
+    setTypeFormModal("edit");
+    setShowFormModal(true);
   };
 
   const handleCloseCreateModal = () => {
-    setShowCreateModal(false);
+    setShowFormModal(false);
   };
 
   return (
@@ -33,12 +40,14 @@ function TaskPage() {
         tasksInProject={tasksInProject}
         isLoading={isLoading}
         error={error}
+        onEdit={handleOpenEditModal}
       />
 
-      <CreateTaskModal
-        showModal={showCreateModal}
+      <TaskFormModal
+        showModal={showFormModal}
+        mode={typeFormModal}
         onClose={handleCloseCreateModal}
-        onCreate={create}
+        onSubmit={create}
         onSuccess={loadTasksFromProject}
       />
     </section>
