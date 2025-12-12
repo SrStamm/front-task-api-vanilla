@@ -11,15 +11,14 @@ function TaskFilters({ filters, onChange }: TaskFiltersProps) {
 
   const onChangeState = (newState: string) => {
     onChange({ ...filters, state: newState });
-    console.log(
-      `Cambio de estado en el filtro: ${filters.state}   estado: ${newState}`,
-    );
 
     queryClient.invalidateQueries({ queryKey: ["tasks"] });
   };
 
   const onChangeLabel = (newLabel: string) => {
     onChange({ ...filters, label: newLabel });
+
+    queryClient.invalidateQueries({ queryKey: ["tasks"] });
   };
 
   return (
