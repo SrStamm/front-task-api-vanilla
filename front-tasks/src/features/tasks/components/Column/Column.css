@@ -1,7 +1,7 @@
 .task-column {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   margin: 0.5rem;
