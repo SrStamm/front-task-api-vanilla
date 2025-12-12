@@ -5,12 +5,14 @@ import TaskFormModal from "../../../features/tasks/components/TaskFormModal";
 import Button from "../../../components/common/Button";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import "./TasksPage.css";
+import TaskFilters from "../../../features/tasks/components/TaskFilters";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
   const [typeFormModal, setTypeFormModal] = useState<"create" | "edit">("edit");
   const [selectedTask, setSelectedTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
+  const [filters, setFilters] = useState({ state: "", label: "" });
   const {
     loadTasksFromProject,
     tasksInProject,
@@ -20,7 +22,7 @@ function TaskPage() {
     update,
     isCreating,
     isUpdating,
-  } = useTasks();
+  } = useTasks(filters);
 
   const handleOpenCreateModal = useCallback(() => {
     setTypeFormModal("create");
@@ -50,6 +52,8 @@ function TaskPage() {
           onClick={handleOpenCreateModal}
         />
       </header>
+
+      <TaskFilters filters={filters} onChange={setFilters} />
 
       <KanbanBoard
         tasksInProject={tasksInProject}
