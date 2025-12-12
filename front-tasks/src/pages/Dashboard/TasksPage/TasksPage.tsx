@@ -13,6 +13,7 @@ function TaskPage() {
   const [selectedTask, setSelectedTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
   const [filters, setFilters] = useState({ state: "", label: "" });
+  const [tabSelected, setTabSelected] = useState<"project" | "all">("project");
   const {
     loadTasksFromProject,
     tasksInProject,
@@ -45,34 +46,58 @@ function TaskPage() {
   return (
     <section className="dashboard-section ">
       <header className="headerPartSection">
-        <h3 className="dashboard-layout-h3">Tareas</h3>
-        <Button
-          className="btn-primary"
-          text="+"
-          onClick={handleOpenCreateModal}
-        />
+        <div className="tab">
+          <h3
+            className={`dashboard-layout-h3 tab-element ${tabSelected == "project" ? "active" : ""}`}
+            onClick={() => setTabSelected("project")}
+          >
+            Tareas del proyecto
+          </h3>
+          <h3
+            className={`tab-title tab-element ${tabSelected == "all" ? "active" : ""}`}
+            onClick={() => setTabSelected("all")}
+          >
+            Mis tareas
+          </h3>
+        </div>
+
+        {tabSelected == "project" ? (
+          <Button
+            className="btn-primary"
+            text="+"
+            onClick={handleOpenCreateModal}
+          />
+        ) : (
+          ""
+        )}
       </header>
 
-      <TaskFilters filters={filters} onChange={setFilters} />
+      {tabSelected == "project" ? (
+        <>
+          <TaskFilters filters={filters} onChange={setFilters} />
 
-      <KanbanBoard
-        tasksInProject={tasksInProject}
-        isLoading={isLoading}
-        error={error}
-        onEdit={handleOpenEditModal}
-      />
+          <KanbanBoard
+            tasksInProject={tasksInProject}
+            isLoading={isLoading}
+            error={error}
+            onEdit={handleOpenEditModal}
+          />
 
-      <TaskFormModal
-        showModal={showFormModal}
-        mode={typeFormModal}
-        initialData={selectedTask || undefined}
-        onClose={handleCloseCreateModal}
-        onCreate={create}
-        onUpdate={update}
-        isCreating={isCreating}
-        isUpdating={isUpdating}
-        onSuccess={loadTasksFromProject}
-      />
+          <TaskFormModal
+            showModal={showFormModal}
+            mode={typeFormModal}
+            initialData={selectedTask || undefined}
+            onClose={handleCloseCreateModal}
+            onCreate={create}
+            onUpdate={update}
+            isCreating={isCreating}
+            isUpdating={isUpdating}
+            onSuccess={loadTasksFromProject}
+          />
+        </>
+      ) : (
+        <p>Lista de todas las tareas, no implementada todavía</p>
+      )}
     </section>
   );
 }

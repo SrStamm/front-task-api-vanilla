@@ -1,0 +1,37 @@
+.tab {
+  display: flex;
+}
+
+.tab h3 {
+  border-right: 2px solid var(--gray-200);
+}
+
+.tab-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.tab-element {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  position: relative;
+}
+
+.tab-element.active {
+  color: var(--primary);
+}
+
+.tab-element.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary);
+}
