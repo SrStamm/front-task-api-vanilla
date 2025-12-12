@@ -6,7 +6,7 @@ import Button from "../../../components/common/Button";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import "./TasksPage.css";
 import TaskFilters from "../../../features/tasks/components/TaskFilters";
-import TaskListView from "../../../features/tasks/components/TaskListView";
+import TaskTable from "../../../features/tasks/components/TaskTable";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -100,7 +100,7 @@ function TaskPage() {
       ) : (
         <>
           <TaskFilters filters={filters} onChange={setFilters} />
-          <TaskListView tasks={taskForUser} />
+          <TaskTable tasks={taskForUser} />
         </>
       )}
     </section>
