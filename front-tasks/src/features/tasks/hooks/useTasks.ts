@@ -1,6 +1,7 @@
 import {
   FetchCreateTask,
   FetchDeleteTask,
+  FetchTaskAssignedToUser,
   FetchTaskToProject,
   FetchUpdateTask,
 } from "../api/TaskService";
@@ -31,6 +32,15 @@ export function useTasks({ state, label }: useTasksFilters) {
       return FetchTaskToProject(projectId, { state: state, label: label });
     },
     enabled: !!projectId,
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000,
+  });
+
+  const { data: taskForUser = [], refetch: loadAllTaskFromUser } = useQuery({
+    queryKey: ["tasks-user"],
+    queryFn: () => {
+      return FetchTaskAssignedToUser();
+    },
     staleTime: 0,
     gcTime: 5 * 60 * 1000,
   });
@@ -88,6 +98,9 @@ export function useTasks({ state, label }: useTasksFilters) {
     tasksInProject,
     isLoading,
     error,
+
+    taskForUser,
+    loadAllTaskFromUser,
 
     // Acciones
     loadTasksFromProject,
