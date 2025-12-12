@@ -6,6 +6,7 @@ import Button from "../../../components/common/Button";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import "./TasksPage.css";
 import TaskFilters from "../../../features/tasks/components/TaskFilters";
+import TaskListView from "../../../features/tasks/components/TaskListView";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -23,6 +24,7 @@ function TaskPage() {
     update,
     isCreating,
     isUpdating,
+    taskForUser,
   } = useTasks(filters);
 
   const handleOpenCreateModal = useCallback(() => {
@@ -96,7 +98,10 @@ function TaskPage() {
           />
         </>
       ) : (
-        <p>Lista de todas las tareas, no implementada todavía</p>
+        <>
+          <TaskFilters filters={filters} onChange={setFilters} />
+          <TaskListView tasks={taskForUser} />
+        </>
       )}
     </section>
   );
