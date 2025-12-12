@@ -13,8 +13,21 @@ export async function FetchUsersAssignedToTask(taskId: number) {
   return res.json();
 }
 
-export async function FetchTaskToProject(projectId: number) {
-  const res = await Fetch({ path: `task/${projectId}`, method: "GET" });
+export async function FetchTaskToProject(
+  projectId: number,
+  filters?: { state: string; label: string },
+) {
+  let path = `task/${projectId}`;
+
+  if (filters?.state && filters.state.length > 0) {
+    path += `?state=${encodeURIComponent(filters.state)}`;
+  }
+
+  const res = await Fetch({ path: path, method: "GET" });
+
+  console.log("Path:", path);
+  console.log("Filters:", filters);
+
   if (!res) throw new Error(`Failed to Fetch all task in project ${projectId}`);
   return res.json();
 }
