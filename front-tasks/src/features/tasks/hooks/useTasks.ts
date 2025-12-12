@@ -9,7 +9,12 @@ import type { ReadAllTaskFromProjectInterface } from "../schemas/Tasks";
 import type { CreateTask, UpdateTask } from "../../../types/Task";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useTasks() {
+interface useTasksFilters {
+  label: string;
+  state: string;
+}
+
+export function useTasks({ state, label }: useTasksFilters) {
   const { projectId } = useGroupProject();
   const queryClient = useQueryClient();
 
@@ -20,10 +25,10 @@ export function useTasks() {
     error,
     refetch: loadTasksFromProject,
   } = useQuery({
-    queryKey: ["tasks", projectId],
+    queryKey: ["tasks", projectId, state, label],
     queryFn: () => {
       if (!projectId) throw new Error("Project not selected");
-      return FetchTaskToProject(projectId);
+      return FetchTaskToProject(projectId, { state: state, label: label });
     },
     enabled: !!projectId,
     staleTime: 0,
@@ -36,7 +41,7 @@ export function useTasks() {
       FetchCreateTask(payload.project_id, payload),
     onSuccess: (newTask, variables) => {
       queryClient.setQueryData(
-        ["tasks", variables.project_id],
+        ["tasks", variables.project_id, state, label],
         (oldTasks: ReadAllTaskFromProjectInterface[] = []) => [
           ...oldTasks,
           newTask,
@@ -50,10 +55,12 @@ export function useTasks() {
     mutationFn: (payload: UpdateTask) =>
       FetchUpdateTask(payload.project_id, payload.task_id, payload),
     onSuccess: (updatedTask) => {
-      queryClient.setQueryData(["tasks", projectId], (oldTasks = []) =>
-        oldTasks.map((task) =>
-          task.task_id === updatedTask.task_id ? updatedTask : task,
-        ),
+      queryClient.setQueryData(
+        ["tasks", projectId, state, label],
+        (oldTasks = []) =>
+          oldTasks.map((task) =>
+            task.task_id === updatedTask.task_id ? updatedTask : task,
+          ),
       );
     },
   });
@@ -69,7 +76,7 @@ export function useTasks() {
     }) => FetchDeleteTask(projectId, taskId),
     onSuccess: (_, variables) => {
       queryClient.setQueryData(
-        ["tasks", projectId],
+        ["tasks", projectId, state, label],
         (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
           oldTasks.filter((t) => t.task_id !== variables.task_id),
       );
