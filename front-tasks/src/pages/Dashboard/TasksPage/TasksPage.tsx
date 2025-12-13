@@ -25,6 +25,9 @@ function TaskPage() {
     isCreating,
     isUpdating,
     taskForUser,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useTasks(filters);
 
   const handleOpenCreateModal = useCallback(() => {
@@ -100,7 +103,12 @@ function TaskPage() {
       ) : (
         <>
           <TaskFilters filters={filters} onChange={setFilters} />
-          <TaskTable tasks={taskForUser} />
+          <TaskTable
+            tasks={taskForUser}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         </>
       )}
     </section>
