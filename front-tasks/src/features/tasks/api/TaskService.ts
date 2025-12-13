@@ -1,8 +1,14 @@
 import type { CreateTask, UpdateTask } from "../../../types/Task";
 import Fetch from "../../../utils/api";
 
-export async function FetchTaskAssignedToUser() {
-  const res = await Fetch({ path: "task", method: "GET" });
+export async function FetchTaskAssignedToUser(
+  page: number,
+  items_per_page: number,
+) {
+  const res = await Fetch({
+    path: `task?limit=${items_per_page}&skip=${page}`,
+    method: "GET",
+  });
   if (!res) throw new Error("Failed to Fetch all Task assigned to user");
   return res.json();
 }
