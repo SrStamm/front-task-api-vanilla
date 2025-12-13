@@ -8,12 +8,19 @@ import {
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import type { ReadAllTaskFromProjectInterface } from "../schemas/Tasks";
 import type { CreateTask, UpdateTask } from "../../../types/Task";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 interface useTasksFilters {
   label: string;
   state: string;
 }
+
+const ITEMS_PER_PAGE: number = 10;
 
 export function useTasks({ state, label }: useTasksFilters) {
   const { projectId } = useGroupProject();
@@ -36,14 +43,31 @@ export function useTasks({ state, label }: useTasksFilters) {
     gcTime: 5 * 60 * 1000,
   });
 
-  const { data: taskForUser = [], refetch: loadAllTaskFromUser } = useQuery({
+  const {
+    data: taskForUser,
+    refetch: loadAllTaskFromUser,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["tasks-user"],
-    queryFn: () => {
-      return FetchTaskAssignedToUser();
+    queryFn: ({ pageParam = 0 }) => {
+      return FetchTaskAssignedToUser(pageParam, ITEMS_PER_PAGE);
     },
-    staleTime: 0,
-    gcTime: 5 * 60 * 1000,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < ITEMS_PER_PAGE) {
+        return undefined;
+      }
+
+      const nextSkip = allPages.length * ITEMS_PER_PAGE;
+
+      return nextSkip;
+    },
+
+    initialPageParam: 0,
   });
+
+  const taskForUserFlat = taskForUser?.pages?.flatMap((page) => page) || [];
 
   // --- POST ---
   const create = useMutation({
@@ -99,8 +123,10 @@ export function useTasks({ state, label }: useTasksFilters) {
     isLoading,
     error,
 
-    taskForUser,
-    loadAllTaskFromUser,
+    taskForUser: taskForUserFlat,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
 
     // Acciones
     loadTasksFromProject,
