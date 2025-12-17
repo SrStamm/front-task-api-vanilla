@@ -1,4 +1,5 @@
 import { useComment } from "../../useComment";
+import CommentForm from "../CommentForm";
 import CommentList from "../CommentList";
 
 interface CommentContainerProps {
@@ -6,7 +7,7 @@ interface CommentContainerProps {
 }
 
 function CommentContainer({ taskId }: CommentContainerProps) {
-  const { commentInTask, error, isLoading } = useComment(taskId);
+  const { commentInTask, error, isLoading, create } = useComment(taskId);
 
   if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
 
@@ -27,6 +28,7 @@ function CommentContainer({ taskId }: CommentContainerProps) {
   return (
     <>
       <CommentList comments={commentInTask} />
+      <CommentForm onSubmit={create.mutateAsync} />
     </>
   );
 }
