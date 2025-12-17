@@ -20,7 +20,7 @@ interface useTasksFilters {
   state: string;
 }
 
-const ITEMS_PER_PAGE: number = 10;
+const ITEMS_PER_PAGE: number = 30;
 
 export function useTasks({ state, label }: useTasksFilters) {
   const { projectId } = useGroupProject();
@@ -50,9 +50,12 @@ export function useTasks({ state, label }: useTasksFilters) {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["tasks-user"],
+    queryKey: ["tasks-user", state, label],
     queryFn: ({ pageParam = 0 }) => {
-      return FetchTaskAssignedToUser(pageParam, ITEMS_PER_PAGE);
+      return FetchTaskAssignedToUser(pageParam, ITEMS_PER_PAGE, {
+        state: state,
+        label: label,
+      });
     },
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < ITEMS_PER_PAGE) {

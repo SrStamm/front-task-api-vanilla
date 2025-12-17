@@ -4,9 +4,16 @@ import Fetch from "../../../utils/api";
 export async function FetchTaskAssignedToUser(
   page: number,
   items_per_page: number,
+  filters?: { state: string; label: string },
 ) {
+  let path = `tasklimit=${items_per_page}&skip=${page}`;
+
+  if (filters?.state) {
+    path += `&state=${encodeURIComponent(filters.state)}`;
+  }
+
   const res = await Fetch({
-    path: `task?limit=${items_per_page}&skip=${page}`,
+    path: path,
     method: "GET",
   });
   if (!res) throw new Error("Failed to Fetch all Task assigned to user");
