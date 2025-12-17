@@ -3,7 +3,7 @@
 import "./KanbanBoard.css";
 import Column from "../Column";
 import TaskModal from "../../components/TaskModal/index.tsx";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
 
@@ -69,12 +69,21 @@ function KanbanBoard({
     setTaskSelected(null);
   };
 
-  if (tasksInProject.length === 0) {
+  if (tasksInProject.length === 0 && projectId) {
     return (
       <div style={{ textAlign: "center", padding: "3rem" }}>
         <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
         <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
           Crea tu primera tarea haciendo clic en el botón "+"
+        </p>
+      </div>
+    );
+  } else if (!projectId) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: "#666" }}>No se ha seleccionado ningún proyecto</p>
+        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
+          Seleccione un proyecto en 'Proyecto actual'
         </p>
       </div>
     );
