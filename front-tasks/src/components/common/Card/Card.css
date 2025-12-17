@@ -2,7 +2,7 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   padding: 2.5rem; /* Más padding */
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -27,7 +27,7 @@
     var(--secondary),
     var(--accent)
   );
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .card:hover {
