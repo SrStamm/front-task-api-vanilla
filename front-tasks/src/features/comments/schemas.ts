@@ -18,3 +18,7 @@ export const UpdateCommentSchema = z.object({
   content: z.string().optional(), // max_length=300
   is_deleted: z.boolean().optional(),
 });
+
+export type CreateCommentInterface = z.infer<typeof CreateCommentSchema>;
+export type ReadCommentInterface = z.infer<typeof ReadCommentSchema>;
+export type UpdateCommentInterface = z.infer<typeof UpdateCommentSchema>;
