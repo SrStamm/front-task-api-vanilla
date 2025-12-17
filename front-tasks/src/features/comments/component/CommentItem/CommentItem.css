@@ -5,7 +5,8 @@
   min-height: 0.1rem;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   padding: 0.4rem;
 }
 
@@ -17,7 +18,5 @@
 .comment-meta {
   font-size: 0.8em;
   display: flex;
-  align-self: flex-end;
-  justify-content: center;
   padding: 0.1rem;
 }
