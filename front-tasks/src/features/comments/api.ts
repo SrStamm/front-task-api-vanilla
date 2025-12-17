@@ -1,0 +1,41 @@
+import Fetch from "../../utils/api.ts";
+import type {
+  CreateTaskInterface,
+  UpdateTaskInterface,
+} from "../tasks/schemas/Tasks";
+
+export async function ReadCommentsInTask(taskId: number) {
+  const res = await Fetch({ path: `task/${taskId}/comments`, method: "GET" });
+  if (!res) throw new Error(`Failed to get Comments from Task ${taskId}`);
+  return res;
+}
+
+export async function CreateCommentsInTask(
+  taskId: number,
+  payload: CreateTaskInterface,
+) {
+  const res = await Fetch({
+    path: `task/${taskId}/comments`,
+    method: "POST",
+    body: payload,
+  });
+  if (!res) throw new Error(`Failed to create a new comment to Task ${taskId}`);
+  return res;
+}
+
+export async function UpdateCommentsInTask(
+  taskId: number,
+  commentId: number,
+  payload: UpdateTaskInterface,
+) {
+  const res = await Fetch({
+    path: `task/${taskId}/comments/${commentId}`,
+    method: "PATCH",
+    body: payload,
+  });
+  if (!res)
+    throw new Error(
+      `Failed to update a comment ${commentId} to Task ${taskId}`,
+    );
+  return res;
+}
