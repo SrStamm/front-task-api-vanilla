@@ -1,118 +1,143 @@
 # 🗂️ Task Manager Frontend
 
-Interfaz web desarrollada en **JavaScript Vanilla**, que sirve como **dashboard visual** para la [API de Tareas](https://github.com/SrStamm/API-de-tareas-con-FastAPI) creada con **FastAPI**.  
-Permite gestionar grupos, proyectos, tareas y comunicación en tiempo real mediante chat y notificaciones.
+Interfaz web desarrollada en **React + TypeScript** que funciona como **dashboard visual** para la [API de Tareas](https://github.com/SrStamm/API-de-tareas-con-FastAPI), construida con **FastAPI**.
+
+El objetivo del proyecto es ofrecer una experiencia clara y eficiente para la **gestión colaborativa de tareas**, integrando comunicación en tiempo real, permisos por rol y una arquitectura frontend modular.
 
 ---
 
 ## 🌐 Descripción general
 
-Este proyecto ofrece una interfaz ligera y sin dependencias de frameworks para interactuar con la API REST de Tareas.  
-El enfoque principal es la **organización colaborativa**: los usuarios pueden trabajar en grupo, gestionar proyectos, asignar tareas, comentar, comunicarse por el chat y recibir notificaciones.
+Este frontend permite a los usuarios interactuar con la API REST de Tareas a través de una interfaz web ligera y organizada.
+
+El sistema está pensado para trabajo colaborativo, permitiendo:
+
+* Organización por **grupos** y **proyectos**
+* Gestión y asignación de **tareas**
+* Comentarios por tarea
+* **Chat en tiempo real**
+* **Notificaciones** instantáneas mediante WebSockets
 
 ---
 
 ## 🧭 Secciones principales del Dashboard
 
-- 🏠 **Inicio:** vista general.  
-- 👥 **Grupos:** administración de proyectos, miembros y sus roles.
-- 📁 **Proyectos:** administración de tareas, miembros y permisos.
-- ✅ **Tareas:** listado, comentarios, asignaciones y estado.
-- 💬 **Chat:** mensajería en tiempo real con WebSocket.
+* 🏠 **Dashboard**
+  Vista general del sistema y acceso rápido a grupos y proyectos.
+
+* 👥 **Grupos**
+  Administración de grupos, miembros y roles.
+
+* 📁 **Proyectos**
+  Gestión de proyectos, permisos y miembros asociados.
+
+* ✅ **Tareas**
+
+  * **Tareas del proyecto**: tablero Kanban con filtros, estados y modal de detalle (comentarios, asignaciones y estado).
+  * **Tareas asignadas al usuario**: listado personal con seguimiento de progreso.
+
+* 💬 **Chat**
+  Mensajería en tiempo real mediante WebSocket, integrada por proyecto.
 
 ---
 
 ## ⚙️ Tecnologías utilizadas
 
-| Categoría | Herramienta / Tecnología |
-|------------|--------------------------|
-| Lenguaje | JavaScript (ES6+) |
-| HTML | Estructura semántica básica |
-| CSS | Estilos personalizados y modulares |
-| Comunicación | Fetch API, WebSocket |
-| Backend | [FastAPI Task API](https://github.com/SrStamm/API-de-tareas-con-FastAPI) |
-| Servidor local | [`serve`](https://www.npmjs.com/package/serve) |
+| Categoría      | Tecnología / Herramienta                                                 |
+| -------------- | ------------------------------------------------------------------------ |
+| Lenguaje       | TypeScript                                                               |
+| UI             | React                                                                    |
+| HTML           | HTML semántico                                                           |
+| Estilos        | CSS modular personalizado                                                |
+| Comunicación   | Fetch API, WebSocket                                                     |
+| Backend        | [FastAPI Task API](https://github.com/SrStamm/API-de-tareas-con-FastAPI) |
+| Servidor local | npm                                                                      |
 
 ---
 
 ## 🚀 Ejecución local
 
 1. Clona el repositorio:
+
    ```bash
-   git clone https://github.com/tuusuario/task-frontend.git
+   git clone https://github.com/SrStamm/front-task-api-vanilla
    ```
-2. Instalar serve (si es que no lo tienes):
+
+2. Instala las dependencias:
+
    ```bash
-   npm install -g serve
+   npm install
    ```
-3. Inicia el servidor local:
+
+3. Inicia el servidor de desarrollo:
+
    ```bash
-   serve .
+   npm run dev
    ```
-4. Abre tu navegador y entra en:
-   ```bash
-   http://localhost:3000
+
+4. Abre el navegador en:
+
+   ```text
+   http://localhost:5173
    ```
 
 ---
 
 ## 🔌 Conexión con la API
 
-El frontend se comunica con la API mediante:
+El frontend se comunica con la API de Tareas a través de:
 
-- Fetch API → peticiones REST (/groups, /projects, /tasks, /comments, etc.)
-- WebSockets → chat y notificaciones en tiempo real
-- Autenticación → mediante tokens JWT generados en la API
+* **Fetch API** → endpoints REST (`/groups`, `/projects`, `/tasks`, `/comments`, etc.)
+* **WebSockets** → chat y notificaciones en tiempo real
+* **Autenticación JWT** → tokens generados por la API
 
-#### ⚠️ Asegúrate de tener la API de Tareas corriendo y actualiza las URLs del entorno si es necesario (en js/config.js).
+> ⚠️ Asegúrate de tener la API de Tareas en ejecución y de configurar correctamente las URLs del entorno (`js/config.js`).
 
 ---
 
 ## 💡 Características destacadas
 
-- Interfaz dinámica sin frameworks.
-- Sistema de chat y notificaciones en tiempo real.
-- Manejo de permisos y roles por grupo y proyecto.
-- Integración con API propia desarrollada en FastAPI.
-- Código modular y organizado por contexto.
+* Arquitectura frontend **modular y mantenible**
+* Comunicación en tiempo real (chat y notificaciones)
+* Manejo de **roles y permisos** por grupo y proyecto
+* Integración directa con una API propia en FastAPI
+* Enfoque en experiencia de usuario y claridad visual
 
 ---
 
 ## 🧰 Fix pendientes
 
-- 🔁 Duplicado de mensajes en chat o proyectos (ajustar el observer).
-- 🔒 Mejorar la conexión/desconexión de WebSocket.
-- 🔄 Llamar una sola vez a /refresh.
-- 📱 Mejorar la responsividad.
-- 🎞️ Optimizar animaciones y transiciones.
-
+* 🔁 Duplicado de mensajes en chat o proyectos (ajustar observers)
+* 🔒 Mejorar el manejo de conexión y reconexión de WebSockets
+* 🔄 Evitar múltiples llamadas innecesarias a `/refresh`
+* 📱 Mejorar la responsividad en dispositivos móviles
+* 🎞️ Optimizar animaciones y transiciones
 
 ---
 
 ## 🧩 Futuras features
 
-- 🔐 Restringir botones/acciones según el rol/permiso del usuario.
-- 💬 Mostrar más información sobre el usuario en comentarios o mensajes.
-- 🏷️ Agregar tags para las tareas.
-- 🔎 Filtros avanzados para tareas.
-- ℹ️ Botones de “Más información” para mostrar relaciones inmediatas.
-- 🟢 Indicar usuarios conectados al chat.
-- 🔔 Listado de notificaciones con opción de marcarlas como leídas.
-- 🧮 Badges: cantidad de tareas, mensajes no leídos, etc.
-- 📊 Métricas (tareas completadas, pendientes, progreso de proyecto).
-- 📱 Soporte PWA (modo offline y notificaciones push).
-- 🌙 Tema oscuro / claro.
-- ⚙️ Configuración de usuario.
-- ⚡ Migración a TypeScript y React.
+* 🔐 Restricción de acciones según rol y permisos
+* 💬 Mostrar información ampliada del usuario en comentarios y mensajes
+* 🏷️ Sistema de etiquetas (tags) para tareas
+* 🔎 Filtros avanzados
+* 🟢 Indicador de usuarios conectados al chat
+* 🔔 Panel de notificaciones con estado leído/no leído
+* 🧮 Badges (tareas pendientes, mensajes sin leer, etc.)
+* 📊 Métricas de progreso por proyecto
+* 📱 Soporte PWA (offline + notificaciones push)
+* 🌙 Tema claro / oscuro
+* ⚙️ Configuración de usuario
 
 ---
 
 ## 🧑‍💻 Autor
-Mirko Alexander Stamm
+
+**Mirko Alexander Stamm**
 📬 Desarrollador Backend & Full-Stack (en formación)
 
 ---
 
 ## 📜 Licencia
 
-Este proyecto se distribuye bajo la licencia MIT.
+Este proyecto se distribuye bajo la licencia **MIT**.
