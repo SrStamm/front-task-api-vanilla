@@ -1,0 +1,129 @@
+.workspace-selector {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: auto;
+  min-width: 180px;
+  max-width: 250px;
+  max-height: 250px;
+  padding: 10px;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  background-color: var(--bg-card-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  z-index: 10000;
+  display: none;
+}
+
+.dropdown-menu.is-open {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  gap: 0.4rem;
+  padding: 0;
+}
+
+.item {
+  padding: 0.3rem 1rem;
+  width: 100%;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  background: var(--primary);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  gap: 0.5rem;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.item:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-med {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.error {
+  padding: 0.3rem 1rem;
+  width: 100%;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  background: var(--error);
+
+  border: 2px solid var(--error);
+  border-radius: 8px;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.warning {
+  padding: 0.3rem 1rem;
+  width: 100%;
+
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+
+  background: var(--warning);
+
+  border: 2px solid var(--warning);
+  border-radius: 8px;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  user-select: none;
+  line-height: 1.5;
+}

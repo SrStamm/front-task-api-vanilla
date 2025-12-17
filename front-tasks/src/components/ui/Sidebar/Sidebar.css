@@ -1,0 +1,72 @@
+.sidebar-container {
+  background: var(--bg-dark);
+  border-right: 1px solid var(--border-dark);
+  color: var(--text-dark);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.sidebar_intern {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sidebar_element {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--transition);
+  color: var(--text-dark);
+}
+
+.sidebar_element:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.sidebar_element.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.sidebar_element.active span {
+  color: #ffffff;
+}
+
+.sidebar_link {
+  display: flex;
+  gap: 1rem;
+}
+
+.selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 200px;
+}
+
+.selectors button {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}

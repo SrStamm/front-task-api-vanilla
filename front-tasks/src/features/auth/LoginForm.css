@@ -1,0 +1,42 @@
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.input-base {
+  width: 100%;
+  height: 2.8rem;
+  padding: 0 1rem;
+  border: 1px solid #ddd;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  background: var(--bg-light);
+  font-size: 1rem;
+
+  color: var(--text-light);
+}
+
+.input-base:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.textarea {
+  max-height: 200px;
+  height: 100%;
+}
+
+.small-texarea {
+  max-height: 200px;
+}
+
+.register-link {
+  margin-left: 0.2rem;
+}

@@ -1,0 +1,12 @@
+.card-list {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-rows: repeat(auto-fit, 220px);
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  max-height: 75vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

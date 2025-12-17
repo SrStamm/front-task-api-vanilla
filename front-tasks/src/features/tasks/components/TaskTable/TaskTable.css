@@ -1,0 +1,15 @@
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-color: var(--bg-card-light);
+  margin: 20px auto;
+}
+
+.scroll-trigger {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray-500);
+}

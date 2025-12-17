@@ -1,0 +1,33 @@
+/* HeaderTable.css */
+
+/* Estilo para la sección de cabecera <thead> */
+.task-table thead {
+  background-color: var(--gray-50); /* Un fondo más claro para que resalte */
+  border-bottom: 2px solid var(--border-light); /* Separador visual fuerte */
+  color: var(--gray-700);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Estilo para cada columna de encabezado <th> */
+.task-table th {
+  padding: 1rem 1.5rem;
+  text-align: left; /* Alinear el texto a la izquierda */
+  font-weight: 600; /* Un poco más de peso */
+
+  /* Preparación para el sorting: indicar que es clickeable */
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+/* Efecto hover: indica que se puede hacer clic */
+.task-table th:hover {
+  background-color: var(--gray-100);
+}
+
+/* Opcional: Estilo para la columna activa de sorting (lo implementarás después) */
+.task-table th.active-sort {
+  background-color: var(--gray-200);
+  color: var(--primary); /* Resaltar el texto de la columna activa */
+}

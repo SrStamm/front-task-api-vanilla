@@ -1,0 +1,47 @@
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+
+  border-left: 4px solid var(--primary);
+}
+
+.list-add-user {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin: auto;
+
+  width: 80%;
+  max-height: 300px;
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.user-add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+
+  background: var(--bg-light);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+
+  width: 100%;
+
+  transition: all 0.2s ease;
+}
+
+.user-add:hover {
+  background: var(--gray-300);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
