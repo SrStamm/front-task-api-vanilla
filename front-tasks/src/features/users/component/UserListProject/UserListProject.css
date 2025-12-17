@@ -4,7 +4,7 @@
   align-items: center;
   padding: 1rem;
   background: var(--gray-100);
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   margin-bottom: 0.5rem;
 
   border-left: 4px solid var(--primary);

@@ -84,7 +84,11 @@ function GroupCreateUpdateModal({
   const body =
     type == "create" ? (
       <>
-        <form id="create-group-form" onSubmit={handleCreate}>
+        <form
+          id="create-group-form"
+          onSubmit={handleCreate}
+          className="modal-form"
+        >
           <label>Nombre del grupo:</label>
           <input
             type="text"
