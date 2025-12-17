@@ -1,4 +1,7 @@
 .form-comment {
   display: flex;
   flex-direction: row;
+  padding: 0.3rem;
+  margin: auto;
+  height: 100%;
 }

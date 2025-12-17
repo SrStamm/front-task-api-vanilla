@@ -1,5 +1,6 @@
 import type { ReadCommentInterface } from "../../schemas";
 import CommentItem from "../CommentItem";
+import "./ComentList.css";
 
 interface commentListProps {
   comments: ReadCommentInterface[];
@@ -15,7 +16,7 @@ function CommentList({ comments }: commentListProps) {
   }
 
   return (
-    <ul>
+    <ul className="coment-list">
       {comments.map((c) => (
         <CommentItem key={c.comment_id} comment={c} />
       ))}

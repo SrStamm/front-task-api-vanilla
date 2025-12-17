@@ -26,10 +26,10 @@ function CommentContainer({ taskId }: CommentContainerProps) {
   }
 
   return (
-    <>
+    <div className="modal-section">
       <CommentList comments={commentInTask} />
       <CommentForm onSubmit={create.mutateAsync} />
-    </>
+    </div>
   );
 }
 
