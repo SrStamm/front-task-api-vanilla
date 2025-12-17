@@ -1,8 +1,8 @@
 import Fetch from "../../utils/api.ts";
 import type {
-  CreateTaskInterface,
-  UpdateTaskInterface,
-} from "../tasks/schemas/Tasks";
+  CreateCommentInterface,
+  UpdateCommentInterface,
+} from "./schemas.ts";
 
 export async function ReadCommentsInTask(taskId: number) {
   const res = await Fetch({ path: `task/${taskId}/comments`, method: "GET" });
@@ -12,7 +12,7 @@ export async function ReadCommentsInTask(taskId: number) {
 
 export async function CreateCommentsInTask(
   taskId: number,
-  payload: CreateTaskInterface,
+  payload: CreateCommentInterface,
 ) {
   const res = await Fetch({
     path: `task/${taskId}/comments`,
@@ -26,7 +26,7 @@ export async function CreateCommentsInTask(
 export async function UpdateCommentsInTask(
   taskId: number,
   commentId: number,
-  payload: UpdateTaskInterface,
+  payload: UpdateCommentInterface,
 ) {
   const res = await Fetch({
     path: `task/${taskId}/comments/${commentId}`,
