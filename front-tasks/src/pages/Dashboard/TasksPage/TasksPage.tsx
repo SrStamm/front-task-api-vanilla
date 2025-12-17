@@ -1,12 +1,12 @@
 import { useCallback, useState } from "react";
 import { useTasks } from "../../../features/tasks/hooks/useTasks";
+import Button from "../../../components/common/Button";
 import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
 import TaskFormModal from "../../../features/tasks/components/TaskFormModal";
-import Button from "../../../components/common/Button";
-import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
-import "./TasksPage.css";
 import TaskFilters from "../../../features/tasks/components/TaskFilters";
 import TaskTable from "../../../features/tasks/components/TaskTable";
+import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
+import "./TasksPage.css";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -77,10 +77,10 @@ function TaskPage() {
         )}
       </header>
 
+      <TaskFilters filters={filters} onChange={setFilters} />
+
       {tabSelected == "project" ? (
         <>
-          <TaskFilters filters={filters} onChange={setFilters} />
-
           <KanbanBoard
             tasksInProject={tasksInProject}
             isLoading={isLoading}
@@ -102,7 +102,6 @@ function TaskPage() {
         </>
       ) : (
         <>
-          <TaskFilters filters={filters} onChange={setFilters} />
           <TaskTable
             tasks={taskForUser}
             fetchNextPage={fetchNextPage}
