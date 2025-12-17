@@ -3,6 +3,7 @@ import Modal from "../../../../components/common/Modal";
 import "./TaskModal.css";
 
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
+import CommentContainer from "../../../comments/component/CommentContainer";
 
 interface TaskModalProps {
   isShow: boolean;
@@ -54,20 +55,7 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
 
       <div className="section tab-content active">
         <div className="comment-container">
-          <ol className="listComments"></ol>
-
-          <div className="form-comment">
-            <input
-              className="input-base"
-              type="text"
-              id="newComment"
-              placeholder="Escribe un comentario..."
-            />
-
-            <button className="btn btn-primary btn-sm" id="addComment">
-              Enviar
-            </button>
-          </div>
+          <CommentContainer taskId={task.task_id} />
         </div>
       </div>
     </>
