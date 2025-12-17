@@ -21,11 +21,13 @@ export function useComment(taskId: number) {
     refetch: loadCommentFromTask,
   } = useQuery({
     queryKey: ["comment", taskId],
-    queryFn: () => ReadCommentsInTask(taskId),
+    queryFn: async () => {
+      const res = await ReadCommentsInTask(taskId);
+      return Array.isArray(res) ? res : [];
+    },
     enabled: !!taskId,
-    staleTime: 6000,
+    staleTime: 60,
     gcTime: 5 * 60 * 1000,
-    select: (data) => data.items,
   });
 
   // --- POST ---
@@ -45,8 +47,10 @@ export function useComment(taskId: number) {
 
   // --- PATCH ---
   const update = useMutation({
-    mutationFn: (commentId: number, payload: UpdateCommentInterface) =>
-      UpdateCommentsInTask(taskId, commentId, payload),
+    mutationFn: (
+      commentId,
+      payload: { commentId: number; payload: UpdateCommentInterface },
+    ) => UpdateCommentsInTask(taskId, commentId, payload),
     onSuccess: (updatedComment) => {
       queryClient.setQueryData(
         ["comment", taskId],
