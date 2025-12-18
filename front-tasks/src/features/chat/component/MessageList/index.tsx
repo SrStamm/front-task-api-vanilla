@@ -9,6 +9,7 @@ function MessageList({ messages }: MessageListProps) {
   if (messages.length === 0) {
     return <p>No hay mensajes</p>;
   }
+
   return (
     <>
       {messages.map((m) => (
