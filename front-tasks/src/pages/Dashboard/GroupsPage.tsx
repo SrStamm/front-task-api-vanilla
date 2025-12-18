@@ -77,8 +77,19 @@ function GroupsPage() {
     handleCloseModal();
   };
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading)
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "black", fontSize: "1.5em" }}>Cargando los grupos</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "red" }}>Error al cargar los grupos</p>
+        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
+      </div>
+    );
 
   return (
     <>

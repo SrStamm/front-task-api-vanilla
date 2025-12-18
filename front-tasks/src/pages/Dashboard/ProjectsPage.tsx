@@ -21,7 +21,14 @@ function ProjectsPage() {
     null,
   );
 
-  if (loading) return <p>Cargando...</p>;
+  if (loading)
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "black", fontSize: "1.5em" }}>
+          Cargando los proyectos
+        </p>
+      </div>
+    );
   if (error)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
