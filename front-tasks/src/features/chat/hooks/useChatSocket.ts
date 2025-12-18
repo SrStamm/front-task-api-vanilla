@@ -1,7 +1,6 @@
 // Infra: open/close WS --- keeps listeners ---- He doesn't know anything about chat
 
 import { useEffect, useRef, useState } from "react";
-
 const ws_url = import.meta.env.VITE_URL_WS;
 
 interface SocketMessage {
@@ -9,28 +8,37 @@ interface SocketMessage {
   payload: any;
 }
 
-export function useChatSocket(projectId: number) {
+export function useChatSocket() {
   const socketRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const token = localStorage.getItem("token");
 
+  // Crea la conexión WebSocket al montar el componente y la cierra al desmontar
   useEffect(() => {
-    const ws = new WebSocket(ws_url);
+    if (token) {
+      const url = new URL(ws_url);
+      url.searchParams.set("token", token);
 
-    socketRef.current = ws;
+      const ws = new WebSocket(url.toString());
 
-    ws.onopen = () => setIsConnected(true);
-    ws.onclose = () => setIsConnected(false);
-    ws.onerror = () => setIsConnected(false);
+      socketRef.current = ws;
 
-    return () => ws.close();
-  }, [projectId]);
+      ws.onopen = () => setIsConnected(true);
+      ws.onclose = () => setIsConnected(false);
+      ws.onerror = () => setIsConnected(false);
 
+      return () => ws.close();
+    }
+  }, [token]);
+
+  // Envia el mensaje al servidor
   const send = (data: SocketMessage) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify(data));
     }
   };
 
+  // Mantiene un array de funciones callbacks para distribuir mensajes
   const listeners = useRef<((data: SocketMessage) => void)[]>([]);
 
   useEffect(() => {
@@ -42,8 +50,10 @@ export function useChatSocket(projectId: number) {
     };
   }, []);
 
+  // Permite suscribir callbacks para recibir mensajes
   const onMessage = (callback: (data: SocketMessage) => void) => {
     listeners.current.push(callback);
+    console.log(callback);
 
     return () => {
       listeners.current = listeners.current.filter((cb) => cb !== callback);

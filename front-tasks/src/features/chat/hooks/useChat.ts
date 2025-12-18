@@ -14,7 +14,7 @@ interface ChatMessage {
 export function useChat() {
   const [messages, setMessages] = useState<ReadMessageInterface[]>([]);
   const { projectId } = useGroupProject();
-  const socket = useChatSocket(projectId);
+  const socket = useChatSocket();
 
   // 🔹 Cargar histórico (REST)
   useEffect(() => {
@@ -33,8 +33,9 @@ export function useChat() {
       }
     });
 
+    console.log(unsubscribe);
     return unsubscribe;
-  }, [projectId, socket]);
+  }, [projectId]);
 
   // 🔹 Enviar mensaje
   const sendMessage = async (content: string) => {
