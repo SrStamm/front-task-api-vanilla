@@ -13,8 +13,8 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { setProjectId } = useGroupProject();
-  const { projects } = useProjects();
+  const { setProjectId, groupId } = useGroupProject();
+  const { projects, loadProjects } = useProjects();
 
   const toggleDropDown = () => {
     setIsOpen(!isOpen);
@@ -28,6 +28,11 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
       setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    setProjectId(null);
+    loadProjects();
+  }, [groupId, setProjectId, loadProjects]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

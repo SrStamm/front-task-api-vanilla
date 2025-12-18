@@ -21,8 +21,21 @@ function ProjectsPage() {
     null,
   );
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading)
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "black", fontSize: "1.5em" }}>
+          Cargando los proyectos
+        </p>
+      </div>
+    );
+  if (error)
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "red" }}>Error al cargar los proyectos</p>
+        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
+      </div>
+    );
 
   const handleOpenModal = (project: ReadProject) => {
     setSelectedProject(project);

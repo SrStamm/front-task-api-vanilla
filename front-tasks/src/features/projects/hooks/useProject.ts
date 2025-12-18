@@ -35,8 +35,12 @@ export function useProjects() {
         setProjects(data);
       }
     } catch (err) {
-      setError("Failed to load projects");
-      console.error(err);
+      if (!groupId) {
+        setError("Group not selected");
+      } else {
+        setError("Failed to load projects");
+      }
+      console.log("Failed to load projects: ", err);
     } finally {
       setLoading(false);
     }
@@ -110,6 +114,7 @@ export function useProjects() {
 
   return {
     projects,
+    loadProjects,
     loading,
     error,
     createProject,
