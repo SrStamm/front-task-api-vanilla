@@ -14,6 +14,8 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
     e.preventDefault();
 
     onSend(message);
+
+    setMessage("");
   };
 
   return (
@@ -30,6 +32,7 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
         className="btn btn-sm"
         text="Enviar"
         form="form-message"
+        disabled={!isConnected}
       />
     </form>
   );
