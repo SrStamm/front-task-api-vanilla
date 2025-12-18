@@ -8,7 +8,16 @@ interface MessageListProps {
 
 function MessageList({ messages }: MessageListProps) {
   if (messages.length === 0) {
-    return <p>No hay mensajes</p>;
+    return (
+      <ul className="list-message">
+        <div style={{ textAlign: "center", padding: "2rem" }}>
+          <p style={{ color: "black" }}>No hay mensajes en este chat</p>
+          <p style={{ color: "#666", fontSize: "0.9rem" }}>
+            Envía el primer mensaje
+          </p>
+        </div>
+      </ul>
+    );
   }
 
   return (
