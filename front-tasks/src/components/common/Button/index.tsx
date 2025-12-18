@@ -6,6 +6,7 @@ interface ButtonProps {
   type?: string;
   form?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 function Button(props: ButtonProps) {
@@ -15,6 +16,7 @@ function Button(props: ButtonProps) {
       onClick={props.onClick && props.onClick}
       type={props.type && props.type}
       form={props.form && props.form}
+      disabled={props.disabled && props.disabled}
     >
       {props.text}
     </button>

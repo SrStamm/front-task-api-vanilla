@@ -1,0 +1,11 @@
+.chat-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-height: 75vh;
+}

@@ -70,7 +70,10 @@ function Sidebar() {
                 className={`sidebar_element ${elementSelected == "chat" ? "active" : ""}`}
                 onClick={() => setElementSelected("chat")}
               >
-                <IoChatboxEllipsesOutline /> Chat
+                <Link to="/dashboard/chat" className="sidebar_link">
+                  <IoChatboxEllipsesOutline />
+                  <span>Chat</span>
+                </Link>
               </div>
             </div>
           </div>
