@@ -129,12 +129,11 @@ export function useChat() {
       // Mensaje optimista
       if (success) {
         const optimisticMessage: ReadMessageInterface = {
-          content: trimmedContent,
+          chat_id: Math.random(),
+          message: trimmedContent,
           project_id: projectId,
-          sender_id: 0, // Obtener del usuario actual
-          sender_name: "Tú",
-          created_at: new Date().toISOString(),
-          is_optimistic: true,
+          user_id: Math.random(),
+          timestamp: new Date(),
         };
 
         console.log(
