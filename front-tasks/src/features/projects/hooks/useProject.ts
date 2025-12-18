@@ -36,7 +36,6 @@ export function useProjects() {
       }
     } catch (err) {
       setError("Failed to load projects");
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -110,6 +109,7 @@ export function useProjects() {
 
   return {
     projects,
+    loadProjects,
     loading,
     error,
     createProject,
