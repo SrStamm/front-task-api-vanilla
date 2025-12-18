@@ -14,7 +14,7 @@ function ChatPage() {
         </header>
         <div className="message-container">
           <MessageList messages={messages} />
-          <MessageForm />
+          <MessageForm onSend={sendMessage} isConnected={isConnected} />
         </div>
       </article>
     </section>
