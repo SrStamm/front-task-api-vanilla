@@ -3,10 +3,14 @@ import ChatPage from "../pages/Dashboard/ChatPage/ChatPage.tsx";
 import GroupsPage from "../pages/Dashboard/GroupsPage";
 import ProjectsPage from "../pages/Dashboard/ProjectsPage";
 import TasksPage from "../pages/Dashboard/TasksPage/TasksPage.tsx";
+import { PrivateRoute } from "./ProtectedRoute.tsx";
 
 export const dashboardRoutes = {
-  path: "/dashboard",
-  element: <DashboardLayout />,
+  element: (
+    <PrivateRoute>
+      <DashboardLayout />
+    </PrivateRoute>
+  ),
   children: [
     { path: "groups", element: <GroupsPage /> },
     { path: "projects", element: <ProjectsPage /> },

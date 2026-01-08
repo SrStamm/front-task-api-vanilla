@@ -5,10 +5,9 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import { AuthProvider } from "../providers/AuthProvider";
 import { PublicRoute } from "./PublicRoute";
-import { PrivateRoute } from "./ProtectedRoute";
-import "../App.css";
 import { dashboardRoutes } from "./dashboard.routes";
 import { GroupProjectProvider } from "../providers/GroupProjectProvider";
+import "../App.css";
 
 export const router = createBrowserRouter([
   {
@@ -37,9 +36,7 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <GroupProjectProvider>
-            <PrivateRoute> {dashboardRoutes.element}</PrivateRoute>
-          </GroupProjectProvider>
+          <GroupProjectProvider>{dashboardRoutes.element}</GroupProjectProvider>
         ),
         children: dashboardRoutes.children,
       },
