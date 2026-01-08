@@ -27,7 +27,7 @@ export function useProjects() {
     try {
       setError(null);
 
-      if (groupId === undefined) {
+      if (!groupId || groupId === undefined) {
         setProjects(undefined);
       } else {
         setLoading(true);
