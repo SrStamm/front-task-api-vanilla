@@ -9,16 +9,22 @@ import { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { Link } from "react-router-dom";
 import { useGroupProject } from "../../../hooks/useGroupProject";
+import UserOptions from "../UserOptions";
 
 function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
   const [elementSelected, setElementSelected] = useState("");
+  const [showUserOptions, setShowUserOptions] = useState(false);
   const { groupId } = useGroupProject();
 
   useEffect(() => {
     setProjectTitle(undefined);
   }, [groupId]);
+
+  const handleShowUserOptions = () => {
+    setShowUserOptions(!showUserOptions);
+  };
 
   return (
     <aside className="sidebar-container">
@@ -85,10 +91,11 @@ function Sidebar() {
       </div>
 
       {/* Zona 3: Perfil */}
-      <div>
-        <div className="sidebar_element">
+      <div style={{ position: "relative" }}>
+        <div className="sidebar_element" onClick={handleShowUserOptions}>
           <FaRegUserCircle /> User
         </div>
+        {showUserOptions && <UserOptions />}
       </div>
     </aside>
   );

@@ -1,15 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./LoginForm.css";
 import Button from "../../components/common/Button/index.tsx";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthProvider.tsx";
 
 const url = import.meta.env.VITE_URL;
 
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const usernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -37,8 +37,7 @@ function LoginForm() {
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem("token", data.access_token);
-        navigate("/dashboard");
+        authContext?.login(data.access_token);
       } else {
         const dataError = await res.json();
         console.log("Error: ", dataError.detail);

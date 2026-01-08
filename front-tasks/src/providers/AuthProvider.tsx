@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (token: string) => {
-    localStorage.setItem("token", "token");
+    localStorage.setItem("token", token);
     await fetchUser(token);
     navigate("/dashboard");
   };
