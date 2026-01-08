@@ -63,7 +63,7 @@ export async function FetchUpdateTask(
   const res = await Fetch({
     path: `task/${projectId}/${taskId}`,
     method: "PATCH",
-    body: { data },
+    body: data,
   });
   if (!res)
     throw new Error(
