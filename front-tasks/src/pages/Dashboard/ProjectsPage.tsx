@@ -8,10 +8,13 @@ import ProjectCreateUpdateModal from "../../features/projects/components/Project
 import UserAddModal from "../../features/users/component/UserAddModal";
 import type { UserInGroup } from "../../features/groups/schemas/Group";
 import { useGroups } from "../../features/groups/hooks/useGroups";
+import { useGroupProject } from "../../hooks/useGroupProject";
 
 function ProjectsPage() {
   const { projects, loading, error, deleteProject } = useProjects();
   const { getUsersInGroup } = useGroups();
+  const { groupId } = useGroupProject();
+
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
@@ -29,6 +32,32 @@ function ProjectsPage() {
         </p>
       </div>
     );
+
+  if (projects && projects.length === 0) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
+        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
+          Crea tu primera tarea haciendo clic en el botón "+"
+        </p>
+      </div>
+    );
+  }
+
+  if (!groupId) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: "red", fontSize: "1.3rem" }}>
+          No hay ningún grupo seleccionado
+        </p>
+        <p style={{ color: "#666", fontSize: "1rem", marginTop: "0.5rem" }}>
+          Seleccione un grupo en
+          <span style={{ color: "black" }}> 'Grupo ▼'</span>
+        </p>
+      </div>
+    );
+  }
+
   if (error)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
