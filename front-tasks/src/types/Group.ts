@@ -28,7 +28,7 @@ export interface AddRemoveUserToGroup {
 export interface UpdateRoleUserInGroup {
   group_id: number;
   user_id: number;
-  role: RoleGroup;
+  role?: RoleGroup;
 }
 
 enum RoleGroup {
@@ -40,5 +40,5 @@ enum RoleGroup {
 export interface UserInGroup {
   user_id: number;
   username: string;
-  role: string;
+  role?: string;
 }

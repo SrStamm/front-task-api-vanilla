@@ -3,10 +3,11 @@ import "./Button.css";
 interface ButtonProps {
   className: string;
   text: string;
-  type?: string;
+  type?: "submit" | "reset" | "button";
   form?: string;
   onClick?: () => void;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 function Button(props: ButtonProps) {
@@ -14,11 +15,11 @@ function Button(props: ButtonProps) {
     <button
       className={`btn ${props.className}`}
       onClick={props.onClick && props.onClick}
-      type={props.type && props.type}
+      type={props.type ?? "button"}
       form={props.form && props.form}
       disabled={props.disabled && props.disabled}
     >
-      {props.text}
+      {props.loading ? "..." : props.text}
     </button>
   );
 }

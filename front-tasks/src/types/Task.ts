@@ -1,3 +1,5 @@
+import { TaskStateEnum } from "../features/tasks/schemas/Tasks";
+
 interface label {
   label: string;
 }
@@ -50,7 +52,7 @@ export interface UpdateTask {
   title?: string;
   description?: string;
   date_exp?: string;
-  state?: StateEnum;
+  state?: StateEnum | TaskStateEnum | string;
   apppend_user_ids?: number[];
   exclude_user_ids?: number[];
   append_label?: label[];

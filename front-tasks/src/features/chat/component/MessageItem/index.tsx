@@ -1,4 +1,5 @@
 import type { ReadMessageInterface } from "../../schemas/messageSchema";
+import formatDate from "../../../../utils/formatedDate";
 import "./MessageItem.css";
 
 interface MessageItemProps {
@@ -7,8 +8,7 @@ interface MessageItemProps {
 
 function MessageItem({ message }: MessageItemProps) {
   const dueDate = new Date(message.timestamp);
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  const formatedDate = dueDate.toLocaleDateString("es-ES", options);
+  const formatedDate = formatDate(dueDate);
 
   return (
     <li className="message-card">

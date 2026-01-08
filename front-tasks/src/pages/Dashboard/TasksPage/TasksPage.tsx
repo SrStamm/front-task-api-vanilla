@@ -7,6 +7,7 @@ import TaskFilters from "../../../features/tasks/components/TaskFilters";
 import TaskTable from "../../../features/tasks/components/TaskTable";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import "./TasksPage.css";
+import { CreateTask, UpdateTask } from "../../../types/Task";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -48,6 +49,14 @@ function TaskPage() {
     setShowFormModal(false);
   }, [setShowFormModal]);
 
+  const handleCreate = async (data: CreateTask) => {
+    create(data);
+  };
+
+  const handleUpdate = async (data: UpdateTask) => {
+    update(data);
+  };
+
   return (
     <section className="dashboard-section ">
       <header className="headerPartSection">
@@ -84,7 +93,7 @@ function TaskPage() {
           <KanbanBoard
             tasksInProject={tasksInProject}
             isLoading={isLoading}
-            error={error}
+            error={error?.message ?? null}
             onEdit={handleOpenEditModal}
           />
 
@@ -93,8 +102,8 @@ function TaskPage() {
             mode={typeFormModal}
             initialData={selectedTask || undefined}
             onClose={handleCloseCreateModal}
-            onCreate={create}
-            onUpdate={update}
+            onCreate={handleCreate}
+            onUpdate={handleUpdate}
             isCreating={isCreating}
             isUpdating={isUpdating}
             onSuccess={loadTasksFromProject}

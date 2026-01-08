@@ -1,10 +1,9 @@
 import type {
-  AddRemoveUserToGroup,
   CreateGroupInterface,
-  UpdateGroup,
   UpdateRoleUserInGroup,
 } from "../schemas/Group.ts";
 import Fetch from "../../../utils/api.ts";
+import { AddRemoveUserToGroup, UpdateGroup } from "../../../types/Group.ts";
 
 export async function fetchGroups() {
   const res = await Fetch({ path: "group", method: "GET" });

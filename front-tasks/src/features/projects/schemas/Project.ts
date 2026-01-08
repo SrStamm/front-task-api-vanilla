@@ -46,13 +46,13 @@ export const UpdateRoleUserInProjectSchema = z.object({
   group_id: z.number(),
   project_id: z.number(),
   user_id: z.number(),
-  permission: PermissionProjectEnum,
+  permission: PermissionProjectEnum.optional(),
 });
 
 export const UserInProjectSchema = z.object({
   user_id: z.number(),
   username: z.string(),
-  permission: z.string(),
+  permission: z.string().optional(),
 });
 
 export type ReadProjectForUser = z.infer<typeof ReadProjectForUserSchema>;

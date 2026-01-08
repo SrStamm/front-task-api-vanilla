@@ -32,13 +32,13 @@ export const AddRemoveUserToGroupSchema = z.object({
 export const UpdateRoleUserInGroupSchema = z.object({
   group_id: z.number(),
   user_id: z.number(),
-  role: RoleGroupEnum,
+  role: RoleGroupEnum.optional(),
 });
 
 export const UserInGroupSchema = z.object({
   user_id: z.number(),
   username: z.string(),
-  role: z.string(),
+  role: z.string().optional(),
 });
 
 export type ReadGroup = z.infer<typeof ReadGroupSchema>;

@@ -47,10 +47,14 @@ export function useComment(taskId: number) {
 
   // --- PATCH ---
   const update = useMutation({
-    mutationFn: (
+    mutationFn: ({
       commentId,
-      payload: { commentId: number; payload: UpdateCommentInterface },
-    ) => UpdateCommentsInTask(taskId, commentId, payload),
+      payload,
+    }: {
+      commentId: number;
+      payload: UpdateCommentInterface;
+    }) => UpdateCommentsInTask(taskId, commentId, payload),
+
     onSuccess: (updatedComment) => {
       queryClient.setQueryData(
         ["comment", taskId],

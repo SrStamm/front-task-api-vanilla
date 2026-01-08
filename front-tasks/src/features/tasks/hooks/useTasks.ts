@@ -94,7 +94,7 @@ export function useTasks({ state, label }: useTasksFilters) {
     onSuccess: (updatedTask) => {
       queryClient.setQueryData(
         ["tasks", projectId, state, label],
-        (oldTasks = []) =>
+        (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
           oldTasks.map((task) =>
             task.task_id === updatedTask.task_id ? updatedTask : task,
           ),
@@ -115,7 +115,7 @@ export function useTasks({ state, label }: useTasksFilters) {
       queryClient.setQueryData(
         ["tasks", projectId, state, label],
         (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
-          oldTasks.filter((t) => t.task_id !== variables.task_id),
+          oldTasks.filter((t) => t.task_id !== variables.taskId),
       );
     },
   });
@@ -127,6 +127,7 @@ export function useTasks({ state, label }: useTasksFilters) {
     error,
 
     taskForUser: taskForUserFlat,
+    loadAllTaskFromUser,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,

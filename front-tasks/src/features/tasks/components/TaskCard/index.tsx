@@ -1,6 +1,7 @@
 // Task Card - contain data for task - click open task modal
 
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
+import formatDate from "../../../../utils/formatedDate";
 import "./TaskCard.css";
 
 interface TaskCardProps {
@@ -10,8 +11,7 @@ interface TaskCardProps {
 
 function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
   const dueDate = new Date(task.date_exp);
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  const formatedDate = dueDate.toLocaleDateString("es-ES", options);
+  const formatedDate = formatDate(dueDate);
 
   const state =
     task.state == "en proceso"

@@ -1,4 +1,5 @@
 import type { ReadTaskInterface } from "../../schemas/Tasks";
+import formatDate from "../../../../utils/formatedDate";
 import "./RowTable.css";
 
 interface RowTableProps {
@@ -7,8 +8,7 @@ interface RowTableProps {
 
 function RowTable({ task }: RowTableProps) {
   const dueDate = new Date(task.date_exp);
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  const formatedDate = dueDate.toLocaleDateString("es-ES", options);
+  const formatedDate = formatDate(dueDate);
 
   const stateClass =
     task.state === "sin empezar"

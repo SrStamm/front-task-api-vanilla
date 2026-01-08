@@ -48,7 +48,7 @@ function Card({
   return (
     <div
       className={`card ${expanded ? "expanded" : ""} ${className}`}
-      onClick={toogleExpand}
+      onClick={hideTemplate ? toogleExpand : undefined}
       ref={cardRef}
     >
       {title && <h3>{title}</h3>}
@@ -61,9 +61,8 @@ function Card({
             <Button
               className={action.className || ""}
               text={action.text}
-              onClick={(e) => {
-                e.stopPropagation();
-                action.onClick();
+              onClick={() => {
+                action.onClick?.();
               }}
             />
           )}

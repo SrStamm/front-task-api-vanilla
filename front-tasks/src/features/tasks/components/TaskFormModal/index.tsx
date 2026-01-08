@@ -54,9 +54,11 @@ function TaskFormModal({
     if (mode === "edit" && initialData) {
       setTitle(initialData.title || "");
       setDescription(initialData.description || "");
-      const datePart = initialData.date_exp?.substring(0, 10) || "";
+      const datePart = initialData.date_exp
+        ? new Date(initialData.date_exp).toISOString().substring(0, 10)
+        : "";
       setDueDate(datePart);
-      setUserIds(initialData.user_ids || []);
+      setUserIds([]);
       setSelectedStatus(initialData.state || "sin empezar");
     } else {
       setTitle("");
@@ -80,7 +82,7 @@ function TaskFormModal({
   };
 
   const onStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedStatus(e.target.value);
+    setSelectedStatus(e.target.value as TaskStateEnum);
   };
 
   const handleUserSelect = (userId: number) => {

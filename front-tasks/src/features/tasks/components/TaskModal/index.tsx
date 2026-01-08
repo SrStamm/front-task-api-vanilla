@@ -4,6 +4,7 @@ import "./TaskModal.css";
 
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
 import CommentContainer from "../../../comments/component/CommentContainer";
+import formatDate from "../../../../utils/formatedDate";
 
 interface TaskModalProps {
   isShow: boolean;
@@ -14,8 +15,7 @@ interface TaskModalProps {
 
 function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
   const dueDate = new Date(task.date_exp);
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  const formatedDate = dueDate.toLocaleDateString("es-ES", options);
+  const formatedDate = formatDate(dueDate);
 
   const header = <h3 className="modal-title">{task.title}</h3>;
   const body = (

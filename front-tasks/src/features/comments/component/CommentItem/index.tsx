@@ -1,4 +1,5 @@
 import type { ReadCommentInterface } from "../../schemas";
+import formatDate from "../../../../utils/formatedDate";
 import "./CommentItem.css";
 
 interface commentItemProps {
@@ -7,8 +8,7 @@ interface commentItemProps {
 
 function CommentItem({ comment }: commentItemProps) {
   const dueDate = new Date(comment.created_at);
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  const formatedDate = dueDate.toLocaleDateString("es-ES", options);
+  const formatedDate = formatDate(dueDate);
 
   return (
     <li className="comment-details">
