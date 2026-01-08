@@ -17,6 +17,13 @@ function TaskTable({
   hasNextPage,
   isFetchingNextPage,
 }: TaskTableProps) {
+  if (tasks.length === 0) {
+    return (
+      <div style={{ textAlign: "center", padding: "3rem" }}>
+        <p style={{ color: "#666" }}>No hay tienes tareas asignadas</p>
+      </div>
+    );
+  }
   // 1. Ref para el elemento que estara al final de la lista
   const observerTargetRef = useRef<HTMLDivElement>(null);
 

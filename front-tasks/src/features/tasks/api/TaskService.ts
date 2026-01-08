@@ -6,7 +6,7 @@ export async function FetchTaskAssignedToUser(
   items_per_page: number,
   filters?: { state: string; label: string },
 ) {
-  let path = `tasklimit=${items_per_page}&skip=${page}`;
+  let path = `task?limit=${items_per_page}&skip=${page}`;
 
   if (filters?.state) {
     path += `&state=${encodeURIComponent(filters.state)}`;
