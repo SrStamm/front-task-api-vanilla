@@ -13,6 +13,7 @@ import { PublicRoute } from "./PublicRoute";
 import { dashboardRoutes } from "./dashboard.routes";
 import { GroupProjectProvider } from "../providers/GroupProjectProvider";
 import "../App.css";
+import { PrivateRoute } from "./ProtectedRoute";
 
 const requireAuthLoader = async () => {
   const token = localStorage.getItem("token");
@@ -72,7 +73,11 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         loader: requireAuthLoader,
         element: (
-          <GroupProjectProvider>{dashboardRoutes.element}</GroupProjectProvider>
+          <PrivateRoute>
+            <GroupProjectProvider>
+              {dashboardRoutes.element}
+            </GroupProjectProvider>
+          </PrivateRoute>
         ),
         children: dashboardRoutes.children,
       },
