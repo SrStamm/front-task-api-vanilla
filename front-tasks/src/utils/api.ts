@@ -58,6 +58,7 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
 
     const data = await response.json();
     console.log("✅ Response JSON recibido");
+    console.log("JSON: ", data);
     return data;
   } catch (error) {
     console.error("🔥 Error en Fetch:", error);
