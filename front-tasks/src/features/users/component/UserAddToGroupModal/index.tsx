@@ -38,6 +38,7 @@ function UserAddToGroupModal({
       modalHeader={header}
       modalBody={body}
       modalActions={actions}
+      onClose={onClose}
       size="med"
     />
   );
