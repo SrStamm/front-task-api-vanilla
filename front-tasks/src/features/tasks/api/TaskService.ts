@@ -16,14 +16,12 @@ export async function FetchTaskAssignedToUser(
     path: path,
     method: "GET",
   });
-  if (!res) throw new Error("Failed to Fetch all Task assigned to user");
-  return res.json();
+  return res;
 }
 
 export async function FetchUsersAssignedToTask(taskId: number) {
   const res = await Fetch({ path: `task/${taskId}/users`, method: "GET" });
-  if (!res) throw new Error("Failed to Fetch all users assigned to task");
-  return res.json();
+  return res;
 }
 
 export async function FetchTaskToProject(
@@ -41,8 +39,7 @@ export async function FetchTaskToProject(
   console.log("Path:", path);
   console.log("Filters:", filters);
 
-  if (!res) throw new Error(`Failed to Fetch all task in project ${projectId}`);
-  return res.json();
+  return res;
 }
 
 export async function FetchCreateTask(projectId: number, data: CreateTask) {
@@ -51,8 +48,7 @@ export async function FetchCreateTask(projectId: number, data: CreateTask) {
     method: "POST",
     body: data,
   });
-  if (!res) throw new Error("Failed to create a task");
-  return res.json();
+  return res;
 }
 
 export async function FetchUpdateTask(
@@ -65,11 +61,7 @@ export async function FetchUpdateTask(
     method: "PATCH",
     body: data,
   });
-  if (!res)
-    throw new Error(
-      `Failed to update a task ${taskId} in project ${projectId}`,
-    );
-  return res.json();
+  return res;
 }
 
 export async function FetchDeleteTask(projectId: number, taskId: number) {
@@ -77,9 +69,5 @@ export async function FetchDeleteTask(projectId: number, taskId: number) {
     path: `task/${projectId}/${taskId}`,
     method: "DELETE",
   });
-  if (!res)
-    throw new Error(
-      `Failed to delete a task ${taskId} in project ${projectId}`,
-    );
-  return res.json();
+  return res;
 }
