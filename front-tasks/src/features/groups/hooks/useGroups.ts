@@ -25,8 +25,8 @@ export function useGroups() {
       const data = await fetchGroupsMe();
       setGroups(data);
     } catch (err) {
+      console.error("Error al cargar los grupos", err);
       setError("Failed to load groups");
-      console.error(err);
     } finally {
       setLoading(false);
     }

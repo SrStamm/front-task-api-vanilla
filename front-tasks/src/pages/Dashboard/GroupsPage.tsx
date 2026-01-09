@@ -83,13 +83,15 @@ function GroupsPage() {
         <p style={{ color: "black", fontSize: "1.5em" }}>Cargando los grupos</p>
       </div>
     );
-  if (error)
+  if (error) {
+    console.error("Error loading groups:", error);
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
         <p style={{ color: "red" }}>Error al cargar los grupos</p>
         <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
       </div>
     );
+  }
 
   return (
     <>
