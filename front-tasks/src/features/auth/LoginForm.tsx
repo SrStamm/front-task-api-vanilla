@@ -41,6 +41,7 @@ function LoginForm() {
 
       if (res.ok) {
         const data = await res.json();
+        console.log("Token recibido:", data.access_token);
         authContext?.login(data.access_token);
       } else {
         const dataError = await res.json();
