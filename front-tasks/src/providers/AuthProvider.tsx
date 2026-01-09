@@ -30,6 +30,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (user !== null && !loading) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, loading, navigate]);
+
   const fetchUser = async (token: string) => {
     try {
       const res = await fetch(url + "user/me", {
@@ -50,7 +56,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (token: string) => {
     localStorage.setItem("token", token);
     await fetchUser(token);
-    navigate("/dashboard");
   };
 
   const logout = () => {
