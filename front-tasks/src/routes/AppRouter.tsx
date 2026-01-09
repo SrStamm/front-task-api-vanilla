@@ -1,6 +1,11 @@
 // Definition for public and private routes
 
-import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  redirect,
+} from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import { AuthProvider } from "../providers/AuthProvider";
@@ -24,6 +29,12 @@ export const router = createBrowserRouter([
             <LoginPage />
           </PublicRoute>
         ),
+        loader: () => {
+          if (localStorage.getItem("token")) {
+            return redirect("/dashboard");
+          }
+          return null;
+        },
       },
       {
         path: "/register",
@@ -40,7 +51,7 @@ export const router = createBrowserRouter([
         ),
         children: dashboardRoutes.children,
       },
-      { path: "/", element: <Navigate to="/dashboard" /> },
+      { path: "/", loader: () => redirect("/dashboard") },
     ],
   },
 ]);
