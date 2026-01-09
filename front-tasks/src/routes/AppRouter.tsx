@@ -23,25 +23,7 @@ const requireAuthLoader = async () => {
     return redirect("/login");
   }
 
-  try {
-    const res = await fetch(`${import.meta.env.VITE_URL}user/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!res.ok) {
-      console.log("❌ Token inválido, limpiando");
-      localStorage.removeItem("token");
-      return redirect("/login");
-    }
-
-    const userData = await res.json();
-    console.log("✅ Usuario autenticado:", userData.username);
-    return userData;
-  } catch (error) {
-    console.error("⚠️ Error en requireAuthLoader:", error);
-    localStorage.removeItem("token");
-    return redirect("/login");
-  }
+  return null;
 };
 
 export const router = createBrowserRouter([
