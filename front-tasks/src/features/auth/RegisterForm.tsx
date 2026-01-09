@@ -91,7 +91,7 @@ function RegisterForm() {
           />
         </div>
         <div className="btn-container">
-          <Button className="btn-primary" text=" Registrarse" />
+          <Button className="btn-primary" text=" Registrarse" type="submit" />
         </div>
       </form>
       <p>

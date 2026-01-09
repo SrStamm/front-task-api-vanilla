@@ -7,6 +7,8 @@ import { AuthContext } from "../../providers/AuthProvider.tsx";
 const url = import.meta.env.VITE_URL;
 
 function LoginForm() {
+  console.log("Ejecutando Login");
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const authContext = useContext(AuthContext);
@@ -74,7 +76,7 @@ function LoginForm() {
           />
         </div>
         <div className="btn-container">
-          <Button className="btn-primary" text="Ingresar" />
+          <Button className="btn-primary" text="Ingresar" type="submit" />
         </div>
         <p>
           No tienes una cuenta?
