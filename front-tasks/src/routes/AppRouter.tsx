@@ -1,11 +1,6 @@
 // Definition for public and private routes
 
-import {
-  createBrowserRouter,
-  Navigate,
-  Outlet,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter, Outlet, redirect } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import { AuthProvider } from "../providers/AuthProvider";
@@ -14,6 +9,7 @@ import { dashboardRoutes } from "./dashboard.routes";
 import { GroupProjectProvider } from "../providers/GroupProjectProvider";
 import "../App.css";
 import { PrivateRoute } from "./ProtectedRoute";
+import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
 
 const requireAuthLoader = async () => {
   const token = localStorage.getItem("token");
@@ -75,11 +71,16 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <GroupProjectProvider>
-              {dashboardRoutes.element}
+              <Outlet />
             </GroupProjectProvider>
           </PrivateRoute>
         ),
-        children: dashboardRoutes.children,
+        children: [
+          {
+            element: <DashboardLayout />,
+            children: dashboardRoutes.children,
+          },
+        ],
       },
       { path: "/", loader: () => redirect("/dashboard") },
     ],
