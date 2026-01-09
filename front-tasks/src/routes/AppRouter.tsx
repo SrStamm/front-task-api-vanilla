@@ -14,6 +14,30 @@ import { dashboardRoutes } from "./dashboard.routes";
 import { GroupProjectProvider } from "../providers/GroupProjectProvider";
 import "../App.css";
 
+const requireAuthLoader = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return redirect("/login");
+  }
+
+  // Si falla → redirect("/login")
+  try {
+    const res = await fetch(`${import.meta.env.VITE_URL}user/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) {
+      localStorage.removeItem("token");
+      return redirect("/login");
+    }
+
+    return await res.json(); // o return null;
+  } catch {
+    localStorage.removeItem("token");
+    return redirect("/login");
+  }
+};
+
 export const router = createBrowserRouter([
   {
     element: (
@@ -46,6 +70,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
+        loader: requireAuthLoader,
         element: (
           <GroupProjectProvider>{dashboardRoutes.element}</GroupProjectProvider>
         ),

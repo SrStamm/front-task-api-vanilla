@@ -44,10 +44,6 @@ function LoginForm() {
         const data = await res.json();
         console.log("Token recibido:", data.access_token);
         authContext?.login(data.access_token);
-
-        setTimeout(() => {
-          navigate("/dashboard", { replace: true });
-        }, 100);
       } else {
         const dataError = await res.json();
         console.log("Error: ", dataError.detail);
