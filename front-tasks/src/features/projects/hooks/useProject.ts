@@ -34,13 +34,12 @@ export function useProjects() {
         const data = await fetchProjects(groupId);
         setProjects(data);
       }
-    } catch (err) {
+    } catch {
       if (!groupId) {
         setError("Group not selected");
       } else {
         setError("Failed to load projects");
       }
-      console.log("Failed to load projects: ", err);
     } finally {
       setLoading(false);
     }

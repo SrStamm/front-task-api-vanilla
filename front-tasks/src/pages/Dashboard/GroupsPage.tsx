@@ -53,7 +53,9 @@ function GroupsPage() {
   };
 
   const handleCloseModal = () => {
-    setSelectedGroup(null);
+    if (showUserAddModal || showCreateProjectModal) {
+      return;
+    }
     setOpenModal(false);
   };
 
@@ -144,7 +146,7 @@ function GroupsPage() {
 
       <UserAddToGroupModal
         users={allUsers}
-        groupId={selectedGroup?.group_id}
+        groupId={selectedGroup && selectedGroup.group_id}
         onClose={handleHideUserAddModal}
         show={showUserAddModal}
       />
