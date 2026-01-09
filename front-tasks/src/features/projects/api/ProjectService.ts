@@ -11,14 +11,14 @@ export async function fetchProjects(groupId: number) {
   const res = await Fetch({ path: `project/${groupId}`, method: "GET" });
 
   if (!res.ok) throw new Error(`Failed to fetch projects to group ${groupId}`);
-  return await res.json();
+  return res;
 }
 
 export async function fetchProjectsMe() {
   const res = await Fetch({ path: "project/me", method: "GET" });
 
   if (!res.ok) throw new Error("Failed to fetch my projects");
-  return await res.json();
+  return res;
 }
 
 export async function fetchUsersProject(group_id: number, project_id: number) {
@@ -28,7 +28,7 @@ export async function fetchUsersProject(group_id: number, project_id: number) {
   });
 
   if (!res.ok) throw new Error("Failed to fetch useras in project");
-  return await res.json();
+  return res;
 }
 
 export async function createProjectApi(data: CreateProject) {
@@ -39,7 +39,7 @@ export async function createProjectApi(data: CreateProject) {
   });
 
   if (!res.ok) throw new Error("Failed to create project");
-  return await res.json();
+  return res;
 }
 
 export async function updateProjectApi(data: UpdateProject) {
@@ -50,7 +50,7 @@ export async function updateProjectApi(data: UpdateProject) {
   });
 
   if (!res.ok) throw new Error("Failed to update project");
-  return await res.json();
+  return res;
 }
 
 export async function deleteProjectApi({
@@ -63,7 +63,7 @@ export async function deleteProjectApi({
   });
 
   if (!res.ok) throw new Error("Failed to delete project");
-  return await res.json();
+  return res;
 }
 
 export async function addUserToProjectApi({
@@ -77,7 +77,7 @@ export async function addUserToProjectApi({
   });
 
   if (!res.ok) throw new Error("Failed to add user to group");
-  return await res.json();
+  return res;
 }
 
 export async function removeUserToProject({
@@ -91,7 +91,7 @@ export async function removeUserToProject({
   });
 
   if (!res.ok) throw new Error("Failed to remove user to project");
-  return await res.json();
+  return res;
 }
 
 export async function updateUserToProject({
@@ -111,5 +111,5 @@ export async function updateUserToProject({
   });
 
   if (!res.ok) throw new Error("Failed to update role for user to project");
-  return await res.json();
+  return res;
 }
