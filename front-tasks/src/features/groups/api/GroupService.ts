@@ -14,9 +14,8 @@ export async function fetchGroups() {
 
 export async function fetchGroupsMe() {
   const res = await Fetch({ path: "group/me", method: "GET" });
-
-  if (!res.ok) throw new Error("Failed to fetch my groups");
-  return res.json();
+  const data = await res.json();
+  return data;
 }
 
 export async function fetchUsersGroup(group_id: number) {
