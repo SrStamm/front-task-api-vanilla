@@ -36,11 +36,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) throw new Error("Token inválido");
+      console.log("Status de /user/me:", res.status);
+      console.log("Headers:", [...res.headers.entries()]);
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Error response de /user/me:", text);
+        throw new Error(
+          `Token inválido - ${res.status}: ${text.slice(0, 200)}`,
+        );
+      }
+
       const data = await res.json();
+      console.log("Usuario recibido:", data);
       setUser(data);
-    } catch {
+    } catch (err) {
       localStorage.removeItem("token");
+      console.error("Catch en fetchUser:", err);
       setUser(null);
     } finally {
       setLoading(false);
