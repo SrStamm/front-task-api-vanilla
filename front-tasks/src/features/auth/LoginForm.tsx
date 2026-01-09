@@ -5,6 +5,8 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider.tsx";
 
 const url = import.meta.env.VITE_URL;
+console.log("VITE_URL desde import.meta.env →", import.meta.env.VITE_URL);
+console.log("url que se está usando →", url);
 
 function LoginForm() {
   console.log("Ejecutando Login");
