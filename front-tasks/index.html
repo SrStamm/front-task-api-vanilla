@@ -4,7 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>front-tasks</title>
+    <title>Task Manager</title>
+    <script>
+      // Script para manejar rutas en Vercel
+      if (
+        window.location.pathname !== "/" &&
+        !window.location.pathname.includes(".")
+      ) {
+        // Si es una ruta de la app (no un archivo), redirige al root
+        sessionStorage.setItem("redirectPath", window.location.pathname);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

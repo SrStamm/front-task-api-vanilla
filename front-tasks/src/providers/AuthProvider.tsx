@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 import type { ReadUser } from "../types/User.ts";
 
 const url = import.meta.env.VITE_URL;
@@ -18,73 +17,68 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<ReadUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   // Verificar token al iniciar la app
   useEffect(() => {
+    console.log("🔍 AuthProvider - Efecto inicial");
     const token = localStorage.getItem("token");
     if (token) {
+      console.log("🔑 AuthProvider - Token encontrado en localStorage");
       fetchUser(token);
     } else {
+      console.log("🔓 AuthProvider - No hay token");
       setLoading(false);
     }
   }, []);
 
   const fetchUser = async (token: string) => {
+    console.log("🔄 AuthProvider - fetchUser ejecutándose");
     try {
       const res = await fetch(url + "user/me", {
         headers: {
           Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "69420", // evita bloqueos raros de ngrok
-          Accept: "application/json", // fuerza que espere JSON
+          "ngrok-skip-browser-warning": "69420",
+          Accept: "application/json",
         },
       });
 
-      console.log("GET /user/me - Status:", res.status);
-      console.log("Content-Type:", res.headers.get("Content-Type"));
+      console.log("📡 AuthProvider - Status:", res.status);
 
       if (!res.ok) {
-        const text = await res.text();
-        console.error("Error response (text):", text);
-        throw new Error(`Status ${res.status}: ${text.slice(0, 200)}`);
-      }
-
-      const contentType = res.headers.get("Content-Type") || "";
-      if (!contentType.includes("application/json")) {
-        const text = await res.text();
-        console.error("Respuesta NO es JSON:", text);
-        throw new Error("Backend devolvió texto/HTML en vez de JSON");
+        console.error("❌ AuthProvider - Error en respuesta");
+        throw new Error(`Status ${res.status}`);
       }
 
       const data = await res.json();
-      console.log("Usuario recibido (raw):", data);
+      console.log("✅ AuthProvider - Usuario recibido:", data.username);
 
-      // Normaliza el objeto para que coincida con tu tipo ReadUser
       const normalizedUser: ReadUser = {
         user_id: data.user_id,
         username: data.username,
-        // agrega más campos si existen
       };
 
       setUser(normalizedUser);
     } catch (err) {
-      console.error("Error completo en fetchUser:", err);
+      console.error("⚠️ AuthProvider - Error en fetchUser:", err);
       localStorage.removeItem("token");
       setUser(null);
     } finally {
+      console.log("🏁 AuthProvider - Finalizando loading");
       setLoading(false);
     }
   };
 
   const login = async (token: string) => {
+    console.log("🔑 AuthProvider - login ejecutándose");
     localStorage.setItem("token", token);
     await fetchUser(token);
   };
 
   const logout = () => {
+    console.log("🚪 AuthProvider - logout ejecutándose");
     localStorage.removeItem("token");
     setUser(null);
-    navigate("/login");
+    // El redireccionamiento se manejará en los componentes/rutas
   };
 
   return (
