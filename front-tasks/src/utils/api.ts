@@ -45,13 +45,7 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
         throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}`);
       }
 
-      // Si es OK pero no JSON, intentar parsear si parece JSON
-      try {
-        const json = JSON.parse(text);
-        return json;
-      } catch {
-        throw new Error(`Expected JSON but got ${contentType}`);
-      }
+      return response;
     }
 
     if (!response.ok) {
