@@ -8,7 +8,11 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
 
   if (loading) {
     console.log("⏳ PrivateRoute - Cargando...");
-    return <p>Cargando...</p>;
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <p style={{ color: "black" }}>Cargando...</p>
+      </div>
+    );
   }
 
   if (!user) {
