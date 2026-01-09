@@ -10,14 +10,12 @@ import Fetch from "../../../utils/api.ts";
 export async function fetchProjects(groupId: number) {
   const res = await Fetch({ path: `project/${groupId}`, method: "GET" });
 
-  if (!res.ok) throw new Error(`Failed to fetch projects to group ${groupId}`);
   return res;
 }
 
 export async function fetchProjectsMe() {
   const res = await Fetch({ path: "project/me", method: "GET" });
 
-  if (!res.ok) throw new Error("Failed to fetch my projects");
   return res;
 }
 
@@ -27,7 +25,6 @@ export async function fetchUsersProject(group_id: number, project_id: number) {
     method: "GET",
   });
 
-  if (!res.ok) throw new Error("Failed to fetch useras in project");
   return res;
 }
 
@@ -38,7 +35,6 @@ export async function createProjectApi(data: CreateProject) {
     body: data,
   });
 
-  if (!res.ok) throw new Error("Failed to create project");
   return res;
 }
 
@@ -49,7 +45,6 @@ export async function updateProjectApi(data: UpdateProject) {
     body: data,
   });
 
-  if (!res.ok) throw new Error("Failed to update project");
   return res;
 }
 
@@ -62,7 +57,6 @@ export async function deleteProjectApi({
     method: "DELETE",
   });
 
-  if (!res.ok) throw new Error("Failed to delete project");
   return res;
 }
 
@@ -76,7 +70,6 @@ export async function addUserToProjectApi({
     method: "POST",
   });
 
-  if (!res.ok) throw new Error("Failed to add user to group");
   return res;
 }
 
@@ -90,7 +83,6 @@ export async function removeUserToProject({
     method: "DELETE",
   });
 
-  if (!res.ok) throw new Error("Failed to remove user to project");
   return res;
 }
 
@@ -110,6 +102,5 @@ export async function updateUserToProject({
     body: roleData,
   });
 
-  if (!res.ok) throw new Error("Failed to update role for user to project");
   return res;
 }
