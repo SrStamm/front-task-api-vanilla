@@ -33,26 +33,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = async (token: string) => {
     try {
       const res = await fetch(url + "user/me", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "69420", // evita bloqueos raros de ngrok
+          Accept: "application/json", // fuerza que espere JSON
+        },
       });
 
-      console.log("Status de /user/me:", res.status);
-      console.log("Headers:", [...res.headers.entries()]);
+      console.log("GET /user/me - Status:", res.status);
+      console.log("Content-Type:", res.headers.get("Content-Type"));
 
       if (!res.ok) {
         const text = await res.text();
-        console.error("Error response de /user/me:", text);
-        throw new Error(
-          `Token inválido - ${res.status}: ${text.slice(0, 200)}`,
-        );
+        console.error("Error response (text):", text);
+        throw new Error(`Status ${res.status}: ${text.slice(0, 200)}`);
+      }
+
+      const contentType = res.headers.get("Content-Type") || "";
+      if (!contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Respuesta NO es JSON:", text);
+        throw new Error("Backend devolvió texto/HTML en vez de JSON");
       }
 
       const data = await res.json();
-      console.log("Usuario recibido:", data);
-      setUser(data);
+      console.log("Usuario recibido (raw):", data);
+
+      // Normaliza el objeto para que coincida con tu tipo ReadUser
+      const normalizedUser: ReadUser = {
+        user_id: data.user_id,
+        username: data.username,
+        // agrega más campos si existen
+      };
+
+      setUser(normalizedUser);
     } catch (err) {
+      console.error("Error completo en fetchUser:", err);
       localStorage.removeItem("token");
-      console.error("Catch en fetchUser:", err);
       setUser(null);
     } finally {
       setLoading(false);
