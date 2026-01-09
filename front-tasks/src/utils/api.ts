@@ -20,9 +20,55 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
     ...(Body && { body: Body }),
   };
 
-  const response = await fetch(url + path, fetchOptions);
+  try {
+    const response = await fetch(url + path, fetchOptions);
 
-  return response;
+    console.log(
+      `📊 Response Status: ${response.status} ${response.statusText}`,
+    );
+    console.log("🔗 URL completa:", url + path);
+
+    // Verificar el content-type
+    const contentType = response.headers.get("content-type");
+    console.log("📄 Content-Type:", contentType);
+
+    // Si no es JSON, leer como texto primero
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error(
+        "❌ Respuesta no es JSON. Recibido:",
+        text.substring(0, 500),
+      );
+
+      // Si es un error 404, 500, etc., lanzar error
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}`);
+      }
+
+      // Si es OK pero no JSON, intentar parsear si parece JSON
+      try {
+        const json = JSON.parse(text);
+        return json;
+      } catch {
+        throw new Error(`Expected JSON but got ${contentType}`);
+      }
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ Response not OK:", errorText);
+      throw new Error(
+        `HTTP ${response.status}: ${errorText.substring(0, 100)}`,
+      );
+    }
+
+    const data = await response.json();
+    console.log("✅ Response JSON recibido");
+    return data;
+  } catch (error) {
+    console.error("🔥 Error en Fetch:", error);
+    throw error;
+  }
 };
 
 export default Fetch;
