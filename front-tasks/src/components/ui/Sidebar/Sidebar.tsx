@@ -47,7 +47,7 @@ function Sidebar() {
             </div>
 
             {/* Zona 2: Navegación */}
-            <div>
+            <div className="sidebar_navigation">
               <div
                 className={`sidebar_element ${elementSelected == "dashboard" ? "active" : ""}`}
                 onClick={() => setElementSelected("dashboard")}

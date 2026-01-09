@@ -100,3 +100,20 @@ body {
   font-weight: 600;
   color: var(--gray-800);
 }
+
+@media (max-width: 768px) {
+  .principal-layout {
+    grid-template-columns: 300px 1fr;
+  }
+
+  .dashboard-layout {
+    overflow-x: auto;
+  }
+
+  .dashboard-h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+}
