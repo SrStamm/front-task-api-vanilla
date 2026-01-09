@@ -12,6 +12,10 @@
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 }
 
+.sidebar-container.is-collapsed {
+  width: 80px;
+}
+
 .sidebar h1 {
   font-size: 1.5rem;
   font-weight: 600;
@@ -69,6 +73,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+}
+
+.collapse_button {
+  background: none;
+  border: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.collapse_button_item {
+  width: 100%;
 }
 
 @media (max-width: 768px) {

@@ -1,4 +1,4 @@
-import { FaTasks } from "react-icons/fa";
+import { FaArrowAltCircleRight, FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { GoProject } from "react-icons/go";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -14,6 +14,7 @@ import UserOptions from "../UserOptions";
 function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [elementSelected, setElementSelected] = useState("");
   const [showUserOptions, setShowUserOptions] = useState(false);
   const { groupId } = useGroupProject();
@@ -26,9 +27,20 @@ function Sidebar() {
     setShowUserOptions(!showUserOptions);
   };
 
+  const handleCollapseSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-    <aside className="sidebar-container">
-      <div className="sidebar">
+    <aside
+      className={
+        isCollapsed ? "sidebar-container is-collapsed" : "sidebar-container"
+      }
+    >
+      <div className={isCollapsed ? "sidebar is-collapsed" : "sidebar"}>
+        <button className="collapse_button" onClick={handleCollapseSidebar}>
+          <FaArrowAltCircleRight className="collapse_button_item" />
+        </button>
         <h1>Project Manager</h1>
         <nav>
           <div className="sidebar_intern">
