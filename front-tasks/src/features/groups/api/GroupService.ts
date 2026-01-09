@@ -14,8 +14,7 @@ export async function fetchGroups() {
 
 export async function fetchGroupsMe() {
   const res = await Fetch({ path: "group/me", method: "GET" });
-  const data = await res.json();
-  return data;
+  return res;
 }
 
 export async function fetchUsersGroup(group_id: number) {
