@@ -20,19 +20,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Verificar token al iniciar la app
   useEffect(() => {
-    console.log("🔍 AuthProvider - Efecto inicial");
     const token = localStorage.getItem("token");
     if (token) {
-      console.log("🔑 AuthProvider - Token encontrado en localStorage");
       fetchUser(token);
     } else {
-      console.log("🔓 AuthProvider - No hay token");
       setLoading(false);
     }
   }, []);
 
   const fetchUser = async (token: string) => {
-    console.log("🔄 AuthProvider - fetchUser ejecutándose");
     try {
       const res = await fetch(url + "user/me", {
         headers: {
@@ -42,15 +38,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       });
 
-      console.log("📡 AuthProvider - Status:", res.status);
-
       if (!res.ok) {
         console.error("❌ AuthProvider - Error en respuesta");
         throw new Error(`Status ${res.status}`);
       }
 
       const data = await res.json();
-      console.log("✅ AuthProvider - Usuario recibido:", data.username);
 
       const normalizedUser: ReadUser = {
         user_id: data.user_id,
@@ -63,19 +56,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.removeItem("token");
       setUser(null);
     } finally {
-      console.log("🏁 AuthProvider - Finalizando loading");
       setLoading(false);
     }
   };
 
   const login = async (token: string) => {
-    console.log("🔑 AuthProvider - login ejecutándose");
     localStorage.setItem("token", token);
     await fetchUser(token);
   };
 
   const logout = () => {
-    console.log("🚪 AuthProvider - logout ejecutándose");
     localStorage.removeItem("token");
     setUser(null);
     // El redireccionamiento se manejará en los componentes/rutas

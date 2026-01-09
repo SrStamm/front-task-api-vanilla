@@ -44,9 +44,6 @@ function RegisterForm() {
 
       if (res.ok) {
         navigate("/login");
-      } else {
-        const dataError = await res.json();
-        console.log("Error: ", dataError.detail);
       }
     } catch (error) {
       console.error("Error al intentar conectar con el servidor:", error);
