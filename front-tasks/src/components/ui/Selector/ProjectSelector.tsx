@@ -7,9 +7,10 @@ import "./Selector.css";
 type selectorProps = {
   text: string;
   setTitle: (name: string) => void;
+  isCollapsed: boolean;
 };
 
-function ProjectSelector({ text, setTitle }: selectorProps) {
+function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,7 +47,7 @@ function ProjectSelector({ text, setTitle }: selectorProps) {
     <div className="workspace-selector" ref={selectorRef}>
       <Button
         className="btn-outline-primary btn-med"
-        text={`${text} ▼`}
+        text={isCollapsed ? "" : `${text} ▼`}
         onClick={toggleDropDown}
       />
 
