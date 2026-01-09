@@ -6,8 +6,7 @@ import type {
 
 export async function ReadCommentsInTask(taskId: number) {
   const res = await Fetch({ path: `task/${taskId}/comments`, method: "GET" });
-  if (!res) throw new Error(`Failed to get Comments from Task ${taskId}`);
-  return res.json();
+  return res;
 }
 
 export async function CreateCommentsInTask(
@@ -19,8 +18,7 @@ export async function CreateCommentsInTask(
     method: "POST",
     body: payload,
   });
-  if (!res) throw new Error(`Failed to create a new comment to Task ${taskId}`);
-  return await res.json();
+  return await res;
 }
 
 export async function UpdateCommentsInTask(
@@ -33,9 +31,5 @@ export async function UpdateCommentsInTask(
     method: "PATCH",
     body: payload,
   });
-  if (!res)
-    throw new Error(
-      `Failed to update a comment ${commentId} to Task ${taskId}`,
-    );
-  return await res.json();
+  return await res;
 }
