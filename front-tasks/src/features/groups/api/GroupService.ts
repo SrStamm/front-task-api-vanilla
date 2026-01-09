@@ -7,9 +7,7 @@ import { AddRemoveUserToGroup, UpdateGroup } from "../../../types/Group.ts";
 
 export async function fetchGroups() {
   const res = await Fetch({ path: "group", method: "GET" });
-
-  if (!res.ok) throw new Error("Failed to fetch groups");
-  return res.json();
+  return res;
 }
 
 export async function fetchGroupsMe() {
@@ -19,8 +17,6 @@ export async function fetchGroupsMe() {
 
 export async function fetchUsersGroup(group_id: number) {
   const res = await Fetch({ path: `group/${group_id}/users`, method: "GET" });
-
-  if (!res.ok) throw new Error("Failed to fetch user in group");
   return res;
 }
 
@@ -58,7 +54,6 @@ export async function addUserToGroupApi({
     method: "POST",
   });
 
-  if (!res.ok) throw new Error("Failed to add user to group");
   return res;
 }
 
