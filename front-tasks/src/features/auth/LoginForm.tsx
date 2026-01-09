@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 import Button from "../../components/common/Button/index.tsx";
 import React, { useContext, useState } from "react";
@@ -10,6 +10,7 @@ console.log("url que se está usando →", url);
 
 function LoginForm() {
   console.log("Ejecutando Login");
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +44,10 @@ function LoginForm() {
         const data = await res.json();
         console.log("Token recibido:", data.access_token);
         authContext?.login(data.access_token);
+
+        setTimeout(() => {
+          navigate("/dashboard", { replace: true });
+        }, 100);
       } else {
         const dataError = await res.json();
         console.log("Error: ", dataError.detail);

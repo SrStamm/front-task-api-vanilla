@@ -30,12 +30,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (user !== null && !loading) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, loading, navigate]);
-
   const fetchUser = async (token: string) => {
     try {
       const res = await fetch(url + "user/me", {
