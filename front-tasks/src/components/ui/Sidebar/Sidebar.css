@@ -1,4 +1,3 @@
-/* Normal */
 .sidebar-container {
   background: var(--bg-dark);
   border-right: 1px solid var(--border-dark);
@@ -134,14 +133,15 @@
     position: fixed;
     z-index: 1000;
     height: 100vh;
-    width: 75%; /* ← más ancho para mejor usabilidad en móvil */
-    max-width: 320px; /* límite razonable */
+    width: 75%;
+    max-width: 320px;
     padding: 1.5rem 1rem;
     background: var(--bg-dark);
     border-right: none;
     border-bottom: 1px solid var(--border-dark);
-    transition: transform 0.3s ease; /* mejor transición */
+    transition: transform 0.3s ease;
     transform: translateX(0);
+    overflow: visible;
   }
 
   .sidebar-container.is-collapsed {
@@ -164,7 +164,7 @@
     justify-content: center;
     cursor: pointer;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.35);
-    z-index: 1100; /* muy importante */
+    z-index: 1100;
     transition: all 0.25s ease;
   }
 
