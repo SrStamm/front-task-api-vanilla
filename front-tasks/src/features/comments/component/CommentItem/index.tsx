@@ -13,7 +13,7 @@ function CommentItem({ comment }: commentItemProps) {
   return (
     <li className="comment-details">
       <div className="comment-info">
-        <h3 className="comment-content">{comment.content}</h3>
+        <p className="comment-content">{comment.content}</p>
       </div>
       <div className="comment-meta">
         <p className="comment-date"> {formatedDate}</p>

@@ -34,14 +34,12 @@ function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
         </div>
 
         <div className="task-description">
-          {task.description && task.description}
+          {task.description}
           <div>
             <p className="task-date"> {formatedDate}</p>
           </div>
           <div>
-            <p className="task-label">
-              {task.task_labels_links && task.task_labels_links}
-            </p>
+            <p className="task-label">{task.task_labels_links}</p>
           </div>
         </div>
       </div>

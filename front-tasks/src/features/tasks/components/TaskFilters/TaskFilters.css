@@ -27,3 +27,9 @@
   height: 30px;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .task-filters-container {
+    width: 80%;
+  }
+}

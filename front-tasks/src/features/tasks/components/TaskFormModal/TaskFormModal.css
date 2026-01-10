@@ -3,3 +3,9 @@
   padding: 1rem;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .user-selection-container ul {
+    padding: 0.2rem;
+  }
+}

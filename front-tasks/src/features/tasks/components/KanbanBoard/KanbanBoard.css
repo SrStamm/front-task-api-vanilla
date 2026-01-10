@@ -4,3 +4,13 @@
 
   max-height: 80vh;
 }
+
+@media (max-width: 768px) {
+  .task-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    max-height: 69vh;
+  }
+}
