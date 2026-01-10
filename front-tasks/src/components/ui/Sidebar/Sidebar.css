@@ -1,3 +1,4 @@
+/* Normal */
 .sidebar-container {
   background: var(--bg-dark);
   border-right: 1px solid var(--border-dark);
@@ -12,26 +13,12 @@
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 }
 
-.sidebar-container.is-collapsed .sidebar_header {
-  width: 50px;
-  display: flex;
-  justify-content: center;
-}
-
-.sidebar-container.is-collapsed span {
-  display: none;
-}
-
 .sidebar h1 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 2rem;
   color: var(--primary);
   text-align: center;
-}
-
-.sidebar-container.is-collapsed h1 {
-  display: none;
 }
 
 .sidebar_intern {
@@ -51,15 +38,6 @@
   color: var(--text-dark);
 }
 
-.sidebar_element svg {
-  color: var(--primary);
-}
-
-.sidebar_element svg:last-child {
-  background-color: var(--bg-dark);
-  color: var(--bg-dark);
-}
-
 .sidebar_element:hover {
   background: rgba(99, 102, 241, 0.15);
 }
@@ -76,6 +54,50 @@
 .sidebar_link {
   display: flex;
   gap: 1rem;
+}
+
+.selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 200px;
+}
+
+.selectors button {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.collapse_button {
+  background: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  width: auto;
+}
+
+.collapse_button_item {
+  width: 100%;
+}
+
+/* Colapsado */
+
+.sidebar-container.is-collapsed .sidebar_header {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-container.is-collapsed span {
+  display: none;
+}
+
+.sidebar-container.is-collapsed h1 {
+  display: none;
 }
 
 .sidebar-container.is-collapsed .sidebar_element {
@@ -99,22 +121,6 @@
   align-items: center;
 }
 
-.selectors {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 200px;
-}
-
-.selectors button {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-}
-
 .sidebar-container.is-collapsed .selectors {
   width: auto;
   height: auto;
@@ -122,18 +128,6 @@
 
 .sidebar-container.is-collapsed #text {
   display: none;
-}
-
-.collapse_button {
-  background: none;
-  color: var(--text-dark);
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  width: auto;
-}
-
-.collapse_button_item {
-  width: 100%;
 }
 
 .sidebar-container.is-collapsed .collapse_button {

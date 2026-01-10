@@ -6,10 +6,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import GroupSelector from "../Selector/GroupSelector";
 import ProjectSelector from "../Selector/ProjectSelector";
 import { useEffect, useState } from "react";
-import "./Sidebar.css";
-import { Link } from "react-router-dom";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import UserOptions from "../UserOptions";
+import SidebarItem from "../SidebarItem";
+import "./Sidebar.css";
 
 function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
@@ -74,43 +74,34 @@ function Sidebar() {
 
             {/* Zona 2: Navegación */}
             <div className="sidebar_navigation">
-              <div
-                className={`sidebar_element ${elementSelected == "dashboard" ? "active" : ""}`}
+              <SidebarItem
+                to="/dashboard"
+                icon={<RxDashboard />}
+                label="Dashboard"
+                isSelected={elementSelected == "dashboard"}
                 onClick={() => setElementSelected("dashboard")}
-              >
-                <RxDashboard className="sidebar_item" />
-                <span>Dashboard</span>
-              </div>
-
-              <div
-                className={`sidebar_element ${elementSelected == "projects" ? "active" : ""}`}
+              />
+              <SidebarItem
+                to="/dashboard/projects"
+                icon={<GoProject />}
+                label="Proyectos"
+                isSelected={elementSelected == "projects"}
                 onClick={() => setElementSelected("projects")}
-              >
-                <Link to="/dashboard/projects" className="sidebar_link">
-                  <GoProject className="sidebar_item" />
-                  <span>Proyectos</span>
-                </Link>
-              </div>
-
-              <div
-                className={`sidebar_element ${elementSelected == "tasks" ? "active" : ""}`}
+              />
+              <SidebarItem
+                to="/dashboard/tasks"
+                icon={<FaTasks />}
+                label="Tareas"
+                isSelected={elementSelected == "tasks"}
                 onClick={() => setElementSelected("tasks")}
-              >
-                <Link to="/dashboard/tasks" className="sidebar_link">
-                  <FaTasks className="sidebar_item" />
-                  <span>Tareas</span>
-                </Link>
-              </div>
-
-              <div
-                className={`sidebar_element ${elementSelected == "chat" ? "active" : ""}`}
+              />
+              <SidebarItem
+                to="/dashboard/chat"
+                icon={<IoChatboxEllipsesOutline />}
+                label="Chat"
+                isSelected={elementSelected == "chat"}
                 onClick={() => setElementSelected("chat")}
-              >
-                <Link to="/dashboard/chat" className="sidebar_link">
-                  <IoChatboxEllipsesOutline className="sidebar_item" />
-                  <span>Chat</span>
-                </Link>
-              </div>
+              />
             </div>
           </div>
         </nav>
@@ -119,8 +110,10 @@ function Sidebar() {
       {/* Zona 3: Perfil */}
       <div style={{ position: "relative" }}>
         <div className="sidebar_element" onClick={handleShowUserOptions}>
-          <FaRegUserCircle className="sidebar_item" />
-          <span>User</span>
+          <span className="sidebar_item_icon">
+            <FaRegUserCircle />
+          </span>
+          <span className="sidebar_item_text">User</span>
         </div>
         {showUserOptions && <UserOptions />}
       </div>
