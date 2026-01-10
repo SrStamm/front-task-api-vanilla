@@ -11,6 +11,13 @@
   justify-content: space-between;
   padding: 2rem 1.5rem;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+
+  width: var(--sidebar-width);
+  transition:
+    width var(--transition),
+    padding var(--transition),
+    background var(--transition);
+  overflow: hidden;
 }
 
 .sidebar h1 {
