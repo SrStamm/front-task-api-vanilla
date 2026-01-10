@@ -38,3 +38,9 @@
 
   list-style: none;
 }
+
+@media (max-width: 768px) {
+  .task-column {
+    flex: 0 0 400px;
+  }
+}
