@@ -2,21 +2,41 @@
   background: var(--gray-100);
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  min-height: 0.1rem;
+  min-height: 4rem;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0.4rem;
+
+  flex-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+.comment-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .comment-content {
   padding: 0.5rem;
   font-size: 1.1em;
+  overflow-wrap: break-word;
 }
 
 .comment-meta {
   font-size: 0.8em;
   display: flex;
   padding: 0.1rem;
+}
+
+@media (max-width: 768px) {
+  .comment-details {
+    flex-direction: column;
+    justify-content: initial;
+  }
+
+  .comment-meta {
+    flex: 1;
+  }
 }

@@ -65,11 +65,3 @@
   flex-direction: column;
   gap: 1rem;
 }
-
-.form-comment {
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  width: 90%;
-  align-self: center;
-}
