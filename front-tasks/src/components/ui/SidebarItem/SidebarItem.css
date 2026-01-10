@@ -25,6 +25,11 @@
   height: 1.2em;
 }
 
+.sidebar_item_text {
+  white-space: nowrap;
+  transition: opacity var(--transition);
+}
+
 .sidebar-container.is-collapsed .sidebar_item_text {
   display: none;
 }
