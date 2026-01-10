@@ -60,9 +60,7 @@ function ProjectModal({
         </div>
 
         <ul className="task-project-list">
-          <li className="task-item task-card-project">Test</li>
-          <li className="task-item task-card-project">Test</li>
-          <li className="task-item task-card-project">Test</li>
+          <p style={{ color: "red", textAlign: "center" }}>No implementado</p>
         </ul>
       </div>
 

@@ -130,6 +130,12 @@
   padding-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+  .modal-actions {
+    margin-top: 0.5rem;
+  }
+}
+
 .modal-actions .btn {
   min-width: 100px;
 }
@@ -219,7 +225,7 @@
 
 @media (max-width: 768px) {
   .modal.med {
-    max-width: 500px;
+    max-width: 23rem;
     min-height: 300px;
   }
 }

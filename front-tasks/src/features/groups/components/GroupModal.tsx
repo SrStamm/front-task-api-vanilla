@@ -63,9 +63,7 @@ function GroupViewModal({
           />
         </div>
         <ol className="listProject">
-          <li className="project-item">Test</li>
-          <li className="project-item">Test</li>
-          <li className="project-item">Test</li>
+          <p style={{ color: "red" }}>No implementado</p>
         </ol>
       </div>
 
