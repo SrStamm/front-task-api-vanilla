@@ -25,12 +25,6 @@
   height: 1.2em;
 }
 
-.sidebar-container.is-collapsed .sidebar_item_icon:last-child {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .sidebar-container.is-collapsed .sidebar_item_text {
   display: none;
 }
