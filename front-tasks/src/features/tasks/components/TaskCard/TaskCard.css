@@ -54,7 +54,7 @@
   flex-direction: row;
   justify-content: flex-end;
   height: 30px;
-
+  text-wrap: nowrap;
   padding: 0.2rem 0.5rem;
   border-radius: var(--radius);
   font-size: 0.75rem;
@@ -80,4 +80,13 @@
 .task-state.done {
   background-color: var(--success);
   color: white;
+}
+
+@media (max-width: 768px) {
+  .task-card {
+    padding: 15px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
 }
