@@ -10,3 +10,9 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+@media (max-width: 768px) {
+  .coment-list {
+    max-height: 200px;
+  }
+}
