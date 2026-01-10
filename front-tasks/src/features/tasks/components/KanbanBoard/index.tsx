@@ -12,6 +12,7 @@ interface KanbanBoardProps {
   isLoading: boolean;
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
+  childModal: boolean;
 }
 
 function KanbanBoard({
@@ -19,6 +20,7 @@ function KanbanBoard({
   isLoading,
   error,
   onEdit,
+  childModal,
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
   const [isShowModal, setShowModal] = useState(false);
@@ -65,8 +67,11 @@ function KanbanBoard({
   };
 
   const handleHideModal = () => {
+    if (childModal) {
+      return;
+    }
+
     setShowModal(false);
-    setTaskSelected(null);
   };
 
   if (tasksInProject.length === 0 && projectId) {

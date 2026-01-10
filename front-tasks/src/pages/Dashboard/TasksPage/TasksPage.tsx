@@ -91,6 +91,7 @@ function TaskPage() {
       {tabSelected == "project" ? (
         <>
           <KanbanBoard
+            childModal={showFormModal}
             tasksInProject={tasksInProject}
             isLoading={isLoading}
             error={error?.message ?? null}
