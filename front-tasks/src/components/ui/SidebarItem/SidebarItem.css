@@ -34,3 +34,8 @@
 .sidebar-container.is-collapsed .sidebar_item_text {
   display: none;
 }
+
+.sidebar_link {
+  display: flex;
+  gap: 1rem;
+}

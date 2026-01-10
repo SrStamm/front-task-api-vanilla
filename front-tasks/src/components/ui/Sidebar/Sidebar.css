@@ -21,6 +21,10 @@
   text-align: center;
 }
 
+.sidebar-container.is-collapsed h1 {
+  display: none;
+}
+
 .sidebar_intern {
   display: flex;
   flex-direction: column;
@@ -51,9 +55,10 @@
   color: #ffffff;
 }
 
-.sidebar_link {
+.sidebar-container.is-collapsed .sidebar_element {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .selectors {
@@ -72,6 +77,11 @@
   text-align: center;
 }
 
+.sidebar-container.is-collapsed .selectors {
+  width: auto;
+  height: auto;
+}
+
 .collapse_button {
   background: none;
   color: var(--text-dark);
@@ -80,54 +90,22 @@
   width: auto;
 }
 
-.collapse_button_item {
-  width: 100%;
-}
-
-/* Colapsado */
-
-.sidebar-container.is-collapsed .sidebar_header {
-  width: 50px;
-  display: flex;
-  justify-content: center;
-}
-
-.sidebar-container.is-collapsed h1 {
-  display: none;
-}
-
-.sidebar-container.is-collapsed .sidebar_element {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sidebar-container.is-collapsed .sidebar_item {
-  width: 2em;
-  height: 1.2em;
-}
-
-.sidebar-container.is-collapsed .sidebar_item:last-child {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.sidebar-container.is-collapsed .selectors {
-  width: auto;
-  height: auto;
-}
-
-.sidebar-container.is-collapsed #text {
-  display: none;
-}
-
 .sidebar-container.is-collapsed .collapse_button {
   display: flex;
   justify-content: start;
   align-items: center;
   width: 100%;
   padding: 0.5rem 0;
+}
+
+.collapse_button_item {
+  width: 100%;
+}
+
+.sidebar-container.is-collapsed .sidebar_header {
+  width: 50px;
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -169,9 +147,8 @@
     transition: all 0.25s ease;
   }
 
-  /* Cuando está colapsado → lo mantenemos visible y lo rotamos */
   .sidebar-container.is-collapsed .collapse_button {
-    right: -3rem; /* misma posición */
+    right: -3rem;
     width: 3rem;
     transform: rotate(180deg);
     background: var(--primary);
@@ -180,12 +157,8 @@
     border: none;
   }
 
-  /* Ocultamos todo el contenido cuando colapsado */
-  .sidebar-container.is-collapsed h1,
   .sidebar-container.is-collapsed nav,
-  .sidebar-container.is-collapsed .sidebar_element,
-  .sidebar-container.is-collapsed .sidebar_intern,
-  .sidebar-container.is-collapsed .selectors {
+  .sidebar-container.is-collapsed .sidebar_element {
     display: none;
   }
 
@@ -195,14 +168,26 @@
     margin-top: 0.8rem;
   }
 
+  .sidebar-container.is-collapsed h1 {
+    display: none;
+  }
+
   .sidebar_intern {
     flex-direction: column;
     gap: 1.2rem;
+  }
+
+  .sidebar-container.is-collapsed .sidebar_intern {
+    display: none;
   }
 
   .selectors {
     width: 100%;
     flex-direction: column;
     gap: 0.8rem;
+  }
+
+  .sidebar-container.is-collapsed .selectors {
+    display: none;
   }
 }
