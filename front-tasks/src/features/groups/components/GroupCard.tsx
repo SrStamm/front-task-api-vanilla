@@ -11,7 +11,6 @@ function GroupCard({ group, onView }: GroupCardProps) {
     <Card
       title={group.name}
       description={`Miembros: ${group.users.length}`}
-      details={<span>ID: {group.group_id}</span>}
       action={{
         text: "Ver más detalles",
         className: "btn-sm btn-outline-primary btn-manage",
