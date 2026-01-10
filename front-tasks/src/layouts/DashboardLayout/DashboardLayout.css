@@ -5,6 +5,13 @@
   overflow-x: auto;
 }
 
+@media (max-width: 768px) {
+  .dashboard-layout {
+    padding: 1rem;
+    overflow-x: none;
+  }
+}
+
 .dashboard-layout h2 {
   font-size: 3rem;
   font-weight: 700;
@@ -18,26 +25,44 @@
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .dashboard-layout h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
 .dashboard-layout-h3 {
-  margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--gray-800);
 }
 
-/* SECCIONES DEL DASHBOARD */
+@media (max-width: 768px) {
+  .dashboard-layout-h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+}
+
 .partSections {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: var(--radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 20px; /* Más padding */
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 
   min-height: 90vh;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .partSections {
+    padding: 10px;
+  }
 }
 
 .partSections:hover {
@@ -55,17 +80,8 @@
 }
 
 @media (max-width: 768px) {
-  .dashboard-layout {
-    padding: 1rem;
-    overflow-x: none;
-  }
-
   .headerPartSection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border-bottom: 2px solid var(--gray-100);
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 }

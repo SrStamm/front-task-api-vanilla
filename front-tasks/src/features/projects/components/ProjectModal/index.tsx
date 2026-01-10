@@ -26,7 +26,7 @@ function ProjectModal({
   const [tabSelected, setTabSelected] = useState("members");
   const { removeUserFromProject } = useProjects();
 
-  const header = <h2 className="modal-title">{project.title}</h2>;
+  const header = <h2>{project.title}</h2>;
 
   const body = (
     <>
@@ -60,9 +60,7 @@ function ProjectModal({
         </div>
 
         <ul className="task-project-list">
-          <li className="task-item task-card-project">Test</li>
-          <li className="task-item task-card-project">Test</li>
-          <li className="task-item task-card-project">Test</li>
+          <p style={{ color: "red", textAlign: "center" }}>No implementado</p>
         </ul>
       </div>
 

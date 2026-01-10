@@ -20,6 +20,14 @@
   line-height: 1.5;
 }
 
+@media (max-width: 768px) {
+  .btn {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    line-height: 1;
+  }
+}
+
 .btn::before {
   content: "";
   position: absolute;
@@ -40,14 +48,21 @@
   left: 100%;
 }
 
-/* Tamaños de botones */
 .btn-vsm {
   padding: 0.5rem 0.5rem;
   font-size: 0.7rem;
 }
+
 .btn-sm {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .btn-sm {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+  }
 }
 
 .btn-long {

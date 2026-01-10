@@ -51,8 +51,8 @@ function Card({
       onClick={hideTemplate ? toogleExpand : undefined}
       ref={cardRef}
     >
-      {title && <h3>{title}</h3>}
-      {details && <div className="card-details">{details}</div>}
+      <h3>{title}</h3>
+      <div className="card-details">{details}</div>
 
       {hideTemplate ? (
         <div className="template-hide">

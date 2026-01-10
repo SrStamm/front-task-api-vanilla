@@ -68,7 +68,7 @@ function TaskPage() {
             Tareas del proyecto
           </h3>
           <h3
-            className={`tab-title tab-element ${tabSelected == "all" ? "active" : ""}`}
+            className={`dashboard-layout-h3 tab-element ${tabSelected == "all" ? "active" : ""}`}
             onClick={() => setTabSelected("all")}
           >
             Mis tareas

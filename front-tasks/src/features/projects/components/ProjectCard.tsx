@@ -10,7 +10,7 @@ function ProjectCard({ project, onView }: ProjectCardProps) {
   return (
     <Card
       title={project.title}
-      description={project.description && project.description}
+      description={project.description}
       action={{
         text: "Ver más detalles",
         className: "btn-sm btn-outline-primary btn-manage",
