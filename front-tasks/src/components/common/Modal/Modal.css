@@ -46,6 +46,16 @@
   margin-bottom: 0.5rem;
 }
 
+@media (max-width: 768px) {
+  .modal h2 {
+    font-size: 1.8em;
+    padding: 0.5rem;
+    margin-bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 .modal-header {
   border-bottom: 1px solid var(--gray-200);
   padding: 1rem;
@@ -54,9 +64,23 @@
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .modal-header {
+    padding: 0.1rem;
+  }
+}
+
 .modal-title {
   font-size: 2rem;
   color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .modal-title {
+    padding: 0.2rem;
+    text-align: center;
+    width: 100%;
+  }
 }
 
 .modal-title-center {
@@ -76,11 +100,27 @@
   gap: 1rem;
 }
 
+@media (max-width: 768px) {
+  .modal-body {
+    padding-bottom: 0;
+  }
+}
+
 .modal-body label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
   color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .modal-body label {
+    margin-top: 0.2rem;
+  }
+
+  .modal-body label:last-child {
+    margin-top: 0.5rem;
+  }
 }
 
 .modal-actions {
@@ -102,6 +142,12 @@
 
 .modal-section {
   margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .modal-section {
+    margin-bottom: 0;
+  }
 }
 
 .modal-section-header {
@@ -133,6 +179,15 @@
   font-size: 1.2em;
 }
 
+@media (max-width: 768px) {
+  .modal-description {
+    line-height: 1.6;
+    text-indent: var(--spacing-xs);
+    margin-bottom: 0;
+    font-size: 1.2em;
+  }
+}
+
 .modal-section-action {
   display: flex;
   flex-direction: row;
@@ -149,16 +204,37 @@
   min-height: 300px;
 }
 
+@media (max-width: 768px) {
+  .modal.small {
+    max-width: 200px;
+    min-height: 100px;
+  }
+}
+
 .modal.med {
   width: 100%;
   max-width: 600px;
   min-height: 400px;
 }
 
+@media (max-width: 768px) {
+  .modal.med {
+    max-width: 500px;
+    min-height: 300px;
+  }
+}
+
 .modal.large {
   width: 100%;
   max-width: 900px;
   min-height: 600px;
+}
+
+@media (max-width: 768px) {
+  .modal.large {
+    max-width: 26rem;
+    min-height: 480px;
+  }
 }
 
 /* Animaciones del fondo de modal */
@@ -220,62 +296,4 @@
 
 .tab-content.active {
   display: block;
-}
-
-@media (max-width: 768px) {
-  .modal.small {
-    max-width: 200px;
-    min-height: 100px;
-  }
-
-  .modal.med {
-    max-width: 500px;
-    min-height: 300px;
-  }
-
-  .modal.large {
-    max-width: 700px;
-    min-height: 500px;
-  }
-
-  .modal-header {
-    padding: 0.1rem;
-  }
-
-  .modal h2 {
-    font-size: 2em;
-    padding: 0.5rem;
-    margin-bottom: 0;
-    width: 100%;
-    text-align: center;
-  }
-
-  .modal-body {
-    padding-bottom: 0;
-  }
-
-  .modal-body label {
-    margin-top: 0.2rem;
-  }
-
-  .modal-body label:last-child {
-    margin-top: 0.5rem;
-  }
-
-  .modal-title {
-    padding: 0.2rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  .modal-description {
-    line-height: 1.6;
-    text-indent: var(--spacing-xs);
-    margin-bottom: 0;
-    font-size: 1.2em;
-  }
-
-  .modal-section {
-    margin-bottom: 0;
-  }
 }

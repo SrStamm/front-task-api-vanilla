@@ -26,7 +26,7 @@ function ProjectModal({
   const [tabSelected, setTabSelected] = useState("members");
   const { removeUserFromProject } = useProjects();
 
-  const header = <h2 className="modal-title">{project.title}</h2>;
+  const header = <h2>{project.title}</h2>;
 
   const body = (
     <>
