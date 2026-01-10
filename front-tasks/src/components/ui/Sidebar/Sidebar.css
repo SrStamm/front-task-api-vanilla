@@ -19,10 +19,14 @@
   margin-bottom: 2rem;
   color: var(--primary);
   text-align: center;
+  margin-top: 1rem;
 }
 
 .sidebar-container.is-collapsed h1 {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  height: 40px;
+  margin-bottom: 2rem;
 }
 
 .sidebar_intern {
@@ -167,19 +171,10 @@
     border: none;
   }
 
-  .sidebar-container.is-collapsed nav,
-  .sidebar-container.is-collapsed .sidebar_element {
-    display: none;
-  }
-
   .sidebar h1 {
     font-size: 1.3rem;
     margin-bottom: 2.5rem;
     margin-top: 0.8rem;
-  }
-
-  .sidebar-container.is-collapsed h1 {
-    display: none;
   }
 
   .sidebar_intern {
@@ -187,17 +182,9 @@
     gap: 1.2rem;
   }
 
-  .sidebar-container.is-collapsed .sidebar_intern {
-    display: none;
-  }
-
   .selectors {
     width: 100%;
     flex-direction: column;
     gap: 0.8rem;
-  }
-
-  .sidebar-container.is-collapsed .selectors {
-    display: none;
   }
 }
