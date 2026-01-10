@@ -8,14 +8,15 @@ import "./Selector.css";
 type selectorProps = {
   text: string;
   setName: (name: string) => void;
+  isCollapsed: boolean;
 };
 
-function GroupSelector({ text, setName }: selectorProps) {
+function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { setGroupId } = useGroupProject();
-  const { groups, loading, error } = useGroups();
+  const { groups } = useGroups();
 
   const handleClickOutside = (e: MouseEvent) => {
     if (
@@ -42,7 +43,7 @@ function GroupSelector({ text, setName }: selectorProps) {
     <div className="workspace-selector" ref={selectorRef}>
       <Button
         className="btn-outline-primary btn-med"
-        text={`${text} ▼`}
+        text={isCollapsed ? "" : `${text} ▼`}
         onClick={toggleDropDown}
       />
 

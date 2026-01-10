@@ -29,7 +29,7 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
       />
       <Button
         type="submit"
-        className="btn btn-sm"
+        className="btn-primary btn-sm"
         text="Enviar"
         form="form-message"
         disabled={!isConnected}

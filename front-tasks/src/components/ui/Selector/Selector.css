@@ -127,3 +127,13 @@
   user-select: none;
   line-height: 1.5;
 }
+
+.sidebar-container.is-collapsed .selectors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-container.is-collapsed .workspace-selector {
+  width: 80%;
+}

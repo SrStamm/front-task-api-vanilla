@@ -53,3 +53,19 @@
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    padding: 1rem;
+    overflow-x: none;
+  }
+
+  .headerPartSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gray-100);
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+}

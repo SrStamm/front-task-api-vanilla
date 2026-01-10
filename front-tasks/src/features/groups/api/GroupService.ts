@@ -23,7 +23,6 @@ export async function fetchUsersGroup(group_id: number) {
 export async function createGroupApi(data: CreateGroupInterface) {
   const res = await Fetch({ path: "group", method: "POST", body: data });
 
-  if (!res.ok) throw new Error("Failed to create group");
   return res;
 }
 
@@ -34,14 +33,12 @@ export async function updateGroupApi(group_id: number, data: UpdateGroup) {
     body: data,
   });
 
-  if (!res.ok) throw new Error("Failed to update group");
   return res;
 }
 
 export async function deleteGroupApi(group_id: number) {
   const res = await Fetch({ path: `group/${group_id}`, method: "DELETE" });
 
-  if (!res.ok) throw new Error("Failed to delete group");
   return res;
 }
 
@@ -66,7 +63,6 @@ export async function removeUserToGroup({
     method: "DELETE",
   });
 
-  if (!res.ok) throw new Error("Failed to remove user to group");
   return res;
 }
 
@@ -85,6 +81,5 @@ export async function updateUserToGroup({
     body: roleData,
   });
 
-  if (!res.ok) throw new Error("Failed to update role for user to group");
   return res;
 }

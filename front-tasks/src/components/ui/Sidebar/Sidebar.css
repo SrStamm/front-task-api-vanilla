@@ -12,12 +12,26 @@
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 }
 
+.sidebar-container.is-collapsed .sidebar_header {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-container.is-collapsed span {
+  display: none;
+}
+
 .sidebar h1 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 2rem;
   color: var(--primary);
   text-align: center;
+}
+
+.sidebar-container.is-collapsed h1 {
+  display: none;
 }
 
 .sidebar_intern {
@@ -35,6 +49,15 @@
   cursor: pointer;
   transition: background-color var(--transition);
   color: var(--text-dark);
+}
+
+.sidebar_element svg {
+  color: var(--primary);
+}
+
+.sidebar_element svg:last-child {
+  background-color: var(--bg-dark);
+  color: var(--bg-dark);
 }
 
 .sidebar_element:hover {
@@ -55,6 +78,27 @@
   gap: 1rem;
 }
 
+.sidebar-container.is-collapsed .sidebar_element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-container.is-collapsed .sidebar_element svg {
+  color: var(--warning);
+}
+
+.sidebar-container.is-collapsed .sidebar_item {
+  width: 2em;
+  height: 1.2em;
+}
+
+.sidebar-container.is-collapsed .sidebar_item:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .selectors {
   display: flex;
   flex-direction: column;
@@ -69,4 +113,110 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+}
+
+.sidebar-container.is-collapsed .selectors {
+  width: auto;
+  height: auto;
+}
+
+.sidebar-container.is-collapsed #text {
+  display: none;
+}
+
+.collapse_button {
+  background: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  width: auto;
+}
+
+.collapse_button_item {
+  width: 100%;
+}
+
+.sidebar-container.is-collapsed .collapse_button {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: fixed;
+    z-index: 1000;
+    height: 100vh;
+    width: 75%; /* ← más ancho para mejor usabilidad en móvil */
+    max-width: 320px; /* límite razonable */
+    padding: 1.5rem 1rem;
+    background: var(--bg-dark);
+    border-right: none;
+    border-bottom: 1px solid var(--border-dark);
+    transition: transform 0.3s ease; /* mejor transición */
+    transform: translateX(0);
+  }
+
+  .sidebar-container.is-collapsed {
+    transform: translateX(-100%);
+    border: none;
+  }
+
+  .collapse_button {
+    position: absolute;
+    top: 1.2rem;
+    right: -3.1rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.35);
+    z-index: 1100; /* muy importante */
+    transition: all 0.25s ease;
+  }
+
+  /* Cuando está colapsado → lo mantenemos visible y lo rotamos */
+  .sidebar-container.is-collapsed .collapse_button {
+    right: -3rem; /* misma posición */
+    width: 3rem;
+    transform: rotate(180deg);
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    border: none;
+  }
+
+  /* Ocultamos todo el contenido cuando colapsado */
+  .sidebar-container.is-collapsed h1,
+  .sidebar-container.is-collapsed nav,
+  .sidebar-container.is-collapsed .sidebar_element,
+  .sidebar-container.is-collapsed .sidebar_intern,
+  .sidebar-container.is-collapsed .selectors {
+    display: none;
+  }
+
+  .sidebar h1 {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    margin-top: 0.8rem;
+  }
+
+  .sidebar_intern {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .selectors {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 }

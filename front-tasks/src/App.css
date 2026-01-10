@@ -6,9 +6,6 @@
   --bg-card-light: #ffffff;
   --bg-card-dark: #23272b;
 
-  --primary: #6366f1;
-  --secondary: #14b8a6;
-
   /* Texto */
   --text-light: #0f172a;
   --text-dark: #f1f5f9;
@@ -28,6 +25,8 @@
   /* Layout */
   --radius: 12px;
   --transition: 0.25s ease;
+
+  --sidebar-width: 250px;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -69,7 +68,7 @@ body {
 
 .principal-layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
   min-height: 100vh;
   min-width: 100vw;
 }
@@ -99,4 +98,21 @@ body {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--gray-800);
+}
+
+@media (max-width: 768px) {
+  .principal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-layout {
+    overflow-x: auto;
+  }
+
+  .dashboard-h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
 }
