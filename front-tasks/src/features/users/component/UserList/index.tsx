@@ -10,20 +10,24 @@ interface userListProps {
 function UserList({ users, onAdd }: userListProps) {
   return (
     <ul className="list-add-user">
-      {users.map((u) => {
-        const actions = (
-          <Button
-            className="btn-vsm btn-outline-error"
-            text="Agregar"
-            onClick={() => onAdd(u.user_id)}
-          />
-        );
-        return (
-          <li key={u.user_id} className="user-add">
-            <UserCard type="user" user={u} actions={actions} />
-          </li>
-        );
-      })}
+      {users.length > 0 ? (
+        users.map((u) => {
+          const actions = (
+            <Button
+              className="btn-vsm btn-outline-error"
+              text="Agregar"
+              onClick={() => onAdd(u.user_id)}
+            />
+          );
+          return (
+            <li key={u.user_id} className="user-add">
+              <UserCard type="user" user={u} actions={actions} />
+            </li>
+          );
+        })
+      ) : (
+        <p style={{ textAlign: "center" }}>No hay usuarios para agregar</p>
+      )}
     </ul>
   );
 }

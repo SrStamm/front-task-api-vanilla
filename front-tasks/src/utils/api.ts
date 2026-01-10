@@ -23,14 +23,8 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
   try {
     const response = await fetch(url + path, fetchOptions);
 
-    console.log(
-      `📊 Response Status: ${response.status} ${response.statusText}`,
-    );
-    console.log("🔗 URL completa:", url + path);
-
     // Verificar el content-type
     const contentType = response.headers.get("content-type");
-    console.log("📄 Content-Type:", contentType);
 
     // Si no es JSON, leer como texto primero
     if (!contentType || !contentType.includes("application/json")) {
@@ -57,8 +51,6 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
     }
 
     const data = await response.json();
-    console.log("✅ Response JSON recibido");
-    console.log("JSON: ", data);
     return data;
   } catch (error) {
     console.error("🔥 Error en Fetch:", error);

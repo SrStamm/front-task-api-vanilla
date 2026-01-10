@@ -4,6 +4,11 @@ Interfaz web desarrollada en **React + TypeScript** que funciona como **dashboar
 
 El objetivo del proyecto es ofrecer una experiencia clara y eficiente para la **gestión colaborativa de tareas**, integrando comunicación en tiempo real, permisos por rol y una arquitectura frontend modular.
 
+**Deploy en Vercel:** https://front-task-api-vanilla.vercel.app/dashboard/tasks
+
+- **Username:** test
+- **Pasword:** test123
+
 ---
 
 ## 🌐 Descripción general

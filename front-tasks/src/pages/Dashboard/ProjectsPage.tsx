@@ -72,10 +72,9 @@ function ProjectsPage() {
   };
 
   const handleCloseModal = () => {
-    if (openCreateModal || showUserModal) {
+    if (showUserModal || openCreateModal) {
       return;
     }
-
     setOpenModal(false);
   };
 

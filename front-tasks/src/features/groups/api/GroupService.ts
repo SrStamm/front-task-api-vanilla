@@ -7,8 +7,7 @@ import { AddRemoveUserToGroup, UpdateGroup } from "../../../types/Group.ts";
 
 export async function fetchGroups() {
   const res = await Fetch({ path: "group", method: "GET" });
-
-  return res.json();
+  return res;
 }
 
 export async function fetchGroupsMe() {
@@ -18,7 +17,6 @@ export async function fetchGroupsMe() {
 
 export async function fetchUsersGroup(group_id: number) {
   const res = await Fetch({ path: `group/${group_id}/users`, method: "GET" });
-
   return res;
 }
 

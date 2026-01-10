@@ -36,9 +36,6 @@ export async function FetchTaskToProject(
 
   const res = await Fetch({ path: path, method: "GET" });
 
-  console.log("Path:", path);
-  console.log("Filters:", filters);
-
   return res;
 }
 

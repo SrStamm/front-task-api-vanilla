@@ -5,11 +5,8 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider.tsx";
 
 const url = import.meta.env.VITE_URL;
-console.log("VITE_URL desde import.meta.env →", import.meta.env.VITE_URL);
-console.log("url que se está usando →", url);
 
 function LoginForm() {
-  console.log("Ejecutando Login");
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -42,13 +39,9 @@ function LoginForm() {
 
       if (res.ok) {
         const data = await res.json();
-        console.log("Token recibido:", data.access_token);
         authContext?.login(data.access_token);
 
         navigate("/dashboard", { replace: true });
-      } else {
-        const dataError = await res.json();
-        console.log("Error: ", dataError.detail);
       }
     } catch (error) {
       console.error("Error al intentar conectar con el servidor:", error);

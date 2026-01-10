@@ -41,6 +41,7 @@ function UserAddModal({
 
   return (
     <Modal
+      onClose={onClose}
       showModal={show}
       onClose={onClose}
       modalHeader={header}

@@ -14,12 +14,9 @@ import ChatPage from "../pages/Dashboard/ChatPage/ChatPage.tsx";
 import "../App.css";
 
 const requireAuthLoader = async () => {
-  console.log("🔍 requireAuthLoader ejecutándose");
   const token = localStorage.getItem("token");
-  console.log("🔑 Token encontrado:", !!token);
 
   if (!token) {
-    console.log("❌ No hay token, redirigiendo a /login");
     return redirect("/login");
   }
 
@@ -42,15 +39,10 @@ export const router = createBrowserRouter([
           </PublicRoute>
         ),
         loader: () => {
-          console.log("🔍 Login loader - Verificando token...");
           const token = localStorage.getItem("token");
           if (token) {
-            console.log(
-              "✅ Token encontrado en login, redirigiendo a /dashboard",
-            );
             return redirect("/dashboard");
           }
-          console.log("ℹ️ No hay token, mostrando login");
           return null;
         },
       },
@@ -83,7 +75,6 @@ export const router = createBrowserRouter([
       {
         path: "/",
         loader: () => {
-          console.log("🔍 Root loader - Redirigiendo a /dashboard");
           return redirect("/dashboard");
         },
       },
