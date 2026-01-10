@@ -102,7 +102,7 @@ body {
 
 @media (max-width: 768px) {
   .principal-layout {
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr;
   }
 
   .dashboard-layout {
