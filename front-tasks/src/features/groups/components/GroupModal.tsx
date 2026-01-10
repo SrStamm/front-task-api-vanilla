@@ -31,7 +31,9 @@ function GroupViewModal({
   const body = (
     <>
       <div className="modal-section">
-        <p className="modal-description"> </p>
+        <p className="modal-description">
+          {group.description ? group.description : "Sin descripción"}
+        </p>
       </div>
 
       <div className="modal-tabs">

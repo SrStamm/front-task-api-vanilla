@@ -235,7 +235,7 @@
 
   .modal.large {
     max-width: 700px;
-    min-height: 600px;
+    min-height: 500px;
   }
 
   .modal-header {
@@ -266,5 +266,16 @@
     padding: 0.2rem;
     text-align: center;
     width: 100%;
+  }
+
+  .modal-description {
+    line-height: 1.6;
+    text-indent: var(--spacing-xs);
+    margin-bottom: 0;
+    font-size: 1.2em;
+  }
+
+  .modal-section {
+    margin-bottom: 0;
   }
 }

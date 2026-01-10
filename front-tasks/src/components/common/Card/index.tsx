@@ -56,7 +56,7 @@ function Card({
 
       {hideTemplate ? (
         <div className="template-hide">
-          {description && <p className="description"> {description}</p>}
+          <p className="description"> {description}</p>
           {action && (
             <Button
               className={action.className || ""}
