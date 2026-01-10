@@ -92,10 +92,6 @@
   justify-content: center;
 }
 
-.sidebar-container.is-collapsed span {
-  display: none;
-}
-
 .sidebar-container.is-collapsed h1 {
   display: none;
 }
@@ -104,10 +100,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.sidebar-container.is-collapsed .sidebar_element svg {
-  color: var(--warning);
 }
 
 .sidebar-container.is-collapsed .sidebar_item {
