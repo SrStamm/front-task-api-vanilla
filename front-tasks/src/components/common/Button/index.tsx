@@ -14,10 +14,10 @@ function Button(props: ButtonProps) {
   return (
     <button
       className={`btn ${props.className}`}
-      onClick={props.onClick && props.onClick}
+      onClick={props.onClick}
       type={props.type ?? "button"}
-      form={props.form && props.form}
-      disabled={props.disabled && props.disabled}
+      form={props.form}
+      disabled={props.disabled}
     >
       {props.loading ? "..." : props.text}
     </button>
