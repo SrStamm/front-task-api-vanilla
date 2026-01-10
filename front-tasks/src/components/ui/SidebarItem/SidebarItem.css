@@ -1,0 +1,36 @@
+.sidebar_item_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 1.2rem;
+  transition: all var(--transition);
+}
+
+.sidebar_item_icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar-container.is-collapsed .sidebar_item_icon {
+  width: 32px;
+  height: 32px;
+  font-size: 1.5rem;
+}
+
+.sidebar-container.is-collapsed .sidebar_item_icon {
+  width: 2em;
+  height: 1.2em;
+}
+
+.sidebar-container.is-collapsed .sidebar_item_icon:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-container.is-collapsed .sidebar_item_text {
+  display: none;
+}
