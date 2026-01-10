@@ -1,17 +1,27 @@
 .card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  padding: 2.5rem; /* Más padding */
+  padding: 2.5rem;
   border-radius: var(--radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  min-height: 220px; /* Más alto */
+  min-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+    max-width: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 
 .card::before {
