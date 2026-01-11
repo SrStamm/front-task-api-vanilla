@@ -53,7 +53,7 @@ function GroupsPage() {
   };
 
   const handleCloseModal = () => {
-    if (showUserAddModal || showCreateProjectModal) {
+    if (showUserAddModal || showCreateProjectModal || openCreateModal) {
       return;
     }
     setOpenModal(false);
