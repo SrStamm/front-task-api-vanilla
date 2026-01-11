@@ -51,6 +51,12 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
+@media (max-width: 768px) {
+  .card:hover {
+    transform: none;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  }
+}
 .card.expanded {
   position: absolute;
   z-index: 10;
@@ -59,6 +65,17 @@
   box-shadow: var(--shadow-lg);
   transform-origin: center top;
   animation: expandCard 0.3s ease forwards;
+}
+
+@media (max-width: 420px) {
+  .card.expanded {
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    animation: none;
+
+    width: 15rem;
+    left: 0;
+  }
 }
 
 .card h3 {
