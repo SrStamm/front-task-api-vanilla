@@ -36,25 +36,31 @@ export function useChat() {
 
       if (data.type === "group_message") {
         console.log("useChat: 📨 Es un group_message. payload:", data.payload);
+
+        const mappedMessage = {
+          chat_id: data.payload.id || data.payload.chat_id,
+          project_id: data.payload.project_id,
+          user_id: data.payload.sender_id || data.payload.user_id,
+          message: data.payload.content || data.payload.message,
+          timestamp: new Date(data.payload.timestamp),
+        };
+
+        console.log("useChat: 🗺️ Mensaje mapeado:", mappedMessage);
         console.log(
-          "useChat: 📨 Proyecto mensaje:",
-          data.payload.project_id,
+          "useChat: 🔍 Proyecto mensaje:",
+          mappedMessage.project_id,
           "vs actual:",
           projectId,
         );
 
         // Verificar que sea para el proyecto actual
-        if (data.payload.project_id === projectId) {
-          console.log("useChat: ✅ Agregando mensaje:", data.payload.content);
+        if (mappedMessage.project_id === projectId) {
+          console.log("useChat: ✅ Agregando mensaje:", mappedMessage.message);
 
           setMessages((prev) => {
-            // EVITAR DUPLICADOS - verificar si el mensaje ya existe
+            // ✅ CORREGIDO: Comparar con mappedMessage.chat_id
             const exists = prev.some(
-              (msg) =>
-                msg.chat_id === data.payload.chat_id ||
-                (msg.timestamp &&
-                  data.payload.timestamp &&
-                  msg.timestamp === data.payload.timestamp),
+              (msg) => msg.chat_id === mappedMessage.chat_id,
             );
 
             if (exists) {
@@ -62,7 +68,7 @@ export function useChat() {
               return prev;
             }
 
-            const newMessages = [...prev, data.payload];
+            const newMessages = [...prev, mappedMessage];
             console.log(
               "useChat: 📊 Total mensajes ahora:",
               newMessages.length,
