@@ -24,6 +24,12 @@
   }
 }
 
+@media (max-width: 420px) {
+  .card {
+    width: 15rem;
+  }
+}
+
 .card::before {
   content: "";
   position: absolute;
