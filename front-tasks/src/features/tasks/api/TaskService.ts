@@ -24,15 +24,25 @@ export async function FetchUsersAssignedToTask(taskId: number) {
   return res;
 }
 
-export async function FetchTaskToProject(
-  projectId: number,
-  filters?: { state: string; label: string },
-) {
+export async function FetchTaskToProject({
+  projectId,
+  limit = 100,
+  filters,
+}: {
+  projectId: number;
+  limit?: number;
+  filters?: { state: string; label: string };
+}) {
   let path = `task/${projectId}`;
+  const params = new URLSearchParams();
+
+  params.append("limit", limit.toString());
 
   if (filters?.state && filters.state.length > 0) {
-    path += `?state=${encodeURIComponent(filters.state)}`;
+    params.append("state", filters.state);
   }
+
+  path = path + "?" + params.toString();
 
   const res = await Fetch({ path: path, method: "GET" });
 

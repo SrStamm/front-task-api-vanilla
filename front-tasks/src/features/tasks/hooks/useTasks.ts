@@ -36,7 +36,13 @@ export function useTasks({ state, label }: useTasksFilters) {
     queryKey: ["tasks", projectId, state, label],
     queryFn: () => {
       if (!projectId) throw new Error("Project not selected");
-      return FetchTaskToProject(projectId, { state: state, label: label });
+      return FetchTaskToProject({
+        projectId,
+        filters: {
+          state: state,
+          label: label,
+        },
+      });
     },
     enabled: !!projectId,
     staleTime: 0,
