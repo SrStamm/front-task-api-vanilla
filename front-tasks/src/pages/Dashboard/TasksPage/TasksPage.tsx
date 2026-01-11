@@ -59,7 +59,7 @@ function TaskPage() {
 
   return (
     <section className="dashboard-section ">
-      <header className="headerPartSection">
+      <header className="headerPartSection task-header">
         <div className="tab">
           <h3
             className={`dashboard-layout-h3 tab-element ${tabSelected == "project" ? "active" : ""}`}
@@ -87,7 +87,6 @@ function TaskPage() {
       </header>
 
       <TaskFilters filters={filters} onChange={setFilters} />
-
       {tabSelected == "project" ? (
         <>
           <KanbanBoard

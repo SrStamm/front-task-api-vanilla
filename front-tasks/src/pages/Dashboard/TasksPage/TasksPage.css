@@ -2,8 +2,18 @@
   display: flex;
 }
 
+@media (max-width: 420px) {
+  .tab {
+    width: 80%;
+  }
+}
+
 .tab h3 {
   border-right: 2px solid var(--gray-200);
+}
+
+.tab h3:last-child {
+  border-right: none;
 }
 
 .tab-element {
@@ -21,6 +31,12 @@
   }
 }
 
+@media (max-width: 420px) {
+  .tab-element {
+    padding: 0.7rem;
+  }
+}
+
 .tab-element.active {
   color: var(--primary);
 }
@@ -33,4 +49,16 @@
   right: 0;
   height: 2px;
   background: var(--primary);
+}
+
+@media (max-width: 420px) {
+  .task-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .task-header button {
+    width: 80%;
+  }
 }
