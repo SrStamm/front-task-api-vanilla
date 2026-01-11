@@ -11,6 +11,18 @@
   max-height: 80vh;
 }
 
+@media (max-width: 768px) {
+  .task-column {
+    flex: 0 0 400px;
+  }
+}
+
+@media (max-width: 420px) {
+  .task-column {
+    flex: 0 0 350px;
+  }
+}
+
 .task-column:hover {
   box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.3);
 }
@@ -37,10 +49,4 @@
   padding: 12px;
 
   list-style: none;
-}
-
-@media (max-width: 768px) {
-  .task-column {
-    flex: 0 0 400px;
-  }
 }

@@ -87,6 +87,12 @@ body {
   overflow-x: auto;
 }
 
+@media (max-width: 420px) {
+  .dashboard-layout {
+    padding: 1rem;
+  }
+}
+
 .dashboard-h2 {
   font-size: 3rem;
   font-weight: 700;
