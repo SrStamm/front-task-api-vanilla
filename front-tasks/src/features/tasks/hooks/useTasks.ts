@@ -76,14 +76,10 @@ export function useTasks({ state, label }: useTasksFilters) {
   const create = useMutation({
     mutationFn: (payload: CreateTask) =>
       FetchCreateTask(payload.project_id, payload),
-    onSuccess: (newTask, variables) => {
-      queryClient.setQueryData(
-        ["tasks", variables.project_id, state, label],
-        (oldTasks: ReadAllTaskFromProjectInterface[] = []) => [
-          ...oldTasks,
-          newTask,
-        ],
-      );
+    onSuccess: (newTask) => {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", newTask.projectId],
+      });
     },
   });
 

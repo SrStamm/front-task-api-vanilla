@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import "./TaskFilters.css";
 
 interface TaskFiltersProps {
@@ -7,18 +6,12 @@ interface TaskFiltersProps {
 }
 
 function TaskFilters({ filters, onChange }: TaskFiltersProps) {
-  const queryClient = useQueryClient();
-
   const onChangeState = (newState: string) => {
     onChange({ ...filters, state: newState });
-
-    queryClient.invalidateQueries({ queryKey: ["tasks"] });
   };
 
   const onChangeLabel = (newLabel: string) => {
     onChange({ ...filters, label: newLabel });
-
-    queryClient.invalidateQueries({ queryKey: ["tasks"] });
   };
 
   return (
