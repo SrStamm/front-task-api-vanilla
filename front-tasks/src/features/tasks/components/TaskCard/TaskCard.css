@@ -38,11 +38,32 @@
   justify-content: space-between;
 }
 
+.task-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding: 0.5rem;
+}
+
+@media (max-width: 420px) {
+  .task-title {
+    font-weight: 600;
+    margin-bottom: 0;
+    padding: 0;
+  }
+}
+
 .task-date {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 0.4rem;
+}
+
+@media (max-width: 420px) {
+  .task-date {
+    font-size: 0.8em;
+  }
 }
 
 .task-card-hide {
@@ -59,6 +80,12 @@
   border-radius: var(--radius);
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .task-state {
+    display: none;
+  }
 }
 
 .task-state p {
@@ -80,13 +107,4 @@
 .task-state.done {
   background-color: var(--success);
   color: white;
-}
-
-@media (max-width: 768px) {
-  .task-card {
-    padding: 15px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: all 0.3s;
-  }
 }
