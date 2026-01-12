@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../../common/Button";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import { useProjects } from "../../../features/projects/hooks/useProject";
+import { getUserDataInProject } from "../../../features/projects/api/ProjectService";
 import "./Selector.css";
 
 type selectorProps = {
@@ -14,7 +15,7 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { setProjectId, groupId } = useGroupProject();
+  const { setProjectId, groupId, setPermission } = useGroupProject();
   const { projects, loadProjects } = useProjects();
 
   const toggleDropDown = () => {
@@ -43,6 +44,15 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
     };
   }, [selectorRef]);
 
+  const handleSelectProject = async (project_id: number, title: string) => {
+    setProjectId(project_id);
+    setTitle(title);
+    setIsOpen(false);
+
+    const res = await getUserDataInProject(groupId, project_id);
+    setPermission(res.permission);
+  };
+
   return (
     <div className="workspace-selector" ref={selectorRef}>
       <Button
@@ -61,9 +71,7 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
                 key={p.project_id}
                 className="item"
                 onClick={() => {
-                  setProjectId(p.project_id);
-                  setIsOpen(false);
-                  setTitle(p.title);
+                  handleSelectProject(p.project_id, p.title);
                 }}
               >
                 {p.title}

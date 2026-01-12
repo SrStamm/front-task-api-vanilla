@@ -19,6 +19,15 @@ export async function fetchProjectsMe() {
   return res;
 }
 
+export async function fetchProjectMeInGroup(groupId: number) {
+  const res = await Fetch({
+    path: `project/${groupId}/projects`,
+    method: "GET",
+  });
+
+  return res;
+}
+
 export async function fetchUsersProject(group_id: number, project_id: number) {
   const res = await Fetch({
     path: `project/${group_id}/${project_id}/users`,
@@ -100,6 +109,18 @@ export async function updateUserToProject({
     path: `project/${group_id}/${project_id}/${user_id}`,
     method: "PATCH",
     body: roleData,
+  });
+
+  return res;
+}
+
+export async function getUserDataInProject(
+  group_id: number,
+  project_id: number,
+) {
+  const res = await Fetch({
+    path: `project/${group_id}/${project_id}/permission`,
+    method: "GET",
   });
 
   return res;

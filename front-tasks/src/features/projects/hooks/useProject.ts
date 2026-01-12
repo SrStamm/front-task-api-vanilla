@@ -6,6 +6,7 @@ import {
   updateProjectApi,
   removeUserToProject,
   addUserToProjectApi,
+  fetchProjectMeInGroup,
 } from "../api/ProjectService";
 import {
   type AddRemoveUserToProject,
@@ -21,7 +22,7 @@ export function useProjects() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { groupId } = useGroupProject();
+  const { groupId, role } = useGroupProject();
 
   const loadProjects = useCallback(async () => {
     try {
@@ -31,7 +32,13 @@ export function useProjects() {
         setProjects(undefined);
       } else {
         setLoading(true);
-        const data = await fetchProjects(groupId);
+
+        const data =
+          role == "admin"
+            ? await fetchProjects(groupId)
+            : await fetchProjectMeInGroup(groupId);
+
+        console.log(data);
         setProjects(data);
       }
     } catch {
@@ -43,7 +50,7 @@ export function useProjects() {
     } finally {
       setLoading(false);
     }
-  }, [groupId]);
+  }, [groupId, role]);
 
   useEffect(() => {
     if (groupId !== undefined) {
