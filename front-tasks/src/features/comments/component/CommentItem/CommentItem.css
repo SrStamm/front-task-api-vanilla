@@ -16,6 +16,7 @@
   .comment-details {
     flex-direction: column;
     justify-content: initial;
+    padding: 0.4rem;
   }
 }
 
@@ -33,6 +34,12 @@
   margin-top: 0.5rem;
 }
 
+@media (max-width: 768px) {
+  .comment-info {
+    margin-top: 0;
+  }
+}
+
 .comment-content {
   font-size: 1.1em;
   overflow-wrap: break-word;
@@ -41,7 +48,8 @@
 @media (max-width: 768px) {
   .comment-content {
     padding: 0.5rem;
-    font-size: 0.9em;
+    padding-bottom: 0;
+    font-size: 1em;
     overflow-wrap: break-word;
   }
 }
@@ -55,7 +63,7 @@
 
 @media (max-width: 768px) {
   .comment-meta {
-    font-size: 0.7em;
+    font-size: 1em;
   }
 }
 
