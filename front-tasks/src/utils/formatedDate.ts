@@ -1,9 +1,9 @@
-function formatDate(dateString: any) {
+function formatDate(dateString: string | number | Date) {
   const date = new Date(dateString);
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const mes = currentDate.getMonth(); // Enero es 0
+  const mes = currentDate.getMonth();
   const dia = currentDate.getDate();
 
   let options: Intl.DateTimeFormatOptions = {};
@@ -28,7 +28,7 @@ function formatDate(dateString: any) {
     };
   }
 
-  return date.toLocaleTimeString("es-ES", options);
+  return date.toLocaleString("es-ES", options);
 }
 
 export default formatDate;
