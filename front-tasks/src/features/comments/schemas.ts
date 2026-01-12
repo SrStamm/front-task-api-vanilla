@@ -8,6 +8,7 @@ export const ReadCommentSchema = z.object({
   comment_id: z.number(),
   task_id: z.number(),
   user_id: z.number(),
+  username: z.string(),
   content: z.string(),
   created_at: z.date(),
   update_at: z.date(),
