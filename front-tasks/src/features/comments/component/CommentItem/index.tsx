@@ -12,6 +12,9 @@ function CommentItem({ comment }: commentItemProps) {
 
   return (
     <li className="comment-details">
+      <div className="comment-header">
+        <p className="comment-username">{comment.username}</p>
+      </div>
       <div className="comment-info">
         <p className="comment-content">{comment.content}</p>
       </div>
