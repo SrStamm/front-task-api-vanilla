@@ -33,17 +33,6 @@ function ProjectsPage() {
       </div>
     );
 
-  if (projects && projects.length === 0) {
-    return (
-      <div style={{ textAlign: "center", padding: "3rem" }}>
-        <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
-        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
-          Crea tu primera tarea haciendo clic en el botón "+"
-        </p>
-      </div>
-    );
-  }
-
   if (!groupId) {
     return (
       <div style={{ textAlign: "center", padding: "3rem" }}>
@@ -133,7 +122,18 @@ function ProjectsPage() {
           {projects && projects.length > 0 ? (
             <ProjectList projects={projects} onViewProject={handleOpenModal} />
           ) : (
-            <p>No perteneces a ningún proyecto</p>
+            <div style={{ textAlign: "center", padding: "3rem" }}>
+              <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
+              <p
+                style={{
+                  color: "#999",
+                  fontSize: "0.9rem",
+                  marginTop: "0.5rem",
+                }}
+              >
+                Crea tu primera tarea haciendo clic en el botón "+"
+              </p>
+            </div>
           )}
         </div>
       </section>
