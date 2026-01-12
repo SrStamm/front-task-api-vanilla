@@ -83,3 +83,12 @@ export async function updateUserToGroup({
 
   return res;
 }
+
+export async function getUserDataInGroup(group_id: number) {
+  const res = await Fetch({
+    path: `group/${group_id}/role`,
+    method: "GET",
+  });
+
+  return res;
+}

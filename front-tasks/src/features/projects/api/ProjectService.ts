@@ -104,3 +104,15 @@ export async function updateUserToProject({
 
   return res;
 }
+
+export async function getUserDataInProject(
+  group_id: number,
+  project_id: number,
+) {
+  const res = await Fetch({
+    path: `project/${group_id}/${project_id}/permission`,
+    method: "GET",
+  });
+
+  return res;
+}

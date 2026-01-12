@@ -67,3 +67,4 @@ export type UpdateRoleUserInProject = z.infer<
   typeof UpdateRoleUserInProjectSchema
 >;
 export type UserInProject = z.infer<typeof UserInProjectSchema>;
+export type PermissionProject = z.infer<typeof PermissionProjectEnum>;
