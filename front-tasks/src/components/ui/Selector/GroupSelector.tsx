@@ -4,6 +4,7 @@ import { useGroupProject } from "../../../hooks/useGroupProject";
 import { useGroups } from "../../../features/groups/hooks/useGroups";
 import Button from "../../common/Button";
 import "./Selector.css";
+import { getUserDataInGroup } from "../../../features/groups/api/GroupService";
 
 type selectorProps = {
   text: string;
@@ -15,7 +16,7 @@ function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
   const selectorRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { setGroupId } = useGroupProject();
+  const { setGroupId, setRole } = useGroupProject();
   const { groups } = useGroups();
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -39,6 +40,16 @@ function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
     };
   }, [selectorRef]);
 
+  const handleSelectGroup = async (group_id: number, name: string) => {
+    setGroupId(group_id);
+    setName(name);
+
+    setIsOpen(false);
+
+    const res = await getUserDataInGroup(group_id);
+    setRole(res.role);
+  };
+
   return (
     <div className="workspace-selector" ref={selectorRef}>
       <Button
@@ -54,9 +65,7 @@ function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
               key={g.group_id}
               className="item"
               onClick={() => {
-                setGroupId(g.group_id);
-                setIsOpen(false);
-                setName(g.name);
+                handleSelectGroup(g.group_id, g.name);
               }}
             >
               {g.name}

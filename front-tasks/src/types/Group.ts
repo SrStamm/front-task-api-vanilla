@@ -1,3 +1,4 @@
+import z from "zod";
 import type { ReadUser } from "../types/User.ts";
 
 export interface ReadGroup {
@@ -31,7 +32,7 @@ export interface UpdateRoleUserInGroup {
   role?: RoleGroup;
 }
 
-enum RoleGroup {
+export enum RoleGroup {
   admin = "admin",
   editor = "editor",
   member = "member",
