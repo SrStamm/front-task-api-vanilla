@@ -25,7 +25,7 @@ export const ReadAllTaskFromProjectSchema = z.object({
   date_exp: z.date(),
   state: TaskState,
   task_labels_links: z.array(z.string()),
-  asigned: z.array(ReadUserAssignedSchema),
+  assigned_user: ReadUserAssignedSchema,
 });
 
 export const CreateTaskSchema = z.object({
