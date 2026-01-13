@@ -14,8 +14,7 @@ interface TaskModalProps {
 }
 
 function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
-  const dueDate = new Date(task.date_exp);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(task.date_exp);
 
   const header = <h3 className="modal-title">{task.title}</h3>;
   const body = (

@@ -7,8 +7,7 @@ interface MessageItemProps {
 }
 
 function MessageItem({ message }: MessageItemProps) {
-  const dueDate = new Date(message.timestamp);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(message.timestamp);
 
   return (
     <li className="message-card">

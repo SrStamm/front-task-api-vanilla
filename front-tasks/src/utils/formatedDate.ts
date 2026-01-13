@@ -1,4 +1,6 @@
 function formatDate(dateString: string | number | Date) {
+  if (!dateString) return "Sin fecha límite";
+
   const date = new Date(dateString);
 
   const currentDate = new Date();
