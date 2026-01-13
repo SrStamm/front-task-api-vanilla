@@ -53,8 +53,8 @@ export interface UpdateTask {
   description?: string;
   date_exp?: string;
   state?: StateEnum | TaskStateEnum | string;
-  apppend_user_ids?: number[];
-  exclude_user_ids?: number[];
+  assigned_user_id?: number;
+  remove_assigned_user_id?: boolean;
   append_label?: label[];
   remove_label?: label[];
 }
