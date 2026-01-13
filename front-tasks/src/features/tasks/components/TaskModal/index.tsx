@@ -34,9 +34,11 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
         <div className="task-details-row">
           <div className="detail-label"> Asignado a:</div>
           <div className="detail-value">
-            {task.asigned.length === 0
-              ? "Sin asignar"
-              : task.asigned.map((u) => <span>{u.username}</span>)}
+            {task.assigned_user ? (
+              <p>{task.assigned_user.username}</p>
+            ) : (
+              "Sin asignar"
+            )}
           </div>
         </div>
       </div>
