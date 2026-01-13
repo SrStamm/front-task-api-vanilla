@@ -16,6 +16,7 @@ function MessageItem({ message }: MessageItemProps) {
           <p className="message-content">{message.message}</p>
         </div>
         <div className="message-meta">
+          <p>{message.username}</p>
           <p className="message-date">{formatedDate}</p>
         </div>
       </div>
