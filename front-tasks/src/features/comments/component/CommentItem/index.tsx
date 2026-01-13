@@ -7,8 +7,7 @@ interface commentItemProps {
 }
 
 function CommentItem({ comment }: commentItemProps) {
-  const dueDate = new Date(comment.created_at);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(comment.created_at);
 
   return (
     <li className="comment-details">

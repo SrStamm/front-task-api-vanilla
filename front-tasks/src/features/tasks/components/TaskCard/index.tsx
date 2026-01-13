@@ -10,8 +10,7 @@ interface TaskCardProps {
 }
 
 function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
-  const dueDate = new Date(task.date_exp);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(task.date_exp);
 
   const state =
     task.state == "en proceso"
