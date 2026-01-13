@@ -39,7 +39,7 @@ function TaskFormModal({
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [dueDate, setDueDate] = useState<string>();
-  const [userIds, setUserIds] = useState<number[]>([]);
+  const [userIdSelected, setUserIdSelected] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] =
     useState<TaskStateEnum>("sin empezar");
   const { projects } = useProjects();
@@ -58,13 +58,15 @@ function TaskFormModal({
         ? new Date(initialData.date_exp).toISOString().substring(0, 10)
         : "";
       setDueDate(datePart);
-      setUserIds([]);
+      setUserIdSelected(
+        initialData.assigned_user ? initialData.assigned_user.user_id : null,
+      );
       setSelectedStatus(initialData.state || "sin empezar");
     } else {
       setTitle("");
       setDescription("");
       setDueDate("");
-      setUserIds([]);
+      setUserIdSelected(null);
     }
   }, [projectId, projects, mode, initialData, showModal]);
 
@@ -86,11 +88,7 @@ function TaskFormModal({
   };
 
   const handleUserSelect = (userId: number) => {
-    setUserIds((prevUserIds) =>
-      prevUserIds.includes(userId)
-        ? prevUserIds.filter((id) => id !== userId) // Toggle
-        : [...prevUserIds, userId],
-    );
+    setUserIdSelected(userId);
   };
 
   const handleCreateTask = async (e: React.FormEvent) => {
@@ -105,7 +103,7 @@ function TaskFormModal({
       project_id: projectId,
       title: title,
       description: description,
-      user_ids: userIds,
+      assigned_user_id: userIdSelected,
       date_exp: dueDate,
     };
 
@@ -134,10 +132,12 @@ function TaskFormModal({
       description: description,
       date_exp: dueDate,
       state: selectedStatus,
+      assigned_user_id: userIdSelected,
     };
 
     if (onUpdate) {
       try {
+        console.log("Editar: ", payload);
         await onUpdate(payload);
         onSuccess();
         onClose();

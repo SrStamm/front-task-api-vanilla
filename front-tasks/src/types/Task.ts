@@ -41,8 +41,8 @@ export interface CreateTask {
   project_id: number;
   title: string;
   description?: string;
-  date_exp: string;
-  user_ids: number[];
+  date_exp: string | null;
+  assigned_user_id: number;
   label?: label[];
 }
 
