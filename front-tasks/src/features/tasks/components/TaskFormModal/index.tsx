@@ -38,7 +38,7 @@ function TaskFormModal({
   const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [dueDate, setDueDate] = useState<string>();
+  const [dueDate, setDueDate] = useState<string>("");
   const [userIdSelected, setUserIdSelected] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] =
     useState<TaskStateEnum>("sin empezar");
@@ -104,7 +104,7 @@ function TaskFormModal({
       title: title,
       description: description,
       assigned_user_id: userIdSelected,
-      date_exp: dueDate,
+      date_exp: dueDate.trim().length === 0 ? null : dueDate,
     };
 
     if (onCreate) {
@@ -130,14 +130,13 @@ function TaskFormModal({
       task_id: initialData!.task_id,
       title: title,
       description: description,
-      date_exp: dueDate,
+      date_exp: dueDate.trim().length === 0 ? null : dueDate,
       state: selectedStatus,
       assigned_user_id: userIdSelected,
     };
 
     if (onUpdate) {
       try {
-        console.log("Editar: ", payload);
         await onUpdate(payload);
         onSuccess();
         onClose();
@@ -191,7 +190,6 @@ function TaskFormModal({
           onChange={onDueDateChange}
           value={dueDate}
           disabled={mode === "create" ? isCreating : isUpdating}
-          required
         />
       </div>
 
