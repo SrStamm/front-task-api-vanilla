@@ -38,7 +38,6 @@ export function useProjects() {
             ? await fetchProjects(groupId)
             : await fetchProjectMeInGroup(groupId);
 
-        console.log(data);
         setProjects(data);
       }
     } catch {
