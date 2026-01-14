@@ -4,6 +4,7 @@ export const ReadMessageSchema = z.object({
   chat_id: z.number(),
   project_id: z.number(),
   user_id: z.number(),
+  username: z.string(),
   message: z.string(),
   timestamp: z.date(),
 });

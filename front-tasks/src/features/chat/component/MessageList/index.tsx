@@ -1,12 +1,16 @@
+import { useContext } from "react";
 import type { ReadMessageInterface } from "../../schemas/messageSchema";
 import MessageItem from "../MessageItem";
 import "./MessageList.css";
+import { AuthContext } from "../../../../providers/AuthProvider";
 
 interface MessageListProps {
   messages: ReadMessageInterface[];
 }
 
 function MessageList({ messages }: MessageListProps) {
+  const userContext = useContext(AuthContext);
+
   if (messages.length === 0) {
     return (
       <ul className="list-message">
@@ -22,9 +26,13 @@ function MessageList({ messages }: MessageListProps) {
 
   return (
     <ul className="list-message">
-      {messages.map((m) => (
-        <MessageItem key={m.chat_id} message={m} />
-      ))}
+      {messages.map((m) =>
+        userContext.user.user_id == m.user_id ? (
+          <MessageItem key={m.chat_id} message={m} isUser={true} />
+        ) : (
+          <MessageItem key={m.chat_id} message={m} isUser={false} />
+        ),
+      )}
     </ul>
   );
 }
