@@ -27,7 +27,7 @@ function MessageList({ messages }: MessageListProps) {
   return (
     <ul className="list-message">
       {messages.map((m) =>
-        userContext.user.user_id == m.user_id ? (
+        userContext.user.user_id == m.user_id || m.username == "Yo" ? (
           <MessageItem key={m.chat_id} message={m} isUser={true} />
         ) : (
           <MessageItem key={m.chat_id} message={m} isUser={false} />
