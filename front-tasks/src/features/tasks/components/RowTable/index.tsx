@@ -7,8 +7,7 @@ interface RowTableProps {
 }
 
 function RowTable({ task }: RowTableProps) {
-  const dueDate = new Date(task.date_exp);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(task.date_exp);
 
   const stateClass =
     task.state === "sin empezar"

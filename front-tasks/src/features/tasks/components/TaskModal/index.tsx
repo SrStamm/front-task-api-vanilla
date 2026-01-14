@@ -14,8 +14,7 @@ interface TaskModalProps {
 }
 
 function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
-  const dueDate = new Date(task.date_exp);
-  const formatedDate = formatDate(dueDate);
+  const formatedDate = formatDate(task.date_exp);
 
   const header = <h3 className="modal-title">{task.title}</h3>;
   const body = (
@@ -34,9 +33,11 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
         <div className="task-details-row">
           <div className="detail-label"> Asignado a:</div>
           <div className="detail-value">
-            {task.asigned.length === 0
-              ? "Sin asignar"
-              : task.asigned.map((u) => <span>{u.username}</span>)}
+            {task.assigned_user ? (
+              <p>{task.assigned_user.username}</p>
+            ) : (
+              "Sin asignar"
+            )}
           </div>
         </div>
       </div>

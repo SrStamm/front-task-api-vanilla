@@ -5,11 +5,28 @@ import { GetMessages } from "../services/chatService";
 import { useChatSocket } from "./useChatSocket";
 import type { ReadMessageInterface } from "../schemas/messageSchema";
 import { useGroupProject } from "../../../hooks/useGroupProject";
+import { UserInProject } from "../../projects/schemas/Project";
+import { fetchUsersProject } from "../../projects/api/ProjectService";
 
 export function useChat() {
   const [messages, setMessages] = useState<ReadMessageInterface[]>([]);
-  const { projectId } = useGroupProject();
+  const [usersInProject, setUsersInProject] = useState<
+    UserInProject[] | undefined
+  >();
+  const { projectId, groupId } = useGroupProject();
   const socket = useChatSocket();
+
+  useEffect(() => {
+    if (projectId && groupId) {
+      fetchUsersProject(groupId, projectId)
+        .then(setUsersInProject)
+        .catch((err) => {
+          console.error("Error obteniendo los usuarios del proyecto: ", err);
+        });
+    } else {
+      return setUsersInProject([]);
+    }
+  }, [groupId, projectId]);
 
   // 🔹 Cargar histórico (REST)
   useEffect(() => {
@@ -28,10 +45,15 @@ export function useChat() {
   const handleIncomingMessage = useCallback(
     (data: any) => {
       if (data.type === "group_message") {
+        const user = usersInProject.find(
+          (u) => u.user_id === data.payload.sender_id,
+        );
+
         const mappedMessage = {
           chat_id: data.payload.id || data.payload.chat_id,
           project_id: data.payload.project_id,
           user_id: data.payload.sender_id || data.payload.user_id,
+          username: user.username,
           message: data.payload.content || data.payload.message,
           timestamp: new Date(data.payload.timestamp),
         };
@@ -57,7 +79,7 @@ export function useChat() {
         console.log("useChat: ℹ️ Tipo de mensaje no manejado:", data.type);
       }
     },
-    [projectId],
+    [projectId, usersInProject],
   );
 
   useEffect(() => {
