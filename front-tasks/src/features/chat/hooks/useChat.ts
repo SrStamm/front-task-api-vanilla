@@ -123,6 +123,7 @@ export function useChat() {
           message: trimmedContent,
           project_id: projectId,
           user_id: Math.random(),
+          username: "Yo",
           timestamp: new Date(),
         };
 
