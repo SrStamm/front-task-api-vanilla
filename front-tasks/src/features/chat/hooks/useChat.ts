@@ -52,7 +52,7 @@ export function useChat() {
         const mappedMessage = {
           chat_id: data.payload.id || data.payload.chat_id,
           project_id: data.payload.project_id,
-          user_id: user.user_id,
+          user_id: data.payload.sender_id || data.payload.user_id,
           username: user.username,
           message: data.payload.content || data.payload.message,
           timestamp: new Date(data.payload.timestamp),
