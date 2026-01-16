@@ -6,6 +6,8 @@ import TaskModal from "../../components/TaskModal/index.tsx";
 import { useMemo, useState } from "react";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
+import { DndContext, DragOverlay, DragStartEvent } from "@dnd-kit/core";
+import TaskCard from "../TaskCard/index.tsx";
 
 interface KanbanBoardProps {
   tasksInProject: ReadAllTaskFromProjectInterface[];
@@ -25,6 +27,9 @@ function KanbanBoard({
   const { projectId } = useGroupProject();
   const [isShowModal, setShowModal] = useState(false);
   const [taskSelected, setTaskSelected] =
+    useState<ReadAllTaskFromProjectInterface | null>(null);
+  const [activeId, setActiveId] = useState(0);
+  const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
 
   const { todoTasks, inProgressTasks, doneTasks } = useMemo(() => {
@@ -94,25 +99,45 @@ function KanbanBoard({
     );
   }
 
+  const handleDragStart = (e: DragStartEvent) => {
+    const { active } = e;
+    const id = Number(active.id);
+
+    setActiveId(Number(id));
+
+    const task = tasksInProject.find((t) => t.task_id == id);
+
+    if (task) {
+      setActiveTask(task);
+    }
+  };
+
   return (
     <>
-      <div className="task-container">
-        <Column
-          column_text="To Do"
-          tasks={todoTasks}
-          onShowModal={handleShowModal}
-        />
-        <Column
-          column_text="In Progress"
-          tasks={inProgressTasks}
-          onShowModal={handleShowModal}
-        />
-        <Column
-          column_text="Done"
-          tasks={doneTasks}
-          onShowModal={handleShowModal}
-        />
-      </div>
+      <DndContext onDragStart={handleDragStart}>
+        <div className="task-container">
+          <Column
+            column_text="To Do"
+            tasks={todoTasks}
+            onShowModal={handleShowModal}
+          />
+          <Column
+            column_text="In Progress"
+            tasks={inProgressTasks}
+            onShowModal={handleShowModal}
+          />
+          <Column
+            column_text="Done"
+            tasks={doneTasks}
+            onShowModal={handleShowModal}
+          />
+        </div>
+        <DragOverlay>
+          {activeId ? (
+            <TaskCard task={activeTask} onShowTaskModal={handleShowModal} />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
 
       {taskSelected && (
         <TaskModal
