@@ -1,0 +1,17 @@
+.error-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.principal-text {
+  color: "red";
+}
+
+.secondary-text {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.error-container button {
+  margin-top: 1rem;
+}
