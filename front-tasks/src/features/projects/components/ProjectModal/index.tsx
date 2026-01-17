@@ -5,6 +5,7 @@ import type { ReadProject } from "../../../projects/schemas/Project";
 import UserListProject from "../../../users/component/UserListProject";
 import "./ProjectModal.css";
 import { useProjects } from "../../hooks/useProject";
+import ErrorContainer from "../../../../components/common/ErrorContainer";
 
 interface projectModalProps {
   open: boolean;
@@ -60,7 +61,12 @@ function ProjectModal({
         </div>
 
         <ul className="task-project-list">
-          <p style={{ color: "red", textAlign: "center" }}>No implementado</p>
+          <ErrorContainer
+            advice="No implementado"
+            recommendation=""
+            isButton={false}
+            isError={false}
+          />
         </ul>
       </div>
 

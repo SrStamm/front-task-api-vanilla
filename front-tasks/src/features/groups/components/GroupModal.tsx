@@ -4,6 +4,7 @@ import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
 import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
+import ErrorContainer from "../../../components/common/ErrorContainer";
 
 interface groupModalProps {
   open: boolean;
@@ -63,7 +64,12 @@ function GroupViewModal({
           />
         </div>
         <ol className="listProject">
-          <p style={{ color: "red" }}>No implementado</p>
+          <ErrorContainer
+            advice="No implementado"
+            recommendation="Se implementará próximamente"
+            isButton={false}
+            isError={true}
+          />
         </ol>
       </div>
 

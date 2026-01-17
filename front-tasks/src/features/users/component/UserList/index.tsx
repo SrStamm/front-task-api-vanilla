@@ -1,4 +1,5 @@
 import Button from "../../../../components/common/Button";
+import ErrorContainer from "../../../../components/common/ErrorContainer";
 import type { ReadUser } from "../../../../types/User";
 import UserCard from "../UserCard";
 
@@ -26,7 +27,12 @@ function UserList({ users, onAdd }: userListProps) {
           );
         })
       ) : (
-        <p style={{ textAlign: "center" }}>No hay usuarios para agregar</p>
+        <ErrorContainer
+          isButton={false}
+          isError={false}
+          advice="No hay usuarios para agregar"
+          recommendation=""
+        />
       )}
     </ul>
   );
