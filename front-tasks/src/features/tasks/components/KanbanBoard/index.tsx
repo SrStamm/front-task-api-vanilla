@@ -12,6 +12,7 @@ import {
   DragOverlay,
   DragStartEvent,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -48,6 +49,12 @@ function KanbanBoard({
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
       },
     }),
   );
@@ -184,7 +191,7 @@ function KanbanBoard({
         </div>
         <DragOverlay>
           {activeId ? (
-            <TaskCard task={activeTask} onShowTaskModal={handleShowModal} />
+            <TaskCard task={activeTask} onShowTaskModal={() => {}} />
           ) : null}
         </DragOverlay>
       </DndContext>
