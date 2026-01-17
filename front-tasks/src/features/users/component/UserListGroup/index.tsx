@@ -1,4 +1,5 @@
 import Button from "../../../../components/common/Button";
+import ErrorContainer from "../../../../components/common/ErrorContainer";
 import type { UserInGroup } from "../../../groups/schemas/Group";
 import UserCard from "../UserCard";
 import "./UserListGroup.css";
@@ -33,9 +34,12 @@ function UserListGroup({ users, addUser, onAdd }: userListProps) {
           );
         })
       ) : (
-        <p style={{ textAlign: "center" }}>
-          No hay usuarios en el grupo para agregar
-        </p>
+        <ErrorContainer
+          advice="No hay usuarios en el grupo para agregar "
+          recommendation="Se implementará próximamente"
+          isButton={false}
+          isError={true}
+        />
       )}
     </ul>
   ) : (

@@ -3,8 +3,12 @@
   padding: 2rem;
 }
 
+.error-container.is-error .principal-text {
+  color: red;
+}
+
 .principal-text {
-  color: "red";
+  color: black;
 }
 
 .secondary-text {

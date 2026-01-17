@@ -14,7 +14,7 @@ function ErrorContainer({
   isError,
 }: ErrorProps) {
   return (
-    <div className={isError ? "error-container  error" : "error-container "}>
+    <div className={isError ? "error-container  is-error" : "error-container "}>
       <p className="principal-text">{advice}</p>
       <p className="secondary-text">{recommendation}</p>
       {isButton ? (
