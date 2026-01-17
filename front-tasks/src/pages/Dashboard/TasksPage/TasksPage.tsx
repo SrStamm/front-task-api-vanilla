@@ -95,6 +95,7 @@ function TaskPage() {
             isLoading={isLoading}
             error={error?.message ?? null}
             onEdit={handleOpenEditModal}
+            onUpdate={handleUpdate}
           />
 
           <TaskFormModal
