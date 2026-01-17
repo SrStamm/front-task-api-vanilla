@@ -19,6 +19,7 @@ import {
 import TaskCard from "../TaskCard/index.tsx";
 import { TaskStateEnum } from "../../schemas/Tasks.ts";
 import { UpdateTask } from "../../../../types/Task.ts";
+import ErrorContainer from "../../../../components/common/ErrorContainer/index.tsx";
 
 interface KanbanBoardProps {
   tasksInProject: ReadAllTaskFromProjectInterface[];
@@ -75,16 +76,12 @@ function KanbanBoard({
 
   if (error)
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "red" }}>Error al cargar las tareas</p>
-        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          style={{ marginTop: "1rem" }}
-        >
-          Reintentar
-        </button>
-      </div>
+      <ErrorContainer
+        advice={error}
+        recommendation=""
+        isButton={true}
+        isError={true}
+      />
     );
 
   const handleShowModal = (taskId: number) => {
@@ -108,21 +105,21 @@ function KanbanBoard({
 
   if (tasksInProject.length === 0 && projectId) {
     return (
-      <div style={{ textAlign: "center", padding: "3rem" }}>
-        <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
-        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
-          Crea tu primera tarea haciendo clic en el botón "+"
-        </p>
-      </div>
+      <ErrorContainer
+        advice="No hay tareas en este proyecto"
+        recommendation="Crea tu primera tarea haciendo click en el botón '+'"
+        isButton={false}
+        isError={false}
+      />
     );
   } else if (!projectId) {
     return (
-      <div style={{ textAlign: "center", padding: "3rem" }}>
-        <p style={{ color: "#666" }}>No se ha seleccionado ningún proyecto</p>
-        <p style={{ color: "#999", fontSize: "0.9rem", marginTop: "0.5rem" }}>
-          Seleccione un proyecto en 'Proyecto actual'
-        </p>
-      </div>
+      <ErrorContainer
+        advice="No se ha seleccionado ningún proyecto"
+        recommendation="Seleccione un proyecto en 'Proyecto actual'"
+        isButton={false}
+        isError={false}
+      />
     );
   }
 
