@@ -3,6 +3,7 @@
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
 import formatDate from "../../../../utils/formatedDate";
 import "./TaskCard.css";
+import { useDraggable } from "@dnd-kit/core";
 
 interface TaskCardProps {
   task: ReadAllTaskFromProjectInterface;
@@ -11,6 +12,17 @@ interface TaskCardProps {
 
 function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
   const formatedDate = formatDate(task.date_exp);
+
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: task.task_id,
+    });
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    opacity: isDragging ? 0 : 1,
+  };
 
   const state =
     task.state == "en proceso"
@@ -23,6 +35,10 @@ function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
     <li
       className={`task-card ${state}`}
       onClick={() => onShowTaskModal(task.task_id)}
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
     >
       <div className="task-card-details">
         <div className="task-card-meta">
