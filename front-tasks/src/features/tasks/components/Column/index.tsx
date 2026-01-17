@@ -11,16 +11,12 @@ interface ColumnProps {
 }
 
 function Column({ column_text, tasks, onShowModal }: ColumnProps) {
-  const { isOver, setNodeRef } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: column_text,
   });
 
-  const style = {
-    color: isOver ? "green" : undefined,
-  };
-
   return (
-    <div className="task-column" style={style} ref={setNodeRef}>
+    <div className="task-column" ref={setNodeRef}>
       <div className="column-header">
         <h4>{column_text}</h4>
         <p className={"task-quantity"}>{tasks.length}</p>

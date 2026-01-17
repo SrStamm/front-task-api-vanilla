@@ -11,6 +11,9 @@ import {
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 import TaskCard from "../TaskCard/index.tsx";
 import { TaskStateEnum } from "../../schemas/Tasks.ts";
@@ -40,6 +43,14 @@ function KanbanBoard({
   const [activeId, setActiveId] = useState(0);
   const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+  );
 
   const { todoTasks, inProgressTasks, doneTasks } = useMemo(() => {
     if (!tasksInProject.length) {
@@ -149,7 +160,11 @@ function KanbanBoard({
 
   return (
     <>
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
         <div className="task-container">
           <Column
             column_text="To Do"
