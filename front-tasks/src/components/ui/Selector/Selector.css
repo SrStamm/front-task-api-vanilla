@@ -35,6 +35,14 @@
   gap: 0.5rem;
 }
 
+.sidebar-container.is-collapsed .dropdown-menu {
+  position: absolute;
+  left: calc(100% + 25px);
+  top: 0;
+  transform: none;
+  min-width: 200px;
+}
+
 .menu {
   display: flex;
   flex-direction: column;
