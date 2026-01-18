@@ -19,7 +19,7 @@
 }
 
 .listUser li {
-  background: var(--bg-light);
+  background: var(--bg);
   padding: 1rem;
   border-radius: var(--radius);
   transition: all 0.2s ease;
@@ -59,7 +59,7 @@
 .project-item,
 .task-item {
   padding: 0.8rem;
-  background: var(--bg-light);
+  background: var(--bg);
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.3s;
