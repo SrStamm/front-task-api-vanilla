@@ -22,7 +22,7 @@
     padding var(--transition),
     color var(--transition),
     background var(--transition);
-  overflow: scroll;
+  overflow: visible;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 
   display: flex;
@@ -104,6 +104,7 @@
 }
 
 .sidebar-container.is-collapsed .selectors {
+  position: relative;
   width: auto;
   height: auto;
 }
@@ -113,6 +114,7 @@
   z-index: 10000;
   right: -15rem;
   top: 1.2rem;
+  background-color: var(--bg-card);
   border: var(--sidebar-border);
   color: var(--sidebar-text);
   cursor: pointer;
@@ -183,7 +185,7 @@
       padding var(--transition),
       color var(--transition),
       background var(--transition);
-    overflow: scroll;
+    overflow: visible;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 
     display: flex;
