@@ -7,7 +7,7 @@ El objetivo del proyecto es ofrecer una experiencia clara y eficiente para la **
 **Deploy en Vercel:** https://front-task-api-vanilla.vercel.app/dashboard/tasks
 
 - **Username:** test
-- **Pasword:** test123
+- **Pasword:** 123456
 
 ---
 
@@ -112,27 +112,27 @@ El frontend se comunica con la API de Tareas a través de:
 
 ## 🧰 Fix pendientes
 
-* 🔁 Duplicado de mensajes en chat o proyectos (ajustar observers)
-* 🔒 Mejorar el manejo de conexión y reconexión de WebSockets
-* 🔄 Evitar múltiples llamadas innecesarias a `/refresh`
-* 📱 Mejorar la responsividad en dispositivos móviles
-* 🎞️ Optimizar animaciones y transiciones
+* [ ] 🔁 Duplicado de mensajes en chat o proyectos (ajustar observers)
+* [ ] 🔒 Mejorar el manejo de conexión y reconexión de WebSockets
+* [ ] 🔄 Evitar múltiples llamadas innecesarias a `/refresh`
+* [x] 📱 Mejorar la responsividad en dispositivos móviles (Enero 2026)
+* [ ] 🎞️ Optimizar animaciones y transiciones
 
 ---
 
 ## 🧩 Futuras features
 
-* 🔐 Restricción de acciones según rol y permisos
-* 💬 Mostrar información ampliada del usuario en comentarios y mensajes
-* 🏷️ Sistema de etiquetas (tags) para tareas
-* 🔎 Filtros avanzados
-* 🟢 Indicador de usuarios conectados al chat
-* 🔔 Panel de notificaciones con estado leído/no leído
-* 🧮 Badges (tareas pendientes, mensajes sin leer, etc.)
-* 📊 Métricas de progreso por proyecto
-* 📱 Soporte PWA (offline + notificaciones push)
-* 🌙 Tema claro / oscuro
-* ⚙️ Configuración de usuario
+* [x] 🔐 Restricción de acciones según rol y permisos (Enero 2026)
+* [x] 💬 Mostrar información ampliada del usuario en comentarios y mensajes (Enero 2026)
+* [ ] 🏷️ Sistema de etiquetas (tags) para tareas
+* [x] 🔎 Filtros de tareas (Enero 2026)
+* [ ] 🟢 Indicador de usuarios conectados al chat
+* [ ] 🔔 Panel de notificaciones con estado leído/no leído
+* [ ] 🧮 Badges (tareas pendientes, mensajes sin leer, etc.)
+* [ ] 📊 Métricas de progreso por proyecto
+* [ ] 📱 Soporte PWA (offline + notificaciones push)
+* [ ] 🌙 Tema claro / oscuro
+* [ ] ⚙️ Configuración de usuario
 
 ---
 
