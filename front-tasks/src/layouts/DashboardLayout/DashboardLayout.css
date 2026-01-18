@@ -35,7 +35,7 @@
 .dashboard-layout-h3 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--h3);
 }
 
 @media (max-width: 768px) {
