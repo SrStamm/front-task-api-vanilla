@@ -15,7 +15,7 @@
   list-style: none;
 }
 
-.user-options-container button {
+.user-options-container.is_collapsed button {
   width: 60px;
   height: 34px;
 }

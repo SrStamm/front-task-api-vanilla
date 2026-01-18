@@ -22,7 +22,7 @@
     padding var(--transition),
     color var(--transition),
     background var(--transition);
-  overflow: hidden;
+  overflow: scroll;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 
   display: flex;
