@@ -2,8 +2,8 @@
 
 /* Estilo para la sección de cabecera <thead> */
 .task-table thead {
-  background-color: var(--gray-50); /* Un fondo más claro para que resalte */
-  border-bottom: 2px solid var(--border-light); /* Separador visual fuerte */
+  background-color: var(--gray-50);
+  border-bottom: 2px solid var(--border);
   color: var(--gray-700);
   font-size: 0.85rem;
   text-transform: uppercase;

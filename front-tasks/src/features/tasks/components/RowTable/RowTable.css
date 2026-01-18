@@ -1,6 +1,6 @@
 /* Estilo para cada fila de datos <tr> */
 .task-table tr {
-  border-bottom: 1px solid var(--border-light); /* Un separador sutil */
+  border-bottom: 1px solid var(--border); /* Un separador sutil */
   transition: background-color var(--transition);
 }
 
@@ -18,7 +18,7 @@
 .task-table td {
   padding: 1rem 1.5rem;
   /* El contenido de texto de los datos es el color primario de texto */
-  color: var(--text-light);
+  color: var(--text);
   font-size: 0.95rem;
 }
 
