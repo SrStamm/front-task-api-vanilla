@@ -9,6 +9,7 @@ import UserAddToGroupModal from "../../features/users/component/UserAddToGroupMo
 import type { ReadUser } from "../../types/User.ts";
 import { fetchGetAllUsers } from "../../features/users/api/userServices.ts";
 import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal/index.tsx";
+import ErrorContainer from "../../components/common/ErrorContainer/index.tsx";
 
 function GroupsPage() {
   const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
@@ -88,10 +89,12 @@ function GroupsPage() {
   if (error) {
     console.error("Error loading groups:", error);
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "red" }}>Error al cargar los grupos</p>
-        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
-      </div>
+      <ErrorContainer
+        advice="Error al cargar los grupos"
+        recommendation={error}
+        isButton={true}
+        isError={true}
+      />
     );
   }
 
@@ -111,7 +114,12 @@ function GroupsPage() {
           {groups.length > 0 ? (
             <GroupList groups={groups} onViewGroup={handleOpenModal} />
           ) : (
-            <p>No perteneces a ningún grupo</p>
+            <ErrorContainer
+              advice="No perteneces a ningún grupo"
+              recommendation=""
+              isButton={true}
+              isError={false}
+            />
           )}
         </div>
       </section>

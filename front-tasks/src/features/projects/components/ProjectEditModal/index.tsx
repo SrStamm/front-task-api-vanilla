@@ -43,9 +43,7 @@ function ProjectCreateUpdateModal({
     if (type === "create") {
       setTitle("");
       setDescription("");
-      groupIdCharged && groupIdCharged
-        ? setGroupId(groupIdCharged)
-        : setGroupId(selectedGroupId);
+      groupIdCharged ? setGroupId(groupIdCharged) : setGroupId(selectedGroupId);
     }
   }, [type, project, open, selectedGroupId, groupIdCharged]);
 

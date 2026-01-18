@@ -47,12 +47,10 @@ function Sidebar() {
         isCollapsed ? "sidebar-container is-collapsed" : "sidebar-container"
       }
     >
+      <button className="collapse_button" onClick={handleCollapseSidebar}>
+        <FaArrowAltCircleRight className="collapse_button_item" />
+      </button>
       <div className={isCollapsed ? "sidebar is-collapsed" : "sidebar"}>
-        <div className="sidebar_header">
-          <button className="collapse_button" onClick={handleCollapseSidebar}>
-            <FaArrowAltCircleRight className="collapse_button_item" />
-          </button>
-        </div>
         <h1>Project Manager</h1>
         <nav>
           <div className="sidebar_intern">
@@ -104,18 +102,19 @@ function Sidebar() {
               />
             </div>
           </div>
-        </nav>
-      </div>
 
-      {/* Zona 3: Perfil */}
-      <div style={{ position: "relative" }}>
-        <div className="sidebar_element" onClick={handleShowUserOptions}>
-          <span className="sidebar_item_icon">
-            <FaRegUserCircle />
-          </span>
-          <span className="sidebar_item_text">User</span>
-        </div>
-        {showUserOptions && <UserOptions />}
+          {/* Zona 3: Perfil */}
+
+          <div style={{ position: "relative" }}>
+            <div className="sidebar_element" onClick={handleShowUserOptions}>
+              <span className="sidebar_item_icon">
+                <FaRegUserCircle />
+              </span>
+              <span className="sidebar_item_text">User</span>
+            </div>
+            {showUserOptions && <UserOptions />}
+          </div>
+        </nav>
       </div>
     </aside>
   );

@@ -9,11 +9,12 @@ import UserAddModal from "../../features/users/component/UserAddModal";
 import type { UserInGroup } from "../../features/groups/schemas/Group";
 import { useGroups } from "../../features/groups/hooks/useGroups";
 import { useGroupProject } from "../../hooks/useGroupProject";
+import ErrorContainer from "../../components/common/ErrorContainer";
 
 function ProjectsPage() {
   const { projects, loading, error, deleteProject } = useProjects();
   const { getUsersInGroup } = useGroups();
-  const { groupId } = useGroupProject();
+  const { groupId, role } = useGroupProject();
 
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -112,28 +113,26 @@ function ProjectsPage() {
         <div className="partSections">
           <div className="headerPartSection">
             <h3 className="dashboard-h3"> Proyectos </h3>
-            <Button
-              text=" + "
-              className="btn-primary"
-              onClick={handleOpenCreateModal}
-            />
+            {role === "admin" ? (
+              <Button
+                text=" + "
+                className="btn-primary"
+                onClick={handleOpenCreateModal}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           {projects && projects.length > 0 ? (
             <ProjectList projects={projects} onViewProject={handleOpenModal} />
           ) : (
-            <div style={{ textAlign: "center", padding: "3rem" }}>
-              <p style={{ color: "#666" }}>No hay tareas en este proyecto</p>
-              <p
-                style={{
-                  color: "#999",
-                  fontSize: "0.9rem",
-                  marginTop: "0.5rem",
-                }}
-              >
-                Crea tu primera tarea haciendo clic en el botón "+"
-              </p>
-            </div>
+            <ErrorContainer
+              advice="No hay tareas en este proyecto"
+              recommendation="Crea tu primera tarea haciendo click en el boton '+'"
+              isButton={false}
+              isError={false}
+            />
           )}
         </div>
       </section>

@@ -18,28 +18,6 @@
   list-style: none;
 }
 
-.listUser li {
-  background: var(--bg-light);
-  padding: 1rem;
-  border-radius: var(--radius);
-  transition: all 0.2s ease;
-}
-
-.listUser li:hover {
-  background: var(--gray-300);
-  transform: translateX(5px);
-  box-shadow: var(--shadow-sm);
-}
-
-.listuser p {
-  margin-right: 1rem;
-}
-
-.listUser p:last-child {
-  margin-bottom: 0;
-  margin-right: 0;
-}
-
 .listProject {
   display: grid;
   grid-template-columns: repeat(2, minmax(200px, 1fr));
@@ -58,7 +36,7 @@
 
 .project-item {
   padding: 0.8rem;
-  background: var(--bg-light);
+  background: var(--bg);
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.3s;

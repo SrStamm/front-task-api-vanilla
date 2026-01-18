@@ -1,0 +1,21 @@
+.error-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-container.is-error .principal-text {
+  color: red;
+}
+
+.principal-text {
+  color: var(--text);
+}
+
+.secondary-text {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.error-container button {
+  margin-top: 1rem;
+}

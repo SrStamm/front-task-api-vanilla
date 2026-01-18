@@ -3,6 +3,7 @@ import type { ReadTaskInterface } from "../../schemas/Tasks";
 import HeaderTable from "../HeaderTable";
 import RowTable from "../RowTable";
 import "./TaskTable.css";
+import ErrorContainer from "../../../../components/common/ErrorContainer";
 
 interface TaskTableProps {
   tasks: ReadTaskInterface[];
@@ -17,13 +18,6 @@ function TaskTable({
   hasNextPage,
   isFetchingNextPage,
 }: TaskTableProps) {
-  if (tasks.length === 0) {
-    return (
-      <div style={{ textAlign: "center", padding: "3rem" }}>
-        <p style={{ color: "#666" }}>No hay tienes tareas asignadas</p>
-      </div>
-    );
-  }
   // 1. Ref para el elemento que estara al final de la lista
   const observerTargetRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +49,17 @@ function TaskTable({
       }
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  if (tasks.length === 0) {
+    return (
+      <ErrorContainer
+        isError={false}
+        isButton={false}
+        advice="No tienes tareas asignadas"
+        recommendation=""
+      />
+    );
+  }
 
   return (
     <table className="task-table">

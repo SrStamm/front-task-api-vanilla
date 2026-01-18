@@ -5,6 +5,7 @@ import "./TaskModal.css";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
 import CommentContainer from "../../../comments/component/CommentContainer";
 import formatDate from "../../../../utils/formatedDate";
+import { useGroupProject } from "../../../../hooks/useGroupProject";
 
 interface TaskModalProps {
   isShow: boolean;
@@ -15,6 +16,7 @@ interface TaskModalProps {
 
 function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
   const formatedDate = formatDate(task.date_exp);
+  const { permission } = useGroupProject();
 
   const header = <h3 className="modal-title">{task.title}</h3>;
   const body = (
@@ -62,13 +64,16 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
     </>
   );
 
-  const actions = (
-    <Button
-      className="btn-primary"
-      text="Editar"
-      onClick={() => onEdit(task)}
-    />
-  );
+  const actions =
+    permission === "admin" || permission === "write" ? (
+      <Button
+        className="btn-primary"
+        text="Editar"
+        onClick={() => onEdit(task)}
+      />
+    ) : (
+      ""
+    );
 
   return (
     <Modal
