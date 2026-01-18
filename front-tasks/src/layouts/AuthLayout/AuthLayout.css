@@ -1,5 +1,5 @@
 .auth-layout {
-  background: var(--bg-light);
+  background: var(--bg);
   min-height: 100vh;
   min-width: 100vw;
   margin: 0 auto;
@@ -14,9 +14,9 @@
   height: 100%;
   margin: auto;
   padding: 3rem;
-  border: var(--border-light);
+  border: var(--border);
   border-radius: var(--radius);
-  background: var(--bg-card-light);
+  background: var(--bg-card);
   box-shadow: var(--shadow);
 }
 
