@@ -145,9 +145,9 @@
     width: 75%;
     max-width: 320px;
     padding: 1.5rem 1rem;
-    background: var(--sidebar-bg);
+    background: none;
     border-right: none;
-    border-bottom: 1px solid var(--sidebar-border);
+    border-bottom: none;
     transition: transform 0.3s ease;
     transform: translateX(0);
     overflow: visible;
@@ -158,10 +158,37 @@
     border: none;
   }
 
+  .sidebar.is-collapsed {
+    position: relative;
+    width: 0;
+    height: calc(100vh - 40px);
+    top: 50%;
+    left: 10px;
+    z-index: 1000;
+    transform: translateY(-50%);
+
+    background: var(--sidebar-bg);
+    border: 1px solid var(--sidebar-border);
+    border-radius: var(--radius);
+    color: var(--sidebar-text);
+
+    transition:
+      width var(--transition),
+      padding var(--transition),
+      color var(--transition),
+      background var(--transition);
+    overflow: scroll;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .collapse_button {
     position: absolute;
     top: 1.2rem;
-    right: -3.1rem;
+    right: 0;
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
@@ -185,6 +212,7 @@
     color: white;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
     border: none;
+    z-index: 10000;
   }
 
   .sidebar h1 {
