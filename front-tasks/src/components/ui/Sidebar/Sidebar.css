@@ -114,6 +114,7 @@
   z-index: 10000;
   right: -15rem;
   top: 1.2rem;
+  background-color: var(--bg-card);
   border: var(--sidebar-border);
   color: var(--sidebar-text);
   cursor: pointer;

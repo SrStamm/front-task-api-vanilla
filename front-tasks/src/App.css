@@ -69,7 +69,7 @@
   box-sizing: border-box;
 }
 
-body.light-teme {
+html.light-theme {
   --bg: #f1f5f9;
   --bg-card: #ffffff;
   --text: #0f172a;
@@ -86,10 +86,11 @@ body.light-teme {
   --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 
   --h3: var(--gray-800);
+  --h2: var(--gray-800);
 }
 
 body {
-  background: #ffffff;
+  background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
