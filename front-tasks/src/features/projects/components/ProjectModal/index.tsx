@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
-import type { ReadProject } from "../../../projects/schemas/Project";
+import type {
+  PermissionProject,
+  ReadProject,
+} from "../../../projects/schemas/Project";
 import UserListProject from "../../../users/component/UserListProject";
 import "./ProjectModal.css";
 import { useProjects } from "../../hooks/useProject";
+import { getUserDataInProject } from "../../api/ProjectService.ts";
 import ErrorContainer from "../../../../components/common/ErrorContainer";
 
 interface projectModalProps {
@@ -25,7 +29,21 @@ function ProjectModal({
   onShowListUser,
 }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
+  const [permission, setPermission] = useState<PermissionProject | null>(null);
   const { removeUserFromProject } = useProjects();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getUserDataInProject(
+        project.group_id,
+        project.project_id,
+      );
+
+      setPermission(response.permission);
+    };
+
+    fetchData();
+  }, [project]);
 
   const header = <h2>{project.title}</h2>;
 
@@ -92,20 +110,23 @@ function ProjectModal({
     </>
   );
 
-  const actions = (
-    <>
-      <Button
-        className="bt-sm btn-secondary btn-sm"
-        text="Editar"
-        onClick={() => onEdit(project)}
-      />
-      <Button
-        className="btn-sm btn-error btn-sm"
-        text="Eliminar"
-        onClick={() => deleteProject(project.group_id, project.project_id)}
-      />
-    </>
-  );
+  const actions =
+    permission === "admin" ? (
+      <>
+        <Button
+          className="bt-sm btn-secondary btn-sm"
+          text="Editar"
+          onClick={() => onEdit(project)}
+        />
+        <Button
+          className="btn-sm btn-error btn-sm"
+          text="Eliminar"
+          onClick={() => deleteProject(project.group_id, project.project_id)}
+        />
+      </>
+    ) : (
+      ""
+    );
 
   return (
     <Modal

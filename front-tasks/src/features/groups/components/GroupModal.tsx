@@ -5,6 +5,7 @@ import type { ReadGroup } from "../schemas/Group";
 import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
+import { useGroupProject } from "../../../hooks/useGroupProject";
 
 interface groupModalProps {
   open: boolean;
@@ -26,6 +27,7 @@ function GroupViewModal({
   onCreateProject,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
+  const { role } = useGroupProject();
 
   const header = <h2 className="modal-title">{group.name}</h2>;
 
@@ -90,20 +92,23 @@ function GroupViewModal({
     </>
   );
 
-  const actions = (
-    <>
-      <Button
-        className="bt-sm btn-secondary btn-sm"
-        text="Editar"
-        onClick={() => onEdit(group)}
-      />
-      <Button
-        className="btn-sm btn-error btn-sm"
-        text="Eliminar"
-        onClick={() => deleteGroup(group.group_id)}
-      />
-    </>
-  );
+  const actions =
+    role === "admin" ? (
+      <>
+        <Button
+          className="bt-sm btn-secondary btn-sm"
+          text="Editar"
+          onClick={() => onEdit(group)}
+        />
+        <Button
+          className="btn-sm btn-error btn-sm"
+          text="Eliminar"
+          onClick={() => deleteGroup(group.group_id)}
+        />
+      </>
+    ) : (
+      ""
+    );
 
   return (
     <Modal

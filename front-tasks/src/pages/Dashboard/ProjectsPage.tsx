@@ -14,7 +14,7 @@ import ErrorContainer from "../../components/common/ErrorContainer";
 function ProjectsPage() {
   const { projects, loading, error, deleteProject } = useProjects();
   const { getUsersInGroup } = useGroups();
-  const { groupId } = useGroupProject();
+  const { groupId, role } = useGroupProject();
 
   const [openModal, setOpenModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -113,11 +113,15 @@ function ProjectsPage() {
         <div className="partSections">
           <div className="headerPartSection">
             <h3 className="dashboard-h3"> Proyectos </h3>
-            <Button
-              text=" + "
-              className="btn-primary"
-              onClick={handleOpenCreateModal}
-            />
+            {role === "admin" ? (
+              <Button
+                text=" + "
+                className="btn-primary"
+                onClick={handleOpenCreateModal}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           {projects && projects.length > 0 ? (
