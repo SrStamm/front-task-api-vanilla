@@ -15,6 +15,17 @@
         sessionStorage.setItem("redirectPath", window.location.pathname);
       }
     </script>
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        // Si no hay tema o es light, ponemos la clase
+        if (theme === "light" || !theme) {
+          document.documentElement.classList.add("light-theme");
+        } else {
+          document.documentElement.classList.remove("light-theme");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
