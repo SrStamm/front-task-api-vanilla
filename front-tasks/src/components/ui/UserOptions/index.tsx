@@ -25,6 +25,12 @@ function UserOptions() {
             onClick={handleLogout}
           />
         </li>
+        <li>
+          <label className="switch">
+            <input type="checkbox" />
+            <span className="slider"></span>
+          </label>
+        </li>
       </ol>
     </>
   );

@@ -104,18 +104,19 @@ function Sidebar() {
               />
             </div>
           </div>
-        </nav>
-      </div>
 
-      {/* Zona 3: Perfil */}
-      <div style={{ position: "relative" }}>
-        <div className="sidebar_element" onClick={handleShowUserOptions}>
-          <span className="sidebar_item_icon">
-            <FaRegUserCircle />
-          </span>
-          <span className="sidebar_item_text">User</span>
-        </div>
-        {showUserOptions && <UserOptions />}
+          {/* Zona 3: Perfil */}
+
+          <div style={{ position: "relative" }}>
+            <div className="sidebar_element" onClick={handleShowUserOptions}>
+              <span className="sidebar_item_icon">
+                <FaRegUserCircle />
+              </span>
+              <span className="sidebar_item_text">User</span>
+            </div>
+            {showUserOptions && <UserOptions />}
+          </div>
+        </nav>
       </div>
     </aside>
   );

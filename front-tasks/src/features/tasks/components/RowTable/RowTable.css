@@ -1,59 +1,46 @@
-/* Estilo para cada fila de datos <tr> */
 .task-table tr {
-  border-bottom: 1px solid var(--border-light); /* Un separador sutil */
+  border-bottom: 1px solid var(--border); /* Un separador sutil */
   transition: background-color var(--transition);
 }
 
-/* Quitar el borde inferior de la última fila */
 .task-table tr:last-child {
   border-bottom: none;
 }
 
-/* Efecto hover: crucial para la legibilidad en listas largas */
 .task-table tr:hover {
-  background-color: var(--gray-50);
+  background-color: var(--gray-800);
 }
 
-/* Estilo para cada celda de datos <td> */
 .task-table td {
   padding: 1rem 1.5rem;
-  /* El contenido de texto de los datos es el color primario de texto */
-  color: var(--text-light);
   font-size: 0.95rem;
 }
 
-/* Énfasis en el título de la tarea (Primera columna) */
+.task-table td:nth-child(2) {
+  color: var(--text);
+}
+
 .task-table tr td:first-child {
   font-weight: 500;
-  color: var(--gray-800);
 }
 
-/* Estilo para las fechas/metadatos (Menos prominente) */
-.task-table td:nth-child(2) {
-  color: var(--gray-500);
-}
-
-/* Puedes incluir esto en tus estilos globales o en RowTable.css */
 .status-pill {
   display: inline-block;
   padding: 4px 10px;
-  border-radius: 9999px; /* Para forma de píldora */
+  border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: capitalize;
 }
 
 .status-todo {
-  background-color: #fef3c7; /* Color de fondo claro de Warning */
   color: var(--warning);
 }
 
 .status-in-progress {
-  background-color: #d1fae5; /* Color de fondo claro de Secondary/Success */
   color: var(--secondary);
 }
 
 .status-done {
-  background-color: #dcfce7; /* Color de fondo claro de Success */
   color: var(--success);
 }

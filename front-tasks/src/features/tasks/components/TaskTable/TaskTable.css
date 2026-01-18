@@ -4,7 +4,7 @@
   box-shadow: var(--shadow-sm);
   border-radius: var(--radius);
   overflow: hidden;
-  background-color: var(--bg-card-light);
+  background-color: var(--bg-card);
   margin: 20px auto;
 }
 

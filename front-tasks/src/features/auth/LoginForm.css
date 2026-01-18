@@ -6,7 +6,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: var(--text-light);
+  color: var(--text);
 }
 
 .input-base {
@@ -17,10 +17,10 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  background: var(--bg-light);
+  background: var(--bg);
   font-size: 1rem;
 
-  color: var(--text-light);
+  color: var(--text);
 }
 
 .input-base:focus {

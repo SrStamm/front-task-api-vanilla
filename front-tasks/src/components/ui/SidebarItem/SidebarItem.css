@@ -14,15 +14,14 @@
   height: 100%;
 }
 
-.sidebar-container.is-collapsed .sidebar_item_icon {
-  width: 32px;
-  height: 32px;
-  font-size: 1.5rem;
+.sidebar_element.active svg {
+  color: white;
 }
 
 .sidebar-container.is-collapsed .sidebar_item_icon {
   width: 2em;
   height: 1.2em;
+  font-size: 1.5rem;
 }
 
 .sidebar_item_text {

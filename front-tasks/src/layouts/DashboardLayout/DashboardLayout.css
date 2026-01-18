@@ -1,6 +1,6 @@
 .dashboard-layout {
   padding: 2rem;
-  background: var(--background);
+  background: var(--bg);
   min-height: 100vh;
   overflow-x: auto;
 }
@@ -35,7 +35,7 @@
 .dashboard-layout-h3 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--h3);
 }
 
 @media (max-width: 768px) {
@@ -46,12 +46,12 @@
 }
 
 .partSections {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--section-bg);
   backdrop-filter: blur(20px);
+  border: 1px solid var(--section-border);
   border-radius: var(--radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 
   min-height: 90vh;

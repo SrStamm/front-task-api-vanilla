@@ -19,14 +19,13 @@
 }
 
 .listUser li {
-  background: var(--bg-light);
+  background: var(--bg);
   padding: 1rem;
   border-radius: var(--radius);
   transition: all 0.2s ease;
 }
 
 .listUser li:hover {
-  background: var(--gray-300);
   transform: translateX(5px);
   box-shadow: var(--shadow-sm);
 }
@@ -40,49 +39,13 @@
   margin-right: 0;
 }
 
-.listProject {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(200px, 1fr));
-  grid-column: 1 / -1;
-  gap: 1rem;
-  margin: auto;
-  padding: 1rem;
-
-  max-width: 80%;
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  list-style: none;
-}
-
-.project-item,
 .task-item {
   padding: 0.8rem;
-  background: var(--bg-light);
+  background: var(--bg);
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.3s;
   border-left: 4px solid var(--primary);
-}
-
-.project-item:hover {
-  background: var(--gray-300);
-  transform: translateX(5px);
-  box-shadow: var(--shadow-sm);
-}
-
-.project-item.active {
-  background: var(--primary);
-  color: white;
-  border-left: 4px solid var(--accent);
-}
-
-.project-item.active:hover {
-  background: var(--secondary);
-  color: white;
-  transform: translateX(5px);
-  box-shadow: var(--shadow-sm);
 }
 
 .task-project-list {

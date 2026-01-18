@@ -1,18 +1,8 @@
 :root {
   /* Background */
-  --bg-light: #f1f5f9;
-  --bg-dark: #1a1d21;
-
-  --bg-card-light: #ffffff;
-  --bg-card-dark: #23272b;
-
-  /* Texto */
-  --text-light: #0f172a;
-  --text-dark: #f1f5f9;
-
-  /* Borders */
-  --border-light: #e2e8f0;
-  --border-dark: #2d3136;
+  --bg: #1a1d21;
+  --bg-card: #23272b;
+  --border: #2d3136;
 
   /* Accents */
   --primary: #6366f1;
@@ -45,7 +35,32 @@
   --gray-800: #1f2937;
   --gray-900: #111827;
 
-  --text: var(--gray-900);
+  --negro-profundo: #1a1d21;
+  --gris-claro: #f1f5f9;
+  --blanco-puro: #ffffff;
+
+  --main-bg: var(--negro-profundo);
+
+  --section-bg: #23272b;
+  --section-border: var(--border);
+
+  /* Sidebar */
+  --sidebar-bg: #23272b;
+  --sidebar-text: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-accent-bg: rgba(99, 102, 241, 0.15);
+  --sidebar-item-active: var(--primary);
+
+  --text: var(--blanco-puro);
+
+  /* Cards y Modales */
+  --surface-bg: #2d3136;
+  --surface-text: var(--blanco-puro);
+  --surface-border: var(--border);
+  --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  --h3: var(--gray-200);
+  --h2: var(--gray-100);
 }
 
 * {
@@ -54,9 +69,28 @@
   box-sizing: border-box;
 }
 
+body.light-teme {
+  --bg: #f1f5f9;
+  --bg-card: #ffffff;
+  --text: #0f172a;
+  --border: #e2e8f0;
+
+  --sidebar-bg: var(--blanco-puro);
+  --main-bg: var(--gris-claro);
+  --section-bg: rgba(255, 255, 255, 0.7);
+
+  --text: var(--negro-profundo);
+
+  --surface-bg: #ffffff;
+  --surface-text: var(--negro-profundo);
+  --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  --h3: var(--gray-800);
+}
+
 body {
   background: #ffffff;
-  color: var(--text-light);
+  color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
   font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -67,8 +101,9 @@ body {
 }
 
 .principal-layout {
+  background: var(--main-bg);
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: 80px 1fr;
   min-height: 100vh;
   min-width: 100vw;
   transition: grid-template-columns var(--transition);
@@ -82,7 +117,7 @@ body {
 
 .dashboard-layout {
   padding: 2rem;
-  background: var(--bg-light);
+  background: var(--main-bg);
   min-height: 100vh;
   overflow-x: auto;
 }
@@ -117,7 +152,7 @@ body {
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--h3);
 }
 
 @media (max-width: 768px) {
