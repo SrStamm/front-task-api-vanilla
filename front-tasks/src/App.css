@@ -67,8 +67,9 @@ body {
 }
 
 .principal-layout {
+  background: var(--bg-light);
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: 80px 1fr;
   min-height: 100vh;
   min-width: 100vw;
   transition: grid-template-columns var(--transition);
