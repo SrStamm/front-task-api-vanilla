@@ -109,7 +109,11 @@
 }
 
 .collapse_button {
-  background: none;
+  position: absolute;
+  z-index: 10000;
+  right: -15rem;
+  top: 1.2rem;
+  border: var(--sidebar-border);
   color: var(--sidebar-text);
   cursor: pointer;
   padding: 1rem;
@@ -121,10 +125,12 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  width: 100%;
+  width: 80%;
   padding: 1rem;
   transform: rotate(0deg);
   opacity: 0.8;
+  right: 0;
+  top: 2rem;
 }
 
 .collapse_button_item {
