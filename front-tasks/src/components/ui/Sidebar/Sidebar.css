@@ -22,7 +22,7 @@
     padding var(--transition),
     color var(--transition),
     background var(--transition);
-  overflow: scroll;
+  overflow: visible;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 
   display: flex;
@@ -104,6 +104,7 @@
 }
 
 .sidebar-container.is-collapsed .selectors {
+  position: relative;
   width: auto;
   height: auto;
 }
@@ -183,7 +184,7 @@
       padding var(--transition),
       color var(--transition),
       background var(--transition);
-    overflow: scroll;
+    overflow: visible;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
 
     display: flex;
