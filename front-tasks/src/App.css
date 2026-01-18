@@ -39,21 +39,27 @@
   --gris-claro: #f1f5f9;
   --blanco-puro: #ffffff;
 
+  --main-bg: var(--negro-profundo);
+
+  --section-bg: #23272b;
+  --section-border: var(--border);
+
   /* Sidebar */
-  --sidebar-bg: var(--negro-profundo);
+  --sidebar-bg: #23272b;
   --sidebar-text: var(--text);
   --sidebar-border: var(--border);
   --sidebar-accent-bg: rgba(99, 102, 241, 0.15);
   --sidebar-item-active: var(--primary);
 
-  --main-bg: var(--gris-claro);
   --text: var(--blanco-puro);
 
   /* Cards y Modales */
-  --surface-bg: var(--bg-card);
-  --surface-text: var(--text-dark);
-  --surface-border: var(--border-dark);
+  --surface-bg: #2d3136;
+  --surface-text: var(--blanco-puro);
+  --surface-border: var(--border);
   --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  --h3: var(--gray-200);
 }
 
 * {
@@ -69,13 +75,16 @@ body.light-teme {
   --border: #e2e8f0;
 
   --sidebar-bg: var(--blanco-puro);
-  --main-bg: #f8fafc;
-  --text: var(var(--negro-profundo));
+  --main-bg: var(--gris-claro);
+  --section-bg: rgba(255, 255, 255, 0.7);
 
-  --surface-bg: var(--bg-card);
-  --surface-text: var(--text-light);
-  --surface-border: var(--border-light);
+  --text: var(--negro-profundo);
+
+  --surface-bg: #ffffff;
+  --surface-text: var(--negro-profundo);
   --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  --h3: var(--gray-800);
 }
 
 body {
@@ -142,7 +151,7 @@ body {
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--h3);
 }
 
 @media (max-width: 768px) {
