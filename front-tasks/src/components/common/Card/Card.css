@@ -1,13 +1,15 @@
 .card {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--surface-bg);
   backdrop-filter: blur(20px);
-  padding: 2.5rem;
+  color: var(--surface-text);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--surface-shadow);
+
+  padding: 2.5rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   min-height: 220px;
   display: flex;
   flex-direction: column;
@@ -37,12 +39,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--primary),
-    var(--secondary),
-    var(--accent)
-  );
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: var(--radius) var(--radius) 0 0;
 }
 
@@ -79,7 +76,7 @@
 }
 
 .card h3 {
-  color: var(--gray-800);
+  color: var(--surface-text);
   margin-bottom: 1rem;
   font-size: 1.5rem; /* Más grande */
   font-weight: 600;
@@ -128,7 +125,7 @@
 }
 
 .card .description {
-  color: var(--text);
+  color: var(--surface-text);
   line-height: 1.5;
   padding: 0.5rem 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
