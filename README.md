@@ -126,13 +126,9 @@ El frontend se comunica con la API de Tareas a través de:
 * [x] 💬 Mostrar información ampliada del usuario en comentarios y mensajes (Enero 2026)
 * [ ] 🏷️ Sistema de etiquetas (tags) para tareas
 * [x] 🔎 Filtros de tareas (Enero 2026)
-* [ ] 🟢 Indicador de usuarios conectados al chat
-* [ ] 🔔 Panel de notificaciones con estado leído/no leído
-* [ ] 🧮 Badges (tareas pendientes, mensajes sin leer, etc.)
 * [ ] 📊 Métricas de progreso por proyecto
 * [ ] 📱 Soporte PWA (offline + notificaciones push)
-* [ ] 🌙 Tema claro / oscuro
-* [ ] ⚙️ Configuración de usuario
+* [x] 🌙 Tema claro / oscuro
 
 ---
 
