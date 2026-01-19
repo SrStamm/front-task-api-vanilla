@@ -41,6 +41,7 @@
   cursor: pointer;
   transition: all 0.3s;
   border-left: 4px solid var(--primary);
+  min-height: 100px;
 }
 
 .project-item:hover {

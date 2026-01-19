@@ -93,9 +93,13 @@ function ProjectModal({
       >
         <div className="modal-section-header">
           <h4 className="modal-subtitle">Tareas</h4>
-          <div className="modal-section-action ">
-            <Button className="btn-primary btn-vsm" text="Crear Tarea" />
-          </div>
+          {permission === "admin" ? (
+            <div className="modal-section-action ">
+              <Button className="btn-primary btn-vsm" text="Crear Tarea" />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
 
         <ul className="task-project-list">
@@ -119,11 +123,15 @@ function ProjectModal({
       >
         <div className="modal-section-header ">
           <h4 className="modal-subtitle">Miembros</h4>
-          <Button
-            className="btn-primary btn-vsm"
-            text="Agregar Usuario"
-            onClick={onShowListUser}
-          />
+          {permission === "admin" ? (
+            <Button
+              className="btn-primary btn-vsm"
+              text="Agregar Usuario"
+              onClick={onShowListUser}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <UserListProject
