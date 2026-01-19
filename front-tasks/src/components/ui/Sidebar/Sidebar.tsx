@@ -112,7 +112,7 @@ function Sidebar() {
               </span>
               <span className="sidebar_item_text">User</span>
             </div>
-            {showUserOptions && <UserOptions />}
+            {showUserOptions && <UserOptions close={handleShowUserOptions} />}
           </div>
         </nav>
       </div>
