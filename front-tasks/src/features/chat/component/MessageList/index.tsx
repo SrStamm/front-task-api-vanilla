@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import type { ReadMessageInterface } from "../../schemas/messageSchema";
 import MessageItem from "../MessageItem";
 import "./MessageList.css";
@@ -11,6 +11,15 @@ interface MessageListProps {
 
 function MessageList({ messages }: MessageListProps) {
   const userContext = useContext(AuthContext);
+  const messageEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollBottom();
+  }, [messages]);
 
   return (
     <ul className="list-message">
@@ -30,6 +39,8 @@ function MessageList({ messages }: MessageListProps) {
           ),
         )
       )}
+
+      <div ref={messageEndRef} />
     </ul>
   );
 }
