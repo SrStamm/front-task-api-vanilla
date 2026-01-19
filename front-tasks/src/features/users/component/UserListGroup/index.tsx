@@ -8,7 +8,7 @@ import "./UserListGroup.css";
 interface userListProps {
   users: UserInGroup[];
   addUser: boolean;
-  role: RoleGroup;
+  role?: RoleGroup;
   onAdd?: (userId: number) => void;
 }
 
