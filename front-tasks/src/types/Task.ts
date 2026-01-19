@@ -11,16 +11,6 @@ enum StateEnum {
   sin_empezar = "sin empezar",
 }
 
-export interface ReadTaskForUser {
-  task_id: number;
-  project_id: number;
-  title: string;
-  description: string;
-  date_exp: string;
-  state: string;
-  task_label_links: label[];
-}
-
 export interface UserAssigned {
   user_id: number;
   username: string;
