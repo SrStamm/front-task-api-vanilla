@@ -61,16 +61,18 @@ export function useChat() {
         // Verificar que sea para el proyecto actual
         if (mappedMessage.project_id === projectId) {
           setMessages((prev) => {
-            const exists = prev.some(
+            const sinOptimista = prev.filter(
+              (m) =>
+                !(m.username === "Yo" && m.message === mappedMessage.message),
+            );
+
+            const yaExiste = sinOptimista.some(
               (msg) => msg.chat_id === mappedMessage.chat_id,
             );
 
-            if (exists) {
-              return prev;
-            }
+            if (yaExiste) return sinOptimista;
 
-            const newMessages = [...prev, mappedMessage];
-            return newMessages;
+            return [...prev, mappedMessage];
           });
         } else {
           return;
