@@ -1,15 +1,36 @@
 import Button from "../../common/Button";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import "./UserOptions.css";
 
-function UserOptions() {
+interface UserOptionsProps {
+  close: (arg: boolean) => void;
+}
+
+function UserOptions({ close }: UserOptionsProps) {
   const [isDark, setIsDark] = useState(
     localStorage.getItem("theme") === "dark",
   );
-
   const authContext = useContext(AuthContext);
+  const selectorRef = useRef<HTMLOListElement>(null);
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      selectorRef.current &&
+      !selectorRef.current.contains(e.target as Node)
+    ) {
+      close(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectorRef]);
 
   const handleLogout = async () => {
     try {
@@ -43,7 +64,7 @@ function UserOptions() {
 
   return (
     <>
-      <ol className="user-options-container">
+      <ol className="user-options-container" ref={selectorRef}>
         <li>
           <Button
             className="btn-error btn-long"
