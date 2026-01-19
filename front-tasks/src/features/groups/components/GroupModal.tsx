@@ -6,6 +6,9 @@ import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
 import { useGroupProject } from "../../../hooks/useGroupProject";
+import ProjectList from "../../projects/components/ProjectList";
+import { ReadProjectForUser } from "../../projects/schemas/Project";
+import ProjectListMini from "../../projects/components/ProjectListMini/ProjectListMini";
 
 interface groupModalProps {
   open: boolean;
@@ -15,6 +18,7 @@ interface groupModalProps {
   onEdit: (group: ReadGroup) => void;
   onAddUser: () => void;
   onCreateProject: () => void;
+  projects: ReadProjectForUser[];
 }
 
 function GroupViewModal({
@@ -25,6 +29,7 @@ function GroupViewModal({
   onEdit,
   onAddUser,
   onCreateProject,
+  projects,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
   const { role } = useGroupProject();
@@ -65,14 +70,16 @@ function GroupViewModal({
             onClick={onCreateProject}
           />
         </div>
-        <ol className="listProject">
+        {projects.length === 0 ? (
           <ErrorContainer
-            advice="No implementado"
-            recommendation="Se implementará próximamente"
+            advice="No perteneces a ningún proyecto o no hay en este grupo"
             isButton={false}
-            isError={true}
+            isError={false}
+            recommendation=""
           />
-        </ol>
+        ) : (
+          <ProjectListMini projects={projects} />
+        )}
       </div>
 
       <div

@@ -15,6 +15,7 @@ interface CardProps {
   children?: ReactNode;
   hideTemplate?: boolean;
   className?: string;
+  expand?: boolean;
 }
 
 function Card({
@@ -25,6 +26,7 @@ function Card({
   children,
   hideTemplate = true,
   className = "",
+  expand = true,
 }: CardProps) {
   const [expanded, setExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -45,9 +47,13 @@ function Card({
     };
   }, [cardRef]);
 
+  const classElement = expand
+    ? `card ${expanded ? "expanded" : ""} ${className}`
+    : `card ${className}`;
+
   return (
     <div
-      className={`card ${expanded ? "expanded" : ""} ${className}`}
+      className={classElement}
       onClick={hideTemplate ? toogleExpand : undefined}
       ref={cardRef}
     >
