@@ -5,7 +5,7 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import GroupSelector from "../Selector/GroupSelector";
 import ProjectSelector from "../Selector/ProjectSelector";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import UserOptions from "../UserOptions";
 import SidebarItem from "../SidebarItem";
@@ -18,6 +18,21 @@ function Sidebar() {
   const [elementSelected, setElementSelected] = useState("");
   const [showUserOptions, setShowUserOptions] = useState(false);
   const { groupId } = useGroupProject();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+      setIsCollapsed(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarRef]);
 
   useEffect(() => {
     setProjectTitle(undefined);
@@ -50,7 +65,10 @@ function Sidebar() {
       <button className="collapse_button" onClick={handleCollapseSidebar}>
         <FaArrowAltCircleRight className="collapse_button_item" />
       </button>
-      <div className={isCollapsed ? "sidebar is-collapsed" : "sidebar"}>
+      <div
+        className={isCollapsed ? "sidebar is-collapsed" : "sidebar"}
+        ref={sidebarRef}
+      >
         <h1>Project Manager</h1>
         <nav>
           <div className="sidebar_intern">
