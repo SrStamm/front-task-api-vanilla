@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/common/Button";
 import GroupList from "../../features/groups/components/GroupList";
 import GroupViewModal from "../../features/groups/components/GroupModal";
@@ -10,6 +10,12 @@ import type { ReadUser } from "../../types/User.ts";
 import { fetchGetAllUsers } from "../../features/users/api/userServices.ts";
 import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal/index.tsx";
 import ErrorContainer from "../../components/common/ErrorContainer/index.tsx";
+import {
+  fetchProjectMeInGroup,
+  fetchProjects,
+} from "../../features/projects/api/ProjectService.ts";
+import { getUserDataInGroup } from "../../features/groups/api/GroupService.ts";
+import { ReadProject } from "../../features/projects/schemas/Project.ts";
 
 function GroupsPage() {
   const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
@@ -22,6 +28,25 @@ function GroupsPage() {
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
+  const [projects, setProjects] = useState<ReadProject[]>([]);
+
+  useEffect(() => {
+    const getProjects = async () => {
+      if (selectedGroup && openModal) {
+        const res = await getUserDataInGroup(selectedGroup.group_id);
+
+        if (res.role === "admin") {
+          const projects_ = await fetchProjects(selectedGroup.group_id);
+          setProjects(projects_);
+        } else {
+          const projects_ = await fetchProjectMeInGroup(selectedGroup.group_id);
+          setProjects(projects_);
+        }
+      }
+    };
+
+    getProjects();
+  }, [selectedGroup, openModal]);
 
   const handleHideCreateProjectModal = () => {
     setShowCreateProjectModal(false);
@@ -133,6 +158,7 @@ function GroupsPage() {
           onEdit={handleOpenUpdateModal}
           onAddUser={handleShowUserAddModal}
           onCreateProject={handleShowCreateProjectModal}
+          projects={projects}
         />
       )}
 

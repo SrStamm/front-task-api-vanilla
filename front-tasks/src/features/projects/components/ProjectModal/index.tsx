@@ -10,6 +10,9 @@ import "./ProjectModal.css";
 import { useProjects } from "../../hooks/useProject";
 import { getUserDataInProject } from "../../api/ProjectService.ts";
 import ErrorContainer from "../../../../components/common/ErrorContainer";
+import TaskCard from "../../../tasks/components/TaskCard/index.tsx";
+import { FetchTaskToProject } from "../../../tasks/api/TaskService.ts";
+import { ReadAllTaskFromProjectInterface } from "../../../tasks/schemas/Tasks.ts";
 
 interface projectModalProps {
   open: boolean;
@@ -30,6 +33,7 @@ function ProjectModal({
 }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
   const [permission, setPermission] = useState<PermissionProject | null>(null);
+  const [tasks, setTasks] = useState<ReadAllTaskFromProjectInterface[]>([]);
   const { removeUserFromProject } = useProjects();
 
   useEffect(() => {
@@ -40,6 +44,22 @@ function ProjectModal({
       );
 
       setPermission(response.permission);
+    };
+
+    fetchData();
+  }, [project]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await FetchTaskToProject({
+        projectId: project.project_id,
+        filters: {
+          state: ["en proceso", "sin empezar"],
+          label: "",
+        },
+      });
+
+      setTasks(response);
     };
 
     fetchData();
@@ -79,12 +99,18 @@ function ProjectModal({
         </div>
 
         <ul className="task-project-list">
-          <ErrorContainer
-            advice="No implementado"
-            recommendation=""
-            isButton={false}
-            isError={false}
-          />
+          {tasks.length === 0 ? (
+            <ErrorContainer
+              advice="No hay tareas en este proyecto"
+              recommendation=""
+              isButton={false}
+              isError={false}
+            />
+          ) : (
+            tasks.map((t) => {
+              return <TaskCard key={t.task_id} task={t} />;
+            })
+          )}
         </ul>
       </div>
 

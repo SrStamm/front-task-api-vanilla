@@ -31,7 +31,7 @@ export async function FetchTaskToProject({
 }: {
   projectId: number;
   limit?: number;
-  filters?: { state: string; label: string };
+  filters?: { state: string | string[]; label: string };
 }) {
   let path = `task/${projectId}`;
   const params = new URLSearchParams();
@@ -39,7 +39,13 @@ export async function FetchTaskToProject({
   params.append("limit", limit.toString());
 
   if (filters?.state && filters.state.length > 0) {
-    params.append("state", filters.state);
+    if (Array.isArray(filters.state)) {
+      filters.state.forEach((s) => {
+        params.append("state", s.trim());
+      });
+    } else {
+      params.append("state", filters.state.trim());
+    }
   }
 
   path = path + "?" + params.toString();

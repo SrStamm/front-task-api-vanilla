@@ -29,6 +29,10 @@
   transition: opacity var(--transition);
 }
 
+.sidebar_element.active .sidebar_item_text {
+  color: var(--text);
+}
+
 .sidebar-container.is-collapsed .sidebar_item_text {
   display: none;
 }
