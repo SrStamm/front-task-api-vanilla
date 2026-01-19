@@ -1,5 +1,8 @@
 import Button from "../../../../components/common/Button";
-import type { UserInProject } from "../../../projects/schemas/Project";
+import type {
+  PermissionProject,
+  UserInProject,
+} from "../../../projects/schemas/Project";
 import UserCard from "../UserCard";
 import "./UserListProject.css";
 
@@ -8,6 +11,7 @@ interface userListProps {
   groupId: number;
   projectId: number;
   onDelete: (group_id: number, project_id: number, user_id: number) => void;
+  permission: PermissionProject;
 }
 
 function UserListProject({
@@ -15,30 +19,35 @@ function UserListProject({
   groupId,
   projectId,
   onDelete,
+  permission,
 }: userListProps) {
   return (
     <ul className="listUser">
       {users.map((u) => {
-        const actions = (
-          <>
-            <select
-              className="permission-select"
-              disabled={true}
-              style={{ display: "none" }}
-            >
-              <option value="read">Lectura</option>
-              <option value="write">Escritura</option>
-              <option value="admin">Administrador</option>
-            </select>
+        const actions =
+          permission === "admin" ? (
+            <>
+              <select
+                className="permission-select"
+                disabled={true}
+                style={{ display: "none" }}
+              >
+                <option value="read">Lectura</option>
+                <option value="write">Escritura</option>
+                <option value="admin">Administrador</option>
+              </select>
 
-            <Button className="btn-vsm btn-outline-secondary" text="Editar" />
-            <Button
-              className="btn-vsm btn-outline-error"
-              text="Eliminar"
-              onClick={() => onDelete(groupId, projectId, u.user_id)}
-            />
-          </>
-        );
+              <Button className="btn-vsm btn-outline-secondary" text="Editar" />
+              <Button
+                className="btn-vsm btn-outline-error"
+                text="Eliminar"
+                onClick={() => onDelete(groupId, projectId, u.user_id)}
+              />
+            </>
+          ) : (
+            ""
+          );
+
         return (
           <li key={u.user_id} className="user-item">
             <UserCard type="project" userProject={u} actions={actions} />
