@@ -12,17 +12,26 @@ interface MessageListProps {
 function MessageList({ messages }: MessageListProps) {
   const userContext = useContext(AuthContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
   const scrollBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    scrollBottom();
+    const list = listRef.current;
+    if (!list) return;
+
+    const distanceToBottom =
+      list.scrollHeight - list.scrollTop - list.clientHeight;
+
+    if (distanceToBottom < 150) {
+      scrollBottom();
+    }
   }, [messages]);
 
   return (
-    <ul className="list-message">
+    <ul className="list-message" ref={listRef}>
       {messages.length === 0 ? (
         <ErrorContainer
           isButton={false}
