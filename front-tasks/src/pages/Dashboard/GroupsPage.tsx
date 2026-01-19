@@ -10,14 +10,12 @@ import type { ReadUser } from "../../types/User.ts";
 import { fetchGetAllUsers } from "../../features/users/api/userServices.ts";
 import ProjectCreateUpdateModal from "../../features/projects/components/ProjectEditModal/index.tsx";
 import ErrorContainer from "../../components/common/ErrorContainer/index.tsx";
-import { useProjects } from "../../features/projects/hooks/useProject.ts";
 import {
   fetchProjectMeInGroup,
   fetchProjects,
-  fetchProjectsMe,
 } from "../../features/projects/api/ProjectService.ts";
 import { getUserDataInGroup } from "../../features/groups/api/GroupService.ts";
-import { ReadProjectForUser } from "../../features/projects/schemas/Project.ts";
+import { ReadProject } from "../../features/projects/schemas/Project.ts";
 
 function GroupsPage() {
   const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
@@ -30,7 +28,7 @@ function GroupsPage() {
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
-  const [projects, setProjects] = useState<ReadProjectForUser[]>([]);
+  const [projects, setProjects] = useState<ReadProject[]>([]);
 
   useEffect(() => {
     const getProjects = async () => {

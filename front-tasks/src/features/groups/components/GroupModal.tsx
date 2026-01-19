@@ -6,8 +6,7 @@ import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
 import { useGroupProject } from "../../../hooks/useGroupProject";
-import ProjectList from "../../projects/components/ProjectList";
-import { ReadProjectForUser } from "../../projects/schemas/Project";
+import { ReadProject } from "../../projects/schemas/Project";
 import ProjectListMini from "../../projects/components/ProjectListMini/ProjectListMini";
 
 interface groupModalProps {
@@ -18,7 +17,7 @@ interface groupModalProps {
   onEdit: (group: ReadGroup) => void;
   onAddUser: () => void;
   onCreateProject: () => void;
-  projects: ReadProjectForUser[];
+  projects: ReadProject[];
 }
 
 function GroupViewModal({
