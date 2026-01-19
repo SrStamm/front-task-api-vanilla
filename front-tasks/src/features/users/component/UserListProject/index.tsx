@@ -11,7 +11,7 @@ interface userListProps {
   groupId: number;
   projectId: number;
   onDelete: (group_id: number, project_id: number, user_id: number) => void;
-  permission: PermissionProject;
+  permission?: PermissionProject;
 }
 
 function UserListProject({
