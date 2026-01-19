@@ -61,9 +61,9 @@ export function useChat() {
         // Verificar que sea para el proyecto actual
         if (mappedMessage.project_id === projectId) {
           setMessages((prev) => {
+            const cleanIncoming = mappedMessage.message.trim();
             const sinOptimista = prev.filter(
-              (m) =>
-                !(m.username === "Yo" && m.message === mappedMessage.message),
+              (m) => !(m.username === "Yo" && m.message === cleanIncoming),
             );
 
             const yaExiste = sinOptimista.some(
