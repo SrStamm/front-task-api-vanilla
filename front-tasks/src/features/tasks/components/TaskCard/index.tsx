@@ -7,7 +7,7 @@ import { useDraggable } from "@dnd-kit/core";
 
 interface TaskCardProps {
   task: ReadAllTaskFromProjectInterface;
-  onShowTaskModal: (taskId: number) => void;
+  onShowTaskModal?: (taskId: number) => void;
 }
 
 function TaskCard({ task, onShowTaskModal }: TaskCardProps) {
