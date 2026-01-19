@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
 import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
-import { useGroupProject } from "../../../hooks/useGroupProject";
 import { ReadProject } from "../../projects/schemas/Project";
 import ProjectListMini from "../../projects/components/ProjectListMini/ProjectListMini";
+import { getUserDataInGroup } from "../api/GroupService";
+import { RoleGroup } from "../../../types/Group";
 
 interface groupModalProps {
   open: boolean;
@@ -31,7 +32,16 @@ function GroupViewModal({
   projects,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
-  const { role } = useGroupProject();
+  const [role, setRole] = useState<RoleGroup | null>(null);
+
+  const getRole = async () => {
+    const res = await getUserDataInGroup(group.group_id);
+    setRole(res.role);
+  };
+
+  useEffect(() => {
+    getRole();
+  }, [group]);
 
   const header = <h2 className="modal-title">{group.name}</h2>;
 
@@ -63,11 +73,15 @@ function GroupViewModal({
       >
         <div className="modal-section-header">
           <h4 className="modal-subtitle">Proyectos</h4>
-          <Button
-            className="btn-primary btn-vsm"
-            text="Crear Proyecto"
-            onClick={onCreateProject}
-          />
+          {role === "admin" ? (
+            <Button
+              className="btn-primary btn-vsm"
+              text="Crear Proyecto"
+              onClick={onCreateProject}
+            />
+          ) : (
+            ""
+          )}
         </div>
         {projects.length === 0 ? (
           <ErrorContainer
@@ -86,14 +100,19 @@ function GroupViewModal({
       >
         <div className="modal-section-header ">
           <h4 className="modal-subtitle">Miembros</h4>
-          <Button
-            className="btn-primary btn-vsm"
-            text="Agregar Usuario"
-            onClick={onAddUser}
-          />
+
+          {role === "admin" ? (
+            <Button
+              className="btn-primary btn-vsm"
+              text="Agregar Usuario"
+              onClick={onAddUser}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
-        <UserListGroup users={group.users} addUser={false} />
+        <UserListGroup users={group.users} addUser={false} role={role} />
       </div>
     </>
   );
