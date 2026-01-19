@@ -13,6 +13,13 @@
   align-items: center;
   gap: 0.5rem;
   list-style: none;
+  top: 4rem;
+}
+
+@media (max-width: 768px) {
+  .user-options-container {
+    left: -1.5rem;
+  }
 }
 
 .user-options-container.is_collapsed button {
