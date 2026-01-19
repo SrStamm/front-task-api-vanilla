@@ -127,7 +127,6 @@ El frontend se comunica con la API de Tareas a través de:
 * [ ] 🏷️ Sistema de etiquetas (tags) para tareas
 * [x] 🔎 Filtros de tareas (Enero 2026)
 * [ ] 📊 Métricas de progreso por proyecto
-* [ ] 📱 Soporte PWA (offline + notificaciones push)
 * [x] 🌙 Tema claro / oscuro
 
 ---
