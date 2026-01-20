@@ -59,6 +59,7 @@ export function useProjects() {
 
   async function createProject(payload: CreateProject) {
     const newProject = await createProjectApi(payload);
+    console.log(newProject);
     setProjects((prev) => [...prev, newProject]);
   }
 
@@ -113,8 +114,22 @@ export function useProjects() {
       user_id: userId,
     };
 
-    await addUserToProjectApi(data);
-    await loadProjects();
+    const res = await addUserToProjectApi(data);
+    console.log(res);
+
+    setProjects((prevProjects) => {
+      if (!prevProjects) return undefined;
+
+      return prevProjects.map((project) => {
+        if (project.project_id === projectId) {
+          return {
+            ...project,
+            users: [...project.users, res],
+          };
+        }
+        return project;
+      });
+    });
   }
 
   return {

@@ -12,7 +12,8 @@ import { useGroupProject } from "../../hooks/useGroupProject";
 import ErrorContainer from "../../components/common/ErrorContainer";
 
 function ProjectsPage() {
-  const { projects, loading, error, deleteProject } = useProjects();
+  const { projects, loading, error, deleteProject, addUserToProject } =
+    useProjects();
   const { getUsersInGroup } = useGroups();
   const { groupId, role } = useGroupProject();
 
@@ -55,6 +56,10 @@ function ProjectsPage() {
         <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
       </div>
     );
+
+  const currentProject = projects?.find(
+    (p) => p.project_id === selectedProject?.project_id,
+  );
 
   const handleOpenModal = (project: ReadProject) => {
     setSelectedProject(project);
@@ -141,7 +146,7 @@ function ProjectsPage() {
         <ProjectModal
           open={openModal}
           onClose={handleCloseModal}
-          project={selectedProject}
+          project={currentProject || selectedProject}
           deleteProject={handleDeleteProject}
           onEdit={handleOpenUpdateModal}
           onShowListUser={handleOpenUserModal}
@@ -161,6 +166,7 @@ function ProjectsPage() {
           onClose={handleCloseUserModal}
           usersInGroup={usersInGroup}
           project={selectedProject}
+          onAddUser={addUserToProject}
         />
       )}
     </>
