@@ -20,6 +20,7 @@ function ProjectsPage() {
     createProject,
     updateProject,
     addUserToProject,
+    removeUserFromProject,
   } = useProjects();
   const { getUsersInGroup } = useGroups();
   const { groupId, role } = useGroupProject();
@@ -156,6 +157,7 @@ function ProjectsPage() {
           project={currentProject || selectedProject}
           deleteProject={handleDeleteProject}
           onEdit={handleOpenUpdateModal}
+          onDelete={removeUserFromProject}
           onShowListUser={handleOpenUserModal}
         />
       )}

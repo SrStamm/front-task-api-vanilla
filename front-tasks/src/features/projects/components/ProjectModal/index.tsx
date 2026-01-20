@@ -7,7 +7,6 @@ import type {
 } from "../../../projects/schemas/Project";
 import UserListProject from "../../../users/component/UserListProject";
 import "./ProjectModal.css";
-import { useProjects } from "../../hooks/useProject";
 import { getUserDataInProject } from "../../api/ProjectService.ts";
 import ErrorContainer from "../../../../components/common/ErrorContainer";
 import TaskCard from "../../../tasks/components/TaskCard/index.tsx";
@@ -21,6 +20,7 @@ interface projectModalProps {
   deleteProject: (groupId: number, projectId: number) => void;
   onEdit: (project: ReadProject) => void;
   onShowListUser: () => void;
+  onDelete: (groupId: number, projectId: number, userId: number) => void;
 }
 
 function ProjectModal({
@@ -30,11 +30,11 @@ function ProjectModal({
   deleteProject,
   onEdit,
   onShowListUser,
+  onDelete,
 }: projectModalProps) {
   const [tabSelected, setTabSelected] = useState("members");
   const [permission, setPermission] = useState<PermissionProject | null>(null);
   const [tasks, setTasks] = useState<ReadAllTaskFromProjectInterface[]>([]);
-  const { removeUserFromProject } = useProjects();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,7 +138,8 @@ function ProjectModal({
           users={project.users}
           groupId={project.group_id}
           projectId={project.project_id}
-          onDelete={removeUserFromProject}
+          onDelete={onDelete}
+          permission={permission}
         />
       </div>
     </>
