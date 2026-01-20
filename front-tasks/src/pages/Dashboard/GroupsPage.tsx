@@ -165,43 +165,45 @@ function GroupsPage() {
       </section>
 
       {selectedGroup && (
-        <GroupViewModal
-          open={openModal}
-          onClose={handleCloseModal}
-          group={currentGroup || selectedGroup}
-          deleteGroup={handleDeleteGroup}
-          onEdit={handleOpenUpdateModal}
-          onAddUser={handleShowUserAddModal}
-          onCreateProject={handleShowCreateProjectModal}
-          projects={projects}
-        />
+        <>
+          <GroupViewModal
+            open={openModal}
+            onClose={handleCloseModal}
+            group={currentGroup || selectedGroup}
+            deleteGroup={handleDeleteGroup}
+            onEdit={handleOpenUpdateModal}
+            onAddUser={handleShowUserAddModal}
+            onCreateProject={handleShowCreateProjectModal}
+            projects={projects}
+          />
+
+          <GroupCreateUpdateModal
+            type={typeModal}
+            group={currentGroup || selectedGroup}
+            open={openCreateModal}
+            onClose={handleCloseCreateModal}
+            createGroup={createGroup}
+            editGroupEvent={updateGroup}
+          />
+
+          <ProjectCreateUpdateModal
+            type="create"
+            onClose={handleHideCreateProjectModal}
+            open={showCreateProjectModal}
+            groupIdCharged={selectedGroup?.group_id}
+            onCreate={createProject}
+            onUpdate={updateProject}
+          />
+
+          <UserAddToGroupModal
+            users={allUsers}
+            groupId={currentGroup?.group_id || selectedGroup.group_id}
+            onClose={handleHideUserAddModal}
+            onAdd={addUserToGroup}
+            show={showUserAddModal}
+          />
+        </>
       )}
-
-      <GroupCreateUpdateModal
-        type={typeModal}
-        group={currentGroup || selectedGroup}
-        open={openCreateModal}
-        onClose={handleCloseCreateModal}
-        createGroup={createGroup}
-        editGroupEvent={updateGroup}
-      />
-
-      <ProjectCreateUpdateModal
-        type="create"
-        onClose={handleHideCreateProjectModal}
-        open={showCreateProjectModal}
-        groupIdCharged={selectedGroup?.group_id}
-        onCreate={createProject}
-        onUpdate={updateProject}
-      />
-
-      <UserAddToGroupModal
-        users={allUsers}
-        groupId={currentGroup.group_id || selectedGroup.group_id}
-        onClose={handleHideUserAddModal}
-        onAdd={addUserToGroup}
-        show={showUserAddModal}
-      />
     </>
   );
 }

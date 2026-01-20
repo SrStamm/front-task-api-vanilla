@@ -59,7 +59,6 @@ export function useProjects() {
 
   async function createProject(payload: CreateProject) {
     const newProject = await createProjectApi(payload);
-    console.log(newProject);
     setProjects((prev) => (prev ? [...prev, newProject] : [newProject]));
   }
 
