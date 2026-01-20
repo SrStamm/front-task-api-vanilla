@@ -38,7 +38,7 @@ export function useGroups() {
 
   async function createGroup(payload: CreateGroupInterface) {
     const newGroup = await createGroupApi(payload);
-    setGroups((prev) => [...prev, newGroup]);
+    setGroups((prev) => (prev ? [...prev, newGroup] : [newGroup]));
   }
 
   async function updateGroup(id: number, payload: UpdateGroupInterface) {
@@ -62,7 +62,20 @@ export function useGroups() {
       user_id: userId,
     };
     const user = await addUserToGroupApi(data);
-    return user;
+
+    setGroups((prevGroups) => {
+      if (!prevGroups) return undefined;
+
+      return prevGroups.map((group) => {
+        if (group.group_id === groupId) {
+          return {
+            ...group,
+            users: [...group.users, user],
+          };
+        }
+        return group;
+      });
+    });
   }
 
   return {

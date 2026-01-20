@@ -16,10 +16,19 @@ import {
 } from "../../features/projects/api/ProjectService.ts";
 import { getUserDataInGroup } from "../../features/groups/api/GroupService.ts";
 import { ReadProject } from "../../features/projects/schemas/Project.ts";
+import { useProjects } from "../../features/projects/hooks/useProject.ts";
 
 function GroupsPage() {
-  const { groups, loading, error, createGroup, deleteGroup, updateGroup } =
-    useGroups();
+  const {
+    groups,
+    loading,
+    error,
+    createGroup,
+    deleteGroup,
+    updateGroup,
+    addUserToGroup,
+  } = useGroups();
+  const { createProject, updateProject } = useProjects();
 
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -29,6 +38,10 @@ function GroupsPage() {
   const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
   const [projects, setProjects] = useState<ReadProject[]>([]);
+
+  const currentGroup = groups?.find(
+    (g) => g.group_id === selectedGroup?.group_id,
+  );
 
   useEffect(() => {
     const getProjects = async () => {
@@ -60,7 +73,9 @@ function GroupsPage() {
     setShowUserAddModal(true);
     const users = await fetchGetAllUsers();
 
-    const usersInGroupIDs = new Set(selectedGroup?.users.map((u) => u.user_id));
+    const usersInGroupIDs = currentGroup
+      ? new Set(currentGroup.users.map((u) => u.user_id))
+      : new Set(selectedGroup?.users.map((u) => u.user_id));
 
     const usersNotInGroup = users.filter((u) => {
       return !usersInGroupIDs.has(u.user_id);
@@ -153,7 +168,7 @@ function GroupsPage() {
         <GroupViewModal
           open={openModal}
           onClose={handleCloseModal}
-          group={selectedGroup}
+          group={currentGroup || selectedGroup}
           deleteGroup={handleDeleteGroup}
           onEdit={handleOpenUpdateModal}
           onAddUser={handleShowUserAddModal}
@@ -164,7 +179,7 @@ function GroupsPage() {
 
       <GroupCreateUpdateModal
         type={typeModal}
-        group={selectedGroup && selectedGroup}
+        group={currentGroup || selectedGroup}
         open={openCreateModal}
         onClose={handleCloseCreateModal}
         createGroup={createGroup}
@@ -176,12 +191,15 @@ function GroupsPage() {
         onClose={handleHideCreateProjectModal}
         open={showCreateProjectModal}
         groupIdCharged={selectedGroup?.group_id}
+        onCreate={createProject}
+        onUpdate={updateProject}
       />
 
       <UserAddToGroupModal
         users={allUsers}
-        groupId={selectedGroup && selectedGroup.group_id}
+        groupId={currentGroup.group_id || selectedGroup.group_id}
         onClose={handleHideUserAddModal}
+        onAdd={addUserToGroup}
         show={showUserAddModal}
       />
     </>

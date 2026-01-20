@@ -115,7 +115,6 @@ export function useProjects() {
     };
 
     const res = await addUserToProjectApi(data);
-    console.log(res);
 
     setProjects((prevProjects) => {
       if (!prevProjects) return undefined;

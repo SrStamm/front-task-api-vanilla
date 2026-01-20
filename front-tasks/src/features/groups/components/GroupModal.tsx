@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
 import type { ReadGroup } from "../schemas/Group";
-import "./GroupModal.css";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
 import { ReadProject } from "../../projects/schemas/Project";
 import ProjectListMini from "../../projects/components/ProjectListMini/ProjectListMini";
 import { getUserDataInGroup } from "../api/GroupService";
 import { RoleGroup } from "../../../types/Group";
+import "./GroupModal.css";
 
 interface groupModalProps {
   open: boolean;
