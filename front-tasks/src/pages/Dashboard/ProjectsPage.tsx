@@ -12,8 +12,15 @@ import { useGroupProject } from "../../hooks/useGroupProject";
 import ErrorContainer from "../../components/common/ErrorContainer";
 
 function ProjectsPage() {
-  const { projects, loading, error, deleteProject, addUserToProject } =
-    useProjects();
+  const {
+    projects,
+    loading,
+    error,
+    deleteProject,
+    createProject,
+    updateProject,
+    addUserToProject,
+  } = useProjects();
   const { getUsersInGroup } = useGroups();
   const { groupId, role } = useGroupProject();
 
@@ -158,6 +165,8 @@ function ProjectsPage() {
         project={selectedProject && selectedProject}
         open={openCreateModal}
         onClose={handleCloseCreateModal}
+        onCreate={createProject}
+        onUpdate={updateProject}
       />
 
       {showUserModal && selectedProject && (

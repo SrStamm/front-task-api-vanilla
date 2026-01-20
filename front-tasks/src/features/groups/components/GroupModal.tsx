@@ -34,13 +34,13 @@ function GroupViewModal({
   const [tabSelected, setTabSelected] = useState("projects");
   const [role, setRole] = useState<RoleGroup | null>(null);
 
-  const getRole = async () => {
-    const res = await getUserDataInGroup(group.group_id);
+  const getRole = async (groupId: number) => {
+    const res = await getUserDataInGroup(groupId);
     setRole(res.role);
   };
 
   useEffect(() => {
-    getRole();
+    getRole(group.group_id);
   }, [group]);
 
   const header = <h2 className="modal-title">{group.name}</h2>;

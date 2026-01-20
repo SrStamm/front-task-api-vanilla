@@ -6,7 +6,6 @@ import type {
   ReadProject,
   UpdateProject,
 } from "../../schemas/Project";
-import { useProjects } from "../../hooks/useProject";
 import { useGroupProject } from "../../../../hooks/useGroupProject";
 
 interface projectModalProps {
@@ -14,6 +13,8 @@ interface projectModalProps {
   open: boolean;
   onClose: () => void;
   project?: ReadProject;
+  onCreate: (newProject: CreateProject) => void;
+  onUpdate: (project: UpdateProject) => void;
   groupIdCharged?: number;
 }
 
@@ -23,13 +24,14 @@ function ProjectCreateUpdateModal({
   onClose,
   project,
   groupIdCharged,
+  onCreate,
+  onUpdate,
 }: projectModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [groupId, setGroupId] = useState(0);
   const [projectId, setProjectId] = useState(0);
 
-  const { createProject, updateProject } = useProjects();
   const { groupId: selectedGroupId } = useGroupProject();
 
   useEffect(() => {
@@ -62,7 +64,7 @@ function ProjectCreateUpdateModal({
       group_id: groupId,
     };
 
-    await createProject(newProject);
+    onCreate(newProject);
 
     onClose();
   };
@@ -77,7 +79,7 @@ function ProjectCreateUpdateModal({
       description: description,
     };
 
-    await updateProject(editGroup);
+    onUpdate(editGroup);
 
     onClose();
   };
