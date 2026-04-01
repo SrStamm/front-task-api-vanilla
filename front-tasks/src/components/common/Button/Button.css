@@ -312,6 +312,21 @@
   margin-right: 0.5rem;
 }
 
+/* Icon wrappers */
+.btn-icon-left,
+.btn-icon-right {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-icon-left {
+  margin-right: var(--spacing-xs);
+}
+
+.btn-icon-right {
+  margin-left: var(--spacing-xs);
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

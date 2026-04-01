@@ -1,4 +1,5 @@
 import "./Button.css";
+import type { ReactNode } from "react";
 
 interface ButtonProps {
   className: string;
@@ -8,9 +9,12 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   loading?: boolean;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
 }
 
 function Button(props: ButtonProps) {
+  const { leftIcon, rightIcon, loading, text, ...rest } = props;
   return (
     <button
       className={`btn ${props.className}`}
@@ -19,7 +23,15 @@ function Button(props: ButtonProps) {
       form={props.form}
       disabled={props.disabled}
     >
-      {props.loading ? "..." : props.text}
+      {loading ? (
+        "..."
+      ) : (
+        <>
+          {leftIcon && <span className="btn-icon-left">{leftIcon}</span>}
+          {text}
+          {rightIcon && <span className="btn-icon-right">{rightIcon}</span>}
+        </>
+      )}
     </button>
   );
 }
