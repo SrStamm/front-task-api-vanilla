@@ -123,7 +123,7 @@ function GroupsPage() {
   if (loading)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "black", fontSize: "1.5em" }}>Cargando los grupos</p>
+        <p style={{ color: "var(--text-muted)", fontSize: "1.5em" }}>Cargando los grupos</p>
       </div>
     );
   if (error) {
