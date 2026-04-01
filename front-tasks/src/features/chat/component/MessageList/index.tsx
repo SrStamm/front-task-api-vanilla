@@ -4,34 +4,55 @@ import MessageItem from "../MessageItem";
 import "./MessageList.css";
 import { AuthContext } from "../../../../providers/AuthProvider";
 import ErrorContainer from "../../../../components/common/ErrorContainer";
+import TypingIndicator from "../../../../components/common/TypingIndicator";
 
 interface MessageListProps {
   messages: ReadMessageInterface[];
+  typingUser?: string;
 }
 
-function MessageList({ messages }: MessageListProps) {
+function MessageList({ messages, typingUser }: MessageListProps) {
   const userContext = useContext(AuthContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const isUserScrolledRef = useRef(false);
+  const prevMessagesLengthRef = useRef(messages.length);
 
-  const scrollBottom = () => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollBottom = (smooth = true) => {
+    messageEndRef.current?.scrollIntoView({ 
+      behavior: smooth ? "smooth" : "auto" 
+    });
   };
 
+  // Detectar si el usuario scrolleó manualmente
+  const handleScroll = () => {
+    const list = listRef.current;
+    if (!list) return;
+    
+    const distanceToBottom = list.scrollHeight - list.scrollTop - list.clientHeight;
+    isUserScrolledRef.current = distanceToBottom > 100;
+  };
+
+  // Scroll inicial al cargar y cuando llegan nuevos mensajes (si no está scrolleando)
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
 
-    const distanceToBottom =
-      list.scrollHeight - list.scrollTop - list.clientHeight;
-
-    if (distanceToBottom < 150) {
-      scrollBottom();
+    // Si es la primera carga, scroll automático
+    if (prevMessagesLengthRef.current === 0 && messages.length > 0) {
+      scrollBottom(false);
+      isUserScrolledRef.current = false;
+    } 
+    // Si llegaron nuevos mensajes y no está scrolleando
+    else if (messages.length > prevMessagesLengthRef.current && !isUserScrolledRef.current) {
+      scrollBottom(true);
     }
-  }, [messages]);
+    
+    prevMessagesLengthRef.current = messages.length;
+  }, [messages.length]);
 
   return (
-    <ul className="list-message" ref={listRef}>
+    <ul className="list-message" ref={listRef} onScroll={handleScroll}>
       {messages.length === 0 ? (
         <ErrorContainer
           isButton={false}
@@ -48,7 +69,7 @@ function MessageList({ messages }: MessageListProps) {
           ),
         )
       )}
-
+      {typingUser && <TypingIndicator username={typingUser} />}
       <div ref={messageEndRef} />
     </ul>
   );
