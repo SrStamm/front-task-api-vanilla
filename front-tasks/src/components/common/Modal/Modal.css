@@ -12,12 +12,14 @@
   align-items: center;
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
   padding: 1rem;
 }
 
 .modal-backdrop.show {
   opacity: 1;
+  visibility: visible;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -35,12 +37,21 @@
   max-height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
-  animation: modalSlideIn 0.4s var(--transition-spring) forwards;
+  
+  /* Iniciar oculto */
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.3s ease, transform 0.3s var(--transition-spring);
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+}
+
+.modal-backdrop.show .modal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 html.light-theme .modal {
@@ -320,17 +331,6 @@ html.light-theme .modal-header {
 
 .modal-backdrop.hidden {
   display: none;
-}
-
-@keyframes modalSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(24px) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 /* Modal form */

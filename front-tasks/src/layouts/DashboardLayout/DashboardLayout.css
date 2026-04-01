@@ -1,15 +1,18 @@
 .dashboard-layout {
   padding: 2rem;
+  padding-left: calc(var(--sidebar-width, 250px) + 2rem);
   background: var(--bg);
   background-image: var(--gradient-mesh);
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: auto;
+  transition: padding-left var(--transition-smooth);
 }
 
 @media (max-width: 768px) {
   .dashboard-layout {
     padding: 1.25rem;
+    padding-left: 1.25rem;
     overflow-x: none;
   }
 }
