@@ -49,7 +49,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc; /* Color cuando está apagado */
+  background-color: var(--theme-toggle-off); /* Color cuando está apagado */
   transition: 0.4s; /* Transición suave */
   border-radius: 34px; /* Para hacerlo redondo */
 }
@@ -62,14 +62,14 @@
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--surface-text);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 /* Cuando el input está checked (activado) */
 .switch input:checked + .slider {
-  background-color: #2196f3; /* Color cuando está encendido (azul) */
+  background-color: var(--theme-toggle-on); /* Color cuando está encendido (azul) */
 }
 
 /* Mueve el círculo cuando está checked */

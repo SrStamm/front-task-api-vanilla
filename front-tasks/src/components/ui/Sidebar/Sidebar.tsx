@@ -1,4 +1,4 @@
-import { FaArrowAltCircleRight, FaTasks } from "react-icons/fa";
+import { FaChevronLeft, FaTasks } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { GoProject } from "react-icons/go";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -58,81 +58,90 @@ function Sidebar() {
 
   return (
     <aside
-      className={
-        isCollapsed ? "sidebar-container is-collapsed" : "sidebar-container"
-      }
+      className={`sidebar-container ${isCollapsed ? "is-collapsed" : ""}`}
+      ref={sidebarRef}
     >
-      <button className="collapse_button" onClick={handleCollapseSidebar}>
-        <FaArrowAltCircleRight className="collapse_button_item" />
-      </button>
-      <div
-        className={isCollapsed ? "sidebar is-collapsed" : "sidebar"}
-        ref={sidebarRef}
-      >
-        <h1>Project Manager</h1>
-        <nav>
-          <div className="sidebar_intern">
-            {/* Zona 1: Contexto */}
+      <div className={`sidebar ${isCollapsed ? "is-collapsed" : ""}`}>
+        {/* Header con título y botón de collapse */}
+        <div className="sidebar-header">
+          <h1 className="sidebar-title">Project Manager</h1>
+          <button 
+            className="collapse-btn" 
+            onClick={handleCollapseSidebar}
+            aria-label={isCollapsed ? "Expandir sidebar" : "Colapsar sidebar"}
+          >
+            <FaChevronLeft className="collapse-icon" />
+          </button>
+        </div>
 
-            <div className="selectors">
-              <GroupSelector
-                text={groupName == undefined ? "Grupo" : groupName}
-                setName={setGroupName}
-                isCollapsed={isCollapsed}
-              />
-
-              <ProjectSelector
-                text={projectTitle == undefined ? "Proyecto" : projectTitle}
-                setTitle={setProjectTitle}
-                isCollapsed={isCollapsed}
-              />
-            </div>
-
-            {/* Zona 2: Navegación */}
-            <div className="sidebar_navigation">
-              <SidebarItem
-                to="/dashboard"
-                icon={<RxDashboard />}
-                label="Dashboard"
-                isSelected={elementSelected == "dashboard"}
-                onClick={() => setElementSelected("dashboard")}
-              />
-              <SidebarItem
-                to="/dashboard/projects"
-                icon={<GoProject />}
-                label="Proyectos"
-                isSelected={elementSelected == "projects"}
-                onClick={() => setElementSelected("projects")}
-              />
-              <SidebarItem
-                to="/dashboard/tasks"
-                icon={<FaTasks />}
-                label="Tareas"
-                isSelected={elementSelected == "tasks"}
-                onClick={() => setElementSelected("tasks")}
-              />
-              <SidebarItem
-                to="/dashboard/chat"
-                icon={<IoChatboxEllipsesOutline />}
-                label="Chat"
-                isSelected={elementSelected == "chat"}
-                onClick={() => setElementSelected("chat")}
-              />
-            </div>
+        {/* Selectors - solo visibles cuando NO está colapsado */}
+        {!isCollapsed && (
+          <div className="selectors">
+            <GroupSelector
+              text={groupName == undefined ? "Grupo" : groupName}
+              setName={setGroupName}
+              isCollapsed={isCollapsed}
+            />
+            <ProjectSelector
+              text={projectTitle == undefined ? "Proyecto" : projectTitle}
+              setTitle={setProjectTitle}
+              isCollapsed={isCollapsed}
+            />
           </div>
+        )}
 
-          {/* Zona 3: Perfil */}
-
-          <div style={{ position: "relative" }}>
-            <div className="sidebar_element" onClick={handleShowUserOptions}>
-              <span className="sidebar_item_icon">
-                <FaRegUserCircle />
-              </span>
-              <span className="sidebar_item_text">User</span>
-            </div>
-            {showUserOptions && <UserOptions close={handleShowUserOptions} />}
-          </div>
+        {/* Navegación */}
+        <nav className="sidebar-nav">
+          <SidebarItem
+            to="/dashboard"
+            icon={<RxDashboard />}
+            label="Dashboard"
+            isSelected={elementSelected == "dashboard"}
+            onClick={() => setElementSelected("dashboard")}
+            showTooltip={isCollapsed}
+          />
+          <SidebarItem
+            to="/dashboard/projects"
+            icon={<GoProject />}
+            label="Proyectos"
+            isSelected={elementSelected == "projects"}
+            onClick={() => setElementSelected("projects")}
+            showTooltip={isCollapsed}
+          />
+          <SidebarItem
+            to="/dashboard/tasks"
+            icon={<FaTasks />}
+            label="Tareas"
+            isSelected={elementSelected == "tasks"}
+            onClick={() => setElementSelected("tasks")}
+            showTooltip={isCollapsed}
+          />
+          <SidebarItem
+            to="/dashboard/chat"
+            icon={<IoChatboxEllipsesOutline />}
+            label="Chat"
+            isSelected={elementSelected == "chat"}
+            onClick={() => setElementSelected("chat")}
+            showTooltip={isCollapsed}
+          />
         </nav>
+
+        {/* Footer con usuario */}
+        <div className="sidebar-footer">
+          <div 
+            className="user-profile"
+            onClick={handleShowUserOptions}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleShowUserOptions()}
+          >
+            <span className="user-icon">
+              <FaRegUserCircle />
+            </span>
+            {!isCollapsed && <span className="user-name">User</span>}
+          </div>
+          {showUserOptions && <UserOptions close={handleShowUserOptions} />}
+        </div>
       </div>
     </aside>
   );
