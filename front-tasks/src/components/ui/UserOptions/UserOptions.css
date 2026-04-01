@@ -31,11 +31,12 @@
   height: 34px;
 }
 
-/* Sidebar colapsado - menú centrado */
+/* Sidebar colapsado - menú ajustado a la derecha */
 .sidebar-container.is-collapsed .user-options-container {
-  left: 50%;
-  transform: translateX(-50%);
+  left: auto;
+  right: 0;
   bottom: calc(100% + 8px);
+  transform: none;
 }
 
 .switch {
