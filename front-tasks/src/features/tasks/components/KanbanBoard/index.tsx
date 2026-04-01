@@ -49,6 +49,9 @@ function KanbanBoard({
   // Estado local para manejar el drag en tiempo real (evita snap-back)
   const [localTasks, setLocalTasks] =
     useState<ReadAllTaskFromProjectInterface[] | null>(null);
+  // Guardar el estado final de la tarea arrastrada para usar en dragEnd
+  const [draggedTaskState, setDraggedTaskState] =
+    useState<TaskStateEnum | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -140,6 +143,7 @@ function KanbanBoard({
 
     if (task) {
       setActiveTask(task);
+      setDraggedTaskState(task.state);
     }
   };
 
@@ -168,6 +172,8 @@ function KanbanBoard({
           task.task_id === activeTaskId ? { ...task, state: newState } : task,
         );
       });
+      // Guardar el nuevo estado para usar en dragEnd
+      setDraggedTaskState(newState);
     }
   };
 
@@ -178,6 +184,7 @@ function KanbanBoard({
       setLocalTasks(null);
       setActiveId(0);
       setActiveTask(null);
+      setDraggedTaskState(null);
       return;
     }
 
@@ -190,13 +197,11 @@ function KanbanBoard({
           ? "en proceso"
           : "completado";
 
-    // Usar la tarea del estado local si existe (para evitar snap-back)
-    const taskToUpdate = localTasks?.find((t) => t.task_id === activeId) ?? activeTask;
-
-    if (taskToUpdate && taskToUpdate.state !== newState) {
+    // Comparar con el estado original guardado en draggedTaskState
+    if (activeTask && draggedTaskState !== null && draggedTaskState !== newState) {
       const payload: UpdateTask = {
         project_id: projectId,
-        task_id: taskToUpdate.task_id,
+        task_id: activeTask.task_id,
         state: newState,
       };
 
@@ -207,6 +212,7 @@ function KanbanBoard({
     setLocalTasks(null);
     setActiveId(0);
     setActiveTask(null);
+    setDraggedTaskState(null);
   };
 
   return (
