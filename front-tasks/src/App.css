@@ -59,6 +59,25 @@
   --gray-800: #1f2937;
   --gray-900: #111827;
 
+  /* Chat */
+  --chat-message-bg: var(--gray-100);
+  --chat-message-user-bg: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
+  --chat-message-text: var(--gray-800);
+
+  /* Theme Toggle */
+  --theme-toggle-off: #9ca3af;
+  --theme-toggle-on: var(--primary);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+
+  /* Skeleton */
+  --skeleton-base: var(--bg-card);
+  --skeleton-highlight: var(--surface-bg);
+
   --negro-profundo: #1a1d21;
   --gris-claro: #f1f5f9;
   --blanco-puro: #ffffff;
@@ -174,30 +193,8 @@ html.light-theme ::selection {
 
 .principal-layout {
   background: var(--main-bg);
-  display: grid;
-  grid-template-columns: 80px 1fr;
   min-height: 100vh;
   min-width: 100vw;
-  transition: grid-template-columns var(--transition);
-}
-
-@media (max-width: 768px) {
-  .principal-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dashboard-layout {
-  padding: 2rem;
-  background: var(--main-bg);
-  min-height: 100vh;
-  overflow-x: auto;
-}
-
-@media (max-width: 420px) {
-  .dashboard-layout {
-    padding: 1rem;
-  }
 }
 
 .dashboard-h2 {
@@ -208,8 +205,6 @@ html.light-theme ::selection {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 3rem;
-  text-align: left;
-  padding: 0;
   text-align: center;
 }
 
