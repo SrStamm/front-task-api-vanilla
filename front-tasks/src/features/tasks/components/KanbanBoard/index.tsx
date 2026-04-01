@@ -116,7 +116,7 @@ function KanbanBoard({
     return (
       <ErrorContainer
         advice="No se ha seleccionado ningún proyecto"
-        recommendation="Seleccione un proyecto en 'Proyecto actual'"
+        recommendation="Seleccione un proyecto en 'Proyecto'"
         isButton={false}
         isError={false}
       />
