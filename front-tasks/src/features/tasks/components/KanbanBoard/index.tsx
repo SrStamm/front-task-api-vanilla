@@ -9,6 +9,7 @@ import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -45,6 +46,9 @@ function KanbanBoard({
   const [activeId, setActiveId] = useState(0);
   const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
+  // Estado local para manejar el drag en tiempo real (evita snap-back)
+  const [localTasks, setLocalTasks] =
+    useState<ReadAllTaskFromProjectInterface[] | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -60,17 +64,20 @@ function KanbanBoard({
     }),
   );
 
+  // Usar estado local durante drag para evitar snap-back
+  const displayTasks = localTasks ?? tasksInProject;
+
   const { todoTasks, inProgressTasks, doneTasks } = useMemo(() => {
-    if (!tasksInProject.length) {
+    if (!displayTasks.length) {
       return { todoTasks: [], inProgressTasks: [], doneTasks: [] };
     }
 
-    const todo = tasksInProject.filter((t) => t.state === "sin empezar");
-    const inProgress = tasksInProject.filter((t) => t.state === "en proceso");
-    const done = tasksInProject.filter((t) => t.state === "completado");
+    const todo = displayTasks.filter((t) => t.state === "sin empezar");
+    const inProgress = displayTasks.filter((t) => t.state === "en proceso");
+    const done = displayTasks.filter((t) => t.state === "completado");
 
     return { todoTasks: todo, inProgressTasks: inProgress, doneTasks: done };
-  }, [tasksInProject]);
+  }, [displayTasks]);
 
   if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
 
@@ -85,7 +92,7 @@ function KanbanBoard({
     );
 
   const handleShowModal = (taskId: number) => {
-    const selected = tasksInProject.find((t) => t.task_id === taskId);
+    const selected = displayTasks.find((t) => t.task_id === taskId);
 
     if (selected) {
       setTaskSelected(selected);
@@ -129,15 +136,50 @@ function KanbanBoard({
 
     setActiveId(Number(id));
 
-    const task = tasksInProject.find((t) => t.task_id == id);
+    const task = displayTasks.find((t) => t.task_id == id);
 
     if (task) {
       setActiveTask(task);
     }
   };
 
+  // Actualizar estado local durante el drag para evitar snap-back
+  const handleDragOver = (e: DragOverEvent) => {
+    const { active, over } = e;
+
+    if (!over) return;
+
+    const activeTaskId = Number(active.id);
+    const overColumnId = String(over.id);
+
+    const newState: TaskStateEnum =
+      overColumnId === "To Do"
+        ? "sin empezar"
+        : overColumnId === "In Progress"
+          ? "en proceso"
+          : "completado";
+
+    // Solo actualizar si cambió de columna
+    const activeTask = displayTasks.find((t) => t.task_id === activeTaskId);
+    if (activeTask && activeTask.state !== newState) {
+      setLocalTasks((prevTasks) => {
+        const tasks = prevTasks ?? displayTasks;
+        return tasks.map((task) =>
+          task.task_id === activeTaskId ? { ...task, state: newState } : task,
+        );
+      });
+    }
+  };
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { over } = e;
+
+    if (!over) {
+      setLocalTasks(null);
+      setActiveId(0);
+      setActiveTask(null);
+      return;
+    }
 
     const destinationColumn = String(over.id);
 
@@ -148,16 +190,21 @@ function KanbanBoard({
           ? "en proceso"
           : "completado";
 
-    if (activeTask && activeTask.state !== newState) {
+    // Usar la tarea del estado local si existe (para evitar snap-back)
+    const taskToUpdate = localTasks?.find((t) => t.task_id === activeId) ?? activeTask;
+
+    if (taskToUpdate && taskToUpdate.state !== newState) {
       const payload: UpdateTask = {
         project_id: projectId,
-        task_id: activeTask.task_id,
+        task_id: taskToUpdate.task_id,
         state: newState,
       };
 
       onUpdate(payload);
     }
 
+    // Limpiar estado local de drag
+    setLocalTasks(null);
     setActiveId(0);
     setActiveTask(null);
   };
@@ -167,6 +214,7 @@ function KanbanBoard({
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
         <div className="task-container">

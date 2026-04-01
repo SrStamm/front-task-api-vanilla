@@ -83,8 +83,10 @@ export function useTasks({ state, label }: useTasksFilters) {
     mutationFn: (payload: CreateTask) =>
       FetchCreateTask(payload.project_id, payload),
     onSuccess: (newTask) => {
+      // Invalidar TODAS las queries de tareas para este proyecto (con cualquier filtro)
       queryClient.invalidateQueries({
         queryKey: ["tasks", newTask.projectId],
+        exact: false,
       });
     },
   });
