@@ -24,7 +24,7 @@
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   transition: all var(--transition-smooth);
 }
 
@@ -195,10 +195,14 @@ html.light-theme .selectors {
 /* ============================================
    TOOLTIP - Solo para estado colapsado
    ============================================ */
+.sidebar_item.has-tooltip {
+  position: relative;
+}
+
 .sidebar_item.has-tooltip::after {
   content: attr(data-tooltip);
-  position: fixed;
-  left: 80px;
+  position: absolute;
+  left: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
   background: var(--bg-card);
@@ -214,6 +218,7 @@ html.light-theme .selectors {
   box-shadow: var(--shadow-lg);
   z-index: 1001;
   pointer-events: none;
+  border: 1px solid var(--border);
 }
 
 .sidebar_item.has-tooltip:hover::after {
@@ -228,6 +233,7 @@ html.light-theme .selectors {
   padding: 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   margin-top: auto;
+  position: relative;
 }
 
 html.light-theme .sidebar-footer {

@@ -6,6 +6,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import GroupSelector from "../Selector/GroupSelector";
 import ProjectSelector from "../Selector/ProjectSelector";
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useGroupProject } from "../../../hooks/useGroupProject";
 import UserOptions from "../UserOptions";
 import SidebarItem from "../SidebarItem";
@@ -15,10 +16,11 @@ function Sidebar() {
   const [groupName, setGroupName] = useState<string | undefined>();
   const [projectTitle, setProjectTitle] = useState<string | undefined>();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [elementSelected, setElementSelected] = useState("");
+  const [elementSelected, setElementSelected] = useState("groups");
   const [showUserOptions, setShowUserOptions] = useState(false);
   const { groupId } = useGroupProject();
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const handleClickOutside = (e: MouseEvent) => {
     if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
@@ -37,6 +39,20 @@ function Sidebar() {
   useEffect(() => {
     setProjectTitle(undefined);
   }, [groupId]);
+
+  // Detectar la ruta actual y seleccionar el item correspondiente
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/dashboard" || path.endsWith("/groups")) {
+      setElementSelected("groups");
+    } else if (path.endsWith("/projects")) {
+      setElementSelected("projects");
+    } else if (path.endsWith("/tasks")) {
+      setElementSelected("tasks");
+    } else if (path.endsWith("/chat")) {
+      setElementSelected("chat");
+    }
+  }, [location.pathname]);
 
   const handleShowUserOptions = () => {
     setShowUserOptions(!showUserOptions);

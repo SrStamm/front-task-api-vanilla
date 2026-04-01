@@ -46,13 +46,22 @@ html.light-theme .dropdown-menu {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Collapsed sidebar */
+/* Collapsed sidebar - dropdown visible dentro del sidebar */
 .sidebar-container.is-collapsed .dropdown-menu {
   position: absolute;
-  left: calc(100% + 20px);
+  left: calc(100% + 8px);
   top: 0;
   transform: none;
   min-width: 220px;
+  z-index: 1001;
+}
+
+/* En mobile, el sidebar colapsado tiene posición fixed, ajustar dropdown */
+@media (max-width: 768px) {
+  .sidebar-container.is-collapsed .dropdown-menu {
+    left: calc(100% + 16px);
+    max-height: 400px;
+  }
 }
 
 /* Menu list */

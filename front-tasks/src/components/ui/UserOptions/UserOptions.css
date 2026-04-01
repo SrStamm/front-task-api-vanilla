@@ -13,18 +13,29 @@
   align-items: center;
   gap: 0.5rem;
   list-style: none;
-  top: 4rem;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {
   .user-options-container {
-    left: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
 .user-options-container.is_collapsed button {
   width: 60px;
   height: 34px;
+}
+
+/* Sidebar colapsado - menú centrado */
+.sidebar-container.is-collapsed .user-options-container {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 8px);
 }
 
 .switch {
