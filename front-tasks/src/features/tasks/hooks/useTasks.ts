@@ -83,8 +83,10 @@ export function useTasks({ state, label }: useTasksFilters) {
     mutationFn: (payload: CreateTask) =>
       FetchCreateTask(payload.project_id, payload),
     onSuccess: (newTask) => {
+      // Invalidar TODAS las queries de tareas para este proyecto (con cualquier filtro)
       queryClient.invalidateQueries({
         queryKey: ["tasks", newTask.projectId],
+        exact: false,
       });
     },
   });
@@ -93,14 +95,13 @@ export function useTasks({ state, label }: useTasksFilters) {
   const update = useMutation({
     mutationFn: (payload: UpdateTask) =>
       FetchUpdateTask(payload.project_id, payload.task_id, payload),
-    onSuccess: (updatedTask) => {
-      queryClient.setQueryData(
-        ["tasks", projectId, state, label],
-        (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
-          oldTasks.map((task) =>
-            task.task_id === updatedTask.task_id ? updatedTask : task,
-          ),
-      );
+    onSuccess: (_, variables) => {
+      // Invalidar TODAS las queries de tareas para el proyecto
+      // (sin importar el filtro de estado/label) para evitar inconsistencias
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", variables.project_id],
+        exact: false,
+      });
     },
   });
 
@@ -134,11 +135,11 @@ export function useTasks({ state, label }: useTasksFilters) {
     hasNextPage,
     isFetchingNextPage,
 
-    // Acciones
+    // Acciones (usar mutateAsync para poder await/catch)
     loadTasksFromProject,
-    create: create.mutate,
-    update: update.mutate,
-    remove: remove.mutate,
+    create: create.mutateAsync,
+    update: update.mutateAsync,
+    remove: remove.mutateAsync,
 
     // Estados de mutaciones
     isCreating: create.isPending,

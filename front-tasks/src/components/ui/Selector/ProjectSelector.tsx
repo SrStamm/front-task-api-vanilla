@@ -31,10 +31,17 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
     }
   };
 
+  // Solo cargar proyectos cuando groupId cambia explícitamente
+  const prevGroupIdRef = useRef<number | null | undefined>(groupId);
+
   useEffect(() => {
-    setProjectId(null);
-    loadProjects();
-  }, [groupId, setProjectId, loadProjects]);
+    // Solo ejecutar si groupId cambió realmente
+    if (groupId !== prevGroupIdRef.current) {
+      prevGroupIdRef.current = groupId;
+      setProjectId(null);
+      loadProjects();
+    }
+  }, [groupId]); // Solo groupId como dependencia
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

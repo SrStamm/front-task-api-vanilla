@@ -6,22 +6,46 @@
 
   /* Accents */
   --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
   --secondary: #14b8a6;
+  --secondary-light: #2dd4bf;
+  --accent: #ec4899;
 
+  /* Semantic */
   --error: #ef4444;
+  --error-light: #f87171;
   --success: #22c55e;
+  --success-light: #4ade80;
   --warning: #facc15;
+  --warning-light: #fde047;
+  --info: #3b82f6;
 
   /* Layout */
   --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --transition: 0.25s ease;
+  --transition-fast: 0.15s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --sidebar-width: 250px;
 
-  /* Shadows */
+  /* Shadows with color tint */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Glow shadows */
+  --glow-primary: 0 0 20px rgba(99, 102, 241, 0.3);
+  --glow-primary-sm: 0 0 10px rgba(99, 102, 241, 0.25);
+  --glow-secondary: 0 0 20px rgba(20, 184, 166, 0.3);
+  --glow-success: 0 0 20px rgba(34, 197, 94, 0.3);
+  --glow-error: 0 0 20px rgba(239, 68, 68, 0.3);
 
   /* Gray */
   --gray-50: #f9fafb;
@@ -34,6 +58,25 @@
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
+
+  /* Chat */
+  --chat-message-bg: var(--gray-100);
+  --chat-message-user-bg: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
+  --chat-message-text: var(--gray-800);
+
+  /* Theme Toggle */
+  --theme-toggle-off: #9ca3af;
+  --theme-toggle-on: var(--primary);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+
+  /* Skeleton */
+  --skeleton-base: var(--bg-card);
+  --skeleton-highlight: var(--surface-bg);
 
   --negro-profundo: #1a1d21;
   --gris-claro: #f1f5f9;
@@ -50,8 +93,11 @@
   --sidebar-border: var(--border);
   --sidebar-accent-bg: rgba(99, 102, 241, 0.15);
   --sidebar-item-active: var(--primary);
+  --sidebar-hover: rgba(99, 102, 241, 0.1);
 
   --text: var(--blanco-puro);
+  --text-muted: var(--gray-400);
+  --text-subtle: var(--gray-500);
 
   /* Cards y Modales */
   --surface-bg: #2d3136;
@@ -59,8 +105,20 @@
   --surface-border: var(--border);
   --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 
+  /* Focus states */
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.4);
+  --focus-ring-secondary: 0 0 0 3px rgba(20, 184, 166, 0.4);
+
+  /* Backdrop */
+  --backdrop-blur: blur(12px);
+
   --h3: var(--gray-200);
   --h2: var(--gray-100);
+
+  /* Gradient backgrounds */
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --gradient-surface: linear-gradient(180deg, var(--surface-bg) 0%, rgba(45, 49, 54, 0.8) 100%);
+  --gradient-mesh: radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(20, 184, 166, 0.1) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
 }
 
 * {
@@ -70,63 +128,73 @@
 }
 
 html.light-theme {
-  --bg: #f1f5f9;
+  --bg: #f8fafc;
   --bg-card: #ffffff;
   --text: #0f172a;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
   --border: #e2e8f0;
 
   --sidebar-bg: var(--blanco-puro);
   --main-bg: var(--gris-claro);
-  --section-bg: rgba(255, 255, 255, 0.7);
-
-  --text: var(--negro-profundo);
+  --section-bg: rgba(255, 255, 255, 0.8);
 
   --surface-bg: #ffffff;
   --surface-text: var(--negro-profundo);
+  --surface-border: #e2e8f0;
   --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 
-  --h3: var(--gray-800);
+  --sidebar-accent-bg: rgba(99, 102, 241, 0.1);
+  --sidebar-hover: rgba(99, 102, 241, 0.08);
+
+  /* Glow más sutil para light */
+  --glow-primary: 0 0 15px rgba(99, 102, 241, 0.2);
+  --glow-primary-sm: 0 0 8px rgba(99, 102, 241, 0.15);
+  --glow-secondary: 0 0 15px rgba(20, 184, 166, 0.2);
+  --glow-success: 0 0 15px rgba(34, 197, 94, 0.2);
+  --glow-error: 0 0 15px rgba(239, 68, 68, 0.2);
+
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  --focus-ring-secondary: 0 0 0 3px rgba(20, 184, 166, 0.3);
+
+  --h3: var(--gray-700);
   --h2: var(--gray-800);
+
+  /* Gradient backgrounds light */
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.9) 100%);
+  --gradient-mesh: radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.08) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(20, 184, 166, 0.06) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
 }
 
 body {
   background: var(--bg);
+  background-image: var(--gradient-mesh);
+  background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
-  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition:
     background-color var(--transition),
     color var(--transition);
 }
 
+/* Selection */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: var(--blanco-puro);
+}
+
+html.light-theme ::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--negro-profundo);
+}
+
 .principal-layout {
   background: var(--main-bg);
-  display: grid;
-  grid-template-columns: 80px 1fr;
   min-height: 100vh;
   min-width: 100vw;
-  transition: grid-template-columns var(--transition);
-}
-
-@media (max-width: 768px) {
-  .principal-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dashboard-layout {
-  padding: 2rem;
-  background: var(--main-bg);
-  min-height: 100vh;
-  overflow-x: auto;
-}
-
-@media (max-width: 420px) {
-  .dashboard-layout {
-    padding: 1rem;
-  }
 }
 
 .dashboard-h2 {
@@ -137,8 +205,6 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 3rem;
-  text-align: left;
-  padding: 0;
   text-align: center;
 }
 

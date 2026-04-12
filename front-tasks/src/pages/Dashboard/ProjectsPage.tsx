@@ -37,7 +37,7 @@ function ProjectsPage() {
   if (loading)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "black", fontSize: "1.5em" }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "1.5em" }}>
           Cargando los proyectos
         </p>
       </div>
@@ -46,12 +46,12 @@ function ProjectsPage() {
   if (!groupId) {
     return (
       <div style={{ textAlign: "center", padding: "3rem" }}>
-        <p style={{ color: "red", fontSize: "1.3rem" }}>
+        <p style={{ color: "var(--warning)", fontSize: "1.3rem" }}>
           No hay ningún grupo seleccionado
         </p>
-        <p style={{ color: "#666", fontSize: "1rem", marginTop: "0.5rem" }}>
+        <p style={{ color: "var(--text-muted)", fontSize: "1rem", marginTop: "0.5rem" }}>
           Seleccione un grupo en
-          <span style={{ color: "black" }}> 'Grupo ▼'</span>
+          <span style={{ color: "var(--primary)", fontWeight: 600 }}> 'Grupo ▼'</span>
         </p>
       </div>
     );
@@ -60,8 +60,8 @@ function ProjectsPage() {
   if (error)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "red" }}>Error al cargar los proyectos</p>
-        <p style={{ color: "#666", fontSize: "0.9rem" }}>{error}</p>
+        <p style={{ color: "var(--error)" }}>Error al cargar los proyectos</p>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>{error}</p>
       </div>
     );
 

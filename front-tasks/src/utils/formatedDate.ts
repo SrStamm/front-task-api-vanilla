@@ -2,35 +2,34 @@ function formatDate(dateString: string | number | Date) {
   if (!dateString) return "Sin fecha límite";
 
   const date = new Date(dateString);
+  const now = new Date();
 
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const mes = currentDate.getMonth();
-  const dia = currentDate.getDate();
+  // Normalizar a medianoche para comparar solo fechas
+  const dateDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  let options: Intl.DateTimeFormatOptions = {};
-
-  if (date.getFullYear() == year) {
-    if (date.getMonth() == mes && date.getDate() == dia) {
-      options = {
-        hour: "2-digit",
-        minute: "2-digit",
-      };
-    } else {
-      options = {
-        month: "2-digit",
-        day: "2-digit",
-      };
-    }
-  } else {
-    options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    };
+  // Si es hoy → mostrar hora
+  if (dateDay.getTime() === nowDay.getTime()) {
+    return date.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
-  return date.toLocaleString("es-ES", options);
+  // Si es de este año → día y mes
+  if (date.getFullYear() === now.getFullYear()) {
+    return date.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "short",
+    });
+  }
+
+  // Otros años → día, mes y año
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export default formatDate;

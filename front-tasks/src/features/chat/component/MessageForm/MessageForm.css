@@ -1,5 +1,5 @@
 .form-message {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: var(--spacing-sm);
 }

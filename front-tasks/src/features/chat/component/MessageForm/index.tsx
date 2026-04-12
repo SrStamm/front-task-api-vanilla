@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 import Button from "../../../../components/common/Button";
 import "./MessageForm.css";
 
@@ -26,6 +27,10 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
         className="input-base"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
       />
       <Button
         type="submit"
@@ -33,6 +38,7 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
         text="Enviar"
         form="form-message"
         disabled={!isConnected}
+        leftIcon={<FaPaperPlane />}
       />
     </form>
   );

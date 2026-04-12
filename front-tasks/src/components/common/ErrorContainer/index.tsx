@@ -1,4 +1,5 @@
 import "./ErrorContainer.css";
+import Button from "../Button";
 
 interface ErrorProps {
   advice: string;
@@ -18,7 +19,11 @@ function ErrorContainer({
       <p className="principal-text">{advice}</p>
       <p className="secondary-text">{recommendation}</p>
       {isButton ? (
-        <button onClick={() => window.location.reload()}>Reintentar</button>
+        <Button
+          className="btn-primary btn-sm"
+          text="Reintentar"
+          onClick={() => window.location.reload()}
+        />
       ) : (
         ""
       )}

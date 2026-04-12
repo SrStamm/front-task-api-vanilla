@@ -13,18 +13,30 @@
   align-items: center;
   gap: 0.5rem;
   list-style: none;
-  top: 4rem;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 @media (max-width: 768px) {
   .user-options-container {
-    left: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
 .user-options-container.is_collapsed button {
   width: 60px;
   height: 34px;
+}
+
+/* Sidebar colapsado - menú ajustado a la derecha */
+.sidebar-container.is-collapsed .user-options-container {
+  left: auto;
+  right: 0;
+  bottom: calc(100% + 8px);
+  transform: none;
 }
 
 .switch {
@@ -49,7 +61,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc; /* Color cuando está apagado */
+  background-color: var(--theme-toggle-off); /* Color cuando está apagado */
   transition: 0.4s; /* Transición suave */
   border-radius: 34px; /* Para hacerlo redondo */
 }
@@ -62,14 +74,14 @@
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--surface-text);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 /* Cuando el input está checked (activado) */
 .switch input:checked + .slider {
-  background-color: #2196f3; /* Color cuando está encendido (azul) */
+  background-color: var(--theme-toggle-on); /* Color cuando está encendido (azul) */
 }
 
 /* Mueve el círculo cuando está checked */

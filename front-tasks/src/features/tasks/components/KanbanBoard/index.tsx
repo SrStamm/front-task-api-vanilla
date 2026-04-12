@@ -9,6 +9,7 @@ import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -27,6 +28,7 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
+  onSuccess?: () => void;
   childModal: boolean;
 }
 
@@ -36,6 +38,7 @@ function KanbanBoard({
   error,
   onEdit,
   onUpdate,
+  onSuccess,
   childModal,
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
@@ -45,6 +48,12 @@ function KanbanBoard({
   const [activeId, setActiveId] = useState(0);
   const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
+  // Estado local para manejar el drag en tiempo real (evita snap-back)
+  const [localTasks, setLocalTasks] =
+    useState<ReadAllTaskFromProjectInterface[] | null>(null);
+  // Guardar el estado final de la tarea arrastrada para usar en dragEnd
+  const [draggedTaskState, setDraggedTaskState] =
+    useState<TaskStateEnum | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -60,17 +69,20 @@ function KanbanBoard({
     }),
   );
 
+  // Usar estado local durante drag para evitar snap-back
+  const displayTasks = localTasks ?? tasksInProject;
+
   const { todoTasks, inProgressTasks, doneTasks } = useMemo(() => {
-    if (!tasksInProject.length) {
+    if (!displayTasks.length) {
       return { todoTasks: [], inProgressTasks: [], doneTasks: [] };
     }
 
-    const todo = tasksInProject.filter((t) => t.state === "sin empezar");
-    const inProgress = tasksInProject.filter((t) => t.state === "en proceso");
-    const done = tasksInProject.filter((t) => t.state === "completado");
+    const todo = displayTasks.filter((t) => t.state === "sin empezar");
+    const inProgress = displayTasks.filter((t) => t.state === "en proceso");
+    const done = displayTasks.filter((t) => t.state === "completado");
 
     return { todoTasks: todo, inProgressTasks: inProgress, doneTasks: done };
-  }, [tasksInProject]);
+  }, [displayTasks]);
 
   if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
 
@@ -85,7 +97,7 @@ function KanbanBoard({
     );
 
   const handleShowModal = (taskId: number) => {
-    const selected = tasksInProject.find((t) => t.task_id === taskId);
+    const selected = displayTasks.find((t) => t.task_id === taskId);
 
     if (selected) {
       setTaskSelected(selected);
@@ -116,7 +128,7 @@ function KanbanBoard({
     return (
       <ErrorContainer
         advice="No se ha seleccionado ningún proyecto"
-        recommendation="Seleccione un proyecto en 'Proyecto actual'"
+        recommendation="Seleccione un proyecto en 'Proyecto'"
         isButton={false}
         isError={false}
       />
@@ -127,17 +139,56 @@ function KanbanBoard({
     const { active } = e;
     const id = Number(active.id);
 
-    setActiveId(Number(id));
+    setActiveId(id);
 
-    const task = tasksInProject.find((t) => t.task_id == id);
+    const task = displayTasks.find((t) => t.task_id === id);
 
     if (task) {
       setActiveTask(task);
+      setDraggedTaskState(task.state);
+    }
+  };
+
+  // Actualizar estado local durante el drag para evitar snap-back
+  const handleDragOver = (e: DragOverEvent) => {
+    const { active, over } = e;
+
+    if (!over) return;
+
+    const activeTaskId = Number(active.id);
+    const overColumnId = String(over.id);
+
+    const newState: TaskStateEnum =
+      overColumnId === "To Do"
+        ? "sin empezar"
+        : overColumnId === "In Progress"
+          ? "en proceso"
+          : "completado";
+
+    // Solo actualizar si cambió de columna
+    const activeTask = displayTasks.find((t) => t.task_id === activeTaskId);
+    if (activeTask && activeTask.state !== newState) {
+      setLocalTasks((prevTasks) => {
+        const tasks = prevTasks ?? displayTasks;
+        return tasks.map((task) =>
+          task.task_id === activeTaskId ? { ...task, state: newState } : task,
+        );
+      });
+      // Guardar el nuevo estado para usar en dragEnd
+      setDraggedTaskState(newState);
     }
   };
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { over } = e;
+
+    if (!over) {
+      setLocalTasks(null);
+      setActiveId(0);
+      setActiveTask(null);
+      setDraggedTaskState(null);
+      return;
+    }
 
     const destinationColumn = String(over.id);
 
@@ -148,6 +199,7 @@ function KanbanBoard({
           ? "en proceso"
           : "completado";
 
+    // Comparar el estado ORIGINAL (activeTask.state) con el nuevo estado
     if (activeTask && activeTask.state !== newState) {
       const payload: UpdateTask = {
         project_id: projectId,
@@ -155,11 +207,16 @@ function KanbanBoard({
         state: newState,
       };
 
-      onUpdate(payload);
+      onUpdate(payload).then(() => {
+        onSuccess?.();
+      });
     }
 
+    // Limpiar estado local de drag
+    setLocalTasks(null);
     setActiveId(0);
     setActiveTask(null);
+    setDraggedTaskState(null);
   };
 
   return (
@@ -167,6 +224,7 @@ function KanbanBoard({
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
         <div className="task-container">

@@ -8,6 +8,8 @@ import TaskTable from "../../../features/tasks/components/TaskTable";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import "./TasksPage.css";
 import { CreateTask, UpdateTask } from "../../../types/Task";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGroupProject } from "../../../hooks/useGroupProject";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -16,6 +18,9 @@ function TaskPage() {
     useState<ReadAllTaskFromProjectInterface | null>(null);
   const [filters, setFilters] = useState({ state: "", label: "" });
   const [tabSelected, setTabSelected] = useState<"project" | "all">("project");
+  const { projectId } = useGroupProject();
+  const queryClient = useQueryClient();
+
   const {
     loadTasksFromProject,
     tasksInProject,
@@ -50,12 +55,22 @@ function TaskPage() {
   }, [setShowFormModal]);
 
   const handleCreate = async (data: CreateTask) => {
-    create(data);
+    await create(data);
   };
 
   const handleUpdate = async (data: UpdateTask) => {
-    update(data);
+    await update(data);
   };
+
+  // Invalidar queries de tareas después de crear/actualizar
+  const handleTaskSuccess = useCallback(() => {
+    if (projectId) {
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", projectId],
+        exact: false,
+      });
+    }
+  }, [projectId, queryClient]);
 
   return (
     <section className="dashboard-section ">
@@ -96,6 +111,7 @@ function TaskPage() {
             error={error?.message ?? null}
             onEdit={handleOpenEditModal}
             onUpdate={handleUpdate}
+            onSuccess={handleTaskSuccess}
           />
 
           <TaskFormModal
@@ -107,7 +123,7 @@ function TaskPage() {
             onUpdate={handleUpdate}
             isCreating={isCreating}
             isUpdating={isUpdating}
-            onSuccess={loadTasksFromProject}
+            onSuccess={handleTaskSuccess}
           />
         </>
       ) : (
