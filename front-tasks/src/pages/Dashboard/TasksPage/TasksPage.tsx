@@ -55,11 +55,11 @@ function TaskPage() {
   }, [setShowFormModal]);
 
   const handleCreate = async (data: CreateTask) => {
-    create(data);
+    await create(data);
   };
 
   const handleUpdate = async (data: UpdateTask) => {
-    update(data);
+    await update(data);
   };
 
   // Invalidar queries de tareas después de crear/actualizar
@@ -111,6 +111,7 @@ function TaskPage() {
             error={error?.message ?? null}
             onEdit={handleOpenEditModal}
             onUpdate={handleUpdate}
+            onSuccess={handleTaskSuccess}
           />
 
           <TaskFormModal

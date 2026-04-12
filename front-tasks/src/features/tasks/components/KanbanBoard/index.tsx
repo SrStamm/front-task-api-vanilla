@@ -28,6 +28,7 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
+  onSuccess?: () => void;
   childModal: boolean;
 }
 
@@ -37,6 +38,7 @@ function KanbanBoard({
   error,
   onEdit,
   onUpdate,
+  onSuccess,
   childModal,
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
@@ -137,9 +139,9 @@ function KanbanBoard({
     const { active } = e;
     const id = Number(active.id);
 
-    setActiveId(Number(id));
+    setActiveId(id);
 
-    const task = displayTasks.find((t) => t.task_id == id);
+    const task = displayTasks.find((t) => t.task_id === id);
 
     if (task) {
       setActiveTask(task);
@@ -197,15 +199,17 @@ function KanbanBoard({
           ? "en proceso"
           : "completado";
 
-    // Comparar con el estado original guardado en draggedTaskState
-    if (activeTask && draggedTaskState !== null && draggedTaskState !== newState) {
+    // Comparar el estado ORIGINAL (activeTask.state) con el nuevo estado
+    if (activeTask && activeTask.state !== newState) {
       const payload: UpdateTask = {
         project_id: projectId,
         task_id: activeTask.task_id,
         state: newState,
       };
 
-      onUpdate(payload);
+      onUpdate(payload).then(() => {
+        onSuccess?.();
+      });
     }
 
     // Limpiar estado local de drag
