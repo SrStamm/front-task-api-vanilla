@@ -4,7 +4,7 @@ Interfaz web desarrollada en **React + TypeScript** que funciona como **dashboar
 
 El objetivo del proyecto es ofrecer una experiencia clara y eficiente para la **gestión colaborativa de tareas**, integrando comunicación en tiempo real, permisos por rol y una arquitectura frontend modular.
 
-**Deploy en Vercel:** https://front-task-api-vanilla.vercel.app/dashboard/tasks
+**Deploy en Vercel:** <https://front-task-api-vanilla.vercel.app/dashboard/tasks>
 
 - **Username:** test
 - **Pasword:** 123456
@@ -17,31 +17,30 @@ Este frontend permite a los usuarios interactuar con la API REST de Tareas a tra
 
 El sistema está pensado para trabajo colaborativo, permitiendo:
 
-* Organización por **grupos** y **proyectos**
-* Gestión y asignación de **tareas**
-* Comentarios por tarea
-* **Chat en tiempo real**
-* **Notificaciones** instantáneas mediante WebSockets
+- Organización por **grupos** y **proyectos**
+- Gestión y asignación de **tareas**
+- Comentarios por tarea
+- **Chat en tiempo real**
+- **Notificaciones** instantáneas mediante WebSockets
 
 ---
 
 ## 🧭 Secciones principales del Dashboard
 
-* 🏠 **Dashboard**
+- 🏠 **Dashboard**
   Vista general del sistema y acceso rápido a grupos y proyectos.
 
-* 👥 **Grupos**
+- 👥 **Grupos**
   Administración de grupos, miembros y roles.
 
-* 📁 **Proyectos**
+- 📁 **Proyectos**
   Gestión de proyectos, permisos y miembros asociados.
 
-* ✅ **Tareas**
+- ✅ **Tareas**
+  - **Tareas del proyecto**: tablero Kanban con filtros, estados y modal de detalle (comentarios, asignaciones y estado).
+  - **Tareas asignadas al usuario**: listado personal con seguimiento de progreso.
 
-  * **Tareas del proyecto**: tablero Kanban con filtros, estados y modal de detalle (comentarios, asignaciones y estado).
-  * **Tareas asignadas al usuario**: listado personal con seguimiento de progreso.
-
-* 💬 **Chat**
+- 💬 **Chat**
   Mensajería en tiempo real mediante WebSocket, integrada por proyecto.
 
 ---
@@ -92,9 +91,9 @@ El sistema está pensado para trabajo colaborativo, permitiendo:
 
 El frontend se comunica con la API de Tareas a través de:
 
-* **Fetch API** → endpoints REST (`/groups`, `/projects`, `/tasks`, `/comments`, etc.)
-* **WebSockets** → chat y notificaciones en tiempo real
-* **Autenticación JWT** → tokens generados por la API
+- **Fetch API** → endpoints REST (`/groups`, `/projects`, `/tasks`, `/comments`, etc.)
+- **WebSockets** → chat y notificaciones en tiempo real
+- **Autenticación JWT** → tokens generados por la API
 
 > ⚠️ Asegúrate de tener la API de Tareas en ejecución y de configurar correctamente las URLs del entorno (`js/config.js`).
 
@@ -102,32 +101,32 @@ El frontend se comunica con la API de Tareas a través de:
 
 ## 💡 Características destacadas
 
-* Arquitectura frontend **modular y mantenible**
-* Comunicación en tiempo real (chat y notificaciones)
-* Manejo de **roles y permisos** por grupo y proyecto
-* Integración directa con una API propia en FastAPI
-* Enfoque en experiencia de usuario y claridad visual
+- Arquitectura frontend **modular y mantenible**
+- Comunicación en tiempo real (chat y notificaciones)
+- Manejo de **roles y permisos** por grupo y proyecto
+- Integración directa con una API propia en FastAPI
+- Enfoque en experiencia de usuario y claridad visual
 
 ---
 
 ## 🧰 Fix pendientes
 
-* [ ] 🔁 Duplicado de mensajes en chat o proyectos (ajustar observers)
-* [ ] 🔒 Mejorar el manejo de conexión y reconexión de WebSockets
-* [ ] 🔄 Evitar múltiples llamadas innecesarias a `/refresh`
-* [x] 📱 Mejorar la responsividad en dispositivos móviles (Enero 2026)
-* [ ] 🎞️ Optimizar animaciones y transiciones
+- [ ] 🔁 Duplicado de mensajes en chat o proyectos (ajustar observers)
+- [ ] 🔒 Mejorar el manejo de conexión y reconexión de WebSockets
+- [ ] 🔄 Evitar múltiples llamadas innecesarias a `/refresh`
+- [x] 📱 Mejorar la responsividad en dispositivos móviles (Enero 2026)
+- [x] 🎞️ Optimizar animaciones y transiciones (Abril 2026)
 
 ---
 
 ## 🧩 Futuras features
 
-* [x] 🔐 Restricción de acciones según rol y permisos (Enero 2026)
-* [x] 💬 Mostrar información ampliada del usuario en comentarios y mensajes (Enero 2026)
-* [ ] 🏷️ Sistema de etiquetas (tags) para tareas
-* [x] 🔎 Filtros de tareas (Enero 2026)
-* [ ] 📊 Métricas de progreso por proyecto
-* [x] 🌙 Tema claro / oscuro
+- [x] 🔐 Restricción de acciones según rol y permisos (Enero 2026)
+- [x] 💬 Mostrar información ampliada del usuario en comentarios y mensajes (Enero 2026)
+- [ ] 🏷️ Sistema de etiquetas (tags) para tareas
+- [x] 🔎 Filtros de tareas (Enero 2026)
+- [ ] 📊 Métricas de progreso por proyecto
+- [x] 🌙 Tema claro / oscuro
 
 ---
 
