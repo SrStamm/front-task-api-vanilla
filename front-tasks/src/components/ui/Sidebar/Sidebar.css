@@ -193,40 +193,6 @@ html.light-theme .selectors {
 }
 
 /* ============================================
-   TOOLTIP - Solo para estado colapsado
-   ============================================ */
-.sidebar_item.has-tooltip {
-  position: relative;
-}
-
-.sidebar_item.has-tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--bg-card);
-  color: var(--text);
-  padding: 0.5rem 0.875rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all var(--transition-fast);
-  box-shadow: var(--shadow-lg);
-  z-index: 1001;
-  pointer-events: none;
-  border: 1px solid var(--border);
-}
-
-.sidebar_item.has-tooltip:hover::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ============================================
    FOOTER - USUARIO
    ============================================ */
 .sidebar-footer {
