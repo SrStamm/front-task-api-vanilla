@@ -167,15 +167,6 @@ function GroupsPage() {
         </div>
       </section>
 
-      <GroupCreateUpdateModal
-        type={typeModal}
-        group={currentGroup || selectedGroup}
-        open={openCreateModal}
-        onClose={handleCloseCreateModal}
-        createGroup={createGroup}
-        editGroupEvent={updateGroup}
-      />
-
       {selectedGroup && (
         <>
           <GroupViewModal
@@ -207,6 +198,17 @@ function GroupsPage() {
           />
         </>
       )}
+
+      {/* Siempre después de GroupViewModal: los backdrops comparten z-index,
+          el orden del DOM decide cuál pinta encima al tener varios modales abiertos */}
+      <GroupCreateUpdateModal
+        type={typeModal}
+        group={currentGroup || selectedGroup}
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+        createGroup={createGroup}
+        editGroupEvent={updateGroup}
+      />
     </>
   );
 }
