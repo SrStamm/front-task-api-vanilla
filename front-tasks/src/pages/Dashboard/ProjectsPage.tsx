@@ -49,9 +49,18 @@ function ProjectsPage() {
         <p style={{ color: "var(--warning)", fontSize: "1.3rem" }}>
           No hay ningún grupo seleccionado
         </p>
-        <p style={{ color: "var(--text-muted)", fontSize: "1rem", marginTop: "0.5rem" }}>
+        <p
+          style={{
+            color: "var(--text-muted)",
+            fontSize: "1rem",
+            marginTop: "0.5rem",
+          }}
+        >
           Seleccione un grupo en
-          <span style={{ color: "var(--primary)", fontWeight: 600 }}> 'Grupo ▼'</span>
+          <span style={{ color: "var(--primary)", fontWeight: 600 }}>
+            {" "}
+            'Grupo ▼'
+          </span>
         </p>
       </div>
     );
@@ -61,7 +70,9 @@ function ProjectsPage() {
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
         <p style={{ color: "var(--error)" }}>Error al cargar los proyectos</p>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>{error}</p>
+        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
+          {error}
+        </p>
       </div>
     );
 
@@ -141,8 +152,8 @@ function ProjectsPage() {
             <ProjectList projects={projects} onViewProject={handleOpenModal} />
           ) : (
             <ErrorContainer
-              advice="No hay tareas en este proyecto"
-              recommendation="Crea tu primera tarea haciendo click en el boton '+'"
+              advice="No hay proyectos en este grupo"
+              recommendation="Crea tu primer proyecto haciendo click en el boton '+'"
               isButton={false}
               isError={false}
             />

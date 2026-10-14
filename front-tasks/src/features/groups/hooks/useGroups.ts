@@ -63,10 +63,8 @@ export function useGroups() {
     };
     const user = await addUserToGroupApi(data);
 
-    setGroups((prevGroups) => {
-      if (!prevGroups) return undefined;
-
-      return prevGroups.map((group) => {
+    setGroups((prevGroups) =>
+      prevGroups.map((group) => {
         if (group.group_id === groupId) {
           return {
             ...group,
@@ -74,8 +72,8 @@ export function useGroups() {
           };
         }
         return group;
-      });
-    });
+      }),
+    );
   }
 
   return {

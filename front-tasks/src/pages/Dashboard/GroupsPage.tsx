@@ -98,6 +98,7 @@ function GroupsPage() {
       return;
     }
     setOpenModal(false);
+    setSelectedGroup(null);
   };
 
   const handleOpenCreateModal = () => {
@@ -123,7 +124,9 @@ function GroupsPage() {
   if (loading)
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "var(--text-muted)", fontSize: "1.5em" }}>Cargando los grupos</p>
+        <p style={{ color: "var(--text-muted)", fontSize: "1.5em" }}>
+          Cargando los grupos
+        </p>
       </div>
     );
   if (error) {
@@ -164,6 +167,15 @@ function GroupsPage() {
         </div>
       </section>
 
+      <GroupCreateUpdateModal
+        type={typeModal}
+        group={currentGroup || selectedGroup}
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+        createGroup={createGroup}
+        editGroupEvent={updateGroup}
+      />
+
       {selectedGroup && (
         <>
           <GroupViewModal
@@ -175,15 +187,6 @@ function GroupsPage() {
             onAddUser={handleShowUserAddModal}
             onCreateProject={handleShowCreateProjectModal}
             projects={projects}
-          />
-
-          <GroupCreateUpdateModal
-            type={typeModal}
-            group={currentGroup || selectedGroup}
-            open={openCreateModal}
-            onClose={handleCloseCreateModal}
-            createGroup={createGroup}
-            editGroupEvent={updateGroup}
           />
 
           <ProjectCreateUpdateModal
