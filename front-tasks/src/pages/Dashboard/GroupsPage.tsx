@@ -98,6 +98,7 @@ function GroupsPage() {
       return;
     }
     setOpenModal(false);
+    setSelectedGroup(null);
   };
 
   const handleOpenCreateModal = () => {

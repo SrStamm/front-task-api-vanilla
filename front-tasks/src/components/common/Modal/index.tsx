@@ -35,12 +35,14 @@ function Modal({
   );
 
   useEffect(() => {
+    if (!showModal) return;
+
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [handleClickOutside]);
+  }, [showModal, handleClickOutside]);
 
   return (
     <div className={`modal-backdrop ${showModal ? "show" : "hidden"}`}>
