@@ -6,7 +6,7 @@ interface ModalProps {
   showModal: boolean;
   modalHeader: React.ReactNode;
   modalBody: React.ReactNode;
-  modalActions: React.ReactNode;
+  modalActions?: React.ReactNode;
   onClose?: () => void;
   size: string;
 }
@@ -49,9 +49,11 @@ function Modal({
       <div className={`modal ${size}`} ref={modalRef}>
         <header className="modal-header"> {modalHeader} </header>
         <main className="modal-body">{modalBody}</main>
-        <footer className="modal-footer">
-          <div className="modal-actions">{modalActions}</div>
-        </footer>
+        {modalActions !== undefined && modalActions !== null && (
+          <footer className="modal-footer">
+            <div className="modal-actions">{modalActions}</div>
+          </footer>
+        )}
       </div>
     </div>
   );
