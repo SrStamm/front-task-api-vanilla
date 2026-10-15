@@ -37,9 +37,9 @@ function SidebarItem({
   return (
     <Link
       to={to}
-      className={`sidebar_item ${isSelected ? "active" : ""} ${showTooltip ? "has-tooltip" : ""}`}
+      className={`sidebar_item ${isSelected ? "active" : ""}`}
       onClick={onClick}
-      data-tooltip={label}
+      title={showTooltip ? label : undefined}
     >
       <span className="sidebar_item_icon">{icon}</span>
       <span className="sidebar_item_text">{label}</span>

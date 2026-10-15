@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../../../components/common/Button";
 import Modal from "../../../components/common/Modal";
+import KebabMenu from "../../../components/common/KebabMenu";
 import type { ReadGroup } from "../schemas/Group";
 import UserListGroup from "../../users/component/UserListGroup";
 import ErrorContainer from "../../../components/common/ErrorContainer";
@@ -43,7 +44,23 @@ function GroupViewModal({
     getRole(group.group_id);
   }, [group]);
 
-  const header = <h2 className="modal-title">{group.name}</h2>;
+  const header = (
+    <div className="modal-header-row">
+      <h2 className="modal-title">{group.name}</h2>
+      {role === "admin" && (
+        <KebabMenu
+          items={[
+            { label: "Editar", onClick: () => onEdit(group) },
+            {
+              label: "Eliminar",
+              danger: true,
+              onClick: () => deleteGroup(group.group_id),
+            },
+          ]}
+        />
+      )}
+    </div>
+  );
 
   const body = (
     <>
@@ -117,24 +134,6 @@ function GroupViewModal({
     </>
   );
 
-  const actions =
-    role === "admin" ? (
-      <>
-        <Button
-          className="bt-sm btn-secondary btn-sm"
-          text="Editar"
-          onClick={() => onEdit(group)}
-        />
-        <Button
-          className="btn-sm btn-error btn-sm"
-          text="Eliminar"
-          onClick={() => deleteGroup(group.group_id)}
-        />
-      </>
-    ) : (
-      ""
-    );
-
   return (
     <Modal
       onClose={onClose}
@@ -142,7 +141,6 @@ function GroupViewModal({
       size="large"
       modalHeader={header}
       modalBody={body}
-      modalActions={actions}
     />
   );
 }

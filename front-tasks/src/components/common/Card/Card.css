@@ -10,7 +10,10 @@
 
   padding: 2rem;
   cursor: pointer;
-  transition: all var(--transition-smooth);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
   position: relative;
   min-height: 220px;
   display: flex;
@@ -53,19 +56,19 @@ html.light-theme .card {
 
 /* Hover effect */
 .card:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
-  border-color: rgba(99, 102, 241, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(99, 102, 241, 0.35);
 }
 
 html.light-theme .card:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 768px) {
   .card:hover {
     transform: none;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   }
 }
 

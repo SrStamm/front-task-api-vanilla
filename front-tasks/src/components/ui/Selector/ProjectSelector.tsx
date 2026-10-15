@@ -64,7 +64,7 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
     <div className="workspace-selector" ref={selectorRef}>
       <Button
         className="btn-outline-primary btn-med"
-        text={isCollapsed ? "" : `${text} ▼`}
+        text={isCollapsed ? "" : text}
         onClick={toggleDropDown}
       />
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
+import KebabMenu from "../../../../components/common/KebabMenu";
 import type {
   PermissionProject,
   ReadProject,
@@ -65,7 +66,23 @@ function ProjectModal({
     fetchData();
   }, [project]);
 
-  const header = <h2>{project.title}</h2>;
+  const header = (
+    <div className="modal-header-row">
+      <h2>{project.title}</h2>
+      {permission === "admin" && (
+        <KebabMenu
+          items={[
+            { label: "Editar", onClick: () => onEdit(project) },
+            {
+              label: "Eliminar",
+              danger: true,
+              onClick: () => deleteProject(project.group_id, project.project_id),
+            },
+          ]}
+        />
+      )}
+    </div>
+  );
 
   const body = (
     <>
@@ -145,24 +162,6 @@ function ProjectModal({
     </>
   );
 
-  const actions =
-    permission === "admin" ? (
-      <>
-        <Button
-          className="bt-sm btn-secondary btn-sm"
-          text="Editar"
-          onClick={() => onEdit(project)}
-        />
-        <Button
-          className="btn-sm btn-error btn-sm"
-          text="Eliminar"
-          onClick={() => deleteProject(project.group_id, project.project_id)}
-        />
-      </>
-    ) : (
-      ""
-    );
-
   return (
     <Modal
       onClose={onClose}
@@ -170,7 +169,6 @@ function ProjectModal({
       size="large"
       modalHeader={header}
       modalBody={body}
-      modalActions={actions}
     />
   );
 }

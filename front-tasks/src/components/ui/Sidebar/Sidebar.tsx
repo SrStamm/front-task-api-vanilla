@@ -94,12 +94,12 @@ function Sidebar() {
         {!isCollapsed && (
           <div className="selectors">
             <GroupSelector
-              text={groupName == undefined ? "Grupo" : groupName}
+              text={groupName == undefined ? "Grupo ▼" : groupName}
               setName={setGroupName}
               isCollapsed={isCollapsed}
             />
             <ProjectSelector
-              text={projectTitle == undefined ? "Proyecto" : projectTitle}
+              text={projectTitle == undefined ? "Proyecto ▼" : projectTitle}
               setTitle={setProjectTitle}
               isCollapsed={isCollapsed}
             />

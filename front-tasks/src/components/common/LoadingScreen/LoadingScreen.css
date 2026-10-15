@@ -1,0 +1,18 @@
+/* Pantalla de carga de ruta (fuera de layouts).
+
+   min-width: 100vw es imprescindible: body es `display:flex; place-items:center`
+   y #root no tiene ancho definido, así que se encoge a su contenido y cualquier
+   hijo aislado queda pegado al borde izquierdo. Mismo recurso que usan
+   .principal-layout y .auth-layout para ocupar el viewport completo. */
+.loading-screen {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-screen p {
+  margin: 0;
+  color: var(--text-muted);
+}
