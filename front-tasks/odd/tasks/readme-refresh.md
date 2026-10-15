@@ -39,30 +39,25 @@ diagram, no tests section.
   lines (two READMEs). No PR requested yet — delivery is the user's decision.
 
 ## Tasks
-- [ ] T1: Playwright screenshots → `docs/screenshots/` (login, dashboard,
-      tasks-kanban, chat) — PARTIAL: `login.png` captured from deployed;
-      other 3 blocked: `test`/`123456` now rejected by API
-      (`mirko-project.pp.ua` → HTTP 400 "Password incorrect"; user exists,
-      wrong password). Awaiting current credentials from user.
+- [x] T1: Playwright screenshots → `docs/screenshots/` — all 4 captured
+      (1440×900, deployed app): login, dashboard (Grupos), tasks-kanban
+      (task `testear` in progress), chat (5 messages). Creds turned out to
+      be `test`/`test` (old `123456` was stale).
 - [x] T2: `git mv README.md README_OLD.md` + write `README.md` (English)
 - [x] T3: write `README.es.md` (Spanish neutral)
-- [ ] T4: verify + work-unit commits — PARTIAL: `pnpm build` PASS;
-      `pnpm lint` reports 27 pre-existing problems (same count recorded as
-      base in prior feature doc — docs introduce none); all 11 sections
-      present in both READMEs; `[MIT](LICENSE)` links removed (no LICENSE
-      file exists). README commit done; screenshot commit pending T1.
+- [x] T4: verify + work-unit commits — `pnpm build` PASS; `pnpm lint` 27
+      pre-existing base problems (docs add none); all 11 sections present
+      in both READMEs; demo creds corrected to `test`/`test` in both;
+      `[MIT](LICENSE)` links removed (no LICENSE file exists).
 
 ## Progress
-- Branch created: `docs/readme-refresh` (from `master`).
-- T2/T3 done and structurally read back: 184 lines each, 11 sections,
-  Mermaid diagram grounded in real src/, env vars documented as names only
-  (`VITE_URL`, `VITE_URL_WS`), no stale `js/config.js` references.
-- T1 partial: 1/4 screenshots; background dev server started by the capture
-  agent on :5174 was killed; user's own :5173 instance untouched.
-- Demo credentials `test`/`123456` documented in both READMEs — REJECTED by
-  backend now; both READMEs may need update once user clarifies (keep or
-  rotate demo creds).
+- Branch `docs/readme-refresh` from `master`.
+- Commit 1 `b4cc616`: bilingual READMEs + README_OLD preservation + this doc.
+- Commit 2: screenshots + demo-credential correction.
+- Out-of-scope discovery (user should fix infra): deployed WebSocket
+  `wss://api.mirko-project.pp.ua/ws` fails handshake HTTP 530 — real-time
+  chat is broken in the deployed app (REST on apex is fine; screenshot
+  unaffected because chat history loads via REST).
 
 ## Next step
-Await current password for `test` → re-run Playwright capture for the 3
-missing screenshots → commit `docs/screenshots/` → close T1/T4.
+Feature complete. Delivery (push/PR) is the user's decision.

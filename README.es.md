@@ -173,7 +173,7 @@ Correcciones pendientes actuales, en orden de impacto:
 
 - **URL:** <https://front-task-api-vanilla.vercel.app/dashboard/tasks>
 - **Usuario:** `test`
-- **Contraseña:** `123456`
+- **Contraseña:** `test`
 
 ## Autor
 
