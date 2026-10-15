@@ -1,16 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { ReactNode } from "react";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 export const PublicRoute = ({ children }: { children: ReactNode }) => {
   const { user, loading } = useAuth();
 
-  if (loading)
-    return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "var(--text-muted)" }}>Cargando...</p>
-      </div>
-    );
+  // Sin este guard, /login parpadearía antes de redirigir a /dashboard.
+  if (loading) return <LoadingScreen />;
   if (user) return <Navigate to="/dashboard" />;
   return children;
 };
