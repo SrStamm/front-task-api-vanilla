@@ -281,6 +281,15 @@ html.light-theme .sidebar-footer {
   height: 48px;
 }
 
+/* Ocultar la etiqueta al colapsar: si solo se la contrae a ancho 0, su gap
+   (0.75rem) sigue ocupando 12px, la caja de 24px desborda y
+   justify-content: center reparte el sobrante -6px/-6px, dejando el icono
+   descentrado respecto al resaltado del hover. display:none elimina el
+   box del flex line y con él el gap. */
+.sidebar-container.is-collapsed .sidebar_item_text {
+  display: none;
+}
+
 .sidebar-container.is-collapsed .sidebar-footer {
   display: flex;
   justify-content: center;
@@ -317,6 +326,11 @@ html.light-theme .sidebar-footer {
 
   .sidebar-container.is-collapsed .sidebar-nav {
     align-items: stretch;
+  }
+
+  /* En móvil el drawer restaura etiquetas completas, como ya hace .sidebar-title */
+  .sidebar-container.is-collapsed .sidebar_item_text {
+    display: block;
   }
 
   .sidebar-container.is-collapsed .sidebar_item {
