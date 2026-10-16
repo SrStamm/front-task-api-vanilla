@@ -1,4 +1,3 @@
-import z from "zod";
 import type { ReadUser } from "../types/User.ts";
 
 export interface ReadGroup {
@@ -13,6 +12,7 @@ export interface CreateGroup {
 }
 
 export interface UpdateGroup {
+  group_id: number;
   name?: string;
   description?: string;
 }

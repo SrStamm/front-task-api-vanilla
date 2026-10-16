@@ -108,7 +108,7 @@ function ProjectsPage() {
   };
 
   const handleDeleteProject = async (groupId: number, projectId: number) => {
-    await deleteProject(groupId, projectId);
+    await deleteProject({ group_id: groupId, project_id: projectId });
     handleCloseModal();
   };
 

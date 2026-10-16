@@ -1,6 +1,7 @@
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { ReadUser } from "../../../../types/User";
+import { AddRemoveUserToGroupInterface } from "../../../groups/schemas/Group";
 import UserList from "../UserList";
 
 interface userAddModalProps {
@@ -8,7 +9,7 @@ interface userAddModalProps {
   onClose: () => void;
   users: ReadUser[];
   groupId: number;
-  onAdd: (groupId: number, userId: number) => void;
+  onAdd: (data: AddRemoveUserToGroupInterface) => void;
 }
 
 function UserAddToGroupModal({
@@ -19,7 +20,7 @@ function UserAddToGroupModal({
   onAdd,
 }: userAddModalProps) {
   const handleAddUserToGroup = async (userId: number) => {
-    onAdd(groupId, userId);
+    onAdd({ group_id: groupId, user_id: userId });
     onClose();
   };
 

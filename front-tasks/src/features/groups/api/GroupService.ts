@@ -1,9 +1,10 @@
 import type {
   CreateGroupInterface,
+  UpdateGroupInterface,
   UpdateRoleUserInGroup,
 } from "../schemas/Group.ts";
 import Fetch from "../../../utils/api.ts";
-import { AddRemoveUserToGroup, UpdateGroup } from "../../../types/Group.ts";
+import { AddRemoveUserToGroup } from "../../../types/Group.ts";
 
 export async function fetchGroups() {
   const res = await Fetch({ path: "group", method: "GET" });
@@ -26,9 +27,9 @@ export async function createGroupApi(data: CreateGroupInterface) {
   return res;
 }
 
-export async function updateGroupApi(group_id: number, data: UpdateGroup) {
+export async function updateGroupApi(data: UpdateGroupInterface) {
   const res = await Fetch({
-    path: `group/${group_id}`,
+    path: `group/${data.group_id}`,
     method: "PATCH",
     body: data,
   });

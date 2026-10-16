@@ -13,8 +13,8 @@ interface groupModalProps {
   open: boolean;
   onClose: () => void;
   group?: ReadGroup;
-  createGroup: (payload: CreateGroupInterface) => Promise<any>;
-  editGroupEvent: (id: number, payload: UpdateGroupInterface) => Promise<any>;
+  createGroup: (payload: CreateGroupInterface) => Promise<void>;
+  editGroupEvent: (payload: UpdateGroupInterface) => Promise<void>;
 }
 
 function GroupCreateUpdateModal({
@@ -65,11 +65,12 @@ function GroupCreateUpdateModal({
     e.preventDefault();
 
     const editGroup: UpdateGroupInterface = {
+      group_id: groupId,
       name: title,
       description: description,
     };
 
-    await editGroupEvent(groupId, editGroup);
+    await editGroupEvent(editGroup);
 
     onClose();
   };

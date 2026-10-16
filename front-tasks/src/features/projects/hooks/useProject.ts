@@ -9,12 +9,14 @@ import {
   fetchProjectMeInGroup,
 } from "../api/ProjectService";
 import {
+  DeleteProject,
   type AddRemoveUserToProject,
   type CreateProject,
   type ReadProject,
   type UpdateProject,
 } from "../schemas/Project";
 import { useGroupProject } from "../../../hooks/useGroupProject";
+import { useMutation } from "@tanstack/react-query";
 
 export function useProjects() {
   const [projects, setProjects] = useState<ReadProject[] | undefined>(
@@ -57,88 +59,71 @@ export function useProjects() {
     }
   }, [groupId, loadProjects]);
 
-  async function createProject(payload: CreateProject) {
-    const newProject = await createProjectApi(payload);
-    setProjects((prev) => (prev ? [...prev, newProject] : [newProject]));
-  }
+  const createProjectMutation = useMutation({
+    mutationFn: (payload: CreateProject) => createProjectApi(payload),
+    onSuccess: (newProject) => {
+      setProjects((prev) => (prev ? [...prev, newProject] : [newProject]));
+    },
+  });
 
-  async function updateProject(payload: UpdateProject) {
-    const updated = await updateProjectApi(payload);
-    setProjects((prev) =>
-      prev.map((g) => (g.project_id === updated.project_id ? updated : g)),
-    );
-  }
+  const updateProjectMutation = useMutation({
+    mutationFn: (payload: UpdateProject) => updateProjectApi(payload),
+    onSuccess: (data, { project_id }) => {
+      setProjects((prev) =>
+        prev.map((p) => (p.project_id === project_id ? data : p)),
+      );
+    },
+  });
 
-  async function deleteProject(group_id: number, project_id: number) {
-    await deleteProjectApi({ group_id, project_id });
-    setProjects((prev) => prev.filter((g) => g.project_id !== project_id));
-  }
+  const deleteProjectMutation = useMutation({
+    mutationFn: (data: DeleteProject) => deleteProjectApi(data),
+    onSuccess: (_, { project_id }) => {
+      setProjects((prev) => prev.filter((g) => g.project_id !== project_id));
+    },
+  });
 
-  async function removeUserFromProject(
-    groupId: number,
-    projectId: number,
-    userId: number,
-  ) {
-    const data: AddRemoveUserToProject = {
-      group_id: groupId,
-      project_id: projectId,
-      user_id: userId,
-    };
+  const removeUserFromProjectMutation = useMutation({
+    mutationFn: (data: AddRemoveUserToProject) => removeUserToProject(data),
+    onSuccess: (_, { project_id, user_id }) => {
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.project_id === project_id
+            ? {
+                ...p,
+                users: p.users.filter((user) => user.user_id !== user_id),
+              }
+            : p,
+        ),
+      );
+    },
+  });
 
-    await removeUserToProject(data);
-
-    setProjects((prevProjects) => {
-      if (!prevProjects) return undefined;
-
-      return prevProjects.map((project) => {
-        if (project.project_id === projectId) {
-          return {
-            ...project,
-            users: project.users.filter((user) => user.user_id !== userId),
-          };
-        }
-        return project;
-      });
-    });
-  }
-
-  async function addUserToProject(
-    groupId: number,
-    projectId: number,
-    userId: number,
-  ) {
-    const data: AddRemoveUserToProject = {
-      group_id: groupId,
-      project_id: projectId,
-      user_id: userId,
-    };
-
-    const res = await addUserToProjectApi(data);
-
-    setProjects((prevProjects) => {
-      if (!prevProjects) return undefined;
-
-      return prevProjects.map((project) => {
-        if (project.project_id === projectId) {
-          return {
-            ...project,
-            users: [...project.users, res],
-          };
-        }
-        return project;
-      });
-    });
-  }
+  const addUserToProjectMutation = useMutation({
+    mutationFn: (data: AddRemoveUserToProject) => addUserToProjectApi(data),
+    onSuccess: (data, { project_id }) =>
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.project_id === project_id ? { ...p, users: [...p.users, data] } : p,
+        ),
+      ),
+  });
 
   return {
     projects,
     loadProjects,
     loading,
     error,
-    createProject,
-    updateProject,
-    deleteProject,
-    removeUserFromProject,
-    addUserToProject,
+
+    createProject: createProjectMutation.mutateAsync,
+    updateProject: updateProjectMutation.mutateAsync,
+    deleteProject: deleteProjectMutation.mutateAsync,
+    removeUserFromProject: removeUserFromProjectMutation.mutateAsync,
+    addUserToProject: addUserToProjectMutation.mutateAsync,
+
+    isCreating: createProjectMutation.isPending,
+    isUpdating: updateProjectMutation.isPending,
+    isDeleting: deleteProjectMutation.isPending,
+    isRemovingUser: removeUserFromProjectMutation.isPending,
+    isAddingUser: addUserToProjectMutation.isPending,
   };
 }

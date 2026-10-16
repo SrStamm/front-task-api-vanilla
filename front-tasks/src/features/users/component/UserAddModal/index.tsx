@@ -1,7 +1,10 @@
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { UserInGroup } from "../../../groups/schemas/Group";
-import type { ReadProject } from "../../../projects/schemas/Project";
+import type {
+  AddRemoveUserToProject,
+  ReadProject,
+} from "../../../projects/schemas/Project";
 import UserListGroup from "../UserListGroup";
 
 interface userAddModalProps {
@@ -9,7 +12,7 @@ interface userAddModalProps {
   onClose: () => void;
   usersInGroup: UserInGroup[];
   project: ReadProject;
-  onAddUser: (groupId: number, projectId: number, userId: number) => void;
+  onAddUser: (data: AddRemoveUserToProject) => void;
 }
 
 function UserAddModal({
@@ -20,7 +23,11 @@ function UserAddModal({
   onAddUser,
 }: userAddModalProps) {
   const handleAddUserToProject = async (userId: number) => {
-    onAddUser(project.group_id, project.project_id, userId);
+    onAddUser({
+      group_id: project.group_id,
+      project_id: project.project_id,
+      user_id: userId,
+    });
     onClose();
   };
 

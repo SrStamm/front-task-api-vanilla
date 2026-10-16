@@ -1,5 +1,6 @@
 import Button from "../../../../components/common/Button";
 import type {
+  AddRemoveUserToProject,
   PermissionProject,
   UserInProject,
 } from "../../../projects/schemas/Project";
@@ -10,7 +11,7 @@ interface userListProps {
   users: UserInProject[];
   groupId: number;
   projectId: number;
-  onDelete: (group_id: number, project_id: number, user_id: number) => void;
+  onDelete: (data: AddRemoveUserToProject) => void;
   permission?: PermissionProject;
 }
 
@@ -41,7 +42,13 @@ function UserListProject({
               <Button
                 className="btn-vsm btn-outline-error"
                 text="Eliminar"
-                onClick={() => onDelete(groupId, projectId, u.user_id)}
+                onClick={() =>
+                  onDelete({
+                    group_id: groupId,
+                    project_id: projectId,
+                    user_id: u.user_id,
+                  })
+                }
               />
             </>
           ) : (
