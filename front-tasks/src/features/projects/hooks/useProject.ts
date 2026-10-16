@@ -61,6 +61,7 @@ export function useProjects() {
 
   const createProjectMutation = useMutation({
     mutationFn: (payload: CreateProject) => createProjectApi(payload),
+    meta: { errorMode: "inline" },
     onSuccess: (newProject) => {
       setProjects((prev) => (prev ? [...prev, newProject] : [newProject]));
     },
@@ -68,6 +69,7 @@ export function useProjects() {
 
   const updateProjectMutation = useMutation({
     mutationFn: (payload: UpdateProject) => updateProjectApi(payload),
+    meta: { errorMode: "inline" },
     onSuccess: (data, { project_id }) => {
       setProjects((prev) =>
         prev.map((p) => (p.project_id === project_id ? data : p)),
@@ -100,6 +102,7 @@ export function useProjects() {
 
   const addUserToProjectMutation = useMutation({
     mutationFn: (data: AddRemoveUserToProject) => addUserToProjectApi(data),
+    meta: { errorMode: "inline" },
     onSuccess: (data, { project_id }) =>
       setProjects((prev) =>
         prev.map((p) =>

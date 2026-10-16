@@ -10,6 +10,7 @@ import type { UserInGroup } from "../../features/groups/schemas/Group";
 import { useGroups } from "../../features/groups/hooks/useGroups";
 import { useGroupProject } from "../../hooks/useGroupProject";
 import ErrorContainer from "../../components/common/ErrorContainer";
+import { getApiErrorMessage } from "../../utils/errors";
 
 function ProjectsPage() {
   const {
@@ -29,6 +30,7 @@ function ProjectsPage() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [usersInGroup, setUsersInGroup] = useState<UserInGroup[]>([]);
+  const [usersError, setUsersError] = useState<string | null>(null);
   const [typeModal, setTypeModal] = useState("");
   const [selectedProject, setSelectedProject] = useState<ReadProject | null>(
     null,
@@ -108,23 +110,34 @@ function ProjectsPage() {
   };
 
   const handleDeleteProject = async (groupId: number, projectId: number) => {
-    await deleteProject({ group_id: groupId, project_id: projectId });
-    handleCloseModal();
+    try {
+      await deleteProject({ group_id: groupId, project_id: projectId });
+      handleCloseModal();
+    } catch {
+      // Toast se encarga del error global
+    }
   };
 
   const handleOpenUserModal = async () => {
-    const usersInGroup = await getUsersInGroup(selectedProject?.group_id);
+    setUsersError(null);
+    try {
+      const usersInGroup = await getUsersInGroup(selectedProject?.group_id);
 
-    const usersInProjectIds = new Set(
-      selectedProject?.users.map((u) => u.user_id),
-    );
+      const usersInProjectIds = new Set(
+        selectedProject?.users.map((u) => u.user_id),
+      );
 
-    const usersNotInProject = usersInGroup.filter((u) => {
-      return !usersInProjectIds.has(u.user_id);
-    });
+      const usersNotInProject = usersInGroup.filter((u) => {
+        return !usersInProjectIds.has(u.user_id);
+      });
+
+      setUsersInGroup(usersNotInProject);
+    } catch (err) {
+      setUsersInGroup([]);
+      setUsersError(getApiErrorMessage(err));
+    }
 
     setShowUserModal(true);
-    setUsersInGroup(usersNotInProject);
   };
 
   const handleCloseUserModal = () => {
@@ -189,6 +202,7 @@ function ProjectsPage() {
           usersInGroup={usersInGroup}
           project={selectedProject}
           onAddUser={addUserToProject}
+          loadError={usersError}
         />
       )}
     </>

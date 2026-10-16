@@ -11,7 +11,7 @@ interface userListProps {
   users: UserInProject[];
   groupId: number;
   projectId: number;
-  onDelete: (data: AddRemoveUserToProject) => void;
+  onDelete: (data: AddRemoveUserToProject) => Promise<void>;
   permission?: PermissionProject;
 }
 
@@ -22,6 +22,18 @@ function UserListProject({
   onDelete,
   permission,
 }: userListProps) {
+  const handleDelete = async (user_id: number) => {
+    try {
+      await onDelete({
+        group_id: groupId,
+        project_id: projectId,
+        user_id,
+      });
+    } catch {
+      // Toast se encarga del error global
+    }
+  };
+
   return (
     <ul className="listUser">
       {users.map((u) => {
@@ -42,13 +54,7 @@ function UserListProject({
               <Button
                 className="btn-vsm btn-outline-error"
                 text="Eliminar"
-                onClick={() =>
-                  onDelete({
-                    group_id: groupId,
-                    project_id: projectId,
-                    user_id: u.user_id,
-                  })
-                }
+                onClick={() => handleDelete(u.user_id)}
               />
             </>
           ) : (

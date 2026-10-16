@@ -20,6 +20,7 @@ interface groupModalProps {
   onAddUser: () => void;
   onCreateProject: () => void;
   projects: ReadProject[];
+  loadError?: string | null;
 }
 
 function GroupViewModal({
@@ -31,6 +32,7 @@ function GroupViewModal({
   onAddUser,
   onCreateProject,
   projects,
+  loadError,
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
   const [role, setRole] = useState<RoleGroup | null>(null);
@@ -100,7 +102,14 @@ function GroupViewModal({
             ""
           )}
         </div>
-        {projects.length === 0 ? (
+        {loadError ? (
+          <ErrorContainer
+            advice="Error al cargar los proyectos"
+            recommendation={loadError}
+            isButton={false}
+            isError={true}
+          />
+        ) : projects.length === 0 ? (
           <ErrorContainer
             advice="No perteneces a ningún proyecto o no hay en este grupo"
             isButton={false}
