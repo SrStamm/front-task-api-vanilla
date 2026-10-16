@@ -52,9 +52,12 @@ function RegisterForm() {
         body: JSON.stringify(newUserData),
       });
 
-      if (res.ok) {
-        navigate("/login");
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`HTTP ${res.status}: ${errorData}`);
       }
+
+      navigate("/login");
     } catch (err) {
       setError(getApiErrorMessage(err));
     } finally {

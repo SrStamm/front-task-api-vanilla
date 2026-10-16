@@ -47,12 +47,14 @@ function LoginForm() {
         body: formData.toString(),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        authContext?.login(data.access_token);
-
-        navigate("/dashboard", { replace: true });
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`HTTP ${res.status}: ${errorData}`);
       }
+
+      const data = await res.json();
+      authContext?.login(data.access_token);
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError(getApiErrorMessage(err));
     } finally {
