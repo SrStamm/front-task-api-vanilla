@@ -49,15 +49,40 @@ diagram, no tests section.
       pre-existing base problems (docs add none); all 11 sections present
       in both READMEs; demo creds corrected to `test`/`test` in both;
       `[MIT](LICENSE)` links removed (no LICENSE file exists).
+- [ ] T5 (iteration 2, user feedback): rework Mermaid diagram (REST solid
+      vs WS dashed flows, TanStack Query + useChatSocket responsibilities
+      legible, keep key-pieces table); add "Technical decisions" section
+      (3 bullets: TanStack Query, feature folders, WS hook); backend
+      prerequisite paragraph + link to backend README in Installation;
+      honesty fix: frontend has NO notification UI (only `group_message`
+      chat events are handled; task-assignment events not surfaced) —
+      fix the "Instant notifications" claim in both READMEs + add to
+      Known limitations; clarify VITE_URL_WS is a full URL incl. path.
+- [ ] T6: GIF demo — pending user decision on scenario (no notification
+      UI exists; honest option = live chat exchange via local front,
+      two users test/test1).
 
 ## Progress
 - Branch `docs/readme-refresh` from `master`.
 - Commit 1 `b4cc616`: bilingual READMEs + README_OLD preservation + this doc.
-- Commit 2: screenshots + demo-credential correction.
-- Out-of-scope discovery (user should fix infra): deployed WebSocket
-  `wss://api.mirko-project.pp.ua/ws` fails handshake HTTP 530 — real-time
-  chat is broken in the deployed app (REST on apex is fine; screenshot
-  unaffected because chat history loads via REST).
+- Commit 2 `bc36412`: screenshots + demo-credential correction.
+- PR #61 MERGED into master as `bec20f2` (user opened it).
+- Iteration 2 branch `docs/readme-iteration2` from master: T5 done
+  (honesty fix: notifications bullet deleted EN/ES, diagram WS node
+  "chat messages", limitation #4 added; diagram reworked — REST solid
+  edge 8, WS dashed linkStyle 12, TanStack/useChatSocket responsibility
+  labels, ChatPage→useChat path; Technical decisions section 4 bullets;
+  backend README link in Installation; VITE_URL_WS full-URL note;
+  extra honesty fix: key-pieces Realtime row "chat is the only
+  subscriber today"). Both READMEs 197 lines, 12 mirrored sections.
+- T6 done: `docs/screenshots/chat-demo.gif` — 960×600, 8.6s, 10fps,
+  0.90 MB; WS live evidence: wire-to-pixel 0.19s (dry-run measured),
+  Enviar-enabled gate passed; two users test/test1 on local vite :5199
+  against remote API. GIF row added to Screenshots tables both files.
+- Verified: `pnpm build` PASS; `pnpm lint` = 27 pre-existing base
+  problems (unchanged); greps clean (no "instant notification" claims);
+  GIF file valid GIF89a. User's TaskModal WIP never staged.
 
 ## Next step
-Feature complete. Delivery (push/PR) is the user's decision.
+Work-unit commit on `docs/readme-iteration2`, then user decides
+push/PR. Demo data enrichment + screenshot refresh deferred by user.
