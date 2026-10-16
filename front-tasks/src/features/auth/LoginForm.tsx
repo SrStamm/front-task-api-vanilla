@@ -1,17 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 import Button from "../../components/common/Button/index.tsx";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider.tsx";
+import { getApiErrorMessage } from "../../utils/errors.ts";
 
 const url = import.meta.env.VITE_URL;
 
 function LoginForm() {
   const navigate = useNavigate();
 
+  const [error, setError] = useState<string | null>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isPending, setIsPending] = useState<boolean>(false);
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    setError(null);
+    setIsPending(false);
+  }, []);
 
   const usernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -23,6 +31,8 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+    setIsPending(true);
 
     const formData = new URLSearchParams();
     formData.append("username", username);
@@ -43,8 +53,10 @@ function LoginForm() {
 
         navigate("/dashboard", { replace: true });
       }
-    } catch (error) {
-      console.error("Error al intentar conectar con el servidor:", error);
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -52,6 +64,7 @@ function LoginForm() {
     <>
       <h2>Ingresar</h2>
       <form onSubmit={handleSubmit}>
+        {error && <p className="form-error">{error}</p>}
         <div className="form-group">
           <label className="form-label">Username:</label>
           <input
@@ -75,7 +88,12 @@ function LoginForm() {
           />
         </div>
         <div className="btn-container">
-          <Button className="btn-primary" text="Ingresar" type="submit" />
+          <Button
+            className="btn-primary"
+            text="Ingresar"
+            type="submit"
+            disabled={isPending}
+          />
         </div>
         <p>
           No tienes una cuenta?

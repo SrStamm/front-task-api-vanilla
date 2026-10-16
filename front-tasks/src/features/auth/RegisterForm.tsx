@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button/index.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CreateUser } from "../../types/User.ts";
+import { getApiErrorMessage } from "../../utils/errors.ts";
 
 const url = import.meta.env.VITE_URL;
 
@@ -9,6 +10,13 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState<boolean>(false);
+
+  useEffect(() => {
+    setError(null);
+    setIsPending(false);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -26,6 +34,8 @@ function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+    setIsPending(true);
 
     const newUserData: CreateUser = {
       username: username,
@@ -45,8 +55,10 @@ function RegisterForm() {
       if (res.ok) {
         navigate("/login");
       }
-    } catch (error) {
-      console.error("Error al intentar conectar con el servidor:", error);
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -54,6 +66,8 @@ function RegisterForm() {
     <>
       <h2>Registro</h2>
       <form onSubmit={handleSubmit}>
+        {error && <p className="form-error">{error}</p>}
+
         <div className="form-group">
           <label className="form-label">Username:</label>
           <input
@@ -83,12 +97,19 @@ function RegisterForm() {
             type="password"
             className="input-base"
             placeholder="Ingresa una contraseña"
+            required
+            minLength={6}
             value={password}
             onChange={passwordChange}
           />
         </div>
         <div className="btn-container">
-          <Button className="btn-primary" text=" Registrarse" type="submit" />
+          <Button
+            className="btn-primary"
+            text=" Registrarse"
+            type="submit"
+            disabled={isPending}
+          />
         </div>
       </form>
       <p>
