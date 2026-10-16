@@ -6,9 +6,26 @@ import UserCard from "../UserCard";
 interface userListProps {
   users: ReadUser[];
   onAdd: (user_id: number) => void;
+  userIdAssigned?: number;
+  text?: string;
+  textAssigned?: string;
 }
 
-function UserList({ users, onAdd }: userListProps) {
+function UserList({
+  users,
+  onAdd,
+  userIdAssigned,
+  text,
+  textAssigned,
+}: userListProps) {
+  const getText = (id: number) => {
+    if (id == userIdAssigned) {
+      return textAssigned ?? "Agregado";
+    }
+
+    return text ?? "Agregar";
+  };
+
   return (
     <ul className="list-add-user">
       {users.length > 0 ? (
@@ -16,7 +33,8 @@ function UserList({ users, onAdd }: userListProps) {
           const actions = (
             <Button
               className="btn-vsm btn-outline-error"
-              text="Agregar"
+              text={getText(u.user_id)}
+              disabled={userIdAssigned == u.user_id ? true : false}
               onClick={() => onAdd(u.user_id)}
             />
           );

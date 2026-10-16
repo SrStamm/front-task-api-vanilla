@@ -213,7 +213,13 @@ function TaskFormModal({
       <div className="user-selection-container">
         <label>Asignar a usuarios:</label>
         <ul>
-          <UserList users={usersSelected} onAdd={handleUserSelect} />
+          <UserList
+            users={usersSelected}
+            onAdd={handleUserSelect}
+            userIdAssigned={userIdSelected ?? undefined}
+            text="Asignar"
+            textAssigned="Asignado"
+          />
         </ul>
       </div>
     </form>

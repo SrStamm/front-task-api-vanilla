@@ -1,4 +1,3 @@
-import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import "./TaskModal.css";
 
@@ -6,19 +5,64 @@ import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks";
 import CommentContainer from "../../../comments/component/CommentContainer";
 import formatDate from "../../../../utils/formatedDate";
 import { useGroupProject } from "../../../../hooks/useGroupProject";
+import KebabMenu from "../../../../components/common/KebabMenu";
 
 interface TaskModalProps {
   isShow: boolean;
   task: ReadAllTaskFromProjectInterface;
   onClose?: () => void;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
+  onDelete: (t: ReadAllTaskFromProjectInterface) => void;
 }
 
-function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
+function TaskModal({
+  isShow,
+  task,
+  onClose,
+  onEdit,
+  onDelete,
+}: TaskModalProps) {
   const formatedDate = formatDate(task.date_exp);
   const { permission } = useGroupProject();
 
-  const header = <h3 className="modal-title">{task.title}</h3>;
+  const header = (
+    <div className="modal-header-row">
+      <h3 className="modal-title">{task.title}</h3>
+      {permission === "write" ? (
+        <KebabMenu
+          items={[
+            {
+              label: "Editar",
+              onClick: () => {
+                onEdit(task);
+              },
+            },
+          ]}
+        />
+      ) : permission === "admin" ? (
+        <KebabMenu
+          items={[
+            {
+              label: "Editar",
+              onClick: () => {
+                onEdit(task);
+              },
+            },
+            {
+              label: "Eliminar",
+              danger: true,
+              onClick: () => {
+                onDelete(task);
+              },
+            },
+          ]}
+        />
+      ) : (
+        ""
+      )}
+    </div>
+  );
+
   const body = (
     <>
       <div className="task-details">
@@ -64,23 +108,11 @@ function TaskModal({ isShow, task, onClose, onEdit }: TaskModalProps) {
     </>
   );
 
-  const actions =
-    permission === "admin" || permission === "write" ? (
-      <Button
-        className="btn-primary"
-        text="Editar"
-        onClick={() => onEdit(task)}
-      />
-    ) : (
-      ""
-    );
-
   return (
     <Modal
       showModal={isShow}
       modalHeader={header}
       modalBody={body}
-      modalActions={actions}
       onClose={onClose}
       size=""
     />
