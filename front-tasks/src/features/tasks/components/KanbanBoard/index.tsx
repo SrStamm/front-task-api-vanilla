@@ -28,7 +28,7 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
-  onDelete: (t: ReadAllTaskFromProjectInterface) => void;
+  onDelete: (t: ReadAllTaskFromProjectInterface) => Promise<void>;
   onSuccess?: () => void;
   childModal: boolean;
 }
@@ -182,7 +182,7 @@ function KanbanBoard({
     }
   };
 
-  const handleDragEnd = (e: DragEndEvent) => {
+  const handleDragEnd = async (e: DragEndEvent) => {
     const { over } = e;
 
     if (!over) {
@@ -210,9 +210,12 @@ function KanbanBoard({
         state: newState,
       };
 
-      onUpdate(payload).then(() => {
+      try {
+        await onUpdate(payload);
         onSuccess?.();
-      });
+      } catch {
+        // Toast se encarga del error global
+      }
     }
 
     // Limpiar estado local de drag
@@ -222,9 +225,13 @@ function KanbanBoard({
     setDraggedTaskState(null);
   };
 
-  const handleDelete = (t: ReadAllTaskFromProjectInterface) => {
-    onDelete(t);
-    setShowModal(false);
+  const handleDelete = async (t: ReadAllTaskFromProjectInterface) => {
+    try {
+      await onDelete(t);
+      setShowModal(false);
+    } catch {
+      // Toast se encarga del error global
+    }
   };
 
   return (

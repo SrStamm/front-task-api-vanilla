@@ -17,6 +17,7 @@ import {
 import { getUserDataInGroup } from "../../features/groups/api/GroupService.ts";
 import { ReadProject } from "../../features/projects/schemas/Project.ts";
 import { useProjects } from "../../features/projects/hooks/useProject.ts";
+import { getApiErrorMessage } from "../../utils/errors.ts";
 
 function GroupsPage() {
   const {
@@ -38,6 +39,8 @@ function GroupsPage() {
   const [allUsers, setAllUsers] = useState<ReadUser[] | []>([]);
   const [typeModal, setTypeModal] = useState("");
   const [projects, setProjects] = useState<ReadProject[]>([]);
+  const [projectsError, setProjectsError] = useState<string | null>(null);
+  const [usersError, setUsersError] = useState<string | null>(null);
 
   const currentGroup = groups?.find(
     (g) => g.group_id === selectedGroup?.group_id,
@@ -46,14 +49,21 @@ function GroupsPage() {
   useEffect(() => {
     const getProjects = async () => {
       if (selectedGroup && openModal) {
-        const res = await getUserDataInGroup(selectedGroup.group_id);
+        setProjectsError(null);
+        try {
+          const res = await getUserDataInGroup(selectedGroup.group_id);
 
-        if (res.role === "admin") {
-          const projects_ = await fetchProjects(selectedGroup.group_id);
-          setProjects(projects_);
-        } else {
-          const projects_ = await fetchProjectMeInGroup(selectedGroup.group_id);
-          setProjects(projects_);
+          if (res.role === "admin") {
+            const projects_ = await fetchProjects(selectedGroup.group_id);
+            setProjects(projects_);
+          } else {
+            const projects_ = await fetchProjectMeInGroup(
+              selectedGroup.group_id,
+            );
+            setProjects(projects_);
+          }
+        } catch (err) {
+          setProjectsError(getApiErrorMessage(err));
         }
       }
     };
@@ -70,18 +80,23 @@ function GroupsPage() {
   };
 
   const handleShowUserAddModal = async () => {
-    setShowUserAddModal(true);
-    const users = await fetchGetAllUsers();
+    setUsersError(null);
+    try {
+      setShowUserAddModal(true);
+      const users = await fetchGetAllUsers();
 
-    const usersInGroupIDs = currentGroup
-      ? new Set(currentGroup.users.map((u) => u.user_id))
-      : new Set(selectedGroup?.users.map((u) => u.user_id));
+      const usersInGroupIDs = currentGroup
+        ? new Set(currentGroup.users.map((u) => u.user_id))
+        : new Set(selectedGroup?.users.map((u) => u.user_id));
 
-    const usersNotInGroup = users.filter((u) => {
-      return !usersInGroupIDs.has(u.user_id);
-    });
+      const usersNotInGroup = users.filter((u) => {
+        return !usersInGroupIDs.has(u.user_id);
+      });
 
-    setAllUsers(usersNotInGroup);
+      setAllUsers(usersNotInGroup);
+    } catch (err) {
+      setUsersError(getApiErrorMessage(err));
+    }
   };
 
   const handleHideUserAddModal = () => {
@@ -117,8 +132,12 @@ function GroupsPage() {
   };
 
   const handleDeleteGroup = async (group_id: number) => {
-    await deleteGroup(group_id);
-    handleCloseModal();
+    try {
+      await deleteGroup(group_id);
+      handleCloseModal();
+    } catch {
+      // Toast se encarga del error global
+    }
   };
 
   if (loading)
@@ -178,6 +197,7 @@ function GroupsPage() {
             onAddUser={handleShowUserAddModal}
             onCreateProject={handleShowCreateProjectModal}
             projects={projects}
+            loadError={projectsError}
           />
 
           <ProjectCreateUpdateModal
@@ -195,6 +215,7 @@ function GroupsPage() {
             onClose={handleHideUserAddModal}
             onAdd={addUserToGroup}
             show={showUserAddModal}
+            loadError={usersError}
           />
         </>
       )}

@@ -7,14 +7,15 @@ import type {
   ReadGroup,
   UpdateGroupInterface,
 } from "../schemas/Group";
+import { getApiErrorMessage } from "../../../utils/errors";
 
 interface groupModalProps {
   type: string;
   open: boolean;
   onClose: () => void;
   group?: ReadGroup;
-  createGroup: (payload: CreateGroupInterface) => Promise<any>;
-  editGroupEvent: (id: number, payload: UpdateGroupInterface) => Promise<any>;
+  createGroup: (payload: CreateGroupInterface) => Promise<void>;
+  editGroupEvent: (payload: UpdateGroupInterface) => Promise<void>;
 }
 
 function GroupCreateUpdateModal({
@@ -28,8 +29,11 @@ function GroupCreateUpdateModal({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [groupId, setGroupId] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setError(null);
+
     if (type === "update" && group) {
       setTitle(group.name);
       setDescription(group.description ?? "");
@@ -50,28 +54,30 @@ function GroupCreateUpdateModal({
 
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
-    const newGroup: CreateGroupInterface = {
-      name: title,
-      description: description,
-    };
-
-    await createGroup(newGroup);
-
-    onClose();
+    try {
+      await createGroup({ name: title, description: description });
+      onClose();
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    }
   };
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
-    const editGroup: UpdateGroupInterface = {
-      name: title,
-      description: description,
-    };
-
-    await editGroupEvent(groupId, editGroup);
-
-    onClose();
+    try {
+      await editGroupEvent({
+        group_id: groupId,
+        name: title,
+        description: description,
+      });
+      onClose();
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    }
   };
 
   const header =
@@ -89,6 +95,8 @@ function GroupCreateUpdateModal({
           onSubmit={handleCreate}
           className="modal-form"
         >
+          {error && <p className="form-error">{error}</p>}
+
           <label>Nombre del grupo:</label>
           <input
             type="text"
@@ -109,6 +117,8 @@ function GroupCreateUpdateModal({
     ) : (
       <>
         <form id="edit-group-form" onSubmit={handleUpdate}>
+          {error && <p className="form-error">{error}</p>}
+
           <label>Nombre del grupo:</label>
           <input
             type="text"

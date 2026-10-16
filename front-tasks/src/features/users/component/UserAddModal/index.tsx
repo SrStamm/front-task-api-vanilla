@@ -1,15 +1,22 @@
+import { useEffect, useState } from "react";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import type { UserInGroup } from "../../../groups/schemas/Group";
-import type { ReadProject } from "../../../projects/schemas/Project";
+import type {
+  AddRemoveUserToProject,
+  ReadProject,
+} from "../../../projects/schemas/Project";
 import UserListGroup from "../UserListGroup";
+import ErrorContainer from "../../../../components/common/ErrorContainer";
+import { getApiErrorMessage } from "../../../../utils/errors";
 
 interface userAddModalProps {
   show: boolean;
   onClose: () => void;
   usersInGroup: UserInGroup[];
   project: ReadProject;
-  onAddUser: (groupId: number, projectId: number, userId: number) => void;
+  onAddUser: (data: AddRemoveUserToProject) => Promise<void>;
+  loadError?: string | null;
 }
 
 function UserAddModal({
@@ -18,14 +25,44 @@ function UserAddModal({
   usersInGroup,
   project,
   onAddUser,
+  loadError,
 }: userAddModalProps) {
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setError(null);
+  }, [show]);
+
   const handleAddUserToProject = async (userId: number) => {
-    onAddUser(project.group_id, project.project_id, userId);
-    onClose();
+    setError(null);
+
+    try {
+      await onAddUser({
+        group_id: project.group_id,
+        project_id: project.project_id,
+        user_id: userId,
+      });
+      onClose();
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    }
   };
 
-  const header = <h2 className="modal-title-center">Lista de usuarios</h2>;
-  const body = (
+  const header = (
+    <div>
+      <h2 className="modal-title-center">Lista de usuarios</h2>
+      {error && <p className="form-error">{error}</p>}
+    </div>
+  );
+
+  const body = loadError ? (
+    <ErrorContainer
+      advice="Error al cargar los usuarios"
+      recommendation={loadError}
+      isButton={false}
+      isError={true}
+    />
+  ) : (
     <UserListGroup
       users={usersInGroup}
       addUser={true}

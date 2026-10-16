@@ -16,6 +16,7 @@ export const CreateGroupSchema = z.object({
 });
 
 export const UpdateGroupSchema = z.object({
+  group_id: z.number(),
   name: z.string().optional(),
   description: z.string().optional(),
 });

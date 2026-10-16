@@ -7,14 +7,15 @@ import type {
   UpdateProject,
 } from "../../schemas/Project";
 import { useGroupProject } from "../../../../hooks/useGroupProject";
+import { getApiErrorMessage } from "../../../../utils/errors";
 
 interface projectModalProps {
   type: string;
   open: boolean;
   onClose: () => void;
   project?: ReadProject;
-  onCreate: (newProject: CreateProject) => void;
-  onUpdate: (project: UpdateProject) => void;
+  onCreate: (newProject: CreateProject) => Promise<void>;
+  onUpdate: (project: UpdateProject) => Promise<void>;
   groupIdCharged?: number;
 }
 
@@ -31,10 +32,13 @@ function ProjectCreateUpdateModal({
   const [description, setDescription] = useState("");
   const [groupId, setGroupId] = useState(0);
   const [projectId, setProjectId] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const { groupId: selectedGroupId } = useGroupProject();
 
   useEffect(() => {
+    setError(null);
+
     if (type === "update" && project) {
       setTitle(project.title);
       setDescription(project.description ?? "");
@@ -57,31 +61,37 @@ function ProjectCreateUpdateModal({
 
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
-    const newProject: CreateProject = {
-      title: title,
-      description: description,
-      group_id: groupId,
-    };
+    try {
+      await onCreate({
+        title: title,
+        description: description,
+        group_id: groupId,
+      });
 
-    onCreate(newProject);
-
-    onClose();
+      onClose();
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    }
   };
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
-    const editGroup: UpdateProject = {
-      group_id: groupId,
-      project_id: projectId,
-      title: title,
-      description: description,
-    };
+    try {
+      await onUpdate({
+        group_id: groupId,
+        project_id: projectId,
+        title: title,
+        description: description,
+      });
 
-    onUpdate(editGroup);
-
-    onClose();
+      onClose();
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    }
   };
 
   const header =
@@ -95,6 +105,8 @@ function ProjectCreateUpdateModal({
     type == "create" ? (
       <>
         <form id="create-project-form" onSubmit={handleCreate}>
+          {error && <p className="form-error">{error}</p>}
+
           <label>Nombre del proyecto:</label>
           <input
             type="text"
@@ -115,6 +127,8 @@ function ProjectCreateUpdateModal({
     ) : (
       <>
         <form id="edit-project-form" onSubmit={handleUpdate}>
+          {error && <p className="form-error">{error}</p>}
+
           <label>Nombre del proyecto:</label>
           <input
             type="text"

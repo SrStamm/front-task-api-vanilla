@@ -3,6 +3,7 @@ import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
 import KebabMenu from "../../../../components/common/KebabMenu";
 import type {
+  AddRemoveUserToProject,
   PermissionProject,
   ReadProject,
 } from "../../../projects/schemas/Project";
@@ -21,7 +22,7 @@ interface projectModalProps {
   deleteProject: (groupId: number, projectId: number) => void;
   onEdit: (project: ReadProject) => void;
   onShowListUser: () => void;
-  onDelete: (groupId: number, projectId: number, userId: number) => void;
+  onDelete: (data: AddRemoveUserToProject) => Promise<void>;
 }
 
 function ProjectModal({
@@ -76,7 +77,8 @@ function ProjectModal({
             {
               label: "Eliminar",
               danger: true,
-              onClick: () => deleteProject(project.group_id, project.project_id),
+              onClick: () =>
+                deleteProject(project.group_id, project.project_id),
             },
           ]}
         />

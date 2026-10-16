@@ -13,6 +13,7 @@ import {
   type UpdateGroupInterface,
   type AddRemoveUserToGroupInterface,
 } from "../schemas/Group";
+import { useMutation } from "@tanstack/react-query";
 
 export function useGroups() {
   const [groups, setGroups] = useState<ReadGroup[]>([]);
@@ -36,54 +37,60 @@ export function useGroups() {
     loadGroups();
   }, []);
 
-  async function createGroup(payload: CreateGroupInterface) {
-    const newGroup = await createGroupApi(payload);
-    setGroups((prev) => (prev ? [...prev, newGroup] : [newGroup]));
-  }
+  const createGroupMutation = useMutation({
+    mutationFn: (payload: CreateGroupInterface) => createGroupApi(payload),
+    meta: { errorMode: "inline" },
+    onSuccess: (created) => {
+      setGroups((prev) => (prev ? [...prev, created] : [created]));
+    },
+  });
 
-  async function updateGroup(id: number, payload: UpdateGroupInterface) {
-    const updated = await updateGroupApi(id, payload);
-    setGroups((prev) => prev.map((g) => (g.group_id === id ? updated : g)));
-  }
+  const updateGroupMutation = useMutation({
+    mutationFn: (payload: UpdateGroupInterface) => updateGroupApi(payload),
+    meta: { errorMode: "inline" },
+    onSuccess: (updated, { group_id }) => {
+      setGroups((prev) =>
+        prev.map((g) => (g.group_id === group_id ? updated : g)),
+      );
+    },
+  });
 
-  async function deleteGroup(id: number) {
-    await deleteGroupApi(id);
-    setGroups((prev) => prev.filter((g) => g.group_id !== id));
-  }
+  const deleteGroupMutation = useMutation({
+    mutationFn: (id: number) => deleteGroupApi(id),
+    onSuccess: (_, id) =>
+      setGroups((prev) => prev.filter((g) => g.group_id !== id)),
+  });
 
   async function getUsersInGroup(id: number) {
-    const users = await fetchUsersGroup(id);
-    return users;
+    return fetchUsersGroup(id);
   }
 
-  async function addUserToGroup(groupId: number, userId: number) {
-    const data: AddRemoveUserToGroupInterface = {
-      group_id: groupId,
-      user_id: userId,
-    };
-    const user = await addUserToGroupApi(data);
-
-    setGroups((prevGroups) =>
-      prevGroups.map((group) => {
-        if (group.group_id === groupId) {
-          return {
-            ...group,
-            users: [...group.users, user],
-          };
-        }
-        return group;
-      }),
-    );
-  }
+  const addUserToGroupMutation = useMutation({
+    mutationFn: (data: AddRemoveUserToGroupInterface) =>
+      addUserToGroupApi(data),
+    meta: { errorMode: "inline" },
+    onSuccess: (data, { group_id }) =>
+      setGroups((prev) =>
+        prev.map((g) =>
+          g.group_id === group_id ? { ...g, users: [...g.users, data] } : g,
+        ),
+      ),
+  });
 
   return {
     groups,
     loading,
     error,
-    createGroup,
-    updateGroup,
-    deleteGroup,
     getUsersInGroup,
-    addUserToGroup,
+
+    createGroup: createGroupMutation.mutateAsync,
+    updateGroup: updateGroupMutation.mutateAsync,
+    deleteGroup: deleteGroupMutation.mutateAsync,
+    addUserToGroup: addUserToGroupMutation.mutateAsync,
+
+    isCreating: createGroupMutation.isPending,
+    isUpdating: updateGroupMutation.isPending,
+    isDeleting: deleteGroupMutation.isPending,
+    isAddingUser: addUserToGroupMutation.isPending,
   };
 }

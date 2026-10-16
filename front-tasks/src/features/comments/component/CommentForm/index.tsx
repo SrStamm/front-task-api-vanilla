@@ -17,8 +17,12 @@ function CommentForm({ onSubmit }: CommentFormProps) {
     e.preventDefault();
     if (!message.trim()) return;
 
-    await onSubmit({ content: message });
-    setMessage("");
+    try {
+      await onSubmit({ content: message });
+      setMessage("");
+    } catch {
+      // Toast se encarga del error global
+    }
   };
 
   return (
