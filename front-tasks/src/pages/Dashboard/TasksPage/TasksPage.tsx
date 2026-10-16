@@ -34,6 +34,7 @@ function TaskPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    remove,
   } = useTasks(filters);
 
   const handleOpenCreateModal = useCallback(() => {
@@ -60,6 +61,10 @@ function TaskPage() {
 
   const handleUpdate = async (data: UpdateTask) => {
     await update(data);
+  };
+
+  const handleDelete = async (t: ReadAllTaskFromProjectInterface) => {
+    await remove({ projectId: t.project_id, taskId: t.task_id });
   };
 
   // Invalidar queries de tareas después de crear/actualizar
@@ -111,6 +116,7 @@ function TaskPage() {
             error={error?.message ?? null}
             onEdit={handleOpenEditModal}
             onUpdate={handleUpdate}
+            onDelete={handleDelete}
             onSuccess={handleTaskSuccess}
           />
 

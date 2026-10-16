@@ -28,6 +28,7 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
+  onDelete: (t: ReadAllTaskFromProjectInterface) => void;
   onSuccess?: () => void;
   childModal: boolean;
 }
@@ -38,6 +39,7 @@ function KanbanBoard({
   error,
   onEdit,
   onUpdate,
+  onDelete,
   onSuccess,
   childModal,
 }: KanbanBoardProps) {
@@ -49,8 +51,9 @@ function KanbanBoard({
   const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
   // Estado local para manejar el drag en tiempo real (evita snap-back)
-  const [localTasks, setLocalTasks] =
-    useState<ReadAllTaskFromProjectInterface[] | null>(null);
+  const [localTasks, setLocalTasks] = useState<
+    ReadAllTaskFromProjectInterface[] | null
+  >(null);
   // Guardar el estado final de la tarea arrastrada para usar en dragEnd
   const [draggedTaskState, setDraggedTaskState] =
     useState<TaskStateEnum | null>(null);
@@ -219,6 +222,11 @@ function KanbanBoard({
     setDraggedTaskState(null);
   };
 
+  const handleDelete = (t: ReadAllTaskFromProjectInterface) => {
+    onDelete(t);
+    setShowModal(false);
+  };
+
   return (
     <>
       <DndContext
@@ -257,6 +265,7 @@ function KanbanBoard({
           task={taskSelected}
           onClose={handleHideModal}
           onEdit={onEdit}
+          onDelete={handleDelete}
         />
       )}
     </>
