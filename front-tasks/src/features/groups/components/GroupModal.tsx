@@ -9,6 +9,7 @@ import { ReadProject } from "../../projects/schemas/Project";
 import ProjectListMini from "../../projects/components/ProjectListMini/ProjectListMini";
 import { getUserDataInGroup } from "../api/GroupService";
 import { RoleGroup } from "../../../types/Group";
+import { getApiErrorMessage } from "../../../utils/errors";
 import "./GroupModal.css";
 
 interface groupModalProps {
@@ -36,10 +37,18 @@ function GroupViewModal({
 }: groupModalProps) {
   const [tabSelected, setTabSelected] = useState("projects");
   const [role, setRole] = useState<RoleGroup | null>(null);
+  const [roleError, setRoleError] = useState<string | null>(null);
 
   const getRole = async (groupId: number) => {
-    const res = await getUserDataInGroup(groupId);
-    setRole(res.role);
+    setRole(null);
+    setRoleError(null);
+
+    try {
+      const res = await getUserDataInGroup(groupId);
+      setRole(res.role);
+    } catch (err) {
+      setRoleError(getApiErrorMessage(err));
+    }
   };
 
   useEffect(() => {
@@ -64,7 +73,14 @@ function GroupViewModal({
     </div>
   );
 
-  const body = (
+  const body = roleError ? (
+    <ErrorContainer
+      advice="No se pudieron cargar tus permisos en este grupo"
+      recommendation={roleError}
+      isButton={false}
+      isError={true}
+    />
+  ) : (
     <>
       <div className="modal-section">
         <p className="modal-description">
