@@ -8,13 +8,24 @@ import { useGroupProject } from "../../../hooks/useGroupProject";
 import { UserInProject } from "../../projects/schemas/Project";
 import { fetchUsersProject } from "../../projects/api/ProjectService";
 
+interface GroupMessagePayload {
+  id?: number;
+  chat_id?: number;
+  project_id: number;
+  sender_id?: number;
+  user_id?: number;
+  content?: string;
+  message?: string;
+  timestamp: string;
+}
+
 export function useChat() {
   const [messages, setMessages] = useState<ReadMessageInterface[]>([]);
   const [usersInProject, setUsersInProject] = useState<
     UserInProject[] | undefined
   >();
   const { projectId, groupId } = useGroupProject();
-  const socket = useChatSocket();
+  const { send, onMessage, isConnected } = useChatSocket();
 
   useEffect(() => {
     if (projectId && groupId) {
@@ -43,54 +54,53 @@ export function useChat() {
 
   // 🔹 Mensajes entrantes (WebSocket) - CON useCallback para evitar re-creaciones
   const handleIncomingMessage = useCallback(
-    (data: any) => {
-      if (data.type === "group_message") {
-        const user = usersInProject.find(
-          (u) => u.user_id === data.payload.sender_id,
+    (data: { type: string; payload: unknown }) => {
+      if (data.type !== "group_message") {
+        return;
+      }
+
+      const payload = data.payload as GroupMessagePayload;
+
+      const user = usersInProject?.find((u) => u.user_id === payload.sender_id);
+
+      const mappedMessage: ReadMessageInterface = {
+        chat_id: payload.id ?? payload.chat_id ?? 0,
+        project_id: payload.project_id,
+        user_id: payload.sender_id ?? payload.user_id ?? 0,
+        username: user?.username ?? "Usuario desconocido",
+        message: payload.content ?? payload.message ?? "",
+        timestamp: new Date(payload.timestamp),
+      };
+
+      if (mappedMessage.project_id !== projectId) {
+        return;
+      }
+
+      setMessages((prev) => {
+        const cleanIncoming = mappedMessage.message.trim();
+
+        const sinOptimista = prev.filter(
+          (m) => !(m.username === "Yo" && m.message === cleanIncoming),
         );
 
-        const mappedMessage = {
-          chat_id: data.payload.id || data.payload.chat_id,
-          project_id: data.payload.project_id,
-          user_id: data.payload.sender_id || data.payload.user_id,
-          username: user.username,
-          message: data.payload.content || data.payload.message,
-          timestamp: new Date(data.payload.timestamp),
-        };
+        const yaExiste = sinOptimista.some(
+          (msg) => msg.chat_id === mappedMessage.chat_id,
+        );
 
-        // Verificar que sea para el proyecto actual
-        if (mappedMessage.project_id === projectId) {
-          setMessages((prev) => {
-            const cleanIncoming = mappedMessage.message.trim();
-            const sinOptimista = prev.filter(
-              (m) => !(m.username === "Yo" && m.message === cleanIncoming),
-            );
+        if (yaExiste) return sinOptimista;
 
-            const yaExiste = sinOptimista.some(
-              (msg) => msg.chat_id === mappedMessage.chat_id,
-            );
-
-            if (yaExiste) return sinOptimista;
-
-            return [...prev, mappedMessage];
-          });
-        } else {
-          return;
-        }
-      } else {
-        console.log("useChat: ℹ️ Tipo de mensaje no manejado:", data.type);
-      }
+        return [...sinOptimista, mappedMessage];
+      });
     },
+
     [projectId, usersInProject],
   );
 
   useEffect(() => {
-    const unsubscribe = socket.onMessage(handleIncomingMessage);
+    const unsubscribe = onMessage(handleIncomingMessage);
 
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, [projectId, handleIncomingMessage, socket]);
+    return unsubscribe;
+  }, [onMessage, handleIncomingMessage]);
 
   // 🔹 Enviar mensaje
   const sendMessage = useCallback(
@@ -116,7 +126,7 @@ export function useChat() {
         },
       };
 
-      const success = socket.send(messageData);
+      const success = send(messageData);
 
       // Mensaje optimista
       if (success) {
@@ -132,12 +142,12 @@ export function useChat() {
         setMessages((prev) => [...prev, optimisticMessage]);
       }
     },
-    [projectId, socket],
+    [projectId, send],
   );
 
   return {
     messages,
     sendMessage,
-    isConnected: socket.isConnected,
+    isConnected,
   };
 }
