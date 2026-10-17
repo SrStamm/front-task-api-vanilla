@@ -303,3 +303,22 @@ html.light-theme .task-action-btn:hover {
   min-height: 80px;
   transition: all var(--transition-fast);
 }
+
+/* Fantasma: marcador de la tarjeta arrastrada en la columna destino.
+   Reemplaza la tarjeta oculta y señala dónde va a caer al soltar. */
+.task-card.is-ghost {
+  border: 2px dashed rgba(99, 102, 241, 0.55);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: none;
+  cursor: grabbing;
+}
+
+/* Mientras se arrastra, el fantasma no debe reaccionar al hover */
+.task-card.is-ghost:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+html.light-theme .task-card.is-ghost {
+  border-color: rgba(99, 102, 241, 0.55);
+}

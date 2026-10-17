@@ -28,7 +28,6 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
-  isUpdating: boolean;
   onDelete: (t: ReadAllTaskFromProjectInterface) => Promise<void>;
   childModal: boolean;
 }
@@ -39,7 +38,6 @@ function KanbanBoard({
   error,
   onEdit,
   onUpdate,
-  isUpdating,
   onDelete,
   childModal,
 }: KanbanBoardProps) {
@@ -55,15 +53,24 @@ function KanbanBoard({
     ReadAllTaskFromProjectInterface[] | null
   >(null);
 
-  // Limpiar localTasks recién cuando tasksInProject (la caché actualizada) refleje que ya no hay discrepancia,
-  // o simplemente cuando la mutación de update termine y los datos se hayan recargado.
+  // El estado local del drag solo se libera cuando la caché ya refleja el cambio.
+  // Comparar datos (y no el estado de la mutación) conserva la vista previa durante
+  // el hover y evita el snap-back al soltar.
   useEffect(() => {
-    // Si teníamos un estado local de arrastre pero la mutación ya terminó y la caché se actualizó,
-    // podemos soltar el estado local con seguridad.
-    if (localTasks && !isUpdating) {
+    if (!localTasks) return;
+
+    const cacheReflectsDrag = localTasks.every((localTask) => {
+      const cachedTask = tasksInProject.find(
+        (t) => t.task_id === localTask.task_id,
+      );
+
+      return cachedTask?.state === localTask.state;
+    });
+
+    if (cacheReflectsDrag) {
       setLocalTasks(null);
     }
-  }, [tasksInProject, isUpdating, localTasks]);
+  }, [tasksInProject, localTasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -248,16 +255,22 @@ function KanbanBoard({
             column_text="To Do"
             tasks={todoTasks}
             onShowModal={handleShowModal}
+            draggedTaskId={activeTask?.task_id ?? null}
+            draggedTaskOriginState={activeTask?.state ?? null}
           />
           <Column
             column_text="In Progress"
             tasks={inProgressTasks}
             onShowModal={handleShowModal}
+            draggedTaskId={activeTask?.task_id ?? null}
+            draggedTaskOriginState={activeTask?.state ?? null}
           />
           <Column
             column_text="Done"
             tasks={doneTasks}
             onShowModal={handleShowModal}
+            draggedTaskId={activeTask?.task_id ?? null}
+            draggedTaskOriginState={activeTask?.state ?? null}
           />
         </div>
         <DragOverlay>

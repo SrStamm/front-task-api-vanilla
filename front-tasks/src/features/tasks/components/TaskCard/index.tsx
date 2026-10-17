@@ -10,20 +10,31 @@ interface TaskCardProps {
   task?: ReadAllTaskFromProjectInterface;
   onShowTaskModal?: (taskId: number) => void;
   loading?: boolean;
+  /**
+   * Rol de la tarjeta que se está arrastrando:
+   * - "source": sigue en su columna original, se oculta porque el DragOverlay ya la
+   *   representa siguiendo al cursor.
+   * - "ghost": ya se movió a otra columna, se muestra como marcador para que se vea
+   *   dónde va a caer antes de soltar.
+   */
+  dragRole?: "source" | "ghost";
 }
 
-function TaskCard({ task, onShowTaskModal, loading }: TaskCardProps) {
+function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
   const formatedDate = task ? formatDate(task.date_exp) : "";
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: task?.task_id ?? 0,
-    });
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task?.task_id ?? 0,
+  });
   const style = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
-    opacity: isDragging ? 0 : 1,
+    // El fantasma ya vive en la columna destino: no debe seguir al cursor.
+    transform:
+      dragRole === "ghost"
+        ? undefined
+        : transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
+    opacity: dragRole === "source" ? 0 : 1,
   };
 
   const state = task
@@ -61,7 +72,7 @@ function TaskCard({ task, onShowTaskModal, loading }: TaskCardProps) {
 
   return (
     <li
-      className={`task-card ${state}`}
+      className={`task-card ${state}${dragRole === "ghost" ? " is-ghost" : ""}`}
       onClick={() => onShowTaskModal?.(task.task_id)}
       ref={setNodeRef}
       style={style}

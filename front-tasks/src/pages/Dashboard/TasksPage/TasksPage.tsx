@@ -102,7 +102,6 @@ function TaskPage() {
             onEdit={handleOpenEditModal}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
-            isUpdating={isUpdating}
           />
 
           <TaskFormModal
