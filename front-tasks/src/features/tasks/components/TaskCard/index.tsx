@@ -53,7 +53,11 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
             <div className="task-info">
               <Skeleton width="80%" height="1.2rem" />
             </div>
-            <Skeleton width="4rem" height="1.5rem" borderRadius="var(--radius)" />
+            <Skeleton
+              width="4rem"
+              height="1.5rem"
+              borderRadius="var(--radius)"
+            />
           </div>
           <div className="task-description">
             <Skeleton width="100%" height="0.875rem" />
@@ -93,7 +97,9 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
             <p className="task-date"> {formatedDate}</p>
           </div>
           <div>
-            <p className="task-label">{task.task_labels_links}</p>
+            <p className="task-label">
+              {task.task_label_links?.map((l) => l.label).join(", ")}
+            </p>
           </div>
         </div>
       </div>

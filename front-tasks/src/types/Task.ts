@@ -1,9 +1,5 @@
 import { TaskStateEnum } from "../features/tasks/schemas/Tasks";
 
-interface label {
-  label: string;
-}
-
 enum StateEnum {
   completado = "completado",
   en_proceso = "en proceso",
@@ -16,24 +12,13 @@ export interface UserAssigned {
   username: string;
 }
 
-export interface ReadTaskForUser {
-  task_id: number;
-  project_id: number;
-  title: string;
-  description: string;
-  date_exp: string;
-  state: string;
-  assigned_users: UserAssigned[];
-  task_label_links: label[];
-}
-
 export interface CreateTask {
   project_id: number;
   title: string;
   description?: string;
   date_exp: string | null;
   assigned_user_id: number;
-  label?: label[];
+  label?: string[];
 }
 
 export interface UpdateTask {
@@ -45,8 +30,8 @@ export interface UpdateTask {
   state?: StateEnum | TaskStateEnum | string;
   assigned_user_id?: number;
   remove_assigned_user_id?: boolean;
-  append_label?: label[];
-  remove_label?: label[];
+  append_label?: string[];
+  remove_label?: string[];
 }
 
 export interface DeleteTask {
