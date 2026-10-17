@@ -8,6 +8,7 @@ interface AuthContextType {
   loading: boolean;
   login: (token: string) => Promise<void>;
   logout: () => void;
+  token: string | null;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -16,13 +17,15 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<ReadUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Verificar token al iniciar la app
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchUser(token);
+    const stored = localStorage.getItem("token");
+    if (stored) {
+      setToken(stored);
+      fetchUser(stored);
     } else {
       setLoading(false);
     }
@@ -62,17 +65,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (token: string) => {
     localStorage.setItem("token", token);
+    setToken(token);
     await fetchUser(token);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setToken(null);
     // El redireccionamiento se manejará en los componentes/rutas
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, token }}>
       {children}
     </AuthContext.Provider>
   );

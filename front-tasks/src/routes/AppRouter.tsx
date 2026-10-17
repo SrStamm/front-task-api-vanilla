@@ -12,6 +12,7 @@ import ProjectsPage from "../pages/Dashboard/ProjectsPage";
 import TasksPage from "../pages/Dashboard/TasksPage/TasksPage.tsx";
 import ChatPage from "../pages/Dashboard/ChatPage/ChatPage.tsx";
 import "../App.css";
+import { SocketProvider } from "../providers/SocketProvider.tsx";
 
 const requireAuthLoader = async () => {
   const token = localStorage.getItem("token");
@@ -60,7 +61,9 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <GroupProjectProvider>
-              <DashboardLayout />
+              <SocketProvider>
+                <DashboardLayout />
+              </SocketProvider>
             </GroupProjectProvider>
           </PrivateRoute>
         ),
