@@ -11,6 +11,7 @@ import type {
   TaskStateEnum,
 } from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
+import { TYPE_OF_LABELS } from "../../constants/labels.ts";
 
 interface TaskFormModalProps {
   showModal: boolean;
@@ -40,6 +41,7 @@ function TaskFormModal({
   const [userIdSelected, setUserIdSelected] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] =
     useState<TaskStateEnum>("sin empezar");
+  const [label, setLabel] = useState<string>("");
   const { projects } = useProjects();
   const { projectId } = useGroupProject();
 
@@ -60,11 +62,13 @@ function TaskFormModal({
         initialData.assigned_user ? initialData.assigned_user.user_id : null,
       );
       setSelectedStatus(initialData.state || "sin empezar");
+      setLabel(initialData.task_label_links?.[0]?.label ?? "");
     } else {
       setTitle("");
       setDescription("");
       setDueDate("");
       setUserIdSelected(null);
+      setLabel("");
     }
   }, [projectId, projects, mode, initialData, showModal]);
 
@@ -103,6 +107,7 @@ function TaskFormModal({
       description: description,
       assigned_user_id: userIdSelected,
       date_exp: dueDate.trim().length === 0 ? null : dueDate,
+      label: label ? [label] : [],
     };
 
     if (onCreate) {
@@ -131,6 +136,14 @@ function TaskFormModal({
       state: selectedStatus,
       assigned_user_id: userIdSelected,
     };
+
+    const currentLabel = initialData.task_label_links?.[0]?.label ?? "";
+    if (label && label !== currentLabel) {
+      payload.append_label = [label];
+      if (currentLabel) payload.remove_label = [currentLabel];
+    } else if (!label && currentLabel) {
+      payload.remove_label = [currentLabel];
+    }
 
     if (onUpdate) {
       try {
@@ -187,6 +200,22 @@ function TaskFormModal({
           value={dueDate}
           disabled={mode === "create" ? isCreating : isUpdating}
         />
+      </div>
+
+      <div>
+        <label>Labels:</label>
+        <select
+          className="input-base select-filter"
+          value={label}
+          onChange={(e) => setLabel(e.target.value)}
+        >
+          <option value="">Sin label</option>
+          {TYPE_OF_LABELS.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
       </div>
 
       {mode === "edit" ? (
