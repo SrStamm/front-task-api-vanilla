@@ -3,7 +3,7 @@
 import "./KanbanBoard.css";
 import Column from "../Column";
 import TaskModal from "../../components/TaskModal/index.tsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReadAllTaskFromProjectInterface } from "../../schemas/Tasks.ts";
 import { useGroupProject } from "../../../../hooks/useGroupProject.ts";
 import {
@@ -28,8 +28,8 @@ interface KanbanBoardProps {
   error: string | null;
   onEdit: (t: ReadAllTaskFromProjectInterface) => void;
   onUpdate: (data: UpdateTask) => Promise<void>;
+  isUpdating: boolean;
   onDelete: (t: ReadAllTaskFromProjectInterface) => Promise<void>;
-  onSuccess?: () => void;
   childModal: boolean;
 }
 
@@ -39,8 +39,8 @@ function KanbanBoard({
   error,
   onEdit,
   onUpdate,
+  isUpdating,
   onDelete,
-  onSuccess,
   childModal,
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
@@ -54,9 +54,16 @@ function KanbanBoard({
   const [localTasks, setLocalTasks] = useState<
     ReadAllTaskFromProjectInterface[] | null
   >(null);
-  // Guardar el estado final de la tarea arrastrada para usar en dragEnd
-  const [draggedTaskState, setDraggedTaskState] =
-    useState<TaskStateEnum | null>(null);
+
+  // Limpiar localTasks recién cuando tasksInProject (la caché actualizada) refleje que ya no hay discrepancia,
+  // o simplemente cuando la mutación de update termine y los datos se hayan recargado.
+  useEffect(() => {
+    // Si teníamos un estado local de arrastre pero la mutación ya terminó y la caché se actualizó,
+    // podemos soltar el estado local con seguridad.
+    if (localTasks && !isUpdating) {
+      setLocalTasks(null);
+    }
+  }, [tasksInProject, isUpdating, localTasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -148,7 +155,6 @@ function KanbanBoard({
 
     if (task) {
       setActiveTask(task);
-      setDraggedTaskState(task.state);
     }
   };
 
@@ -177,8 +183,6 @@ function KanbanBoard({
           task.task_id === activeTaskId ? { ...task, state: newState } : task,
         );
       });
-      // Guardar el nuevo estado para usar en dragEnd
-      setDraggedTaskState(newState);
     }
   };
 
@@ -189,7 +193,6 @@ function KanbanBoard({
       setLocalTasks(null);
       setActiveId(0);
       setActiveTask(null);
-      setDraggedTaskState(null);
       return;
     }
 
@@ -212,17 +215,15 @@ function KanbanBoard({
 
       try {
         await onUpdate(payload);
-        onSuccess?.();
       } catch {
         // Toast se encarga del error global
+        setLocalTasks(null);
       }
     }
 
     // Limpiar estado local de drag
-    setLocalTasks(null);
     setActiveId(0);
     setActiveTask(null);
-    setDraggedTaskState(null);
   };
 
   const handleDelete = async (t: ReadAllTaskFromProjectInterface) => {

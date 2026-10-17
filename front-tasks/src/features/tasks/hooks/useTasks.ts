@@ -95,13 +95,14 @@ export function useTasks({ state, label }: useTasksFilters) {
   const update = useMutation({
     mutationFn: (payload: UpdateTask) =>
       FetchUpdateTask(payload.project_id, payload.task_id, payload),
-    onSuccess: (_, variables) => {
-      // Invalidar TODAS las queries de tareas para el proyecto
-      // (sin importar el filtro de estado/label) para evitar inconsistencias
-      queryClient.invalidateQueries({
-        queryKey: ["tasks", variables.project_id],
-        exact: false,
-      });
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        ["tasks", variables.project_id, state, label],
+        (tasks: ReadAllTaskFromProjectInterface[] = []) =>
+          tasks.map((t) =>
+            t.task_id === variables.task_id ? { ...t, state: data.state } : t,
+          ),
+      );
     },
   });
 
