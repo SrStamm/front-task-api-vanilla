@@ -21,7 +21,6 @@ interface TaskFormModalProps {
   onUpdate: (data: UpdateTask) => Promise<void>;
   isCreating?: boolean;
   isUpdating?: boolean;
-  onSuccess: () => void;
 }
 
 function TaskFormModal({
@@ -33,7 +32,6 @@ function TaskFormModal({
   onUpdate,
   isCreating = false,
   isUpdating = false,
-  onSuccess,
 }: TaskFormModalProps) {
   const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
   const [title, setTitle] = useState<string>("");
@@ -110,7 +108,6 @@ function TaskFormModal({
     if (onCreate) {
       try {
         await onCreate(payload);
-        onSuccess();
         onClose();
       } catch (error) {
         console.error("Error al crear la tarea:", error);
@@ -138,7 +135,6 @@ function TaskFormModal({
     if (onUpdate) {
       try {
         await onUpdate(payload);
-        onSuccess();
         onClose();
       } catch (error) {
         console.error("Error al actualizar la tarea:", error);
