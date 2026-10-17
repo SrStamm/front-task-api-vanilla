@@ -1,3 +1,4 @@
+import { TYPE_OF_LABELS } from "../../constants/labels";
 import "./TaskFilters.css";
 
 interface TaskFiltersProps {
@@ -35,7 +36,15 @@ function TaskFilters({ filters, onChange }: TaskFiltersProps) {
           className="input-base select-filter"
           value={filters.label}
           onChange={(e) => onChangeLabel(e.target.value)}
-        ></select>
+        >
+          <option value=""></option>
+
+          {TYPE_OF_LABELS.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

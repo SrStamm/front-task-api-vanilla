@@ -1,0 +1,18 @@
+export const TYPE_OF_LABELS = [
+  "bug",
+  "feature",
+  "refactor",
+  "docs",
+  "tests",
+  "ui/ux",
+  "urgent",
+  "high_priority",
+  "medium_priority",
+  "low_priority",
+  "blocker",
+  "frontend",
+  "backend",
+  "database",
+  "api",
+  "infrastructure",
+] as const;

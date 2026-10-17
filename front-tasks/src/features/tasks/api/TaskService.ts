@@ -1,19 +1,33 @@
 import type { CreateTask, UpdateTask } from "../../../types/Task";
 import Fetch from "../../../utils/api";
 
+function appendFilter(
+  params: URLSearchParams,
+  key: string,
+  value?: string | string[],
+) {
+  if (!value) return;
+  const values = Array.isArray(value) ? value : [value];
+  values
+    .filter((v) => v.trim().length > 0)
+    .forEach((v) => params.append(key, v.trim()));
+}
+
 export async function FetchTaskAssignedToUser(
   page: number,
   items_per_page: number,
   filters?: { state: string; label: string },
 ) {
-  let path = `task?limit=${items_per_page}&skip=${page}`;
+  const params = new URLSearchParams();
 
-  if (filters?.state) {
-    path += `&state=${encodeURIComponent(filters.state)}`;
-  }
+  params.append("limit", items_per_page.toString());
+  params.append("skip", page.toString());
+
+  appendFilter(params, "state", filters?.state);
+  appendFilter(params, "labels", filters?.label);
 
   const res = await Fetch({
-    path: path,
+    path: `task?${params.toString()}`,
     method: "GET",
   });
   return res;
@@ -33,24 +47,17 @@ export async function FetchTaskToProject({
   limit?: number;
   filters?: { state: string | string[]; label: string };
 }) {
-  let path = `task/${projectId}`;
   const params = new URLSearchParams();
 
   params.append("limit", limit.toString());
 
-  if (filters?.state && filters.state.length > 0) {
-    if (Array.isArray(filters.state)) {
-      filters.state.forEach((s) => {
-        params.append("state", s.trim());
-      });
-    } else {
-      params.append("state", filters.state.trim());
-    }
-  }
+  appendFilter(params, "state", filters?.state);
+  appendFilter(params, "labels", filters?.label);
 
-  path = path + "?" + params.toString();
-
-  const res = await Fetch({ path: path, method: "GET" });
+  const res = await Fetch({
+    path: `task/${projectId}?${params.toString()}`,
+    method: "GET",
+  });
 
   return res;
 }
