@@ -1,5 +1,13 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import type { ReadUser } from "../types/User.ts";
+import { setOnUnauthorized } from "../utils/api";
 
 const url = import.meta.env.VITE_URL;
 
@@ -20,16 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Verificar token al iniciar la app
-  useEffect(() => {
-    const stored = localStorage.getItem("token");
-    if (stored) {
-      setToken(stored);
-      fetchUser(stored);
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  const queryClient = useQueryClient();
 
   const fetchUser = async (token: string) => {
     try {
@@ -69,12 +68,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await fetchUser(token);
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
     // El redireccionamiento se manejará en los componentes/rutas
-  };
+  }, []);
+
+  // Un 401 en cualquier request cierra la sesión y descarta los datos cacheados,
+  // para que el dashboard no quede mostrando listas de una sesión muerta.
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      logout();
+      queryClient.clear();
+    });
+  }, [logout, queryClient]);
+
+  // Verificar token al iniciar la app
+  useEffect(() => {
+    const stored = localStorage.getItem("token");
+    if (stored) {
+      setToken(stored);
+      fetchUser(stored);
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, token }}>

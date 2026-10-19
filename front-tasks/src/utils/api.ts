@@ -6,6 +6,12 @@ type FetchProps = {
   body?: object;
 };
 
+let onUnauthorized: (() => void) | null = null;
+
+export const setOnUnauthorized = (fn: () => void) => {
+  onUnauthorized = fn;
+};
+
 const Fetch = async ({ path, method, body }: FetchProps) => {
   const token = localStorage.getItem("token");
 
@@ -36,6 +42,8 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
 
       // Si es un error 404, 500, etc., lanzar error
       if (!response.ok) {
+        if (response.status === 401) onUnauthorized?.();
+
         throw new Error(`HTTP ${response.status}: ${text.substring(0, 100)}`);
       }
 
@@ -43,6 +51,8 @@ const Fetch = async ({ path, method, body }: FetchProps) => {
     }
 
     if (!response.ok) {
+      if (response.status === 401) onUnauthorized?.();
+
       const errorText = await response.text();
       console.error("❌ Response not OK:", errorText);
       throw new Error(
