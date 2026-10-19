@@ -55,6 +55,7 @@ export function useTasks({ state, label }: useTasksFilters) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    error: errorUser,
   } = useInfiniteQuery({
     queryKey: ["tasks-user", state, label],
     queryFn: ({ pageParam = 0 }) => {
@@ -82,12 +83,13 @@ export function useTasks({ state, label }: useTasksFilters) {
   const create = useMutation({
     mutationFn: (payload: CreateTask) =>
       FetchCreateTask(payload.project_id, payload),
-    onSuccess: (newTask) => {
+    onSuccess: (_, variables) => {
       // Invalidar TODAS las queries de tareas para este proyecto (con cualquier filtro)
       queryClient.invalidateQueries({
-        queryKey: ["tasks", newTask.projectId],
+        queryKey: ["tasks", variables.project_id],
         exact: false,
       });
+      queryClient.invalidateQueries({ queryKey: ["tasks-user"] });
     },
   });
 
@@ -103,6 +105,7 @@ export function useTasks({ state, label }: useTasksFilters) {
             t.task_id === variables.task_id ? { ...t, state: data.state } : t,
           ),
       );
+      queryClient.invalidateQueries({ queryKey: ["tasks-user"] });
     },
   });
 
@@ -121,6 +124,7 @@ export function useTasks({ state, label }: useTasksFilters) {
         (oldTasks: ReadAllTaskFromProjectInterface[] = []) =>
           oldTasks.filter((t) => t.task_id !== variables.taskId),
       );
+      queryClient.invalidateQueries({ queryKey: ["tasks-user"] });
     },
   });
 
@@ -129,6 +133,7 @@ export function useTasks({ state, label }: useTasksFilters) {
     tasksInProject,
     isLoading,
     error,
+    errorUser,
 
     taskForUser: taskForUserFlat,
     loadAllTaskFromUser,

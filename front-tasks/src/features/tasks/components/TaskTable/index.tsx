@@ -10,6 +10,7 @@ interface TaskTableProps {
   fetchNextPage: () => void;
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
+  error: string | null;
 }
 
 function TaskTable({
@@ -17,6 +18,7 @@ function TaskTable({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  error,
 }: TaskTableProps) {
   // 1. Ref para el elemento que estara al final de la lista
   const observerTargetRef = useRef<HTMLDivElement>(null);
@@ -49,6 +51,17 @@ function TaskTable({
       }
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  if (error) {
+    return (
+      <ErrorContainer
+        isError={true}
+        isButton={true}
+        advice={error}
+        recommendation=""
+      />
+    );
+  }
 
   if (tasks.length === 0) {
     return (
