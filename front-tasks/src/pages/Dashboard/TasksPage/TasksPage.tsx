@@ -21,6 +21,7 @@ function TaskPage() {
     tasksInProject,
     isLoading,
     error,
+    errorUser,
     create,
     update,
     isCreating,
@@ -122,6 +123,7 @@ function TaskPage() {
             fetchNextPage={fetchNextPage}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
+            error={errorUser?.message ?? null}
           />
         </>
       )}
