@@ -7,7 +7,7 @@ export const ReadTaskSchema = z.object({
   project_id: z.number(),
   title: z.string(),
   description: z.string(),
-  date_exp: z.date(),
+  date_exp: z.string().nullable(),
   state: TaskState,
   task_label_links: z.array(z.object({ label: z.string() })),
 });
@@ -22,7 +22,7 @@ export const ReadAllTaskFromProjectSchema = z.object({
   project_id: z.number(),
   title: z.string(),
   description: z.string(),
-  date_exp: z.date(),
+  date_exp: z.string().nullable(),
   state: TaskState,
   task_label_links: z.array(z.object({ label: z.string() })),
   assigned_user: ReadUserAssignedSchema,

@@ -28,8 +28,15 @@ function GroupsPage() {
     deleteGroup,
     updateGroup,
     addUserToGroup,
+    isCreating,
+    isUpdating,
   } = useGroups();
-  const { createProject, updateProject } = useProjects();
+  const {
+    createProject,
+    updateProject,
+    isCreating: isCreatingProject,
+    isUpdating: isUpdatingProject,
+  } = useProjects();
 
   const [selectedGroup, setSelectedGroup] = useState<ReadGroup | null>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -149,7 +156,6 @@ function GroupsPage() {
       </div>
     );
   if (error) {
-    console.error("Error loading groups:", error);
     return (
       <ErrorContainer
         advice="Error al cargar los grupos"
@@ -207,6 +213,8 @@ function GroupsPage() {
             groupIdCharged={selectedGroup?.group_id}
             onCreate={createProject}
             onUpdate={updateProject}
+            isCreating={isCreatingProject}
+            isUpdating={isUpdatingProject}
           />
 
           <UserAddToGroupModal
@@ -229,6 +237,8 @@ function GroupsPage() {
         onClose={handleCloseCreateModal}
         createGroup={createGroup}
         editGroupEvent={updateGroup}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
       />
     </>
   );

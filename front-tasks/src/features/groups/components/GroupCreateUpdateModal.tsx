@@ -16,6 +16,8 @@ interface groupModalProps {
   group?: ReadGroup;
   createGroup: (payload: CreateGroupInterface) => Promise<void>;
   editGroupEvent: (payload: UpdateGroupInterface) => Promise<void>;
+  isCreating?: boolean;
+  isUpdating?: boolean;
 }
 
 function GroupCreateUpdateModal({
@@ -25,6 +27,8 @@ function GroupCreateUpdateModal({
   group,
   createGroup,
   editGroupEvent,
+  isCreating,
+  isUpdating,
 }: groupModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -151,6 +155,7 @@ function GroupCreateUpdateModal({
           text="Crear"
           type="submit"
           form="create-group-form"
+          disabled={isCreating}
         />
       ) : (
         <Button
@@ -158,6 +163,7 @@ function GroupCreateUpdateModal({
           text="Editar"
           type="submit"
           form="edit-group-form"
+          disabled={isUpdating}
         />
       )}
     </>

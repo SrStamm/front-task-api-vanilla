@@ -28,6 +28,7 @@ function UserAddModal({
   loadError,
 }: userAddModalProps) {
   const [error, setError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     setError(null);
@@ -35,6 +36,7 @@ function UserAddModal({
 
   const handleAddUserToProject = async (userId: number) => {
     setError(null);
+    setIsAdding(true);
 
     try {
       await onAddUser({
@@ -45,6 +47,8 @@ function UserAddModal({
       onClose();
     } catch (err) {
       setError(getApiErrorMessage(err));
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -67,6 +71,7 @@ function UserAddModal({
       users={usersInGroup}
       addUser={true}
       onAdd={handleAddUserToProject}
+      isAdding={isAdding}
     />
   );
   const actions = (

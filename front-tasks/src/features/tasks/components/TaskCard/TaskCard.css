@@ -10,7 +10,7 @@
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.04);
   overflow: hidden;
-  
+
   touch-action: none;
   user-select: none;
 }
@@ -255,44 +255,6 @@ html.light-theme .task-card:hover {
 
 .task-avatar:first-child {
   margin-left: 0;
-}
-
-/* Task actions */
-.task-actions {
-  display: flex;
-  gap: 0.25rem;
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-}
-
-.task-card:hover .task-actions {
-  opacity: 1;
-}
-
-.task-action-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-}
-
-.task-action-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--text);
-}
-
-html.light-theme .task-action-btn:hover {
-  background: rgba(0, 0, 0, 0.08);
 }
 
 /* Drop placeholder */

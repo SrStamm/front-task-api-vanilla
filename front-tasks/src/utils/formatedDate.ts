@@ -1,4 +1,4 @@
-function formatDate(dateString: string | number | Date) {
+function formatDate(dateString: string | number | Date | null) {
   if (!dateString) return "Sin fecha límite";
 
   const date = new Date(dateString);

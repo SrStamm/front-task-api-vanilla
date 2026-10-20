@@ -9,6 +9,7 @@ interface userListProps {
   userIdAssigned?: number;
   text?: string;
   textAssigned?: string;
+  isAdding?: boolean;
 }
 
 function UserList({
@@ -17,6 +18,7 @@ function UserList({
   userIdAssigned,
   text,
   textAssigned,
+  isAdding,
 }: userListProps) {
   const getText = (id: number) => {
     if (id == userIdAssigned) {
@@ -34,7 +36,7 @@ function UserList({
             <Button
               className="btn-vsm btn-outline-error"
               text={getText(u.user_id)}
-              disabled={userIdAssigned == u.user_id ? true : false}
+              disabled={isAdding || userIdAssigned == u.user_id}
               onClick={() => onAdd(u.user_id)}
             />
           );

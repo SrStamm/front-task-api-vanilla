@@ -12,16 +12,22 @@ interface CommentFormProps {
 
 function CommentForm({ onSubmit }: CommentFormProps) {
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!message.trim()) return;
+
+    setIsSubmitting(true);
 
     try {
       await onSubmit({ content: message });
       setMessage("");
     } catch {
       // Toast se encarga del error global
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -35,7 +41,12 @@ function CommentForm({ onSubmit }: CommentFormProps) {
         onChange={(e) => setMessage(e.target.value)}
       />
 
-      <Button className="btn btn-primary btn-sm" text="Enviar" type="submit" />
+      <Button
+        className="btn btn-primary btn-sm"
+        text="Enviar"
+        type="submit"
+        disabled={isSubmitting || !message.trim()}
+      />
     </form>
   );
 }

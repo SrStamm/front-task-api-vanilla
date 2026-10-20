@@ -13,7 +13,7 @@ function RowTable({ task }: RowTableProps) {
     task.state === "sin empezar"
       ? "status-todo"
       : task.state === "en proceso"
-        ? "statis-in-progress"
+        ? "status-in-progress"
         : "status-done";
 
   return (

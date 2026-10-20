@@ -20,7 +20,7 @@
 }
 
 .task-table th:hover {
-  background-color: var(--gray-800);
+  background-color: var(--row-hover-bg);
 }
 
 .task-table th.active-sort {

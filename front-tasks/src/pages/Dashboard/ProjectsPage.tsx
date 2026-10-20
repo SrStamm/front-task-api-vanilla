@@ -22,6 +22,8 @@ function ProjectsPage() {
     updateProject,
     addUserToProject,
     removeUserFromProject,
+    isCreating,
+    isUpdating,
   } = useProjects();
   const { getUsersInGroup } = useGroups();
   const { groupId, role } = useGroupProject();
@@ -193,6 +195,8 @@ function ProjectsPage() {
         onClose={handleCloseCreateModal}
         onCreate={createProject}
         onUpdate={updateProject}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
       />
 
       {showUserModal && selectedProject && (
