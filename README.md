@@ -186,7 +186,7 @@ Current pending fixes, in order of impact:
 
 - **URL:** <https://front-task-api-vanilla.vercel.app/dashboard/tasks>
 - **Username:** `test`
-- **Password:** `test`
+- **Password:** `test123456`
 
 ## Author
 
