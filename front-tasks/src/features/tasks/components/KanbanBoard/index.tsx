@@ -119,8 +119,6 @@ function KanbanBoard({
     if (selected) {
       setTaskSelected(selected);
       setShowModal(true);
-    } else {
-      console.error(`Tarea ${taskId} no encontrada.`);
     }
   };
 

@@ -26,7 +26,7 @@ export interface UpdateTask {
   task_id: number;
   title?: string;
   description?: string;
-  date_exp?: string;
+  date_exp?: string | null;
   state?: StateEnum | TaskStateEnum | string;
   assigned_user_id?: number;
   remove_assigned_user_id?: boolean;

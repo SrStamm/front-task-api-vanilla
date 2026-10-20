@@ -27,6 +27,7 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
         className="input-base"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        aria-label="Mensaje"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
@@ -37,7 +38,7 @@ function MessageForm({ onSend, isConnected }: MessageFormProps) {
         className="btn-primary btn-sm"
         text="Enviar"
         form="form-message"
-        disabled={!isConnected}
+        disabled={!isConnected || !message.trim()}
         leftIcon={<FaPaperPlane />}
       />
     </form>

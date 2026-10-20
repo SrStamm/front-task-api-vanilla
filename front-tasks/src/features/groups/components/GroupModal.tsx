@@ -88,16 +88,20 @@ function GroupViewModal({
         </p>
       </div>
 
-      <div className="modal-tabs">
+      <div className="modal-tabs" role="tablist">
         <button
           className={`tab-btn ${tabSelected == "projects" ? "active" : ""}`}
           onClick={() => setTabSelected("projects")}
+          role="tab"
+          aria-selected={tabSelected === "projects"}
         >
           Proyectos
         </button>
         <button
           className={`tab-btn ${tabSelected == "members" ? "active" : ""}`}
           onClick={() => setTabSelected("members")}
+          role="tab"
+          aria-selected={tabSelected === "members"}
         >
           Miembros
         </button>
@@ -154,7 +158,7 @@ function GroupViewModal({
           )}
         </div>
 
-        <UserListGroup users={group.users} addUser={false} role={role} />
+        <UserListGroup users={group.users} addUser={false} />
       </div>
     </>
   );

@@ -8,7 +8,7 @@
 }
 
 .task-table tr:hover {
-  background-color: var(--gray-800);
+  background-color: var(--row-hover-bg);
 }
 
 .task-table td {

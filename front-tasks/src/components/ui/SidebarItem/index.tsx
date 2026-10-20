@@ -40,6 +40,8 @@ function SidebarItem({
       className={`sidebar_item ${isSelected ? "active" : ""}`}
       onClick={onClick}
       title={showTooltip ? label : undefined}
+      aria-current={isSelected ? "page" : undefined}
+      aria-label={showTooltip ? label : undefined}
     >
       <span className="sidebar_item_icon">{icon}</span>
       <span className="sidebar_item_text">{label}</span>

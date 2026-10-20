@@ -25,6 +25,7 @@ function UserAddToGroupModal({
   loadError,
 }: userAddModalProps) {
   const [error, setError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     setError(null);
@@ -32,12 +33,15 @@ function UserAddToGroupModal({
 
   const handleAddUserToGroup = async (userId: number) => {
     setError(null);
+    setIsAdding(true);
 
     try {
       await onAdd({ group_id: groupId, user_id: userId });
       onClose();
     } catch (err) {
       setError(getApiErrorMessage(err));
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -55,7 +59,11 @@ function UserAddToGroupModal({
       isError={true}
     />
   ) : (
-    <UserList users={users} onAdd={handleAddUserToGroup} />
+    <UserList
+      users={users}
+      onAdd={handleAddUserToGroup}
+      isAdding={isAdding}
+    />
   );
   const actions = (
     <>

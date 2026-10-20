@@ -17,6 +17,8 @@ interface projectModalProps {
   onCreate: (newProject: CreateProject) => Promise<void>;
   onUpdate: (project: UpdateProject) => Promise<void>;
   groupIdCharged?: number;
+  isCreating?: boolean;
+  isUpdating?: boolean;
 }
 
 function ProjectCreateUpdateModal({
@@ -27,6 +29,8 @@ function ProjectCreateUpdateModal({
   groupIdCharged,
   onCreate,
   onUpdate,
+  isCreating,
+  isUpdating,
 }: projectModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -49,7 +53,11 @@ function ProjectCreateUpdateModal({
     if (type === "create") {
       setTitle("");
       setDescription("");
-      groupIdCharged ? setGroupId(groupIdCharged) : setGroupId(selectedGroupId);
+      if (groupIdCharged) {
+        setGroupId(groupIdCharged);
+      } else {
+        setGroupId(selectedGroupId);
+      }
     }
   }, [type, project, open, selectedGroupId, groupIdCharged]);
 
@@ -161,6 +169,7 @@ function ProjectCreateUpdateModal({
           text="Crear"
           type="submit"
           form="create-project-form"
+          disabled={isCreating}
         />
       ) : (
         <Button
@@ -168,6 +177,7 @@ function ProjectCreateUpdateModal({
           text="Editar"
           type="submit"
           form="edit-project-form"
+          disabled={isUpdating}
         />
       )}
     </>

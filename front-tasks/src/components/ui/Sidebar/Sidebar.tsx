@@ -44,7 +44,7 @@ function Sidebar() {
   useEffect(() => {
     const path = location.pathname;
     if (path === "/dashboard" || path.endsWith("/groups")) {
-      setElementSelected("groups");
+      setElementSelected("dashboard");
     } else if (path.endsWith("/projects")) {
       setElementSelected("projects");
     } else if (path.endsWith("/tasks")) {
@@ -149,7 +149,14 @@ function Sidebar() {
             onClick={handleShowUserOptions}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleShowUserOptions()}
+            aria-haspopup="menu"
+            aria-expanded={showUserOptions}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleShowUserOptions();
+              }
+            }}
           >
             <span className="user-icon">
               <FaRegUserCircle />

@@ -1,6 +1,6 @@
 import type React from "react";
 import "./Modal.css";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
 
 interface ModalProps {
   showModal: boolean;
@@ -20,6 +20,7 @@ function Modal({
   size,
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -44,10 +45,28 @@ function Modal({
     };
   }, [showModal, handleClickOutside]);
 
+  useEffect(() => {
+    if (!showModal) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    modalRef.current?.focus();
+
+    return () => {
+      previouslyFocused?.focus?.();
+    };
+  }, [showModal]);
+
   return (
     <div className={`modal-backdrop ${showModal ? "show" : "hidden"}`}>
-      <div className={`modal ${size}`} ref={modalRef}>
-        <header className="modal-header"> {modalHeader} </header>
+      <div
+        className={`modal ${size}`}
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+      >
+        <header className="modal-header" id={titleId}> {modalHeader} </header>
         <main className="modal-body">{modalBody}</main>
         {modalActions !== undefined && modalActions !== null && (
           <footer className="modal-footer">

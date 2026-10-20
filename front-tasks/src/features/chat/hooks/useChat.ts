@@ -106,12 +106,10 @@ export function useChat() {
   const sendMessage = useCallback(
     async (content: string) => {
       if (!projectId) {
-        console.error("useChat: ❌ No hay projectId");
         return;
       }
 
       if (!content || !content.trim()) {
-        console.error("useChat: ❌ Contenido vacío");
         return;
       }
 

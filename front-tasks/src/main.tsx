@@ -21,7 +21,11 @@ const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: (failureCount, error) => {
+        const message = error instanceof Error ? error.message : "";
+        if (message.startsWith("HTTP 401")) return false;
+        return failureCount < 1;
+      },
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000,
     },

@@ -114,8 +114,8 @@ function TaskFormModal({
       try {
         await onCreate(payload);
         onClose();
-      } catch (error) {
-        console.error("Error al crear la tarea:", error);
+      } catch {
+        //
       }
     }
   };
@@ -149,8 +149,8 @@ function TaskFormModal({
       try {
         await onUpdate(payload);
         onClose();
-      } catch (error) {
-        console.error("Error al actualizar la tarea:", error);
+      } catch {
+        //
       }
     }
   };

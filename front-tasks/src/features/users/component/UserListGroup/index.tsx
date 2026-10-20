@@ -1,6 +1,5 @@
 import Button from "../../../../components/common/Button";
 import ErrorContainer from "../../../../components/common/ErrorContainer";
-import { RoleGroup } from "../../../../types/Group";
 import type { UserInGroup } from "../../../groups/schemas/Group";
 import UserCard from "../UserCard";
 import "./UserListGroup.css";
@@ -8,11 +7,16 @@ import "./UserListGroup.css";
 interface userListProps {
   users: UserInGroup[];
   addUser: boolean;
-  role?: RoleGroup;
   onAdd?: (userId: number) => void;
+  isAdding?: boolean;
 }
 
-function UserListGroup({ users, addUser, role, onAdd }: userListProps) {
+function UserListGroup({
+  users,
+  addUser,
+  onAdd,
+  isAdding,
+}: userListProps) {
   return addUser ? (
     <ul className="list-add-user">
       {users.length > 0 ? (
@@ -27,6 +31,7 @@ function UserListGroup({ users, addUser, role, onAdd }: userListProps) {
                     <Button
                       className="btn-vsm btn-outline-secondary"
                       text="Agregar"
+                      disabled={isAdding}
                       onClick={() => onAdd(u.user_id)}
                     />
                   </>
@@ -49,34 +54,7 @@ function UserListGroup({ users, addUser, role, onAdd }: userListProps) {
       {users.map((u) => {
         return (
           <li key={u.user_id} className="user-item">
-            <UserCard
-              userGroup={u}
-              type="group"
-              actions={
-                <>
-                  <select disabled={true} style={{ display: "none" }}>
-                    <option value="member">Miembro</option>
-                    <option value="editor">Editor</option>
-                    <option value="admin">Administrador</option>
-                  </select>
-
-                  {role === "admin" ? (
-                    <>
-                      <Button
-                        className="btn-vsm btn-outline-secondary"
-                        text="Editar"
-                      />
-                      <Button
-                        className="btn-vsm btn-outline-error"
-                        text="Eliminar"
-                      />
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </>
-              }
-            />
+            <UserCard userGroup={u} type="group" actions={<></>} />
           </li>
         );
       })}

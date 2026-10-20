@@ -92,16 +92,20 @@ function ProjectModal({
         <p className="modal-description">{project.description}</p>
       </div>
 
-      <div className="modal-tabs">
+      <div className="modal-tabs" role="tablist">
         <button
           className={`tab-btn ${tabSelected == "tasks" ? "active" : ""}`}
           onClick={() => setTabSelected("tasks")}
+          role="tab"
+          aria-selected={tabSelected === "tasks"}
         >
           Tareas
         </button>
         <button
           className={`tab-btn ${tabSelected == "members" ? "active" : ""}`}
           onClick={() => setTabSelected("members")}
+          role="tab"
+          aria-selected={tabSelected === "members"}
         >
           Miembros
         </button>
