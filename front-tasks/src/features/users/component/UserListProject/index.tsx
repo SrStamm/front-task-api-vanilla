@@ -1,4 +1,4 @@
-import Button from "../../../../components/common/Button";
+import KebabMenu from "../../../../components/common/KebabMenu";
 import type {
   AddRemoveUserToProject,
   PermissionProject,
@@ -39,24 +39,15 @@ function UserListProject({
       {users.map((u) => {
         const actions =
           permission === "admin" ? (
-            <>
-              <select
-                className="permission-select"
-                disabled={true}
-                style={{ display: "none" }}
-              >
-                <option value="read">Lectura</option>
-                <option value="write">Escritura</option>
-                <option value="admin">Administrador</option>
-              </select>
-
-              <Button className="btn-vsm btn-outline-secondary" text="Editar" />
-              <Button
-                className="btn-vsm btn-outline-error"
-                text="Eliminar"
-                onClick={() => handleDelete(u.user_id)}
-              />
-            </>
+            <KebabMenu
+              items={[
+                {
+                  label: "Eliminar",
+                  danger: true,
+                  onClick: () => handleDelete(u.user_id),
+                },
+              ]}
+            />
           ) : (
             ""
           );
