@@ -42,10 +42,10 @@ function UserListGroup({
         })
       ) : (
         <ErrorContainer
-          advice="No hay usuarios en el grupo para agregar "
-          recommendation="Se implementará próximamente"
+          advice="Todos los usuarios del grupo ya forman parte del proyecto"
+          recommendation=""
           isButton={false}
-          isError={true}
+          isError={false}
         />
       )}
     </ul>

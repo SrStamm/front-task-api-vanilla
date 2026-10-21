@@ -10,16 +10,17 @@
   align-items: center;
   justify-content: center;
   padding: 0.375rem;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-muted);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .kebab-menu-trigger:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
   color: var(--text);
 }
 
@@ -28,11 +29,13 @@
 }
 
 html.light-theme .kebab-menu-trigger {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.18);
 }
 
 html.light-theme .kebab-menu-trigger:hover {
   background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 /* Dropdown */

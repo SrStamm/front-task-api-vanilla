@@ -82,6 +82,13 @@ html.light-theme .modal-header {
   border-bottom-color: rgba(0, 0, 0, 0.08);
 }
 
+/* Header wrappers (e.g. the plain <div> around the user-modal title) must
+   span the header; otherwise width: 100% on the child title resolves against
+   a content-sized box and text-align: center has no visible effect. */
+.modal-header > div {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .modal-header {
     padding: 1rem;
