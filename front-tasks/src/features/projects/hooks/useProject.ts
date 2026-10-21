@@ -70,9 +70,19 @@ export function useProjects() {
   const updateProjectMutation = useMutation({
     mutationFn: (payload: UpdateProject) => updateProjectApi(payload),
     meta: { errorMode: "inline" },
-    onSuccess: (data, { project_id }) => {
+    // El PATCH devuelve solo {detail}, no el proyecto: hay que aplicar lo que
+    // se envió y conservar el resto (users, group_id) para no corromper la lista.
+    onSuccess: (_data, { project_id, title, description }) => {
       setProjects((prev) =>
-        prev.map((p) => (p.project_id === project_id ? data : p)),
+        prev.map((p) =>
+          p.project_id === project_id
+            ? {
+                ...p,
+                title: title ?? p.title,
+                description: description ?? p.description,
+              }
+            : p,
+        ),
       );
     },
   });
