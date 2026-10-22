@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGroupProject } from "../../../../hooks/useGroupProject";
 import { useProjects } from "../../../projects/hooks/useProject";
 import Button from "../../../../components/common/Button";
 import Modal from "../../../../components/common/Modal";
-import UserList from "../../../users/component/UserList";
 import type { ReadUser } from "../../../../types/User.ts";
 import type { CreateTask, UpdateTask } from "../../../../types/Task.ts";
 import type {
@@ -34,7 +33,6 @@ function TaskFormModal({
   isCreating = false,
   isUpdating = false,
 }: TaskFormModalProps) {
-  const [usersSelected, setUsersSelected] = useState<ReadUser[]>([]);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [dueDate, setDueDate] = useState<string>("");
@@ -45,12 +43,26 @@ function TaskFormModal({
   const { projects } = useProjects();
   const { projectId } = useGroupProject();
 
-  useEffect(() => {
-    if (projectId && projects) {
-      const project = projects.find((p) => p.project_id == projectId);
-      setUsersSelected(project ? project.users : []);
+  // Solo los miembros del proyecto pueden ser responsables de una tarea: la
+  // API rechaza con 404 cualquier otro usuario.
+  const projectUsers: ReadUser[] = useMemo(() => {
+    const project = projects?.find((p) => p.project_id === projectId);
+    return project?.users ?? [];
+  }, [projects, projectId]);
+
+  // Si el responsable actual ya no pertenece al proyecto, se mantiene en la
+  // lista para que el desplegable no pierda la preselección en silencio.
+  const assigneeOptions: ReadUser[] = useMemo(() => {
+    const current = mode === "edit" ? initialData?.assigned_user : null;
+
+    if (current && !projectUsers.some((u) => u.user_id === current.user_id)) {
+      return [...projectUsers, current];
     }
 
+    return projectUsers;
+  }, [projectUsers, initialData, mode]);
+
+  useEffect(() => {
     if (mode === "edit" && initialData) {
       setTitle(initialData.title || "");
       setDescription(initialData.description || "");
@@ -58,9 +70,7 @@ function TaskFormModal({
         ? new Date(initialData.date_exp).toISOString().substring(0, 10)
         : "";
       setDueDate(datePart);
-      setUserIdSelected(
-        initialData.assigned_user ? initialData.assigned_user.user_id : null,
-      );
+      setUserIdSelected(initialData.assigned_user?.user_id ?? null);
       setSelectedStatus(initialData.state || "sin empezar");
       setLabel(initialData.task_label_links?.[0]?.label ?? "");
     } else {
@@ -70,7 +80,7 @@ function TaskFormModal({
       setUserIdSelected(null);
       setLabel("");
     }
-  }, [projectId, projects, mode, initialData, showModal]);
+  }, [projectId, mode, initialData, showModal]);
 
   // Al cambiar algún dato de la tarea, se edita
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,8 +99,9 @@ function TaskFormModal({
     setSelectedStatus(e.target.value as TaskStateEnum);
   };
 
-  const handleUserSelect = (userId: number) => {
-    setUserIdSelected(userId);
+  const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setUserIdSelected(value === "" ? null : Number(value));
   };
 
   const handleCreateTask = async (e: React.FormEvent) => {
@@ -134,8 +145,21 @@ function TaskFormModal({
       description: description,
       date_exp: dueDate.trim().length === 0 ? null : dueDate,
       state: selectedStatus,
-      assigned_user_id: userIdSelected,
     };
+
+    // El responsable solo se envía cuando cambia. Reenviarlo en cada edición
+    // volvía a notificar al responsable de tareas que no le tocaban, y
+    // provocaba un 404 si ya no pertenecía al proyecto. Quitarlo es un caso
+    // aparte: la API solo lo limpia con `remove_assigned_user_id`.
+    const currentAssigneeId = initialData.assigned_user?.user_id ?? null;
+
+    if (userIdSelected !== currentAssigneeId) {
+      if (userIdSelected === null) {
+        payload.remove_assigned_user_id = true;
+      } else {
+        payload.assigned_user_id = userIdSelected;
+      }
+    }
 
     const currentLabel = initialData.task_label_links?.[0]?.label ?? "";
     if (label && label !== currentLabel) {
@@ -236,16 +260,20 @@ function TaskFormModal({
       )}
 
       <div className="user-selection-container">
-        <label>Asignar a usuarios:</label>
-        <ul>
-          <UserList
-            users={usersSelected}
-            onAdd={handleUserSelect}
-            userIdAssigned={userIdSelected ?? undefined}
-            text="Asignar"
-            textAssigned="Asignado"
-          />
-        </ul>
+        <label>Asignar a usuario:</label>
+        <select
+          className="assignee-select"
+          value={userIdSelected ?? ""}
+          onChange={handleAssigneeChange}
+          disabled={mode === "create" ? isCreating : isUpdating}
+        >
+          <option value="">Sin asignar</option>
+          {assigneeOptions.map((u) => (
+            <option key={u.user_id} value={u.user_id}>
+              {u.username}
+            </option>
+          ))}
+        </select>
       </div>
     </form>
   );

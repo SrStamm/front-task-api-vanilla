@@ -43,8 +43,10 @@ function KanbanBoard({
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
   const [isShowModal, setShowModal] = useState(false);
-  const [taskSelected, setTaskSelected] =
-    useState<ReadAllTaskFromProjectInterface | null>(null);
+  // Solo se guarda el id de la tarea abierta. La tarea se lee siempre de la
+  // caché para que el modal refleje el estado vigente (por ejemplo, el
+  // responsable recién desasignado) y no una foto del momento del clic.
+  const [taskSelectedId, setTaskSelectedId] = useState<number | null>(null);
   const [activeId, setActiveId] = useState(0);
   const [activeTask, setActiveTask] =
     useState<ReadAllTaskFromProjectInterface | null>(null);
@@ -101,6 +103,14 @@ function KanbanBoard({
     return { todoTasks: todo, inProgressTasks: inProgress, doneTasks: done };
   }, [displayTasks]);
 
+  const taskSelected = useMemo(() => {
+    if (taskSelectedId === null) {
+      return null;
+    }
+
+    return tasksInProject.find((t) => t.task_id === taskSelectedId) ?? null;
+  }, [taskSelectedId, tasksInProject]);
+
   if (isLoading) return <p style={{ textAlign: "center" }}>Cargando...</p>;
 
   if (error)
@@ -114,10 +124,8 @@ function KanbanBoard({
     );
 
   const handleShowModal = (taskId: number) => {
-    const selected = displayTasks.find((t) => t.task_id === taskId);
-
-    if (selected) {
-      setTaskSelected(selected);
+    if (tasksInProject.some((t) => t.task_id === taskId)) {
+      setTaskSelectedId(taskId);
       setShowModal(true);
     }
   };

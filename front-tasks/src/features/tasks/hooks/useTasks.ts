@@ -101,9 +101,27 @@ export function useTasks({ state, label }: useTasksFilters) {
       queryClient.setQueryData(
         ["tasks", variables.project_id, state, label],
         (tasks: ReadAllTaskFromProjectInterface[] = []) =>
-          tasks.map((t) =>
-            t.task_id === variables.task_id ? { ...t, ...data } : t,
-          ),
+          tasks.map((t) => {
+            if (t.task_id !== variables.task_id) return t;
+
+            const merged = { ...t, ...data };
+
+            // El PATCH responde con `assigned_user_id`, no con el objeto
+            // `assigned_user` que la interfaz pinta. Si el id que acaba de
+            // confirmar el servidor no coincide con el asignado cacheado, ese
+            // objeto está obsoleto: se descarta para no mostrar como
+            // responsable a la persona que ya lo era.
+            if (data.assigned_user_id !== undefined) {
+              const serverAssigneeId = data.assigned_user_id ?? null;
+              const cachedAssigneeId = t.assigned_user?.user_id ?? null;
+
+              if (serverAssigneeId !== cachedAssigneeId) {
+                merged.assigned_user = null;
+              }
+            }
+
+            return merged;
+          }),
       );
       queryClient.invalidateQueries({
         queryKey: ["tasks", variables.project_id],

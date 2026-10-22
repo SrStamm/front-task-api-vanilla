@@ -17,7 +17,8 @@ export interface CreateTask {
   title: string;
   description?: string;
   date_exp: string | null;
-  assigned_user_id: number;
+  // La API acepta `null` para crear la tarea sin responsable.
+  assigned_user_id: number | null;
   label?: string[];
 }
 
