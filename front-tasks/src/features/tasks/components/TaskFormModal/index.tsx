@@ -11,6 +11,10 @@ import type {
 } from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
 import { TYPE_OF_LABELS } from "../../constants/labels.ts";
+import {
+  FILTERABLE_TASK_STATES,
+  TASK_STATE_DEFINITIONS,
+} from "../../constants/states";
 
 interface TaskFormModalProps {
   showModal: boolean;
@@ -250,9 +254,11 @@ function TaskFormModal({
             value={selectedStatus}
             onChange={onStatusChange}
           >
-            <option value="sin empezar">To Do</option>
-            <option value="en proceso">In progress</option>
-            <option value="completado">Completed</option>
+            {FILTERABLE_TASK_STATES.map((state) => (
+              <option key={state} value={state}>
+                {TASK_STATE_DEFINITIONS[state]?.label ?? state}
+              </option>
+            ))}
           </select>
         </div>
       ) : (

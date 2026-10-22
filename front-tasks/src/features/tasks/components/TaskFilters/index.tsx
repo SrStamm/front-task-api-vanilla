@@ -1,4 +1,8 @@
 import { TYPE_OF_LABELS } from "../../constants/labels";
+import {
+  FILTERABLE_TASK_STATES,
+  TASK_STATE_DEFINITIONS,
+} from "../../constants/states";
 import "./TaskFilters.css";
 
 interface TaskFiltersProps {
@@ -25,9 +29,11 @@ function TaskFilters({ filters, onChange }: TaskFiltersProps) {
           onChange={(e) => onChangeState(e.target.value)}
         >
           <option value=""></option>
-          <option value="sin empezar">To Do</option>
-          <option value="en proceso">In progress</option>
-          <option value="completado">Done</option>
+          {FILTERABLE_TASK_STATES.map((state) => (
+            <option key={state} value={state}>
+              {TASK_STATE_DEFINITIONS[state]?.label ?? state}
+            </option>
+          ))}
         </select>
       </div>
       <div className="task-filters">
