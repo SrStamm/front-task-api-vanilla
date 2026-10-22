@@ -102,9 +102,13 @@ export function useTasks({ state, label }: useTasksFilters) {
         ["tasks", variables.project_id, state, label],
         (tasks: ReadAllTaskFromProjectInterface[] = []) =>
           tasks.map((t) =>
-            t.task_id === variables.task_id ? { ...t, state: data.state } : t,
+            t.task_id === variables.task_id ? { ...t, ...data } : t,
           ),
       );
+      queryClient.invalidateQueries({
+        queryKey: ["tasks", variables.project_id],
+        exact: false,
+      });
       queryClient.invalidateQueries({ queryKey: ["tasks-user"] });
     },
   });
