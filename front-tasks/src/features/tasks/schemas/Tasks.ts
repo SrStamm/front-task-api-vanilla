@@ -25,7 +25,8 @@ export const ReadAllTaskFromProjectSchema = z.object({
   date_exp: z.string().nullable(),
   state: TaskState,
   task_label_links: z.array(z.object({ label: z.string() })),
-  assigned_user: ReadUserAssignedSchema,
+  // La API responde con `null` cuando la tarea no tiene responsable.
+  assigned_user: ReadUserAssignedSchema.nullable(),
 });
 
 export type TaskStateEnum = z.infer<typeof TaskState>;
