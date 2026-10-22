@@ -1,0 +1,38 @@
+/*
+ * Píldora de estado compartida. Los colores salen de los tokens --status-*
+ * (App.css), que tienen valores distintos en el tema oscuro y en el claro.
+ */
+.task-state-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.task-state-badge.todo {
+  background: var(--status-todo-bg);
+  color: var(--status-todo-fg);
+}
+
+.task-state-badge.in-progress {
+  background: var(--status-progress-bg);
+  color: var(--status-progress-fg);
+}
+
+.task-state-badge.done {
+  background: var(--status-done-bg);
+  color: var(--status-done-fg);
+}
+
+.task-state-badge.cancelled,
+.task-state-badge.unknown {
+  background: var(--status-neutral-bg);
+  color: var(--status-neutral-fg);
+}

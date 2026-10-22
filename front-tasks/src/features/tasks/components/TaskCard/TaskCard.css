@@ -25,15 +25,20 @@ html.light-theme .task-card:hover {
 
 /* Status indicator border */
 .task-card.todo {
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid var(--status-todo-accent);
 }
 
 .task-card.in-progress {
-  border-left: 4px solid var(--warning);
+  border-left: 4px solid var(--status-progress-accent);
 }
 
 .task-card.done {
-  border-left: 4px solid var(--success);
+  border-left: 4px solid var(--status-done-accent);
+}
+
+.task-card.cancelled,
+.task-card.unknown {
+  border-left: 4px solid var(--status-neutral-accent);
 }
 
 /* Hover effect */
@@ -126,51 +131,10 @@ html.light-theme .task-card:hover {
   display: none;
 }
 
-/* Task state badge */
-.task-state {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  height: 26px;
-  text-wrap: nowrap;
-  padding: 0.25rem 0.625rem;
-  border-radius: 13px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
 @media (max-width: 768px) {
-  .task-state {
+  .task-card .task-state-badge {
     display: none;
   }
-}
-
-.task-state p {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-}
-
-.task-state.todo {
-  background-color: var(--primary);
-  color: white;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-}
-
-.task-state.in-progress {
-  background-color: var(--warning);
-  color: #1f2937;
-  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.3);
-}
-
-.task-state.done {
-  background-color: var(--success);
-  color: white;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
 }
 
 /* Priority indicator */

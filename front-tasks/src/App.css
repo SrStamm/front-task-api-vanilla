@@ -21,6 +21,20 @@
   --warning-light: #fde047;
   --info: #3b82f6;
 
+  /* Task states (tarjeta, tabla y modal comparten esta paleta) */
+  --status-todo-accent: var(--primary);
+  --status-todo-fg: #a5b4fc;
+  --status-todo-bg: rgba(99, 102, 241, 0.18);
+  --status-progress-accent: var(--warning);
+  --status-progress-fg: #fde047;
+  --status-progress-bg: rgba(250, 204, 21, 0.16);
+  --status-done-accent: var(--success);
+  --status-done-fg: #86efac;
+  --status-done-bg: rgba(34, 197, 94, 0.16);
+  --status-neutral-accent: var(--gray-500);
+  --status-neutral-fg: var(--text-muted);
+  --status-neutral-bg: rgba(107, 114, 128, 0.2);
+
   /* Layout */
   --radius: 12px;
   --radius-sm: 8px;
@@ -192,6 +206,19 @@ html.light-theme {
     radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.05) 0px, transparent 50%);
 
   --row-hover-bg: var(--gray-100);
+
+  /* Task states: en tema claro el texto necesita un tono más oscuro */
+  --status-todo-accent: var(--primary-dark);
+  --status-todo-fg: #4338ca;
+  --status-todo-bg: rgba(99, 102, 241, 0.12);
+  --status-progress-accent: #ca8a04;
+  --status-progress-fg: #854d0e;
+  --status-progress-bg: rgba(250, 204, 21, 0.22);
+  --status-done-accent: #16a34a;
+  --status-done-fg: #166534;
+  --status-done-bg: rgba(34, 197, 94, 0.14);
+  --status-neutral-fg: #475569;
+  --status-neutral-bg: rgba(100, 116, 139, 0.16);
 }
 
 body {

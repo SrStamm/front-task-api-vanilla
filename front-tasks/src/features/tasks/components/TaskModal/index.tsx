@@ -6,6 +6,7 @@ import CommentContainer from "../../../comments/component/CommentContainer";
 import formatDate from "../../../../utils/formatedDate";
 import { useGroupProject } from "../../../../hooks/useGroupProject";
 import KebabMenu from "../../../../components/common/KebabMenu";
+import TaskStateBadge from "../TaskStateBadge";
 
 interface TaskModalProps {
   isShow: boolean;
@@ -69,7 +70,7 @@ function TaskModal({
         <div className="task-details-row">
           <div className="detail-label"> Estado: </div>
           <div className="detail-value">
-            <span className="task-modal-state">{task.state}</span>
+            <TaskStateBadge state={task.state} />
           </div>
         </div>
         <div className="task-details-row">
