@@ -7,6 +7,7 @@ import { useDraggable } from "@dnd-kit/core";
 import Skeleton from "../../../../components/common/Skeleton";
 import { TASK_STATE_DEFINITIONS } from "../../constants/states";
 import TaskStateBadge from "../TaskStateBadge";
+import { getLabelDisplayName } from "../../constants/labels";
 
 interface TaskCardProps {
   task?: ReadAllTaskFromProjectInterface;
@@ -98,7 +99,9 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
           </div>
           <div>
             <p className="task-label">
-              {task.task_label_links?.map((l) => l.label).join(", ")}
+              {task.task_label_links
+                ?.map((l) => getLabelDisplayName(l.label))
+                .join(", ")}
             </p>
           </div>
         </div>

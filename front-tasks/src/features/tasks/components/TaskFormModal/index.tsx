@@ -10,7 +10,7 @@ import type {
   TaskStateEnum,
 } from "../../schemas/Tasks.ts";
 import "./TaskFormModal.css";
-import { TYPE_OF_LABELS } from "../../constants/labels.ts";
+import { TYPE_OF_LABELS, getLabelDisplayName } from "../../constants/labels.ts";
 import {
   FILTERABLE_TASK_STATES,
   TASK_STATE_DEFINITIONS,
@@ -240,7 +240,7 @@ function TaskFormModal({
           <option value="">Sin label</option>
           {TYPE_OF_LABELS.map((l) => (
             <option key={l} value={l}>
-              {l}
+              {getLabelDisplayName(l)}
             </option>
           ))}
         </select>

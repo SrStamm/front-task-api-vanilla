@@ -1,4 +1,4 @@
-import { TYPE_OF_LABELS } from "../../constants/labels";
+import { TYPE_OF_LABELS, getLabelDisplayName } from "../../constants/labels";
 import {
   FILTERABLE_TASK_STATES,
   TASK_STATE_DEFINITIONS,
@@ -47,7 +47,7 @@ function TaskFilters({ filters, onChange }: TaskFiltersProps) {
 
           {TYPE_OF_LABELS.map((l) => (
             <option key={l} value={l}>
-              {l}
+              {getLabelDisplayName(l)}
             </option>
           ))}
         </select>
