@@ -6,6 +6,7 @@ interface ErrorProps {
   recommendation: string;
   isButton: boolean;
   isError: boolean;
+  onRetry?: () => void;
 }
 
 function ErrorContainer({
@@ -13,6 +14,7 @@ function ErrorContainer({
   recommendation,
   isButton,
   isError,
+  onRetry,
 }: ErrorProps) {
   return (
     <div className={isError ? "error-container  is-error" : "error-container "}>
@@ -22,7 +24,13 @@ function ErrorContainer({
         <Button
           className="btn-primary btn-sm"
           text="Reintentar"
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            if (onRetry) {
+              onRetry();
+            } else {
+              window.location.reload();
+            }
+          }}
         />
       ) : (
         ""

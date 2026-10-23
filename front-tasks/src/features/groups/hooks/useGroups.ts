@@ -18,15 +18,17 @@ import { useMutation } from "@tanstack/react-query";
 export function useGroups() {
   const [groups, setGroups] = useState<ReadGroup[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
 
   async function loadGroups() {
+    setError(null);
     try {
       setLoading(true);
       const data = await fetchGroupsMe();
       setGroups(data);
-    } catch {
-      setError("Failed to load groups");
+      return data;
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
     }
@@ -81,6 +83,7 @@ export function useGroups() {
     loading,
     error,
     getUsersInGroup,
+    loadGroups,
 
     createGroup: createGroupMutation.mutateAsync,
     updateGroup: updateGroupMutation.mutateAsync,

@@ -24,6 +24,7 @@ function ProjectsPage() {
     removeUserFromProject,
     isCreating,
     isUpdating,
+    loadProjects,
   } = useProjects();
   const { getUsersInGroup } = useGroups();
   const { groupId, role } = useGroupProject();
@@ -72,12 +73,13 @@ function ProjectsPage() {
 
   if (error)
     return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <p style={{ color: "var(--error)" }}>Error al cargar los proyectos</p>
-        <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
-          {error}
-        </p>
-      </div>
+      <ErrorContainer
+        isError={true}
+        isButton={true}
+        onRetry={loadProjects}
+        advice="Error al cargar los proyectos"
+        recommendation={getApiErrorMessage(error)}
+      />
     );
 
   const currentProject = projects?.find(
