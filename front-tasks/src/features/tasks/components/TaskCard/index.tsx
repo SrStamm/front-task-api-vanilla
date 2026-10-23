@@ -5,6 +5,9 @@ import formatDate from "../../../../utils/formatedDate";
 import "./TaskCard.css";
 import { useDraggable } from "@dnd-kit/core";
 import Skeleton from "../../../../components/common/Skeleton";
+import { TASK_STATE_DEFINITIONS } from "../../constants/states";
+import TaskStateBadge from "../TaskStateBadge";
+import { getLabelDisplayName } from "../../constants/labels";
 
 interface TaskCardProps {
   task?: ReadAllTaskFromProjectInterface;
@@ -37,12 +40,10 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
     opacity: dragRole === "source" ? 0 : 1,
   };
 
-  const state = task
-    ? task.state == "en proceso"
-      ? "in-progress"
-      : task.state == "completado"
-        ? "done"
-        : "todo"
+  // El estado crudo del API se traduce a la variante visual desde el mapa
+  // compartido; el texto lo pone el badge.
+  const variant = task
+    ? (TASK_STATE_DEFINITIONS[task.state]?.variant ?? "unknown")
     : "todo";
 
   if (loading) {
@@ -76,7 +77,7 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
 
   return (
     <li
-      className={`task-card ${state}${dragRole === "ghost" ? " is-ghost" : ""}`}
+      className={`task-card ${variant}${dragRole === "ghost" ? " is-ghost" : ""}`}
       onClick={() => onShowTaskModal?.(task.task_id)}
       ref={setNodeRef}
       style={style}
@@ -88,7 +89,7 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
           <div className="task-info">
             <h3 className="task-title">{task.title}</h3>
           </div>
-          <div className={`task-state ${state}`}>{task.state}</div>
+          <TaskStateBadge state={task.state} />
         </div>
 
         <div className="task-description">
@@ -98,7 +99,9 @@ function TaskCard({ task, onShowTaskModal, loading, dragRole }: TaskCardProps) {
           </div>
           <div>
             <p className="task-label">
-              {task.task_label_links?.map((l) => l.label).join(", ")}
+              {task.task_label_links
+                ?.map((l) => getLabelDisplayName(l.label))
+                .join(", ")}
             </p>
           </div>
         </div>

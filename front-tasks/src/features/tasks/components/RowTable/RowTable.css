@@ -23,24 +23,3 @@
 .task-table tr td:first-child {
   font-weight: 500;
 }
-
-.status-pill {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.status-todo {
-  color: var(--warning);
-}
-
-.status-in-progress {
-  color: var(--secondary);
-}
-
-.status-done {
-  color: var(--success);
-}

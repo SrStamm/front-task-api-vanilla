@@ -1,6 +1,7 @@
 import type { ReadTaskInterface } from "../../schemas/Tasks";
 import formatDate from "../../../../utils/formatedDate";
 import "./RowTable.css";
+import TaskStateBadge from "../TaskStateBadge";
 
 interface RowTableProps {
   task: ReadTaskInterface;
@@ -9,18 +10,13 @@ interface RowTableProps {
 function RowTable({ task }: RowTableProps) {
   const formatedDate = formatDate(task.date_exp);
 
-  const stateClass =
-    task.state === "sin empezar"
-      ? "status-todo"
-      : task.state === "en proceso"
-        ? "status-in-progress"
-        : "status-done";
-
   return (
     <tr>
       <td>{task.title}</td>
       <td>{formatedDate}</td>
-      <td className={`status-pill ${stateClass}`}>{task.state}</td>
+      <td>
+        <TaskStateBadge state={task.state} />
+      </td>
     </tr>
   );
 }
