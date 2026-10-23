@@ -9,6 +9,7 @@
   list-style: none;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.04);
+  border-left: 4px solid var(--card-status-accent, rgba(255, 255, 255, 0.04));
   overflow: hidden;
 
   touch-action: none;
@@ -17,6 +18,7 @@
 
 html.light-theme .task-card {
   border-color: rgba(0, 0, 0, 0.04);
+  border-left-color: var(--card-status-accent, rgba(0, 0, 0, 0.04));
 }
 
 html.light-theme .task-card:hover {
@@ -24,28 +26,29 @@ html.light-theme .task-card:hover {
 }
 
 /* Status indicator border */
+/* El color del borde izquierdo sale de --status-*-accent vía --card-status-accent,
+   así el tema claro no puede pisarlo con su `border-color`. */
 .task-card.todo {
-  border-left: 4px solid var(--status-todo-accent);
+  --card-status-accent: var(--status-todo-accent);
 }
 
 .task-card.in-progress {
-  border-left: 4px solid var(--status-progress-accent);
+  --card-status-accent: var(--status-progress-accent);
 }
 
 .task-card.done {
-  border-left: 4px solid var(--status-done-accent);
+  --card-status-accent: var(--status-done-accent);
 }
 
 .task-card.cancelled,
 .task-card.unknown {
-  border-left: 4px solid var(--status-neutral-accent);
+  --card-status-accent: var(--status-neutral-accent);
 }
 
 /* Hover effect */
 .task-card:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-3px) translateX(4px);
-  border-color: rgba(99, 102, 241, 0.15);
 }
 
 .task-card:active {
