@@ -9,7 +9,7 @@
 }
 
 .tab h3 {
-  border-right: 2px solid var(--gray-200);
+  border-right: 2px solid var(--border);
 }
 
 .tab h3:last-child {

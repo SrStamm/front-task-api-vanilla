@@ -74,8 +74,8 @@
 }
 
 .task-card-project {
-  background-color: var(--gray-50);
-  border: 1px solid var(--gray-200);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;

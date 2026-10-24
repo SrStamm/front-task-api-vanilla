@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: var(--gray-100);
+  background: var(--bg-card);
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 
