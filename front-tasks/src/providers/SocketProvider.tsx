@@ -15,18 +15,26 @@ const ws_url = import.meta.env.VITE_URL_WS;
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const socketRef = useRef<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [attempts, setAttempts] = useState(0);
   const { token } = useAuth();
 
   const MAX_ATTEMPTS = 5;
+  const attemptsRef = useRef(0);
+  const reconnectFnRef = useRef<(() => void) | null>(null);
+  const manualReconnectRef = useRef(false);
 
   // Crea la conexión WebSocket al montar el componente y la cierra al desmontar
   useEffect(() => {
     // Valida si se tiene un token
     if (!token) {
+      setIsConnected(false);
+      setAttempts(0);
+      attemptsRef.current = 0;
       return;
     }
 
-    let attempts = 0;
+    attemptsRef.current = 0;
+    setAttempts(0);
     let timer: ReturnType<typeof setTimeout>;
     let closedByUs = false;
 
@@ -39,19 +47,23 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         socketRef.current = ws;
 
         ws.onopen = () => {
-          if (socketRef.current !== ws) return; // ◀ punto 4
-          attempts = 0;
+          if (socketRef.current !== ws) return;
+          attemptsRef.current = 0;
+          setAttempts(0);
+          manualReconnectRef.current = false;
           setIsConnected(true);
         };
 
         ws.onclose = () => {
-          if (socketRef.current !== ws) return; // ◀ punto 4
+          if (socketRef.current !== ws) return;
           setIsConnected(false);
-          if (closedByUs || attempts >= MAX_ATTEMPTS) return;
-          attempts += 1;
+          if (closedByUs) return;
+          if (attemptsRef.current >= MAX_ATTEMPTS) return;
+          attemptsRef.current += 1;
+          setAttempts(attemptsRef.current);
           timer = setTimeout(
             connect,
-            Math.min(1000 * 2 ** (attempts - 1), 15000),
+            Math.min(1000 * 2 ** (attemptsRef.current - 1), 15000),
           );
         };
 
@@ -80,10 +92,12 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
+    reconnectFnRef.current = connect;
+
     connect();
 
     return () => {
-      closedByUs = true; // ◀ no reintentar al desmontar
+      closedByUs = true;
       clearTimeout(timer);
       const ws = socketRef.current;
       if (!ws) return;
@@ -98,7 +112,25 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         ws.close(1000, "Component unmounted");
       }
       socketRef.current = null;
+      reconnectFnRef.current = null;
     };
+  }, [token]);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      if (!token) return;
+      if (socketRef.current?.readyState === WebSocket.OPEN) return;
+      if (attemptsRef.current >= MAX_ATTEMPTS) {
+        attemptsRef.current = 0;
+        setAttempts(0);
+      }
+      if (reconnectFnRef.current) {
+        reconnectFnRef.current();
+      }
+    };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
   }, [token]);
 
   // Envia el mensaje al servidor
@@ -129,14 +161,28 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
+  const reconnect = useCallback(() => {
+    if (!token) return;
+    if (socketRef.current?.readyState === WebSocket.OPEN) return;
+    manualReconnectRef.current = true;
+    attemptsRef.current = 0;
+    setAttempts(0);
+    if (reconnectFnRef.current) {
+      reconnectFnRef.current();
+    }
+  }, [token]);
+
   // Mantiene estable la referencia del objeto mientras sus propiedades no cambien
   const contextValue = useMemo(
     () => ({
       send,
       onMessage,
       isConnected,
+      reconnect,
+      attempts,
+      maxAttempts: MAX_ATTEMPTS,
     }),
-    [send, onMessage, isConnected],
+    [send, onMessage, isConnected, reconnect, attempts],
   );
 
   return (

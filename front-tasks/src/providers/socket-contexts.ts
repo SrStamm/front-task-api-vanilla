@@ -9,6 +9,9 @@ interface SocketContextType {
   send: (data: SocketMessage) => boolean;
   onMessage: (callback: (data: SocketMessage) => void) => () => void;
   isConnected: boolean;
+  reconnect?: () => void;
+  attempts?: number;
+  maxAttempts?: number;
 }
 
 export const SocketContext = createContext<SocketContextType | undefined>(
