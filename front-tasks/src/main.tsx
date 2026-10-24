@@ -32,11 +32,18 @@ const queryClient = new QueryClient({
   },
 });
 
+const getToasterTheme = () => {
+  if (typeof window === "undefined") return "dark";
+  const theme = localStorage.getItem("theme");
+  if (theme === "light") return "light";
+  return "dark";
+};
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster richColors position="bottom-right" />
+      <Toaster richColors position="bottom-right" theme={getToasterTheme()} />
     </QueryClientProvider>
   </StrictMode>,
 );
