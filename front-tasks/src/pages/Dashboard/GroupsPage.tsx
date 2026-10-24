@@ -22,6 +22,7 @@ import { getApiErrorMessage } from "../../utils/errors.ts";
 function GroupsPage() {
   const {
     groups,
+    loadGroups,
     loading,
     error,
     createGroup,
@@ -155,13 +156,15 @@ function GroupsPage() {
         </p>
       </div>
     );
+
   if (error) {
     return (
       <ErrorContainer
         advice="Error al cargar los grupos"
-        recommendation={error}
+        recommendation={getApiErrorMessage(error)}
         isButton={true}
         isError={true}
+        onRetry={loadGroups}
       />
     );
   }
@@ -185,7 +188,7 @@ function GroupsPage() {
             <ErrorContainer
               advice="No perteneces a ningún grupo"
               recommendation=""
-              isButton={true}
+              isButton={false}
               isError={false}
             />
           )}

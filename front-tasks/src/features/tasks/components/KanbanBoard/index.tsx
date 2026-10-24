@@ -30,6 +30,7 @@ interface KanbanBoardProps {
   onUpdate: (data: UpdateTask) => Promise<void>;
   onDelete: (t: ReadAllTaskFromProjectInterface) => Promise<void>;
   childModal: boolean;
+  onRetry?: () => void;
 }
 
 function KanbanBoard({
@@ -40,6 +41,7 @@ function KanbanBoard({
   onUpdate,
   onDelete,
   childModal,
+  onRetry,
 }: KanbanBoardProps) {
   const { projectId } = useGroupProject();
   const [isShowModal, setShowModal] = useState(false);
@@ -120,6 +122,7 @@ function KanbanBoard({
         recommendation=""
         isButton={true}
         isError={true}
+        onRetry={onRetry}
       />
     );
 

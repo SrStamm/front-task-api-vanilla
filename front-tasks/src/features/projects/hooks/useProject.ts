@@ -23,7 +23,7 @@ export function useProjects() {
     undefined,
   );
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
   const { groupId, role } = useGroupProject();
 
   const loadProjects = useCallback(async () => {
@@ -42,12 +42,8 @@ export function useProjects() {
 
         setProjects(data);
       }
-    } catch {
-      if (!groupId) {
-        setError("Group not selected");
-      } else {
-        setError("Failed to load projects");
-      }
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
     }

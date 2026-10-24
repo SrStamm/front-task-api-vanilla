@@ -8,6 +8,7 @@ import TaskFilters from "../../../features/tasks/components/TaskFilters";
 import TaskTable from "../../../features/tasks/components/TaskTable";
 import type { ReadAllTaskFromProjectInterface } from "../../../features/tasks/schemas/Tasks";
 import { CreateTask, UpdateTask } from "../../../types/Task";
+import { getApiErrorMessage } from "../../../utils/errors";
 
 function TaskPage() {
   const [showFormModal, setShowFormModal] = useState(false);
@@ -31,6 +32,8 @@ function TaskPage() {
     hasNextPage,
     isFetchingNextPage,
     remove,
+    loadAllTaskFromUser,
+    loadTasksFromProject,
   } = useTasks(filters);
 
   const handleOpenCreateModal = useCallback(() => {
@@ -99,10 +102,11 @@ function TaskPage() {
             childModal={showFormModal}
             tasksInProject={tasksInProject}
             isLoading={isLoading}
-            error={error?.message ?? null}
+            error={error ? getApiErrorMessage(error) : null}
             onEdit={handleOpenEditModal}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
+            onRetry={loadTasksFromProject}
           />
 
           <TaskFormModal
@@ -123,7 +127,8 @@ function TaskPage() {
             fetchNextPage={fetchNextPage}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
-            error={errorUser?.message ?? null}
+            error={errorUser ? getApiErrorMessage(errorUser) : null}
+            onRetry={loadAllTaskFromUser}
           />
         </>
       )}

@@ -11,6 +11,7 @@ interface TaskTableProps {
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
   error: string | null;
+  onRetry?: () => void;
 }
 
 function TaskTable({
@@ -19,6 +20,7 @@ function TaskTable({
   hasNextPage,
   isFetchingNextPage,
   error,
+  onRetry,
 }: TaskTableProps) {
   // 1. Ref para el elemento que estara al final de la lista
   const observerTargetRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,7 @@ function TaskTable({
         isButton={true}
         advice={error}
         recommendation=""
+        onRetry={onRetry}
       />
     );
   }
