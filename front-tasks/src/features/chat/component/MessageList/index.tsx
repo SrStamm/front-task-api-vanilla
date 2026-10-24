@@ -9,9 +9,10 @@ import TypingIndicator from "../../../../components/common/TypingIndicator";
 interface MessageListProps {
   messages: ReadMessageInterface[];
   typingUser?: string;
+  messagesError?: unknown;
 }
 
-function MessageList({ messages, typingUser }: MessageListProps) {
+function MessageList({ messages, typingUser, messagesError }: MessageListProps) {
   const userContext = useContext(AuthContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -53,7 +54,14 @@ function MessageList({ messages, typingUser }: MessageListProps) {
 
   return (
     <ul className="list-message" ref={listRef} onScroll={handleScroll}>
-      {messages.length === 0 ? (
+      {messagesError ? (
+        <ErrorContainer
+          isButton={false}
+          isError={true}
+          advice="Error al cargar los mensajes"
+          recommendation="Intenta recargar la página o vuelve a intentarlo más tarde"
+        />
+      ) : messages.length === 0 ? (
         <ErrorContainer
           isButton={false}
           isError={false}

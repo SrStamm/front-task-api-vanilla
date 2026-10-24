@@ -19,36 +19,64 @@ interface GroupMessagePayload {
   timestamp: string;
 }
 
+const PAGE_SIZE = 100;
+
 export function useChat() {
   const [messages, setMessages] = useState<ReadMessageInterface[]>([]);
   const [usersInProject, setUsersInProject] = useState<
     UserInProject[] | undefined
   >();
+  const [usersError, setUsersError] = useState<unknown>(null);
+  const [messagesError, setMessagesError] = useState<unknown>(null);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const { projectId, groupId } = useGroupProject();
   const { send, onMessage, isConnected } = useChatSocket();
 
   useEffect(() => {
     if (projectId && groupId) {
+      setUsersError(null);
       fetchUsersProject(groupId, projectId)
         .then(setUsersInProject)
         .catch((err) => {
           console.error("Error obteniendo los usuarios del proyecto: ", err);
+          setUsersError(err);
+          setUsersInProject([]);
         });
     } else {
-      return setUsersInProject([]);
+      setUsersError(null);
+      setUsersInProject([]);
     }
   }, [groupId, projectId]);
 
-  // 🔹 Cargar histórico (REST)
+  // 🔹 Cargar histórico (REST) - cargar los últimos mensajes
   useEffect(() => {
     if (projectId && typeof projectId === "number") {
-      GetMessages(projectId)
-        .then(setMessages)
-        .catch((err) => {
+      setMessagesError(null);
+      setIsLoadingMessages(true);
+      // Intentar cargar la última página: pedimos un límite grande o simplemente los últimos
+      GetMessages(projectId, { limit: 200 })
+        .then((data) => {
+          // Si vienen ordenados asc por timestamp, mantenemos; si queremos asegurar últimos, invertimos si necesario
+          setMessages(Array.isArray(data) ? data : []);
+        })
+        .catch((err: any) => {
+          // Tratar "no encontrado" como chat vacío, no error
+          const status = err?.response?.status;
+          const message = err?.message || "";
+          if (status === 404 || message.includes("ChatNotFoundError") || message.includes("not found")) {
+            setMessages([]);
+            setMessagesError(null);
+            return;
+          }
           console.error("useChat: ❌ Error cargando mensajes:", err);
+          setMessagesError(err);
+        })
+        .finally(() => {
+          setIsLoadingMessages(false);
         });
     } else {
-      return setMessages([]);
+      setMessages([]);
+      setMessagesError(null);
     }
   }, [projectId]);
 
@@ -67,7 +95,7 @@ export function useChat() {
         chat_id: payload.id ?? payload.chat_id ?? 0,
         project_id: payload.project_id,
         user_id: payload.sender_id ?? payload.user_id ?? 0,
-        username: user?.username ?? "Usuario desconocido",
+        username: user?.username ?? (usersError ? "Usuario desconocido (error)" : "Usuario desconocido"),
         message: payload.content ?? payload.message ?? "",
         timestamp: new Date(payload.timestamp),
       };
@@ -147,5 +175,8 @@ export function useChat() {
     messages,
     sendMessage,
     isConnected,
+    messagesError,
+    usersError,
+    isLoadingMessages,
   };
 }

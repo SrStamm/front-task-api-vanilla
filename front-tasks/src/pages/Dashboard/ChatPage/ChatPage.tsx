@@ -9,7 +9,7 @@ import Button from "../../../components/common/Button";
 import "./ChatPage.css";
 
 function ChatPage() {
-  const { messages, sendMessage, isConnected } = useChat();
+  const { messages, sendMessage, isConnected, messagesError, usersError } = useChat();
   const { projectId } = useGroupProject();
   const socketCtx = useContext(SocketContext);
   const reconnect = socketCtx?.reconnect;
@@ -56,7 +56,14 @@ function ChatPage() {
           )}
         </header>
         <div className="message-container">
-          <MessageList messages={messages} />
+          <MessageList messages={messages} messagesError={messagesError} />
+          {usersError && (
+            <div style={{ padding: "0 1rem", marginBottom: "0.5rem" }}>
+              <span style={{ color: "var(--warning)", fontSize: "0.875rem" }}>
+                No se pudieron cargar los usuarios del proyecto; algunos nombres podrían mostrarse como desconocidos.
+              </span>
+            </div>
+          )}
           <MessageForm onSend={sendMessage} isConnected={isConnected} />
         </div>
       </article>
