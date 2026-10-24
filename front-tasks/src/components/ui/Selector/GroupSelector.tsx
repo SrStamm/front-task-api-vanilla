@@ -5,6 +5,8 @@ import { useGroups } from "../../../features/groups/hooks/useGroups";
 import Button from "../../common/Button";
 import "./Selector.css";
 import { getUserDataInGroup } from "../../../features/groups/api/GroupService";
+import { toast } from "sonner";
+import { getApiErrorMessage } from "../../../utils/errors";
 
 type selectorProps = {
   text: string;
@@ -18,6 +20,7 @@ function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
 
   const { setGroupId, setRole } = useGroupProject();
   const { groups } = useGroups();
+  const requestIdRef = useRef(0);
 
   const handleClickOutside = (e: MouseEvent) => {
     if (
@@ -41,13 +44,24 @@ function GroupSelector({ text, setName, isCollapsed }: selectorProps) {
   }, [selectorRef]);
 
   const handleSelectGroup = async (group_id: number, name: string) => {
-    setGroupId(group_id);
-    setName(name);
-
+    const requestId = ++requestIdRef.current;
     setIsOpen(false);
 
-    const res = await getUserDataInGroup(group_id);
-    setRole(res.role);
+    try {
+      const res = await getUserDataInGroup(group_id);
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+      setGroupId(group_id);
+      setRole(res.role);
+      setName(name);
+    } catch (err) {
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+      setRole(null);
+      toast.error(getApiErrorMessage(err));
+    }
   };
 
   return (
