@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: var(--gray-100);
+  background: var(--bg-card);
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
 
@@ -31,7 +31,7 @@
   padding: 1rem;
   margin-bottom: 0.5rem;
 
-  background: var(--bg-light);
+  background: var(--surface-bg);
   border-radius: var(--radius);
   border-left: 4px solid var(--primary);
 
@@ -41,7 +41,7 @@
 }
 
 .user-add:hover {
-  background: var(--gray-300);
+  background: var(--row-hover-bg);
   transform: translateX(5px);
   box-shadow: var(--shadow-sm);
 }

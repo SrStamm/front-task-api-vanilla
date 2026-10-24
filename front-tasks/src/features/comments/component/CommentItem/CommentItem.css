@@ -1,7 +1,7 @@
 .comment-details {
   background: var(--surface-bg);
   border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 
   display: flex;
@@ -69,4 +69,8 @@
 
 .comment-date {
   font-size: 0.8em;
+}
+
+html.light-theme .comment-details {
+  border: 1px solid var(--border);
 }

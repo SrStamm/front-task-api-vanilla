@@ -57,7 +57,7 @@
 }
 
 .project-item:hover {
-  background: var(--gray-300);
+  background: var(--row-hover-bg);
   transform: translateX(5px);
   box-shadow: var(--shadow-sm);
 }
