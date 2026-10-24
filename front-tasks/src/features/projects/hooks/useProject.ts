@@ -1,127 +1,89 @@
-import { useCallback, useEffect, useState } from "react";
 import {
+  addUserToProjectApi,
   createProjectApi,
   deleteProjectApi,
-  fetchProjects,
-  updateProjectApi,
-  removeUserToProject,
-  addUserToProjectApi,
   fetchProjectMeInGroup,
+  fetchProjects,
+  removeUserToProject,
+  updateProjectApi,
 } from "../api/ProjectService";
 import {
-  DeleteProject,
   type AddRemoveUserToProject,
   type CreateProject,
+  DeleteProject,
   type ReadProject,
   type UpdateProject,
 } from "../schemas/Project";
 import { useGroupProject } from "../../../hooks/useGroupProject";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useProjects() {
-  const [projects, setProjects] = useState<ReadProject[] | undefined>(
-    undefined,
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+  const queryClient = useQueryClient();
   const { groupId, role } = useGroupProject();
 
-  const loadProjects = useCallback(async () => {
-    try {
-      setError(null);
-
-      if (!groupId || groupId === undefined) {
-        setProjects(undefined);
-      } else {
-        setLoading(true);
-
-        const data =
-          role == "admin"
-            ? await fetchProjects(groupId)
-            : await fetchProjectMeInGroup(groupId);
-
-        setProjects(data);
+  const projectsQuery = useQuery({
+    queryKey: ["projects", groupId, role],
+    queryFn: async () => {
+      if (!groupId) {
+        return undefined;
       }
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [groupId, role]);
+      if (role === "admin") {
+        return fetchProjects(groupId);
+      }
+      return fetchProjectMeInGroup(groupId);
+    },
+    enabled: !!groupId,
+  });
 
-  useEffect(() => {
-    if (groupId !== undefined) {
-      loadProjects();
-    }
-  }, [groupId, loadProjects]);
+  const projects: ReadProject[] | undefined = projectsQuery.data;
+
+  const invalidateProjects = () => {
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
+  };
 
   const createProjectMutation = useMutation({
     mutationFn: (payload: CreateProject) => createProjectApi(payload),
     meta: { errorMode: "inline" },
-    onSuccess: (newProject) => {
-      setProjects((prev) => (prev ? [...prev, newProject] : [newProject]));
+    onSuccess: () => {
+      invalidateProjects();
     },
   });
 
   const updateProjectMutation = useMutation({
     mutationFn: (payload: UpdateProject) => updateProjectApi(payload),
     meta: { errorMode: "inline" },
-    // El PATCH devuelve solo {detail}, no el proyecto: hay que aplicar lo que
-    // se envió y conservar el resto (users, group_id) para no corromper la lista.
-    onSuccess: (_data, { project_id, title, description }) => {
-      setProjects((prev) =>
-        prev.map((p) =>
-          p.project_id === project_id
-            ? {
-                ...p,
-                title: title ?? p.title,
-                description: description ?? p.description,
-              }
-            : p,
-        ),
-      );
+    onSuccess: () => {
+      invalidateProjects();
     },
   });
 
   const deleteProjectMutation = useMutation({
     mutationFn: (data: DeleteProject) => deleteProjectApi(data),
-    onSuccess: (_, { project_id }) => {
-      setProjects((prev) => prev.filter((g) => g.project_id !== project_id));
+    onSuccess: () => {
+      invalidateProjects();
     },
   });
 
   const removeUserFromProjectMutation = useMutation({
     mutationFn: (data: AddRemoveUserToProject) => removeUserToProject(data),
-    onSuccess: (_, { project_id, user_id }) => {
-      setProjects((prev) =>
-        prev.map((p) =>
-          p.project_id === project_id
-            ? {
-                ...p,
-                users: p.users.filter((user) => user.user_id !== user_id),
-              }
-            : p,
-        ),
-      );
+    onSuccess: () => {
+      invalidateProjects();
     },
   });
 
   const addUserToProjectMutation = useMutation({
     mutationFn: (data: AddRemoveUserToProject) => addUserToProjectApi(data),
     meta: { errorMode: "inline" },
-    onSuccess: (data, { project_id }) =>
-      setProjects((prev) =>
-        prev.map((p) =>
-          p.project_id === project_id ? { ...p, users: [...p.users, data] } : p,
-        ),
-      ),
+    onSuccess: () => {
+      invalidateProjects();
+    },
   });
 
   return {
     projects,
-    loadProjects,
-    loading,
-    error,
+    loadProjects: projectsQuery.refetch,
+    loading: projectsQuery.isLoading,
+    error: projectsQuery.error,
 
     createProject: createProjectMutation.mutateAsync,
     updateProject: updateProjectMutation.mutateAsync,

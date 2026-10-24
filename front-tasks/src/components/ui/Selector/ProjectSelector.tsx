@@ -4,6 +4,8 @@ import { useGroupProject } from "../../../hooks/useGroupProject";
 import { useProjects } from "../../../features/projects/hooks/useProject";
 import { getUserDataInProject } from "../../../features/projects/api/ProjectService";
 import "./Selector.css";
+import { toast } from "sonner";
+import { getApiErrorMessage } from "../../../utils/errors";
 
 type selectorProps = {
   text: string;
@@ -16,7 +18,8 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { setProjectId, groupId, setPermission } = useGroupProject();
-  const { projects, loadProjects } = useProjects();
+  const { projects } = useProjects();
+  const requestIdRef = useRef(0);
 
   const toggleDropDown = () => {
     setIsOpen(!isOpen);
@@ -31,18 +34,6 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
     }
   };
 
-  // Solo cargar proyectos cuando groupId cambia explícitamente
-  const prevGroupIdRef = useRef<number | null | undefined>(groupId);
-
-  useEffect(() => {
-    // Solo ejecutar si groupId cambió realmente
-    if (groupId !== prevGroupIdRef.current) {
-      prevGroupIdRef.current = groupId;
-      setProjectId(null);
-      loadProjects();
-    }
-  }, [groupId]); // Solo groupId como dependencia
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -52,12 +43,28 @@ function ProjectSelector({ text, setTitle, isCollapsed }: selectorProps) {
   }, [selectorRef]);
 
   const handleSelectProject = async (project_id: number, title: string) => {
-    setProjectId(project_id);
-    setTitle(title);
+    const requestId = ++requestIdRef.current;
     setIsOpen(false);
 
-    const res = await getUserDataInProject(groupId, project_id);
-    setPermission(res.permission);
+    if (groupId === null || groupId === undefined) {
+      return;
+    }
+
+    try {
+      const res = await getUserDataInProject(groupId, project_id);
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+      setProjectId(project_id);
+      setPermission(res.permission);
+      setTitle(title);
+    } catch (err) {
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+      setPermission(null);
+      toast.error(getApiErrorMessage(err));
+    }
   };
 
   return (

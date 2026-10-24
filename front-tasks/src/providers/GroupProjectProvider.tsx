@@ -23,13 +23,24 @@ export function GroupProjectProvider({ children }) {
   const [role, setRole] = useState<RoleGroup | null>(null);
   const [permission, setPermission] = useState<PermissionProject | null>(null);
 
+  const handleSetGroupId = (id: number | null) => {
+    setGroupId(id);
+    setProjectId(null);
+    setPermission(null);
+  };
+
+  const handleSetProjectId = (id: number | null) => {
+    setProjectId(id);
+    setPermission(null);
+  };
+
   return (
     <GroupProjectContext.Provider
       value={{
         groupId,
         projectId,
-        setGroupId,
-        setProjectId,
+        setGroupId: handleSetGroupId,
+        setProjectId: handleSetProjectId,
         role,
         permission,
         setRole,

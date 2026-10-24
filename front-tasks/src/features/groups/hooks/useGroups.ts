@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   addUserToGroupApi,
   createGroupApi,
@@ -8,58 +7,45 @@ import {
   updateGroupApi,
 } from "../api/GroupService";
 import {
+  type AddRemoveUserToGroupInterface,
   type CreateGroupInterface,
   type ReadGroup,
   type UpdateGroupInterface,
-  type AddRemoveUserToGroupInterface,
 } from "../schemas/Group";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGroups() {
-  const [groups, setGroups] = useState<ReadGroup[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+  const queryClient = useQueryClient();
 
-  async function loadGroups() {
-    setError(null);
-    try {
-      setLoading(true);
-      const data = await fetchGroupsMe();
-      setGroups(data);
-      return data;
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const groupsQuery = useQuery({
+    queryKey: ["groups"],
+    queryFn: fetchGroupsMe,
+  });
 
-  useEffect(() => {
-    loadGroups();
-  }, []);
+  const groups: ReadGroup[] = groupsQuery.data ?? [];
 
   const createGroupMutation = useMutation({
     mutationFn: (payload: CreateGroupInterface) => createGroupApi(payload),
     meta: { errorMode: "inline" },
-    onSuccess: (created) => {
-      setGroups((prev) => (prev ? [...prev, created] : [created]));
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
   const updateGroupMutation = useMutation({
     mutationFn: (payload: UpdateGroupInterface) => updateGroupApi(payload),
     meta: { errorMode: "inline" },
-    onSuccess: (updated, { group_id }) => {
-      setGroups((prev) =>
-        prev.map((g) => (g.group_id === group_id ? updated : g)),
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
   const deleteGroupMutation = useMutation({
     mutationFn: (id: number) => deleteGroupApi(id),
-    onSuccess: (_, id) =>
-      setGroups((prev) => prev.filter((g) => g.group_id !== id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
   });
 
   async function getUsersInGroup(id: number) {
@@ -70,20 +56,17 @@ export function useGroups() {
     mutationFn: (data: AddRemoveUserToGroupInterface) =>
       addUserToGroupApi(data),
     meta: { errorMode: "inline" },
-    onSuccess: (data, { group_id }) =>
-      setGroups((prev) =>
-        prev.map((g) =>
-          g.group_id === group_id ? { ...g, users: [...g.users, data] } : g,
-        ),
-      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    },
   });
 
   return {
     groups,
-    loading,
-    error,
+    loading: groupsQuery.isLoading,
+    error: groupsQuery.error,
     getUsersInGroup,
-    loadGroups,
+    loadGroups: groupsQuery.refetch,
 
     createGroup: createGroupMutation.mutateAsync,
     updateGroup: updateGroupMutation.mutateAsync,
