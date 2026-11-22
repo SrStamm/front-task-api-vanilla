@@ -1,5 +1,5 @@
 import "./TasksPage.css";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTasks } from "../../../features/tasks/hooks/useTasks";
 import Button from "../../../components/common/Button";
 import KanbanBoard from "../../../features/tasks/components/KanbanBoard";
@@ -17,6 +17,8 @@ function TaskPage() {
     useState<ReadAllTaskFromProjectInterface | null>(null);
   const [filters, setFilters] = useState({ state: "", label: "" });
   const [tabSelected, setTabSelected] = useState<"project" | "all">("project");
+  const projectTabRef = useRef<HTMLButtonElement>(null);
+  const allTabRef = useRef<HTMLButtonElement>(null);
 
   const {
     tasksInProject,
@@ -69,19 +71,71 @@ function TaskPage() {
   return (
     <section className="dashboard-section ">
       <header className="headerPartSection task-header">
-        <div className="tab">
-          <h3
-            className={`dashboard-layout-h3 tab-element ${tabSelected == "project" ? "active" : ""}`}
+        <div className="tab" role="tablist" aria-label="Vistas de tareas">
+          <button
+            type="button"
+            role="tab"
+            id="tasks-tab-project"
+            ref={projectTabRef}
+            className={`tab-element ${tabSelected == "project" ? "active" : ""}`}
+            aria-selected={tabSelected == "project"}
+            aria-controls="tasks-panel-project"
+            tabIndex={tabSelected == "project" ? 0 : -1}
             onClick={() => setTabSelected("project")}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setTabSelected("all");
+                allTabRef.current?.focus();
+              } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setTabSelected("all");
+                allTabRef.current?.focus();
+              } else if (e.key === "Home") {
+                e.preventDefault();
+                setTabSelected("project");
+                projectTabRef.current?.focus();
+              } else if (e.key === "End") {
+                e.preventDefault();
+                setTabSelected("all");
+                allTabRef.current?.focus();
+              }
+            }}
           >
             Tareas del proyecto
-          </h3>
-          <h3
-            className={`dashboard-layout-h3 tab-element ${tabSelected == "all" ? "active" : ""}`}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="tasks-tab-all"
+            ref={allTabRef}
+            className={`tab-element ${tabSelected == "all" ? "active" : ""}`}
+            aria-selected={tabSelected == "all"}
+            aria-controls="tasks-panel-all"
+            tabIndex={tabSelected == "all" ? 0 : -1}
             onClick={() => setTabSelected("all")}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setTabSelected("project");
+                projectTabRef.current?.focus();
+              } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setTabSelected("project");
+                projectTabRef.current?.focus();
+              } else if (e.key === "Home") {
+                e.preventDefault();
+                setTabSelected("project");
+                projectTabRef.current?.focus();
+              } else if (e.key === "End") {
+                e.preventDefault();
+                setTabSelected("all");
+                allTabRef.current?.focus();
+              }
+            }}
           >
             Mis tareas
-          </h3>
+          </button>
         </div>
 
         {tabSelected == "project" ? (
@@ -97,7 +151,7 @@ function TaskPage() {
 
       <TaskFilters filters={filters} onChange={setFilters} />
       {tabSelected == "project" ? (
-        <>
+        <div role="tabpanel" id="tasks-panel-project" aria-labelledby="tasks-tab-project" tabIndex={0}>
           <KanbanBoard
             childModal={showFormModal}
             tasksInProject={tasksInProject}
@@ -119,9 +173,9 @@ function TaskPage() {
             isCreating={isCreating}
             isUpdating={isUpdating}
           />
-        </>
+        </div>
       ) : (
-        <>
+        <div role="tabpanel" id="tasks-panel-all" aria-labelledby="tasks-tab-all" tabIndex={0}>
           <TaskTable
             tasks={taskForUser}
             fetchNextPage={fetchNextPage}
@@ -130,7 +184,7 @@ function TaskPage() {
             error={errorUser ? getApiErrorMessage(errorUser) : null}
             onRetry={loadAllTaskFromUser}
           />
-        </>
+        </div>
       )}
     </section>
   );

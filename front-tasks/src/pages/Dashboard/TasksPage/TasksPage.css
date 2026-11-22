@@ -8,11 +8,11 @@
   }
 }
 
-.tab h3 {
+.tab .tab-element {
   border-right: 2px solid var(--border);
 }
 
-.tab h3:last-child {
+.tab .tab-element:last-child {
   border-right: none;
 }
 
@@ -23,6 +23,8 @@
   cursor: pointer;
   font-weight: 500;
   position: relative;
+  font: inherit;
+  color: inherit;
 }
 
 @media (max-width: 768px) {

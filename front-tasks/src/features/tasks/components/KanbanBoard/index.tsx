@@ -12,11 +12,13 @@ import {
   DragOverEvent,
   DragOverlay,
   DragStartEvent,
+  KeyboardSensor,
   PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import TaskCard from "../TaskCard/index.tsx";
 import { TaskStateEnum } from "../../schemas/Tasks.ts";
 import { UpdateTask } from "../../../../types/Task.ts";
@@ -87,6 +89,9 @@ function KanbanBoard({
         delay: 250,
         tolerance: 5,
       },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 
